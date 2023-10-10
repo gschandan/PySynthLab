@@ -5,22 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/benchmarks/lia/small.sl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/benchmarks/lia/small_linear_func.sl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/helpers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/helpers/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Dissertation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Dissertation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pysynthlab/enumerator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pysynthlab/helpers/sygus_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pysynthlab/verifier.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/enumerator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/helpers/syugus_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/verifier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Unit Test" />
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,9 +33,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2WQrIdJjftlGxuHzG3Qr0sNCifD" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -45,7 +50,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation/tests/helpers",
+    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation/tests",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -55,9 +60,10 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
+      <recent name="$PROJECT_DIR$/pysynthlab" />
       <recent name="$PROJECT_DIR$/tests/helpers" />
       <recent name="$PROJECT_DIR$/pysynthlab/helpers" />
-      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/pysynthlab/src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -72,7 +78,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1696675565859</updated>
-      <workItem from="1696675567519" duration="1831000" />
+      <workItem from="1696675567519" duration="3685000" />
+      <workItem from="1696855201031" duration="7448000" />
     </task>
     <servers />
   </component>
