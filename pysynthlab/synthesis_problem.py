@@ -1,6 +1,3 @@
-from typing import List
-
-
 class SynthesisProblem:
     """
         A class representing a synthesis problem.
@@ -11,9 +8,9 @@ class SynthesisProblem:
             logic for the synthesis problem e.g. LIA (Linear Integer Arithmetic)
         synthesis_function : str
             the function to be synthesised
-        variables : dict
+        variables : dict[str,str]
             variables to be used: <name,type>
-        constraints : list
+        constraints : list[str]
             constraints to specify a desired property of the synthesised function
         Methods
         -------
@@ -31,9 +28,9 @@ class SynthesisProblem:
                 logic for the synthesis problem e.g. LIA (Linear Integer Arithmetic)
             synthesis_function : str
                 the function to be synthesised
-            variables : dict
+            variables : dict[str,str]
                 variables to be used: <name,type>
-            constraints : list
+            constraints : list[str]
                 constraints to specify a desired property of the synthesised function
         """
         self.logic: str = logic

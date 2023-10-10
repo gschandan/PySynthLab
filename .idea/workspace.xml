@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pysynthlab/enumerator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/helpers/sygus_parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/verifier.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/enumerator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/helpers/syugus_parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/verifier.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/sygus_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/sygus_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +36,7 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -79,7 +75,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696675565859</updated>
       <workItem from="1696675567519" duration="3685000" />
-      <workItem from="1696855201031" duration="7448000" />
+      <workItem from="1696855201031" duration="9243000" />
     </task>
     <servers />
   </component>
