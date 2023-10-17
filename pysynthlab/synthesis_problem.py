@@ -1,7 +1,6 @@
 class SynthesisProblem:
     """
         A class representing a synthesis problem.
-        ...
         Attributes
         ----------
         logic : str
@@ -12,6 +11,7 @@ class SynthesisProblem:
             variables to be used: <name,type>
         constraints : list[str]
             constraints to specify a desired property of the synthesised function
+        ...
         Methods
         -------
         info():
@@ -32,20 +32,20 @@ class SynthesisProblem:
                 variables to be used: <name,type>
             constraints : list[str]
                 constraints to specify a desired property of the synthesised function
+                :rtype: object
         """
         self.logic: str = logic
         self.synthesis_function: str = synthesis_function
         self.variables: dict[str, str] = variables
         self.constraints: list[str] = constraints
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns a string representation of the synthesis problem.
 
-        Returns:
-            str: A string representation of the synthesis problem.
+        :returns: str: A string representation of the synthesis problem.
         """
-        output: list[str] = [f"(set-logic {self.logic})\n", self.synthesis_function, '\n']
+        output: list[str] = [f"(set-logic {self.logic})\n", self.synthesis_function + ')\n']
 
         for var_name, var_type in self.variables.items():
             output.append(f"(declare-var {var_name} {var_type})")
