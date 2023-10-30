@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/sygus_parser.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/helpers/test_syugus_parser.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +203,7 @@
       <updated>1696675565859</updated>
       <workItem from="1696675567519" duration="3685000" />
       <workItem from="1696855201031" duration="21316000" />
-      <workItem from="1698692018354" duration="1830000" />
+      <workItem from="1698692018354" duration="2329000" />
     </task>
     <servers />
   </component>
