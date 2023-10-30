@@ -1,2 +1,4 @@
 pytest
 hypothesis
+ply
+pyparsing
