@@ -1,48 +1,45 @@
+from helpers.parser.src.v2.parser import SygusV2Parser
+from helpers.parser.src.v2.printer import SygusV2ASTPrinter
+
+
 class SynthesisProblem:
     """
         A class representing a synthesis problem.
         Attributes
         ----------
-        logic : str
-            logic for the synthesis problem e.g. LIA (Linear Integer Arithmetic)
-        synthesis_function : str
-            the function to be synthesised
-        variables : dict[str,str]
-            variables to be used: <name,type>
-        constraints : list[str]
-            constraints to specify a desired property of the synthesised function
         ...
         Methods
         -------
         info():
             Prints the synthesis problem to the console
+        get_logic
+            get the logic for the synthesis problem e.g. LIA (Linear Integer Arithmetic)
+        get_synthesis_function : str
+            get the function to be synthesised
+        get_variables : dict[str,str]
+            get the declared variables: <name,type>
+        get_constraints : list[str]
+            constraints to specify a desired property of the synthesised function
         """
+    sygus_version :int = 0
 
-    def __init__(self, logic: str, synthesis_function: str, variables: dict[str, str], constraints: list[str]):
+    def __init__(self, problem: str):
         """
         Constructs all the necessary attributes for the synthesis problem.
 
         Parameters
         ----------
-            logic : str
-                logic for the synthesis problem e.g. LIA (Linear Integer Arithmetic)
-            synthesis_function : str
-                the function to be synthesised
-            variables : dict[str,str]
-                variables to be used: <name,type>
-            constraints : list[str]
-                constraints to specify a desired property of the synthesised function
-                :rtype: object
+            problem : str
+                synthesis problem to be parsed
         """
-        self.logic: str = logic
-        self.synthesis_function: str = synthesis_function
-        self.variables: dict[str, str] = variables
-        self.constraints: list[str] = constraints
+        self.parser = SygusV2Parser()
+        self.problem = self.parser.parse(problem)
+        self.printer = SygusV2ASTPrinter()
+
 
     def __str__(self) -> str:
         """
         Returns a string representation of the synthesis problem.
-
         :returns: str: A string representation of the synthesis problem.
         """
         output: list[str] = [f"(set-logic {self.logic})\n", self.synthesis_function + ')\n']
@@ -59,4 +56,3 @@ class SynthesisProblem:
         :returns: None
         """
         print(self)
-
