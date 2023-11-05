@@ -1,11 +1,9 @@
 import inspect
-
 from abc import ABC, abstractmethod
 from enum import auto, Enum, unique
 from typing import Dict, List, Set, Tuple, Union
 
 from . import ast, exceptions, utilities
-
 from .utilities import Hashable, Identifier
 
 

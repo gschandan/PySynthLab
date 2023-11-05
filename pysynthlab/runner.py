@@ -1,11 +1,12 @@
+import warnings
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
-from synthesis_problem import SynthesisProblem
+
+from pysynthlab.synthesis_problem import SynthesisProblem
 
 
 def main(args):
-
     file = args.input_file.read()
-    problem = SynthesisProblem(file, args.sygus_standard)
+    problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
 
 
@@ -23,11 +24,8 @@ if __name__ == '__main__':
         help='Convert all (- x) terms to (- 0 x)')
 
     parser.add_argument(
-        '-s', '--source-sygus-standard', default='2', choices=['1','2'],
+        '-s', '--sygus-standard', default='2', choices=['1','2'],
         help='The SyGuS language standard used in the input file')
-    parser.add_argument(
-        '-t', '--target-sygus-standard', default='2', choices=['1','2'],
-        help='The SyGuS language standard for the output file')
 
     parser.add_argument(
         'input_file', type=FileType('r'),

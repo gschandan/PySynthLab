@@ -1,11 +1,6 @@
-import ply.yacc
-
-from io import StringIO
-
-from .. import ast, exceptions, utilities
-from ..base.parser import SygusParserBase
-
 from .lexer import SygusV2Lexer
+from .. import ast, utilities
+from ..base.parser import SygusParserBase
 
 
 # noinspection PyMethodMayBeStatic

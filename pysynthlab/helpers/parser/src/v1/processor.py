@@ -1,6 +1,7 @@
 from .. import ast
-from ..resolution import SymbolTable
 from ..base.processor import SygusProcessorBase
+from ..resolution import SymbolTable
+
 
 class SygusV1Processor(SygusProcessorBase):
     __slots__ = ['new_decls', 'symbol_table']

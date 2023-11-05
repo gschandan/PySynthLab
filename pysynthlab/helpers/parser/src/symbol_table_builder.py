@@ -1,7 +1,6 @@
 from typing import Union
 
 from . import ast, resolution, utilities
-
 from .exceptions import ResolutionException, UnsupportedFeatureException
 from .resolution import SymbolTable, SortDescriptor, SortKind, FunctionDescriptor
 

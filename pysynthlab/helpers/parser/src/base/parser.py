@@ -1,12 +1,10 @@
-import ply.yacc
-
 from abc import abstractmethod
 from io import StringIO
 
-from .. import ast, exceptions, utilities
-from ..symbol_table_builder import SymbolTableBuilder
+import ply.yacc
 
 from .lexer import SygusLexerBase
+from .. import ast, exceptions, utilities
 
 
 # noinspection PyMethodMayBeStatic

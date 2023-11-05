@@ -6,6 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/ast.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/ast.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/resolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/resolution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/symbol_table_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/symbol_table_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parsetab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/processor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
     </list>
@@ -225,7 +238,7 @@
       <workItem from="1696675567519" duration="3685000" />
       <workItem from="1696855201031" duration="21316000" />
       <workItem from="1698692018354" duration="1830000" />
-      <workItem from="1699197303273" duration="4214000" />
+      <workItem from="1699197303273" duration="5613000" />
     </task>
     <servers />
   </component>

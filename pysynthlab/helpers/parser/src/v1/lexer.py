@@ -1,5 +1,6 @@
-import ply.lex
 import re
+
+import ply.lex
 
 from ..base.lexer import SygusLexerBase
 

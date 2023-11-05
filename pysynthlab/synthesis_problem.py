@@ -1,10 +1,10 @@
-from helpers.parser.src.v1.parser import SygusV1Parser
-from helpers.parser.src.v2.parser import SygusV2Parser
-from helpers.parser.src import symbol_table_builder
-from helpers.parser.src.ast import Program
-from helpers.parser.src.resolution import SymbolTable
-from helpers.parser.src.v1.printer import SygusV1ASTPrinter
-from helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from pysynthlab.helpers.parser.src import symbol_table_builder
+from pysynthlab.helpers.parser.src.ast import Program
+from pysynthlab.helpers.parser.src.resolution import SymbolTable
+from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
+from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
+from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
+from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:

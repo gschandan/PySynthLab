@@ -1,5 +1,3 @@
-from typing import Dict
-
 from .. import ast
 from ..base.printer import SygusASTPrinterBase
 from ..resolution import SymbolTable

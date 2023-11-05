@@ -3,8 +3,8 @@ from enum import auto, Enum, unique
 from typing import Dict, List, Tuple, Union
 
 from . import utilities
-
 from .utilities import Identifier, Location
+
 
 class ASTVisitor(object):
     __slots__ = ['name']
