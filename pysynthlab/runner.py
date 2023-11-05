@@ -8,6 +8,7 @@ def main(args):
     file = args.input_file.read()
     problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
+    print(problem.get_logic())
 
 
 if __name__ == '__main__':

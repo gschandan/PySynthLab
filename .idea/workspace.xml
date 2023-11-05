@@ -6,19 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/ast.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/ast.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/lexer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/printer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/resolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/resolution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/symbol_table_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/symbol_table_builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parsetab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/printer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/processor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
     </list>
@@ -53,22 +40,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/Documents/Data Science/Courses/Dissertation/pysynthlab/helpers/parser&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;zielu.gittoolbox.app.config.v2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;zielu.gittoolbox.prj.config.selected.tab.id&quot;: &quot;zielu.gittoolbox.config.shared.autoFetch&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation/pysynthlab/runner.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "zielu.gittoolbox.app.config.v2",
+    "vue.rearranger.settings.migration": "true",
+    "zielu.gittoolbox.prj.config.selected.tab.id": "zielu.gittoolbox.config.shared.autoFetch"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pysynthlab/helpers/parser" />
@@ -82,7 +69,7 @@
       <recent name="$PROJECT_DIR$/pysynthlab" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.check">
+  <component name="RunManager" selected="Python.runner">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -150,7 +137,7 @@
       </texify>
       <method v="2" />
     </configuration>
-    <configuration name="check" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="runner" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Dissertation" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -163,8 +150,8 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/helpers/parser/bin/check.py" />
-      <option name="PARAMETERS" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
+      <option name="PARAMETERS" value="-s 1 $USER_HOME$/code/benchmarks/small.sl" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -217,9 +204,17 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="BibTeX.sygus_docs bibliography" />
+      <item itemvalue="LaTeX.sygus_docs" />
+      <item itemvalue="Python.runner" />
+      <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
+      <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
+      <item itemvalue="Python tests.Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.check" />
+        <item itemvalue="Python.runner" />
         <item itemvalue="LaTeX.sygus_docs" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
@@ -238,27 +233,16 @@
       <workItem from="1696675567519" duration="3685000" />
       <workItem from="1696855201031" duration="21316000" />
       <workItem from="1698692018354" duration="1830000" />
-      <workItem from="1699197303273" duration="5613000" />
+      <workItem from="1699197303273" duration="6397000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pysynthlab/helpers/parser/src/ast.py</url>
-          <line>216</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Dissertation$.coverage" NAME=" Coverage Results" MODIFIED="1697570580187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/helpers" />
     <SUITE FILE_PATH="coverage/Dissertation$main.coverage" NAME="main Coverage Results" MODIFIED="1698694483354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab" />
-    <SUITE FILE_PATH="coverage/Dissertation$check.coverage" NAME="check Coverage Results" MODIFIED="1698693595781" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$check.coverage" NAME="runner Coverage Results" MODIFIED="1699204813924" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
   </component>
 </project>

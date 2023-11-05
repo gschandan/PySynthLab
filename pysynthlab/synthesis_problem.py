@@ -10,8 +10,21 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 class SynthesisProblem:
     """
         A class representing a synthesis problem.
+        ...
         Attributes
         ----------
+        options : object
+            Additional options for the synthesis problem.
+        sygus_standard : int
+            The selected SyGuS-IF standard version.
+        parser : SygusParser (SygusV1Parser or SygusV2Parser)
+            The SyGuS parser based on the chosen standard.
+        problem : Program
+            The parsed synthesis problem.
+        symbol_table : SymbolTable
+            The symbol table built from the parsed problem.
+        printer : SygusASTPrinter (SygusV1ASTPrinter or SygusV2ASTPrinter)
+            The AST (Abstract Syntax Tree) printer based on the chosen standard.
         ...
         Methods
         -------
@@ -29,16 +42,25 @@ class SynthesisProblem:
 
     def __init__(self, problem: str, sygus_standard: int = 2, options: object = None):
         """
-        Constructs all the necessary attributes for the synthesis problem.
+        Initialize a SynthesisProblem instance with the provided parameters.
 
         Parameters
         ----------
-            problem: str
-                synthesis problem to be parsed
-            sygus_standard: int
-                v1 or v2 SyGuS-IF standard
-            options: object
-                additional options if V1 problem e.g. no-unary-minus
+        problem : str
+            The synthesis problem to be parsed.
+        sygus_standard : int, optional
+            The SyGuS-IF standard version (1 or 2). Default is 2.
+        options : object, optional
+            Additional options for version 1 (e.g., 'no-unary-minus'). Default is None.
+
+        Examples
+        --------
+        >> problem = SynthesisProblem("(set-logic LIA)\n(synth-fun f ((x Int) (y Int)) Int)\n...", sygus_standard=1)
+        >> print(problem.problem)
+        (set-logic LIA)
+        (synth-fun f ((x Int) (y Int)) Int)
+        ...
+
         """
         if options is None:
             options = {}
@@ -65,7 +87,7 @@ class SynthesisProblem:
         print(self)
 
     def get_logic(self):
-        pass
+        return self.symbol_table.logic_name
 
     def get_synthesis_function(self):
         pass
