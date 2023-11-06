@@ -30,17 +30,9 @@ class SynthesisProblem:
         -------
         info():
             Prints the synthesis problem to the console
-        get_logic
-            get the logic for the synthesis problem e.g. LIA (Linear Integer Arithmetic)
-        get_synthesis_function : str
-            get the function to be synthesised
-        get_variables : dict[str,str]
-            get the declared variables: <name,type>
-        get_constraints : list[str]
-            constraints to specify a desired property of the synthesised function
         """
 
-    def __init__(self, problem: str, sygus_standard: int = 2, options: object = None):
+    def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
         """
         Initialize a SynthesisProblem instance with the provided parameters.
 
@@ -88,18 +80,3 @@ class SynthesisProblem:
 
     def get_logic(self):
         return self.symbol_table.logic_name
-
-    def get_synthesis_function(self):
-        pass
-
-    def get_variables(self):
-        pass
-
-    def get_constraints(self):
-        pass
-
-    def enumerator(self):
-        pass
-
-    def verifier(self):
-        pass
