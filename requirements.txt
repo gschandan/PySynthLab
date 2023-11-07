@@ -2,3 +2,4 @@ pytest
 hypothesis
 ply
 pyparsing
+z3-solver

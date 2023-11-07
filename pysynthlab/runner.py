@@ -1,4 +1,5 @@
-import warnings
+import z3
+import helpers.parser.src.ast as ast
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
 from pysynthlab.synthesis_problem import SynthesisProblem
@@ -9,6 +10,30 @@ def main(args):
     problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
     print(problem.get_logic())
+
+    solver = z3.Solver()
+    for command in problem.problem.commands:
+        if command.command_kind.value == ast.CommandKind.DECLARE_VAR.value:
+            var_name = command.symbol
+            var_type = command.sort_expression.identifier.symbol
+            if var_type == "Int":
+                solver.add(z3.Int(var_name))
+
+        if command.command_kind.value == ast.CommandKind.CONSTRAINT.value:
+            constraint = command.expr
+            # Need to translate constraint between sygus and z3
+            solver.add(constraint)
+
+    if solver.check() == z3.sat:
+        model = solver.model()
+        print("Solution found:")
+        for command in problem.problem.commands:
+            if command.command_kind.value == ast.CommandKind.DECLARE_VAR.value:
+                var_name = command.symbol
+                var_value = model[command.symbol]
+                print(f"{var_name} = {var_value}")
+    else:
+        print("No solution found.")
 
 
 if __name__ == '__main__':
