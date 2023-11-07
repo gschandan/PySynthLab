@@ -41,5 +41,7 @@ then we take this model and check if it is consistent in the T-solver
 if this is not consistent, add the negation of the model to the original formula
 now as the old model doesn't satisfy the new formula, backtrack until we can develop a new model
 
-
+z3 - classic synthesis algorithms - 3 basic original algo
+extract configurability from those algorithms
+implement classic cegis - verifier z3
 """

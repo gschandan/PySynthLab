@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pysynthlab/solvers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/solvers/notes.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/enumerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/solvers/SAT.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/verifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/solvers/SMT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/solvers/notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/solvers/sat.notes.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,7 +234,7 @@
       <workItem from="1696855201031" duration="21316000" />
       <workItem from="1698692018354" duration="1830000" />
       <workItem from="1699197303273" duration="9270000" />
-      <workItem from="1699299789429" duration="4440000" />
+      <workItem from="1699299789429" duration="6327000" />
     </task>
     <servers />
   </component>
