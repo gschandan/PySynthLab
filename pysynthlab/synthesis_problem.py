@@ -81,5 +81,8 @@ class SynthesisProblem:
     def get_logic(self):
         return self.symbol_table.logic_name
 
+    def get_synth_funcs(self):
+        return self.symbol_table.synth_functions
+
     # def get_variables(self):
     #     return self.symbol_table.sor
