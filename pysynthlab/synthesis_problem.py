@@ -1,6 +1,6 @@
 from pysynthlab.helpers.parser.src import symbol_table_builder
-from pysynthlab.helpers.parser.src.ast import Program
-from pysynthlab.helpers.parser.src.resolution import SymbolTable
+from pysynthlab.helpers.parser.src.ast import Program, CommandKind
+from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
@@ -84,5 +84,7 @@ class SynthesisProblem:
     def get_synth_funcs(self):
         return self.symbol_table.synth_functions
 
-    # def get_variables(self):
-    #     return self.symbol_table.sor
+    def get_synth_func(self, symbol):
+        return next(filter(lambda x:
+                           x.function_kind == FunctionKind.SYNTH_FUN and x.identifier.symbol == symbol,
+                           list(self.symbol_table.synth_functions.values())))

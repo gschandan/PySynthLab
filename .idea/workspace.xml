@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/two.sl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/two.smt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/two.sl" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/two.sl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
     </list>
@@ -223,7 +222,7 @@
       <workItem from="1698692018354" duration="1830000" />
       <workItem from="1699197303273" duration="9270000" />
       <workItem from="1699299789429" duration="9314000" />
-      <workItem from="1701535147663" duration="8317000" />
+      <workItem from="1701535147663" duration="16777000" />
     </task>
     <servers />
   </component>
@@ -235,35 +234,37 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
-          <line>84</line>
+          <line>85</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
-          <line>32</line>
+          <line>34</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
-          <line>28</line>
+          <line>30</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
-          <line>13</line>
+          <line>14</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pysynthlab/synthesis_problem.py</url>
-          <line>84</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
-          <line>61</line>
-          <option name="timeStamp" value="39" />
+          <line>75</line>
+          <option name="timeStamp" value="56" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
@@ -271,6 +272,6 @@
     <SUITE FILE_PATH="coverage/Dissertation$runner_smt.coverage" NAME="runner_smt Coverage Results" MODIFIED="1701690142200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$main.coverage" NAME="main Coverage Results" MODIFIED="1698694483354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab" />
     <SUITE FILE_PATH="coverage/Dissertation$check.coverage" NAME="runner Coverage Results" MODIFIED="1699204944897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
-    <SUITE FILE_PATH="coverage/Dissertation$runner.coverage" NAME="runner_sygus Coverage Results" MODIFIED="1701689318141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner.coverage" NAME="runner_sygus Coverage Results" MODIFIED="1701709350174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
   </component>
 </project>
