@@ -9,31 +9,6 @@ from pysynthlab.synthesis_problem import SynthesisProblem
 def main(args):
     file = args.input_file.read()
 
-    # Testing smt input
-    #solver = z3.Solver()
-    #solver.add(z3.parse_smt2_string('''
-    #(set-logic LIA)
-    #
-    #(declare-var x Int)
-    #
-    #(declare-fun id1 (Int) Int)
-    #(declare-fun id2 (Int) Int)
-    #(declare-fun id3 (Int) Int)
-    #(declare-fun id4 (Int) Int)
-    #
-    #(assert
-    #  (forall ((x Int))
-    #    (= (id1 x) (id2 x) (id3 x) (id4 x) x)
-    #  )
-    #)
-    #
-    #(check-sat)
-    #(get-model)
-    #'''))
-    #solver.check()
-    #model = solver.model()
-    #print('Model:', model)
-
     problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
     print(problem.get_logic())
@@ -42,14 +17,17 @@ def main(args):
     solver = z3.Solver()
     solver.add(z3.parse_smt2_string(smt_lib_problem))
 
-    result = solver.check()
+    additional_constraints = []
+    for i in range(1000):
 
-    if result == z3.sat:
-        print('Satisfiable!')
-        model = solver.model()
-        print('Model:', model)
-    else:
-        print('Unsatisfiable!')
+        if solver.check() == z3.sat:
+            print('Satisfiable!')
+            model = solver.model()
+            print('Model:', model)
+
+        else:
+            print('Unsatisfiable!')
+            break
 
 
 def translate_to_smt_lib_2(sygus_content):
