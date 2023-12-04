@@ -1,10 +1,8 @@
 (set-logic LIA)
-
-(synth-fun f ((x Int)) Int)
-(synth-fun g ((a Int) (b Int)) Int)
-
-(declare-var p Int)
-(declare-var q Int)
-
-(constraint (= (f p) (g p q)))
+(synth-fun id1 ((x Int)) Int ((Start Int)) ((Start Int ((- x) (+ x Start)))))
+(synth-fun id2 ((x Int)) Int ((Start Int)) ((Start Int ((Variable Int) (- x) (+ x Start)))))
+(synth-fun id3 ((x Int)) Int ((Start Int)) ((Start Int (0 (- x) (+ x Start)))))
+(synth-fun id4 ((x Int)) Int ((Start Int)) ((Start Int ((- x) (+ x Start)))))
+(declare-var x Int)
+(constraint (= (id1 x) (id2 x) (id3 x) (id4 x) x))
 (check-synth)

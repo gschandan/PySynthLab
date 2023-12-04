@@ -1,12 +1,17 @@
 (set-logic LIA)
 
-(declare-fun f (Int) Int)
-(declare-fun g (Int Int) Int)
+(declare-var x Int)
 
-(declare-fun p () Int)
-(declare-fun q () Int)
+(declare-fun id1 (Int) Int)
+(declare-fun id2 (Int) Int)
+(declare-fun id3 (Int) Int)
+(declare-fun id4 (Int) Int)
 
-(assert (= (f p) (g p q)))
+(assert
+  (forall ((x Int))
+    (= (id1 x) (id2 x) (id3 x) (id4 x) x)
+  )
+)
 
 (check-sat)
 (get-model)

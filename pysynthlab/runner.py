@@ -10,11 +10,29 @@ def main(args):
     file = args.input_file.read()
 
     # Testing smt input
-    # solver = z3.Solver()
-    # solver.add(z3.parse_smt2_string(file))
-    # solver.check()
-    # model = solver.model()
-    # print('Model:', model)
+    #solver = z3.Solver()
+    #solver.add(z3.parse_smt2_string('''
+    #(set-logic LIA)
+    #
+    #(declare-var x Int)
+    #
+    #(declare-fun id1 (Int) Int)
+    #(declare-fun id2 (Int) Int)
+    #(declare-fun id3 (Int) Int)
+    #(declare-fun id4 (Int) Int)
+    #
+    #(assert
+    #  (forall ((x Int))
+    #    (= (id1 x) (id2 x) (id3 x) (id4 x) x)
+    #  )
+    #)
+    #
+    #(check-sat)
+    #(get-model)
+    #'''))
+    #solver.check()
+    #model = solver.model()
+    #print('Model:', model)
 
     problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
@@ -22,11 +40,7 @@ def main(args):
     smt_lib_problem = translate_to_smt_lib_2(problem)
 
     solver = z3.Solver()
-
-    for command in smt_lib_problem.split('\n'):
-        if command.strip() != '':
-            print(f"Parsed command: {command}")
-            solver.add(z3.parse_smt2_string(command))
+    solver.add(z3.parse_smt2_string(smt_lib_problem))
 
     result = solver.check()
 
@@ -72,8 +86,7 @@ def translate_to_smt_lib_2(sygus_content):
             sort = tokens[3]
             smt_lib_2_content.append(f'(declare-fun {symbol} () {sort})')
         elif command == 'constraint':
-            term = ''.join([' (' if s == '(' else s for s in tokens[2:-1]])
-            smt_lib_2_content.append(f'(assert{term})')
+            smt_lib_2_content.append(line.replace('(constraint', '(assert'))
         elif command == 'declare-weight':
             symbol = tokens[2]
             attributes = ' '.join(tokens[3:])
@@ -82,7 +95,6 @@ def translate_to_smt_lib_2(sygus_content):
             pass
 
     smt_lib_2_content.append('(check-sat)')
-    smt_lib_2_content.append('(get-model)')
     return '\n'.join(smt_lib_2_content)
 
 
