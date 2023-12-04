@@ -1,96 +1,89 @@
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 import cvc5
+import z3
 
 from pysynthlab.helpers.parser.src.ast import CommandKind, ASTVisitor
 from pysynthlab.synthesis_problem import SynthesisProblem
 
-class CVC5DeclarationVisitor(ASTVisitor):
-    def __init__(self, solver):
-        super().__init__('CVC5DeclarationVisitor')
-        self.solver = solver
-
-    def visit_declare_var_command(self, declare_var_command):
-        symbol = declare_var_command.symbol
-        sort_expr = declare_var_command.sort_expression
-
-        cvc5_sort = self.convert_sort_expr(sort_expr)
-
-        cvc5_var = self.solver.mkVar(symbol, cvc5_sort)
-
-        print(f"Declared variable: {symbol} of sort {sort_expr}")
-
-    def convert_sort_expr(self, sort_expr):
-        cvc5_sort = self.cvc5_sort_converter(sort_expr)
-        return cvc5_sort
-
-    def cvc5_sort_converter(self, sort_expr):
-        if sort_expr.identifier.symbol == 'Int':
-            return cvc5.Sort(cvc5.SortKind.INTEGER)
-        elif sort_expr.identifier.symbol == 'Bool':
-            return cvc5.Sort(cvc5.SortKind.BOOLEAN)
-        else:
-            raise ValueError(f"Unsupported sort: {sort_expr}")
-
-
 def main(args):
     file = args.input_file.read()
+
+    # Testing smt input
+    # solver = z3.Solver()
+    # solver.add(z3.parse_smt2_string(file))
+    # solver.check()
+    # model = solver.model()
+    # print('Model:', model)
+
     problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
     print(problem.get_logic())
+    smt_lib_problem = translate_to_smt_lib_2(problem.__str__())
 
-    solver = cvc5.Solver()
+    solver = z3.Solver()
 
-    # required options
+    for command in smt_lib_problem.split('\n'):
+        if command.strip() != '':
+            solver.add(z3.parse_smt2_string(command))
 
-    solver.setOption("sygus", "true")
-    solver.setOption("incremental", "false")
+    result = solver.check()
 
-    # set the logic
-    solver.setLogic(problem.get_logic())
+    if result == z3.sat:
+        print('Satisfiable!')
+        model = solver.model()
+        print('Model:', model)
+    else:
+        print('Unsatisfiable!')
 
-    declaration_visitor = CVC5DeclarationVisitor(solver)
 
-    for command in problem.problem.commands:
-        if command.command_kind == CommandKind.DECLARE_VAR:
-            command.accept(declaration_visitor)
+def translate_to_smt_lib_2(sygus_content):
+    smt_lib_2_content = []
+    same_commands = {
+        'declare-datatype',
+        'declare-datatypes',
+        'declare-sort',
+        'define-fun',
+        'define-sort',
+        'set-info',
+        'set-logic',
+        'set-option'
+    }
+    for line in sygus_content.split('\n'):
+        line = line.strip()
+        if not line or line.startswith(';'):
+            continue
 
-    def str_to_term(str_input):
-        def get_kind(sym):
-            if sym == "+":
-                return cvc5.Kind.PLUS
-            elif sym == "-":
-                return cvc5.Kind.MINUS
-            elif sym == "*":
-                return cvc5.Kind.MULT
-            elif sym == "/":
-                return cvc5.Kind.DIVISION
-            elif sym == "=":
-                return cvc5.Kind.EQUAL
+        tokens = line.replace('(', ' ( ').replace(')', ' ) ').split()
 
-        # Tokenize the input
-        tokens = str_input.split()
+        command = tokens[1]
+        if command in same_commands:  # Commands that are the same in SyGuS-IF and SMT-LIB2
+            smt_lib_2_content.append(line)
+        elif command == 'synth-fun':
+            function_symbol = tokens[2]
+            variable_sorts = ' '.join(f'({var})' for var in tokens[3:-2:2])
+            return_sort = tokens[-2]
+            smt_lib_2_content.append(f'(declare-fun {function_symbol} ({variable_sorts}) {return_sort})')
+        elif command == 'check-synth':
+            smt_lib_2_content.append('(check-sat)')
+        elif command == 'assume':
+            term = ' '.join(tokens[2:-1])
+            smt_lib_2_content.append(f'(assert {term})')
+        elif command == 'declare-var':
+            symbol = tokens[2]
+            sort = tokens[3]
+            smt_lib_2_content.append(f'(declare-fun {symbol} () {sort})')
+        elif command == 'constraint':
+            term = ' '.join(tokens[2:-1])
+            smt_lib_2_content.append(f'(assert {term})')
+        elif command == '(declare-weight':
+            symbol = tokens[2]
+            attributes = ' '.join(tokens[3:])
+            smt_lib_2_content.append(f'; (declare-weight {symbol} {attributes})')
+        else:
+            smt_lib_2_content.append(line)
 
-        stack = []
-        for t in tokens:
-            if t in ["+", "-", "*", "/", "="]:
-                # Handle operators
-                right = stack.pop()
-                left = stack.pop()
-                stack.append(solver.mkTerm(get_kind(t), left, right))
-            else:
-                # Handle variables or constants
-                if t.isdigit():
-                    # If it's a number, create a constant
-                    stack.append(solver.mkConst(solver.getIntegerSort(), t))
-                else:
-                    # Assume it's a variable
-                    stack.append(solver.mkVar(t, solver.getIntegerSort()))
-
-        return stack.pop()
-
-    solver.assertFormula(problem.__str__())
-
-    result = solver.checkSynth()
+    smt_lib_2_content.append('(get-model)')
+    return '\n'.join(smt_lib_2_content)
 
 
 if __name__ == '__main__':

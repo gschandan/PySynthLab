@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pysynthlab/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/small.smt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +70,7 @@
       <recent name="$PROJECT_DIR$/.." />
     </key>
   </component>
-  <component name="RunManager" selected="Python.runner">
+  <component name="RunManager" selected="Python.runner_sygus">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -81,20 +79,6 @@
         <envs />
         <main-file>$USER_HOME$</main-file>
         <aux-dir>$USER_HOME$</aux-dir>
-      </texify-bibtex>
-      <method v="2" />
-    </configuration>
-    <configuration name="sygus_docs bibliography" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
-      <texify-bibtex>
-        <compiler>BIBTEX</compiler>
-        <compiler-path />
-        <compiler-arguments />
-        <envs>
-          <env name="BIBINPUTS" value="$PROJECT_DIR$/docs" />
-          <env name="BSTINPUTS" value="$PROJECT_DIR$/docs:" />
-        </envs>
-        <main-file>$USER_HOME$</main-file>
-        <aux-dir>$PROJECT_DIR$/out</aux-dir>
       </texify-bibtex>
       <method v="2" />
     </configuration>
@@ -119,28 +103,29 @@
       </texify>
       <method v="2" />
     </configuration>
-    <configuration name="sygus_docs" type="LATEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory" temporary="true">
-      <texify>
-        <compiler>PDFLATEX</compiler>
-        <compiler-path />
-        <sumatra-path />
-        <pdf-viewer>EVINCE</pdf-viewer>
-        <viewer-command />
-        <compiler-arguments />
-        <envs />
-        <main-file />
-        <output-path>$PROJECT_DIR$/out</output-path>
-        <auxil-path>{projectDir}/auxil</auxil-path>
-        <compile-twice>false</compile-twice>
-        <output-format>PDF</output-format>
-        <latex-distribution>TEXLIVE</latex-distribution>
-        <has-been-run>true</has-been-run>
-        <bib-run-config>[BibTeX.sygus_docs bibliography]</bib-run-config>
-        <makeindex-run-config>[]</makeindex-run-config>
-      </texify>
+    <configuration name="runner_smt" type="PythonConfigurationType" factoryName="Python">
+      <module name="Dissertation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
+      <option name="PARAMETERS" value="-s 1 $USER_HOME$/code/benchmarks/small.smt" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="runner" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="runner_sygus" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Dissertation" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -208,17 +193,15 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="BibTeX.sygus_docs bibliography" />
-      <item itemvalue="LaTeX.sygus_docs" />
-      <item itemvalue="Python.runner" />
+      <item itemvalue="Python.runner_smt" />
+      <item itemvalue="Python.runner_sygus" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.runner" />
-        <item itemvalue="LaTeX.sygus_docs" />
+        <item itemvalue="Python.runner_sygus" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" />
@@ -238,6 +221,7 @@
       <workItem from="1698692018354" duration="1830000" />
       <workItem from="1699197303273" duration="9270000" />
       <workItem from="1699299789429" duration="9314000" />
+      <workItem from="1701535147663" duration="6418000" />
     </task>
     <servers />
   </component>
@@ -249,16 +233,37 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
-          <line>17</line>
-          <option name="timeStamp" value="26" />
+          <line>85</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="37" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Dissertation$.coverage" NAME=" Coverage Results" MODIFIED="1697570580187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/helpers" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_smt.coverage" NAME="runner_smt Coverage Results" MODIFIED="1701688059856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$main.coverage" NAME="main Coverage Results" MODIFIED="1698694483354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab" />
     <SUITE FILE_PATH="coverage/Dissertation$check.coverage" NAME="runner Coverage Results" MODIFIED="1699204944897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
-    <SUITE FILE_PATH="coverage/Dissertation$runner.coverage" NAME="runner Coverage Results" MODIFIED="1701021198027" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner.coverage" NAME="runner_sygus Coverage Results" MODIFIED="1701688176738" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
   </component>
 </project>
