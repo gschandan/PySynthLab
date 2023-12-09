@@ -17,9 +17,9 @@ def main(args):
     solver = z3.Solver()
     solver.add(z3.parse_smt2_string(smt_lib_problem))
 
-    additional_constraints = []
-    for i in range(1000):
+    constraints = solver.assertions()
 
+    for i in range(10):
         if solver.check() == z3.sat:
             print('Satisfiable!')
             model = solver.model()
@@ -79,8 +79,8 @@ def translate_to_smt_lib_2(sygus_content):
 def extract_synth_function(sygus_content, function_symbol) -> str:
     synthesis_function = sygus_content.get_synth_func(function_symbol)
     func_problem = next(filter(lambda x:
-                       x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
-                       sygus_content.problem.commands))
+                               x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
+                               sygus_content.problem.commands))
 
     arg_sorts = [str(arg_sort.identifier) for arg_sort in synthesis_function.argument_sorts]
 
