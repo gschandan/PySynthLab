@@ -23,20 +23,34 @@ def main(args):
 
     counterexample = []
 
-    while solver.check() == z3.sat:
+    if solver.check() == z3.sat:
         model = solver.model()
         print(model)
 
-        negated_constraints = []
-        for var in model:
-            variable_name = str(var)
-            variable_value = model[var]
-            if z3.is_int_value(variable_value):
-                negated_constraints.append(z3.Or(z3.Int(variable_name) != variable_value))
-        solver.add(negated_constraints)
+        for constraint in solver.assertions():
+            solver.add(z3.Not(constraint))
+            solver.push()
+            print(solver.assertions())
+            result = solver.check()
+            if result == z3.sat:
+                print("Not a valid invariant. Counter-example:")
+                print(solver.model())
+            elif result == z3.unsat:
+                print("Invariant is valid")
+            else:
+                print(result)
 
-    model = solver.model()
-    print(model)
+        # negated_constraints = []
+        # for var in model:
+        #     variable_name = str(var)
+        #     variable_value = model[var]
+        #     if z3.is_int_value(variable_value):
+        #         negated_constraints.append(z3.Or(z3.Int(variable_name) != variable_value))
+        # solver.add(negated_constraints)
+
+        print(model)
+        print(solver.statistics())
+
 
 def translate_to_smt_lib_2(sygus_content):
     smt_lib_2_content = []
