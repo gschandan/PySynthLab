@@ -88,3 +88,9 @@ class SynthesisProblem:
         return next(filter(lambda x:
                            x.function_kind == FunctionKind.SYNTH_FUN and x.identifier.symbol == symbol,
                            list(self.symbol_table.synth_functions.values())))
+
+    def get_var_symbols(self):
+        return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]
+
+    def variables(self):
+        return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]

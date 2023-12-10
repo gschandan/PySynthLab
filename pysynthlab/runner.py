@@ -1,5 +1,4 @@
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
-import cvc5
 import z3
 
 from pysynthlab.helpers.parser.src.ast import CommandKind, ASTVisitor
@@ -15,19 +14,55 @@ def main(args):
     smt_lib_problem = translate_to_smt_lib_2(problem)
 
     solver = z3.Solver()
+    solver.set("timeout", 300)
     solver.add(z3.parse_smt2_string(smt_lib_problem))
 
+    specification = []
+    for var in solver.assertions():
+        if isinstance(var, z3.Z3_INT_SORT):
+            specification.append(str(var))
+        elif isinstance(var, z3.FuncDecl):
+            specification.append((var var.domain, var.range))
+
     constraints = solver.assertions()
+    variables = problem.get_var_symbols()
+    functions = problem.get_synth_funcs()
 
-    for i in range(10):
-        if solver.check() == z3.sat:
-            print('Satisfiable!')
-            model = solver.model()
-            print('Model:', model)
+    counterexample = []
 
-        else:
-            print('Unsatisfiable!')
-            break
+    while solver.check() == z3.sat:
+        model = solver.model()
+
+        program_code = []
+        for var in variables:
+            program_code.append(model[z3.Int(var)])
+
+        examples = []
+        for i in range(len(program_code[0])):
+            inputs = []
+            for j in range(len(program_code)):
+                inputs.append(program_code[j][i])
+            examples.append(inputs)
+
+        results = []
+        for i in range(len(examples)):
+            results.append([program_code[0][i](*example) for example in examples[i]])
+
+        update_specification(specification, examples, results, solver)
+
+    print(program_code)
+    print(examples)
+
+
+def update_specification(specification, examples, results, solver):
+    for i in range(len(specification)):
+        if isinstance(specification[i], tuple):
+            specification[i] = (specification[i][0], specification[i][1], *examples[i][0], *results[i])
+
+    if solver.check(specification) == z3.sat:
+        return
+
+    raise Exception("failed")
 
 
 def translate_to_smt_lib_2(sygus_content):
