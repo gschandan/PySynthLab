@@ -14,15 +14,8 @@ def main(args):
     smt_lib_problem = translate_to_smt_lib_2(problem)
 
     solver = z3.Solver()
-    solver.set("timeout", 300)
+    solver.set("timeout", 5)
     solver.add(z3.parse_smt2_string(smt_lib_problem))
-
-    specification = []
-    for var in solver.assertions():
-        if isinstance(var, z3.Z3_INT_SORT):
-            specification.append(str(var))
-        elif isinstance(var, z3.FuncDecl):
-            specification.append((var var.domain, var.range))
 
     constraints = solver.assertions()
     variables = problem.get_var_symbols()
@@ -32,38 +25,18 @@ def main(args):
 
     while solver.check() == z3.sat:
         model = solver.model()
+        print(model)
 
-        program_code = []
-        for var in variables:
-            program_code.append(model[z3.Int(var)])
+        negated_constraints = []
+        for var in model:
+            variable_name = str(var)
+            variable_value = model[var]
+            if z3.is_int_value(variable_value):
+                negated_constraints.append(z3.Or(z3.Int(variable_name) != variable_value))
+        solver.add(negated_constraints)
 
-        examples = []
-        for i in range(len(program_code[0])):
-            inputs = []
-            for j in range(len(program_code)):
-                inputs.append(program_code[j][i])
-            examples.append(inputs)
-
-        results = []
-        for i in range(len(examples)):
-            results.append([program_code[0][i](*example) for example in examples[i]])
-
-        update_specification(specification, examples, results, solver)
-
-    print(program_code)
-    print(examples)
-
-
-def update_specification(specification, examples, results, solver):
-    for i in range(len(specification)):
-        if isinstance(specification[i], tuple):
-            specification[i] = (specification[i][0], specification[i][1], *examples[i][0], *results[i])
-
-    if solver.check(specification) == z3.sat:
-        return
-
-    raise Exception("failed")
-
+    model = solver.model()
+    print(model)
 
 def translate_to_smt_lib_2(sygus_content):
     smt_lib_2_content = []

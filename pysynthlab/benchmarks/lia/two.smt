@@ -1,6 +1,6 @@
 (set-logic LIA)
 
-(declare-var x Int)
+(declare-fun x () Int)
 
 (declare-fun id1 (Int) Int)
 (declare-fun id2 (Int) Int)
