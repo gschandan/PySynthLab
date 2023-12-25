@@ -1,3 +1,5 @@
+import z3
+
 from pysynthlab.helpers.parser.src import symbol_table_builder
 from pysynthlab.helpers.parser.src.ast import Program, CommandKind
 from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind
@@ -32,7 +34,7 @@ class SynthesisProblem:
             Prints the synthesis problem to the console
         """
 
-    def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
+    def __init__(self, problem: str, solver: z3.Solver, sygus_standard: int = 1, options: object = None):
         """
         Initialize a SynthesisProblem instance with the provided parameters.
 
@@ -64,6 +66,10 @@ class SynthesisProblem:
         self.printer: SygusV2ASTPrinter | SygusV1ASTPrinter = SygusV2ASTPrinter(self.symbol_table) \
             if sygus_standard == 2 \
             else SygusV1ASTPrinter(self.symbol_table, options)
+        self.solver = solver
+        self.commands = [x for x in self.problem.commands]
+        self.z3variables = []
+        self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
 
     def __str__(self) -> str:
         """
@@ -92,5 +98,26 @@ class SynthesisProblem:
     def get_var_symbols(self):
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]
 
-    def variables(self):
+    def get_function_symbols(self):
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]
+
+    def extract_synth_function(self, function_symbol) -> str:
+        synthesis_function = self.get_synth_func(function_symbol)
+        func_problem = next(filter(lambda x:
+                                   x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
+                                   self.problem.commands))
+
+        arg_sorts = [str(arg_sort.identifier) for arg_sort in synthesis_function.argument_sorts]
+
+        return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
+
+    def add_variables(self):
+
+        for variable in [x for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]:
+            if variable.__getattribute__('sort_expression').identifier.symbol == 'Int':
+                self.z3variables.append(z3.Int(variable.symbol))
+            print(variable.symbol, variable.__getattribute__('sort_expression').identifier.symbol == 'Int')
+
+    def setup_solver(self):
+
+        self.add_variables()

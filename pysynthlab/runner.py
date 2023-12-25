@@ -8,119 +8,48 @@ from pysynthlab.synthesis_problem import SynthesisProblem
 def main(args):
     file = args.input_file.read()
 
-    problem = SynthesisProblem(file, int(args.sygus_standard))
-    problem.info()
-    print(problem.get_logic())
-    smt_lib_problem = translate_to_smt_lib_2(problem)
-
     solver = z3.Solver()
     solver.set("timeout", 5)
-    solver.add(z3.parse_smt2_string(smt_lib_problem))
+    problem = SynthesisProblem(file, solver, int(args.sygus_standard))
+    problem.info()
+    print(problem.get_logic())
+    problem.setup_solver()
 
-    constraints = solver.assertions()
-    variables = problem.get_var_symbols()
-    functions = problem.get_synth_funcs()
-
-    counterexample = []
-
-    if solver.check() == z3.sat:
-        model = solver.model()
-        print(model)
-
-        for constraint in solver.assertions():
-            solver.add(z3.Not(constraint))
-            solver.push()
-            print(solver.assertions())
-            result = solver.check()
-            if result == z3.sat:
-                print("Not a valid invariant. Counter-example:")
-                print(solver.model())
-            elif result == z3.unsat:
-                print("Invariant is valid")
-            else:
-                print(result)
-
-        # negated_constraints = []
-        # for var in model:
-        #     variable_name = str(var)
-        #     variable_value = model[var]
-        #     if z3.is_int_value(variable_value):
-        #         negated_constraints.append(z3.Or(z3.Int(variable_name) != variable_value))
-        # solver.add(negated_constraints)
-
-        print(model)
-        print(solver.statistics())
-
-
-def translate_to_smt_lib_2(sygus_content):
-    smt_lib_2_content = []
-    same_commands = {
-        'declare-datatype',
-        'declare-datatypes',
-        'declare-sort',
-        'define-fun',
-        'define-sort',
-        'set-info',
-        'set-logic',
-        'set-option'
-    }
-
-    for line in str(sygus_content).__str__().split('\n'):
-        line = line.strip()
-        if not line or line.startswith(';'):
-            continue
-
-        tokens = line.replace('(', ' ( ').replace(')', ' ) ').split()
-
-        command = tokens[1]
-
-        if command in same_commands:
-            smt_lib_2_content.append(line)
-        elif command == 'synth-fun':
-            smt_lib_2_content.append(extract_synth_function(sygus_content, tokens[2]))
-        elif command == 'assume':
-            term = ' '.join(tokens[2:-1])
-            smt_lib_2_content.append(f'(assert {term})')
-        elif command == 'declare-var':
-            symbol = tokens[2]
-            sort = tokens[3]
-            smt_lib_2_content.append(f'(declare-fun {symbol} () {sort})')
-        elif command == 'constraint':
-            smt_lib_2_content.append(line.replace('(constraint', '(assert'))
-        elif command == 'declare-weight':
-            symbol = tokens[2]
-            attributes = ' '.join(tokens[3:])
-            smt_lib_2_content.append(f'; (declare-weight {symbol} {attributes})')
-        elif command == 'check-synth':
-            pass
-
-    smt_lib_2_content.append('(check-sat)')
-    return '\n'.join(smt_lib_2_content)
-
-
-def extract_synth_function(sygus_content, function_symbol) -> str:
-    synthesis_function = sygus_content.get_synth_func(function_symbol)
-    func_problem = next(filter(lambda x:
-                               x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
-                               sygus_content.problem.commands))
-
-    arg_sorts = [str(arg_sort.identifier) for arg_sort in synthesis_function.argument_sorts]
-
-    return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
+    # if solver.check() == z3.sat:
+    #     model = solver.model()
+    #     print(model)
+    #
+    #     for constraint in solver.assertions():
+    #         solver.add(z3.Not(constraint))
+    #         solver.push()
+    #         print(solver.assertions())
+    #         result = solver.check()
+    #         if result == z3.sat:
+    #             print("Not a valid invariant. Counter-example:")
+    #             print(solver.model())
+    #         elif result == z3.unsat:
+    #             print("Invariant is valid")
+    #         else:
+    #             print(result)
+    #
+    #     # negated_constraints = []
+    #     # for var in model:
+    #     #     variable_name = str(var)
+    #     #     variable_value = model[var]
+    #     #     if z3.is_int_value(variable_value):
+    #     #         negated_constraints.append(z3.Or(z3.Int(variable_name) != variable_value))
+    #     # solver.add(negated_constraints)
+    #
+    #     print(model)
+    #     print(solver.statistics())
 
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        '-b', '--binarize', action='store_true',
-        help='Convert all chainable operators to binary operator applications')
-    parser.add_argument(
         '-q', '--quiet', action='store_true',
         help='Suppress all messages and debugging output')
-    parser.add_argument(
-        '-u', '--no-unary-minus', action='store_true',
-        help='Convert all (- x) terms to (- 0 x)')
 
     parser.add_argument(
         '-s', '--sygus-standard', default='2', choices=['1', '2'],

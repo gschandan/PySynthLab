@@ -2,7 +2,8 @@
 
 (synth-fun f ((x Int) (y Int)) Int)
 
-(define-fun func ((x Int)) Int (+ (* x 100) 1000))
+(define-fun func ((x Int)) Int
+            (+ (* x 100) 1000))
 (declare-var x Int)
 (declare-var y Int)
 (constraint (= (f x y) (f y x)))
