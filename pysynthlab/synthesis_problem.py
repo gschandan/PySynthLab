@@ -123,7 +123,7 @@ class SynthesisProblem:
             function_name = function.function_name
             function_return_sort = map_string_to_z3_sort(function.__getattribute__('function_range_sort').identifier.symbol)
             function_params = [map_string_to_z3_sort(sort[1].identifier.symbol) for sort in function.function_parameters]
-            function_body = function.function_body
+            function_body = translate_ast_to_z3(function.function_body, function_name)
             self.z3functions.append(z3.Function(function_name, *function_params, function_return_sort))
         print(self.z3functions[0])
 
@@ -132,22 +132,14 @@ class SynthesisProblem:
         self.initialise_functions()
 
 
-def translate_ast_to_z3(node):
+def translate_ast_to_z3(node, function_name):
     if isinstance(node, LiteralTerm):
-        return map_literal_to_z3_val(LiteralTerm.literal_kind, LiteralTerm.literal_value)
+        return map_literal_to_z3_val(node.literal.literal_kind, node.literal.literal_value)
     elif isinstance(node, Identifier):
-        if node.symbol == '+':
-            return z3.Add(translate_ast_to_z3(node.ar), translate_ast_to_z3(node.right))
-        elif node.op == '-':
+        return node.symbol
     elif isinstance(node, FunctionApplicationTerm):
-        func_name = node.function_name
-        args = [translate_ast_to_z3(arg) for arg in node.arguments]
-        return getattr(globals()['z3'], func_name)(*args)
-    else:
+        args = [translate_ast_to_z3(arg, function_name) for arg in node.arguments]
 
-
-# Handle other expression types (e.g., logical operators, comparisons)
-# ...
 
 def map_literal_to_z3_val(literal_kind: LiteralKind, literal_value: object) -> object:
     if literal_kind == LiteralKind.NUMERAL:
