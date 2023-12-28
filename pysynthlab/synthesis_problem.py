@@ -1,13 +1,13 @@
 import z3
 
 from pysynthlab.helpers.parser.src import symbol_table_builder
-from pysynthlab.helpers.parser.src.ast import Program, CommandKind
+from pysynthlab.helpers.parser.src.ast import Program, CommandKind, FunctionApplicationTerm, LiteralTerm, \
+    Identifier, LiteralKind
 from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
-
 
 class SynthesisProblem:
     """
@@ -69,6 +69,8 @@ class SynthesisProblem:
         self.solver = solver
         self.commands = [x for x in self.problem.commands]
         self.z3variables = []
+        self.z3functions = []
+        self.z3function_definitions = []
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
 
     def __str__(self) -> str:
@@ -111,13 +113,59 @@ class SynthesisProblem:
 
         return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
 
-    def add_variables(self):
-
+    def initialise_variables(self):
         for variable in [x for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]:
             if variable.__getattribute__('sort_expression').identifier.symbol == 'Int':
-                self.z3variables.append(z3.Int(variable.symbol))
-            print(variable.symbol, variable.__getattribute__('sort_expression').identifier.symbol == 'Int')
+                self.z3variables.append(z3.Int(variable.symbol, self.solver.ctx))
+
+    def initialise_functions(self):
+        for function in [x for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN or x.command_kind == CommandKind.DEFINE_FUN]:
+            function_name = function.function_name
+            function_return_sort = map_string_to_z3_sort(function.__getattribute__('function_range_sort').identifier.symbol)
+            function_params = [map_string_to_z3_sort(sort[1].identifier.symbol) for sort in function.function_parameters]
+            function_body = function.function_body
+            self.z3functions.append(z3.Function(function_name, *function_params, function_return_sort))
+        print(self.z3functions[0])
 
     def setup_solver(self):
+        self.initialise_variables()
+        self.initialise_functions()
 
-        self.add_variables()
+
+def translate_ast_to_z3(node):
+    if isinstance(node, LiteralTerm):
+        return map_literal_to_z3_val(LiteralTerm.literal_kind, LiteralTerm.literal_value)
+    elif isinstance(node, Identifier):
+        if node.symbol == '+':
+            return z3.Add(translate_ast_to_z3(node.ar), translate_ast_to_z3(node.right))
+        elif node.op == '-':
+    elif isinstance(node, FunctionApplicationTerm):
+        func_name = node.function_name
+        args = [translate_ast_to_z3(arg) for arg in node.arguments]
+        return getattr(globals()['z3'], func_name)(*args)
+    else:
+
+
+# Handle other expression types (e.g., logical operators, comparisons)
+# ...
+
+def map_literal_to_z3_val(literal_kind: LiteralKind, literal_value: object) -> object:
+    if literal_kind == LiteralKind.NUMERAL:
+        return z3.IntVal(literal_value)
+    elif literal_kind == LiteralKind.BOOLEAN:
+        return z3.BoolVal(literal_value)
+    else:
+        raise ValueError(f"Unsupported kind: {literal_kind}")
+
+def map_string_to_z3_sort(sort_str: str) -> object:
+    """
+
+    :param sort_str:
+    :return:
+    """
+    if sort_str == 'Int':
+        return z3.IntSort()
+    elif sort_str == 'Bool':
+        return z3.BoolSort()
+    else:
+        raise ValueError(f"Unsupported sort: {sort_str}")
