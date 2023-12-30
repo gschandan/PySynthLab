@@ -1,8 +1,7 @@
-from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 import z3
 
-from pysynthlab.helpers.parser.src.ast import CommandKind, ASTVisitor
 from pysynthlab.synthesis_problem import SynthesisProblem
+from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
 
 def main(args):
@@ -13,38 +12,20 @@ def main(args):
     problem = SynthesisProblem(file, solver, int(args.sygus_standard))
     problem.info()
     print(problem.get_logic())
-    problem.setup_solver()
 
-    # if solver.check() == z3.sat:
-    #     model = solver.model()
-    #     print(model)
-    #
-    #     for constraint in solver.assertions():
-    #         solver.add(z3.Not(constraint))
-    #         solver.push()
-    #         print(solver.assertions())
-    #         result = solver.check()
-    #         if result == z3.sat:
-    #             print("Not a valid invariant. Counter-example:")
-    #             print(solver.model())
-    #         elif result == z3.unsat:
-    #             print("Invariant is valid")
-    #         else:
-    #             print(result)
-    #
-    #     # negated_constraints = []
-    #     # for var in model:
-    #     #     variable_name = str(var)
-    #     #     variable_value = model[var]
-    #     #     if z3.is_int_value(variable_value):
-    #     #         negated_constraints.append(z3.Or(z3.Int(variable_name) != variable_value))
-    #     # solver.add(negated_constraints)
-    #
-    #     print(model)
-    #     print(solver.statistics())
+    solver.add(z3.parse_smt2_string(problem.convert_sygus_to_smt()))
+
+    result = solver.check()
+    if result == z3.sat:
+        print('Satisfiable!')
+        model = solver.model()
+        print('Model:', model)
+    else:
+        print('Unsatisfiable!')
 
 
 if __name__ == '__main__':
+
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(

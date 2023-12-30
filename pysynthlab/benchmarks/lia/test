@@ -1,7 +1,6 @@
 verification file 1:
 
 (set-logic LIA)
-(define-fun f ((x Int) (y Int)) Int x )
 (declare-fun x () Int)
 (declare-fun y ()Int)
 (assert(or (not(= (f x y) (f y x)))
@@ -15,7 +14,6 @@ sat
 (
 (define-fun x () Int (- 1))
 (define-fun y () Int 0)
-(define-fun f ((x!0 Int) (x!1 Int)) Int x!1)
 )
 
 Look for example that is sat when x = -1 and y = 0
