@@ -1,6 +1,7 @@
 verification file 1:
 
 (set-logic LIA)
+(define-fun f ((x Int) (y Int)) Int x )
 (declare-fun x () Int)
 (declare-fun y ()Int)
 (assert(or (not(= (f x y) (f y x)))
