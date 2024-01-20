@@ -76,6 +76,7 @@ class SynthesisProblem:
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
         pyparsing.ParserElement.enablePackrat()
         self.smt_problem = self.convert_sygus_to_smt()
+        self.initialise_variables()
 
     def __str__(self) -> str:
         """
@@ -153,7 +154,6 @@ class SynthesisProblem:
                                function.function_parameters]
             function_body = translate_ast_to_z3(function.function_body, function_name)
             self.z3functions.append(z3.Function(function_name, *function_params, function_return_sort))
-        print(self.z3functions[0])
 
     def setup_solver(self):
         self.initialise_variables()

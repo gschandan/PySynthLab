@@ -14,14 +14,22 @@ def main(args):
     print(problem.get_logic())
 
     solver.add(z3.parse_smt2_string(problem.convert_sygus_to_smt()))
-
+    counterexamples = []
     result = solver.check()
-    if result == z3.sat:
-        print('Satisfiable!')
-        model = solver.model()
-        print('Model:', model)
-    else:
-        print('Unsatisfiable!')
+    while True:
+        if result == z3.sat:
+            print('Satisfiable!')
+            model = solver.model()
+            print('Model:', model)
+            counterexample = {var: model[var] for var in model.decls()}
+            counterexamples.append(counterexample)
+            print(counterexamples)
+            additional_constraints = []
+            for variable in problem.z3variables:
+                additional_constraints.append(variable == counterexample[variable])
+        else:
+            print('Unsatisfiable!')
+            break
 
 
 if __name__ == '__main__':
