@@ -155,8 +155,7 @@ class SynthesisProblem:
 
     def generate_linear_integer_expressions(self, depth):
         if depth == 0:
-            # Extend the range of integer values
-            yield from [z3.IntVal(i) for i in range(-20, 21)]
+            yield from [z3.IntVal(i) for i in range(-20, 20)]
         else:
             for var_name, var in self.z3variables.items():
                 for expr in self.generate_linear_integer_expressions(depth - 1):
@@ -165,7 +164,6 @@ class SynthesisProblem:
                     yield var - expr
                     yield var * z3.IntVal(2)
                     yield var * z3.IntVal(-1)
-                    # Conditional
                     for other_expr in self.generate_linear_integer_expressions(depth - 1):
                         yield z3.If(var > other_expr, var, other_expr)
                         yield z3.If(var >= other_expr, var, other_expr)

@@ -21,36 +21,36 @@ def main(args):
             for func_name, z3_func in problem.z3functions.items():
                 func_args = [z3.Int(f'arg_{i}') for i in range(z3_func.arity()) if z3_func.domain(i) == z3.IntSort()]
 
-                solver.push()
-                solver.add(z3.parse_smt2_string(problem.extract_synth_function(func_name)))
-                solver.add(z3_func(*func_args) == candidate_expr)
+            solver.push()
+            solver.add(z3.parse_smt2_string(problem.extract_synth_function(func_name)))
+            solver.add(z3_func(*func_args) == candidate_expr)
 
-                result = solver.check()
-                if result == z3.sat:
-                    model = solver.model()
-                    counterexample = {str(var): model[var] for var in model.decls() if str(var) in problem.z3variables}
+            result = solver.check()
+            if result == z3.sat:
+                model = solver.model()
+                counterexample = {str(var): model[var] for var in model.decls() if str(var) in problem.z3variables}
 
-                    print('Counterexample:', counterexample)
+                print('Counterexample:', counterexample)
 
-                    solver.pop()
+                solver.pop()
 
-                    additional_constraints = []
-                    for var_name, z3_var in problem.z3variables.items():
-                        if var_name in counterexample:
-                            additional_constraint = z3_var != counterexample[var_name]
-                            additional_constraints.append(additional_constraint)
+                additional_constraints = []
+                for var_name, z3_var in problem.z3variables.items():
+                    if var_name in counterexample:
+                        additional_constraint = z3_var != counterexample[var_name]
+                        additional_constraints.append(additional_constraint)
 
-                    solver.add(additional_constraints)
-                    break
-                else:
-                    print('Valid candidate found:', candidate_expr)
-                    solver.pop()
-                    return candidate_expr
+                solver.add(additional_constraints)
+                break
+            else:
+                print('Valid candidate found:', candidate_expr)
+                solver.pop()
+                return candidate_expr
 
         depth += 1
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
