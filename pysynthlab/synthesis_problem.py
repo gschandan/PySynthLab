@@ -70,13 +70,16 @@ class SynthesisProblem:
             else SygusV1ASTPrinter(self.symbol_table, options)
         self.solver = solver
         self.commands = [x for x in self.problem.commands]
-        self.z3variables = []
-        self.z3functions = []
+        self.z3variables = {}
         self.z3function_definitions = []
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
+
         pyparsing.ParserElement.enablePackrat()
         self.smt_problem = self.convert_sygus_to_smt()
+
         self.initialise_variables()
+        self.z3functions = []
+        self.initialise_z3_functions()
 
     def __str__(self) -> str:
         """
@@ -141,81 +144,25 @@ class SynthesisProblem:
         return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
 
     def initialise_variables(self):
-        for variable in [x for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]:
-            if variable.__getattribute__('sort_expression').identifier.symbol == 'Int':
-                self.z3variables.append(z3.Int(variable.symbol, self.solver.ctx))
+        for variable in self.problem.commands:
+            if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
+                z3_var = z3.Int(variable.symbol, self.solver.ctx)
+                self.z3variables[variable.symbol] = z3_var
 
-    def initialise_functions(self):
-        for function in [x for x in self.problem.commands if
-                         x.command_kind == CommandKind.DECLARE_FUN or x.command_kind == CommandKind.DEFINE_FUN]:
-            function_name = function.function_name
-            function_return_sort = sort_map[function.__getattribute__('function_range_sort').identifier.symbol]
-            function_params = [sort_map[sort[1].identifier.symbol] for sort in
-                               function.function_parameters]
-            function_body = translate_ast_to_z3(function.function_body, function_name)
-            self.z3functions.append(z3.Function(function_name, *function_params, function_return_sort))
+    def initialise_z3_functions(self):
+        self.z3functions = {func.identifier.symbol: self.create_z3_function(func) for func in
+                            self.get_synth_funcs().values()}
 
-    def setup_solver(self):
-        self.initialise_variables()
-        self.initialise_functions()
-        for function in [x for x in self.problem.commands if
-                         x.command_kind == CommandKind.DECLARE_FUN or x.command_kind == CommandKind.DEFINE_FUN]:
-            function.__str__()
+    def generate_linear_integer_expressions(self, depth):
+        if depth == 0:
+            yield from [z3.IntVal(i) for i in range(-1, 10)]
+        else:
+            for var_name, var in self.z3variables.items():
+                for expr in self.generate_linear_integer_expressions(depth - 1):
+                    yield var + expr
+                    yield var - expr
 
-
-def translate_ast_to_z3(node, function_name):
-    if isinstance(node, LiteralTerm):
-        return map_literal_to_z3_val(node.literal.literal_kind, node.literal.literal_value)
-    elif isinstance(node, Identifier):
-        return z3_operator_map[node.symbol]
-    elif isinstance(node, FunctionApplicationTerm):
-        args = [translate_ast_to_z3(arg, function_name) for arg in node.arguments]
-
-
-z3_operator_map = {
-    '+': z3.Z3_OP_BADD,
-    '-': z3.Z3_OP_BSUB,
-    '*': z3.Z3_OP_BMUL,
-    '/': z3.Z3_OP_BSDIV,
-    '%': z3.Z3_OP_BSMOD,
-    'True': z3.Z3_OP_TRUE,
-    'False': z3.Z3_OP_FALSE,
-    '==': z3.Z3_OP_EQ,
-    'Distinct': z3.Z3_OP_DISTINCT,
-    'If': z3.Z3_OP_ITE,
-    'And': z3.Z3_OP_AND,
-    'Or': z3.Z3_OP_OR,
-    'Xor': z3.Z3_OP_XOR,
-    'Not': z3.Z3_OP_NOT,
-    'Implies': z3.Z3_OP_IMPLIES,
-    'ToReal': z3.Z3_OP_TO_REAL,
-    'ToInt': z3.Z3_OP_TO_INT,
-    '**': z3.Z3_OP_POWER,
-    'IsInt': z3.Z3_OP_IS_INT,
-    '|': z3.Z3_OP_BOR,
-    '&': z3.Z3_OP_BAND,
-    '~': z3.Z3_OP_BNOT,
-    '^': z3.Z3_OP_BXOR,
-    '<=': z3.Z3_OP_SLEQ,
-    '<': z3.Z3_OP_SLT,
-    '>=': z3.Z3_OP_SGEQ,
-    '>': z3.Z3_OP_SGT,
-    'ULE': z3.Z3_OP_ULEQ,
-    'ULT': z3.Z3_OP_ULT,
-    'UGE': z3.Z3_OP_UGEQ,
-    'UGT': z3.Z3_OP_UGT,
-}
-
-sort_map = {
-    'Int': z3.IntSort(),
-    'Bool': z3.BoolSort()
-}
-
-
-def map_literal_to_z3_val(literal_kind: LiteralKind, literal_value: object) -> object:
-    if literal_kind == LiteralKind.NUMERAL:
-        return z3.IntVal(literal_value)
-    elif literal_kind == LiteralKind.BOOLEAN:
-        return z3.BoolVal(literal_value)
-    else:
-        raise ValueError(f"Unsupported kind: {literal_kind}")
+    @staticmethod
+    def create_z3_function(func_descriptor):
+        arg_sorts = [z3.IntSort() for arg_sort in func_descriptor.argument_sorts if arg_sort == 'Int']
+        return z3.Function(func_descriptor.identifier.symbol, *arg_sorts, z3.IntSort())

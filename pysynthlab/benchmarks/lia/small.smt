@@ -1,6 +1,6 @@
 (set-logic LIA)
 
-;(declare-fun f (Int Int) Int)
+(declare-fun f (Int Int) Int)
 (define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
 
 (declare-fun x () Int)
