@@ -155,12 +155,26 @@ class SynthesisProblem:
 
     def generate_linear_integer_expressions(self, depth):
         if depth == 0:
-            yield from [z3.IntVal(i) for i in range(-1, 10)]
+            # Extend the range of integer values
+            yield from [z3.IntVal(i) for i in range(-20, 21)]
         else:
             for var_name, var in self.z3variables.items():
                 for expr in self.generate_linear_integer_expressions(depth - 1):
+                    # Arithmetic
                     yield var + expr
                     yield var - expr
+                    yield var * z3.IntVal(2)
+                    yield var * z3.IntVal(-1)
+                    # Conditional
+                    for other_expr in self.generate_linear_integer_expressions(depth - 1):
+                        yield z3.If(var > other_expr, var, other_expr)
+                        yield z3.If(var >= other_expr, var, other_expr)
+                        yield z3.If(var >= other_expr, other_expr, var)  # TODO: decide if to keep or remove these
+                        yield z3.If(var < other_expr, var, other_expr)
+                        yield z3.If(var <= other_expr, var, other_expr)
+                        yield z3.If(var <= other_expr, other_expr, var)  # TODO: decide if to keep or remove these
+                        yield z3.If(var == other_expr, var, expr)
+                        yield z3.If(var != other_expr, var, expr)
 
     @staticmethod
     def create_z3_function(func_descriptor):

@@ -1,0 +1,6 @@
+(set-logic LIA)
+(synth-fun max ((x Int) (y Int)) Int)
+(declare-var x Int)
+(declare-var y Int)
+(constraint (or (and (>= (max x y) x) (= (max x y) y)) (and (>= (max x y) y) (= (max x y) x))))
+(check-synth)

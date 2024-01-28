@@ -1,0 +1,5 @@
+(set-logic LIA)
+(synth-fun abs ((x Int)) Int)
+(declare-var x Int)
+(constraint (or (= (abs x) x) (= (abs x) (- x))))
+(check-synth)

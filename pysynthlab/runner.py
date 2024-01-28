@@ -47,12 +47,7 @@ def main(args):
                     solver.pop()
                     return candidate_expr
 
-            depth += 1
-
-
-def enumerate_candidates():
-    yield "some expression"
-
+        depth += 1
 
 if __name__ == '__main__':
 
