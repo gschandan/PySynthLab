@@ -1,13 +1,13 @@
 import z3
 import pyparsing
 from pysynthlab.helpers.parser.src import symbol_table_builder
-from pysynthlab.helpers.parser.src.ast import Program, CommandKind, FunctionApplicationTerm, LiteralTerm, \
-    Identifier, LiteralKind
+from pysynthlab.helpers.parser.src.ast import Program, CommandKind
 from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from functools import lru_cache
 
 
 class SynthesisProblem:
@@ -154,8 +154,9 @@ class SynthesisProblem:
                             self.get_synth_funcs().values()}
 
     def generate_linear_integer_expressions(self, depth):
+        """Generates linear integer expressions up to a given depth, yielding candidate expressions"""
         if depth == 0:
-            yield from [z3.IntVal(i) for i in range(-20, 20)]
+            yield from [z3.IntVal(i) for i in range(-10, 5)]
         else:
             for var_name, var in self.z3variables.items():
                 for expr in self.generate_linear_integer_expressions(depth - 1):
@@ -164,15 +165,99 @@ class SynthesisProblem:
                     yield var - expr
                     yield var * z3.IntVal(2)
                     yield var * z3.IntVal(-1)
+                    # Conditional
                     for other_expr in self.generate_linear_integer_expressions(depth - 1):
                         yield z3.If(var > other_expr, var, other_expr)
-                        yield z3.If(var >= other_expr, var, other_expr)
-                        yield z3.If(var >= other_expr, other_expr, var)  # TODO: decide if to keep or remove these
                         yield z3.If(var < other_expr, var, other_expr)
-                        yield z3.If(var <= other_expr, var, other_expr)
-                        yield z3.If(var <= other_expr, other_expr, var)  # TODO: decide if to keep or remove these
                         yield z3.If(var == other_expr, var, expr)
                         yield z3.If(var != other_expr, var, expr)
+
+    @lru_cache(maxsize=None)
+    def generate_linear_integer_expressions_v2(self, depth):
+        """
+        Generates linear integer expressions up to a given depth using memoisation to reduce computation.
+        Performance isn't great so commented out other operations
+        """
+        if depth == 0:
+            return [z3.IntVal(i) for i in range(-20, 20)]
+
+        expressions = []
+        for var_name, var in self.z3variables.items():
+            for expr in self.generate_linear_integer_expressions(depth - 1):
+                expressions.extend([
+                    var + expr,
+                    var - expr,
+                    # var * z3.IntVal(2),
+                    var * z3.IntVal(-1),
+                ])
+
+                # generate conditional expressions only once per pair to reduce computation
+                # for other_expr in (expr2 for expr2 in self.generate_linear_integer_expressions(depth - 1) if
+                #                    expr2 is not expr):
+                #     expressions.extend([
+                #         z3.If(var > other_expr, var, other_expr),
+                #         z3.If(var >= other_expr, var, other_expr),
+                #         z3.If(var >= other_expr, other_expr, var),
+                #         z3.If(var < other_expr, var, other_expr),
+                #         z3.If(var <= other_expr, var, other_expr),
+                #         z3.If(var <= other_expr, other_expr, var),
+                #         z3.If(var == other_expr, var, expr),
+                #         z3.If(var != other_expr, var, expr),
+                #     ])
+        return iter(expressions)
+
+    def generate_linear_integer_expressions_v3(self, depth, variables=None):
+        if variables is None:
+            variables = list(self.z3variables.values())
+
+        # Base case: yield integer constants and variables directly without recursion as getting recursion errors in v1
+        if depth == 0:
+            for i in range(-6, 5):
+                yield z3.IntVal(i)
+            for var in variables:
+                yield var
+        else:
+            # Generate expressions from previous depth
+            previous_expressions = list(self.generate_linear_integer_expressions_v3(depth - 1, variables))
+            for expr in previous_expressions:
+                for var in variables:
+                    yield var + expr
+                    yield var - expr
+                    yield expr - var
+                    yield var * z3.IntVal(2)
+                    yield var * z3.IntVal(-1)
+                    # Generate combinations + avoiding recursion by using previously generated expressions
+                    for other_expr in previous_expressions:
+                        if expr.sort() == other_expr.sort():  # check sorts to prevent invalid operations
+                            yield expr + other_expr
+                            yield expr - other_expr
+                            yield z3.If(var > other_expr, expr, other_expr)
+                            yield z3.If(var < other_expr, expr, other_expr)
+
+    def generate_linear_integer_expressions_v4(self, depth, size_limit, variables=None, current_size=0):
+
+        if variables is None:
+            variables = list(self.z3variables.values())
+
+        if depth == 0 or current_size >= size_limit:
+            yield from [z3.IntVal(i) for i in range(-10, 11)]
+        else:
+            for var_name, var in variables.items():
+                if current_size < size_limit:
+                    yield var
+
+                for expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit,variables, current_size + 1):
+                    # impose size limit
+                    if current_size + 1 < size_limit:
+                        yield var + expr
+                        yield var - expr
+                        yield var * z3.IntVal(2)
+                        yield var * z3.IntVal(-1)
+
+                        for other_expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit, variables,  current_size + 2):
+                            if current_size + 2 < size_limit:
+                                yield z3.If(var > other_expr, var, other_expr)
+                                yield z3.If(var < other_expr, var, other_expr)
 
     @staticmethod
     def create_z3_function(func_descriptor):
