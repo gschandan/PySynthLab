@@ -2,7 +2,7 @@ import z3
 import pyparsing
 from pysynthlab.helpers.parser.src import symbol_table_builder
 from pysynthlab.helpers.parser.src.ast import Program, CommandKind
-from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind
+from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind, SortDescriptor
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
@@ -78,7 +78,7 @@ class SynthesisProblem:
         self.smt_problem = self.convert_sygus_to_smt()
 
         self.initialise_variables()
-        self.z3functions = []
+        self.z3functions = {}
         self.initialise_z3_functions()
 
     def __str__(self) -> str:
@@ -150,27 +150,52 @@ class SynthesisProblem:
                 self.z3variables[variable.symbol] = z3_var
 
     def initialise_z3_functions(self):
-        self.z3functions = {func.identifier.symbol: self.create_z3_function(func) for func in
-                            self.get_synth_funcs().values()}
+        for func in self.get_synth_funcs().values():
+            z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
+            z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
+            self.z3functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
 
-    def generate_linear_integer_expressions(self, depth):
-        """Generates linear integer expressions up to a given depth, yielding candidate expressions"""
-        if depth == 0:
-            yield from [z3.IntVal(i) for i in range(-10, 5)]
+    @staticmethod
+    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
+        sort_symbol = sort_descriptor.identifier.symbol
+        return {
+            'Int': z3.IntSort(),
+            'Bool': z3.BoolSort(),
+        }.get(sort_symbol, None)
+
+    def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0, variables=None):
+        """
+        Generates linear integer expressions up to a given depth,
+        yields size limited candidate expressions.
+        """
+        if variables is None:
+            variables = self.z3variables
+
+        # if the current depth == 0 or current_size exceeds the limit, yield integer values and variables
+        if depth == 0 or current_size >= size_limit:
+            yield from [z3.IntVal(i) for i in range(-11, 10)]
+            yield from variables.values()
         else:
-            for var_name, var in self.z3variables.items():
-                for expr in self.generate_linear_integer_expressions(depth - 1):
-                    # Arithmetic
-                    yield var + expr
-                    yield var - expr
-                    yield var * z3.IntVal(2)
-                    yield var * z3.IntVal(-1)
-                    # Conditional
-                    for other_expr in self.generate_linear_integer_expressions(depth - 1):
-                        yield z3.If(var > other_expr, var, other_expr)
-                        yield z3.If(var < other_expr, var, other_expr)
-                        yield z3.If(var == other_expr, var, expr)
-                        yield z3.If(var != other_expr, var, expr)
+            # for each variable, generate expressions by combining with other expressions of lesser depth
+            for var_name, var in variables.items():
+                # if the current size is within the limit, just yield the variable
+                if current_size < size_limit:
+                    yield var
+                for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1, variables):
+                    # arithmetic operations constrained to the size limit
+                    if current_size + 1 < size_limit:
+                        yield var + expr
+                        yield var - expr
+                        yield var * z3.IntVal(2)
+                        yield var * z3.IntVal(-1)
+
+                    # conditional expressions also constrained to the size limit
+                    for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1, variables):
+                        if current_size + 2 < size_limit:
+                            yield z3.If(var > other_expr, var, other_expr)
+                            yield z3.If(var < other_expr, var, other_expr)
+                            yield z3.If(var == other_expr, var, expr)
+                            yield z3.If(var != other_expr, var, expr)
 
     @lru_cache(maxsize=None)
     def generate_linear_integer_expressions_v2(self, depth):
@@ -237,7 +262,7 @@ class SynthesisProblem:
     def generate_linear_integer_expressions_v4(self, depth, size_limit, variables=None, current_size=0):
 
         if variables is None:
-            variables = list(self.z3variables.values())
+            variables = self.z3variables
 
         if depth == 0 or current_size >= size_limit:
             yield from [z3.IntVal(i) for i in range(-10, 11)]
@@ -259,7 +284,39 @@ class SynthesisProblem:
                                 yield z3.If(var > other_expr, var, other_expr)
                                 yield z3.If(var < other_expr, var, other_expr)
 
-    @staticmethod
-    def create_z3_function(func_descriptor):
-        arg_sorts = [z3.IntSort() for arg_sort in func_descriptor.argument_sorts if arg_sort == 'Int']
-        return z3.Function(func_descriptor.identifier.symbol, *arg_sorts, z3.IntSort())
+    def generate_linear_integer_expressions_v5(self, depth, variables=None):
+        if variables is None:
+            variables = self.z3variables
+
+        if depth == 0:
+            yield from [z3.IntVal(i) for i in range(-10, 11)]
+            yield from variables.values()
+        else:
+            sub_expressions = list(self.generate_linear_integer_expressions_v5(depth - 1, variables))
+            # combine expressions from sub_expressions
+            for i in range(len(sub_expressions)):
+                for j in range(i, len(sub_expressions)):
+                    expr1 = sub_expressions[i]
+                    expr2 = sub_expressions[j]
+
+                    # ite expressions
+                    yield z3.If(expr1 > expr2, expr1, expr2)
+                    yield z3.If(expr1 < expr2, expr1, expr2)
+                    yield z3.If(expr1 == expr2, expr1, z3.IntVal(0))
+
+                    # logical operations in conditions
+                    for cond in [expr1 > expr2, expr1 < expr2, expr1 == expr2]:
+                        yield z3.If(cond, expr1 + expr2, expr1 - expr2)
+                        yield z3.If(cond, expr1 * expr2, expr1)
+
+                    # logical combinations
+                    logical_conditions = [
+                        z3.And(expr1 > 0, expr2 < 0),
+                        z3.Or(expr1 > 0, expr2 < 0),
+                        z3.Not(expr1 == expr2),
+                    ]
+
+                    for cond in logical_conditions:
+                        yield z3.If(cond, expr1, expr2)
+                        yield z3.If(cond, expr2, expr1)
+
