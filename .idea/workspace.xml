@@ -75,7 +75,7 @@
       <recent name="$PROJECT_DIR$/.." />
     </key>
   </component>
-  <component name="RunManager" selected="Python.runner_sygus_small">
+  <component name="RunManager" selected="Python.runner_max2ints">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -130,6 +130,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="runner_large" type="PythonConfigurationType" factoryName="Python">
+      <module name="Dissertation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
+      <option name="PARAMETERS" value="-s 1 $USER_HOME$/code/benchmarks/large.sl" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="runner_max2ints" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Dissertation" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -145,28 +167,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
       <option name="PARAMETERS" value="-s 1 $USER_HOME$/code/benchmarks/max2ints.sl" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="runner_smt" type="PythonConfigurationType" factoryName="Python">
-      <module name="Dissertation" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
-      <option name="PARAMETERS" value="-s 1 $USER_HOME$/code/benchmarks/two.smt" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -265,7 +265,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.runner_abs" />
-      <item itemvalue="Python.runner_smt" />
+      <item itemvalue="Python.runner_large" />
       <item itemvalue="Python.runner_sygus_small" />
       <item itemvalue="Python.runner_sygus_two" />
       <item itemvalue="Python.runner_max2ints" />
@@ -310,7 +310,7 @@
       <workItem from="1705338031123" duration="1696000" />
       <workItem from="1705752246723" duration="4979000" />
       <workItem from="1706441725032" duration="12729000" />
-      <workItem from="1706967862883" duration="15847000" />
+      <workItem from="1706967862883" duration="22140000" />
     </task>
     <servers />
   </component>
@@ -333,8 +333,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pysynthlab/synthesis_problem.py</url>
-          <line>292</line>
+          <line>279</line>
           <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/runner.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="56" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -348,14 +358,15 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_triangle.coverage" NAME="runner_abs Coverage Results" MODIFIED="1706467937361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
-    <SUITE FILE_PATH="coverage/Dissertation$runner_max2ints.coverage" NAME="runner_max2ints Coverage Results" MODIFIED="1707067489811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_max2ints.coverage" NAME="runner_max2ints Coverage Results" MODIFIED="1707079660183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$runner_sygus.coverage" NAME="runner_sygus_large Coverage Results" MODIFIED="1702237950586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_abs.coverage" NAME="runner_abs Coverage Results" MODIFIED="1707069134742" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$.coverage" NAME=" Coverage Results" MODIFIED="1697570580187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/helpers" />
-    <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_small.coverage" NAME="runner_sygus_small Coverage Results" MODIFIED="1707067520484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
-    <SUITE FILE_PATH="coverage/Dissertation$runner_smt.coverage" NAME="runner_smt Coverage Results" MODIFIED="1701690142200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_small.coverage" NAME="runner_sygus_small Coverage Results" MODIFIED="1707077446220" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_smt.coverage" NAME="runner_large Coverage Results" MODIFIED="1707077080737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$main.coverage" NAME="main Coverage Results" MODIFIED="1698694483354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab" />
     <SUITE FILE_PATH="coverage/Dissertation$check.coverage" NAME="runner Coverage Results" MODIFIED="1699204944897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
-    <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_two.coverage" NAME="runner_sygus_two Coverage Results" MODIFIED="1706467532200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_two.coverage" NAME="runner_sygus_two Coverage Results" MODIFIED="1707069258089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_large.coverage" NAME="runner_max2ints Coverage Results" MODIFIED="1706472676740" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$runner.coverage" NAME="runner_sygus Coverage Results" MODIFIED="1701722537869" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
   </component>

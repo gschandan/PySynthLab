@@ -163,34 +163,31 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0, variables=None):
+    def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0):
         """
         Generates linear integer expressions up to a given depth,
         yields size limited candidate expressions.
         """
-        if variables is None:
-            variables = self.z3variables
-
         # if the current depth == 0 or current_size exceeds the limit, yield integer values and variables
         if depth == 0 or current_size >= size_limit:
-            yield from [z3.IntVal(i) for i in range(-11, 10)]
-            yield from variables.values()
+            yield from [z3.IntVal(i) for i in range(-10, 10)] + list(self.z3variables.values())
         else:
             # for each variable, generate expressions by combining with other expressions of lesser depth
-            for var_name, var in variables.items():
+            for var_name, var in self.z3variables.items():
                 # if the current size is within the limit, just yield the variable
                 if current_size < size_limit:
                     yield var
-                for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1, variables):
+                for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                     # arithmetic operations constrained to the size limit
                     if current_size + 1 < size_limit:
                         yield var + expr
                         yield var - expr
+                        yield expr - var
                         yield var * z3.IntVal(2)
                         yield var * z3.IntVal(-1)
 
                     # conditional expressions also constrained to the size limit
-                    for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1, variables):
+                    for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                         if current_size + 2 < size_limit:
                             yield z3.If(var > other_expr, var, other_expr)
                             yield z3.If(var < other_expr, var, other_expr)
@@ -203,49 +200,44 @@ class SynthesisProblem:
         Generates linear integer expressions up to a given depth using memoisation to reduce computation.
         Performance isn't great so commented out other operations
         """
+
         if depth == 0:
-            return [z3.IntVal(i) for i in range(-20, 20)]
+            return [z3.IntVal(i) for i in range(-11, 10)] + list(self.z3variables.values())
 
         expressions = []
         for var_name, var in self.z3variables.items():
-            for expr in self.generate_linear_integer_expressions(depth - 1):
+            for expr in self.generate_linear_integer_expressions_v2(depth - 1):
                 expressions.extend([
                     var + expr,
                     var - expr,
-                    # var * z3.IntVal(2),
+                    var * z3.IntVal(2),
                     var * z3.IntVal(-1),
                 ])
 
                 # generate conditional expressions only once per pair to reduce computation
-                # for other_expr in (expr2 for expr2 in self.generate_linear_integer_expressions(depth - 1) if
-                #                    expr2 is not expr):
-                #     expressions.extend([
-                #         z3.If(var > other_expr, var, other_expr),
-                #         z3.If(var >= other_expr, var, other_expr),
-                #         z3.If(var >= other_expr, other_expr, var),
-                #         z3.If(var < other_expr, var, other_expr),
-                #         z3.If(var <= other_expr, var, other_expr),
-                #         z3.If(var <= other_expr, other_expr, var),
-                #         z3.If(var == other_expr, var, expr),
-                #         z3.If(var != other_expr, var, expr),
-                #     ])
+                for other_expr in (expr2 for expr2 in self.generate_linear_integer_expressions_v2(depth - 1) if
+                                   expr2 is not expr):
+                    expressions.extend([
+                        z3.If(var > other_expr, var, other_expr),
+                        z3.If(var < other_expr, var, other_expr),
+                        z3.If(var == other_expr, var, expr),
+                        z3.If(var != other_expr, var, expr),
+                    ])
         return iter(expressions)
 
-    def generate_linear_integer_expressions_v3(self, depth, variables=None):
-        if variables is None:
-            variables = list(self.z3variables.values())
+    def generate_linear_integer_expressions_v3(self, depth):
 
         # Base case: yield integer constants and variables directly without recursion as getting recursion errors in v1
         if depth == 0:
             for i in range(-6, 5):
                 yield z3.IntVal(i)
-            for var in variables:
+            for var in self.z3variables.values():
                 yield var
         else:
             # Generate expressions from previous depth
-            previous_expressions = list(self.generate_linear_integer_expressions_v3(depth - 1, variables))
+            previous_expressions = list(self.generate_linear_integer_expressions_v3(depth - 1))
             for expr in previous_expressions:
-                for var in variables:
+                for var in self.z3variables.values():
                     yield var + expr
                     yield var - expr
                     yield expr - var
@@ -259,19 +251,16 @@ class SynthesisProblem:
                             yield z3.If(var > other_expr, expr, other_expr)
                             yield z3.If(var < other_expr, expr, other_expr)
 
-    def generate_linear_integer_expressions_v4(self, depth, size_limit, variables=None, current_size=0):
-
-        if variables is None:
-            variables = self.z3variables
+    def generate_linear_integer_expressions_v4(self, depth, size_limit, current_size=0):
 
         if depth == 0 or current_size >= size_limit:
             yield from [z3.IntVal(i) for i in range(-10, 11)]
         else:
-            for var_name, var in variables.items():
+            for var_name, var in self.z3variables.items():
                 if current_size < size_limit:
                     yield var
 
-                for expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit,variables, current_size + 1):
+                for expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit, current_size + 1):
                     # impose size limit
                     if current_size + 1 < size_limit:
                         yield var + expr
@@ -279,20 +268,18 @@ class SynthesisProblem:
                         yield var * z3.IntVal(2)
                         yield var * z3.IntVal(-1)
 
-                        for other_expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit, variables,  current_size + 2):
+                        for other_expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit, current_size + 2):
                             if current_size + 2 < size_limit:
                                 yield z3.If(var > other_expr, var, other_expr)
                                 yield z3.If(var < other_expr, var, other_expr)
 
-    def generate_linear_integer_expressions_v5(self, depth, variables=None):
-        if variables is None:
-            variables = self.z3variables
+    def generate_linear_integer_expressions_v5(self, depth):
 
         if depth == 0:
             yield from [z3.IntVal(i) for i in range(-10, 11)]
-            yield from variables.values()
+            yield from self.z3variables.values()
         else:
-            sub_expressions = list(self.generate_linear_integer_expressions_v5(depth - 1, variables))
+            sub_expressions = list(self.generate_linear_integer_expressions_v5(depth - 1))
             # combine expressions from sub_expressions
             for i in range(len(sub_expressions)):
                 for j in range(i, len(sub_expressions)):
