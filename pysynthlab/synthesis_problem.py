@@ -1,62 +1,18 @@
 import z3
 import pyparsing
 from pysynthlab.helpers.parser.src import symbol_table_builder
-from pysynthlab.helpers.parser.src.ast import Program, CommandKind
+from pysynthlab.helpers.parser.src.ast import Program, CommandKind, GrammarTermKind
 from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind, SortDescriptor
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
-from functools import lru_cache
 
 
 class SynthesisProblem:
-    """
-        A class representing a synthesis problem.
-        ...
-        Attributes
-        ----------
-        options : object
-            Additional options for the synthesis problem.
-        sygus_standard : int
-            The selected SyGuS-IF standard version.
-        parser : SygusParser (SygusV1Parser or SygusV2Parser)
-            The SyGuS parser based on the chosen standard.
-        problem : Program
-            The parsed synthesis problem.
-        symbol_table : SymbolTable
-            The symbol table built from the parsed problem.
-        printer : SygusASTPrinter (SygusV1ASTPrinter or SygusV2ASTPrinter)
-            The AST (Abstract Syntax Tree) printer based on the chosen standard.
-        ...
-        Methods
-        -------
-        info():
-            Prints the synthesis problem to the console
-        """
 
     def __init__(self, problem: str, solver: z3.Solver, sygus_standard: int = 1, options: object = None):
-        """
-        Initialize a SynthesisProblem instance with the provided parameters.
 
-        Parameters
-        ----------
-        problem : str
-            The synthesis problem to be parsed.
-        sygus_standard : int, optional
-            The SyGuS-IF standard version (1 or 2). Default is 2.
-        options : object, optional
-            Additional options for version 1 (e.g., 'no-unary-minus'). Default is None.
-
-        Examples
-        --------
-        >> problem = SynthesisProblem("(set-logic LIA)\n(synth-fun f ((x Int) (y Int)) Int)\n...", sygus_standard=1)
-        >> print(problem.problem)
-        (set-logic LIA)
-        (synth-fun f ((x Int) (y Int)) Int)
-        ...
-
-        """
         if options is None:
             options = {}
         self.options: object = options
@@ -80,18 +36,16 @@ class SynthesisProblem:
         self.initialise_variables()
         self.z3functions = {}
         self.initialise_z3_functions()
+        self.operand_pool = []
+        self.initialize_operand_pool();
+
+        self.MIN_CONST = -10
+        self.MAX_CONST = 10
 
     def __str__(self) -> str:
-        """
-        Returns a string representation of the synthesis problem.
-        :returns: str: A string representation of the synthesis problem.
-        """
         return self.printer.run(self.problem, self.symbol_table)
 
     def info(self) -> None:
-        """ Prints the synthesis problem to the console
-        :returns: None
-        """
         print(self)
 
     def convert_sygus_to_smt(self):
@@ -163,14 +117,78 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
+    def get_grammar(self):
+        grammars = {}
+        for synth_func_cmd in self.get_synth_funcs().values():
+            synth_grammar = synth_func_cmd.synthesis_grammar
+            if synth_grammar is None:
+                continue
+
+            output_sort = self.convert_sort_descriptor_to_z3_sort(synth_func_cmd.range_sort)
+
+            if output_sort not in grammars:
+                grammars[output_sort] = {'nonterminals': [], 'rules': {}}
+
+            for nt_symbol, nt_sort in synth_grammar.nonterminals:
+                nt_sort_z3 = self.convert_sort_descriptor_to_z3_sort(nt_sort)
+                grammars[output_sort]['nonterminals'].append((nt_symbol, nt_sort_z3))
+                if nt_symbol in synth_grammar.grouped_rule_lists:
+                    grouped_rule_list = synth_grammar.grouped_rule_lists[nt_symbol]
+                    grammars[output_sort]['rules'][nt_symbol] = []
+                    for expansion_rule in grouped_rule_list.expansion_rules:
+                        processed_rule = self.process_expansion_rule(expansion_rule)
+                        grammars[output_sort]['rules'][nt_symbol].append(processed_rule)
+
+        return grammars
+
+    def process_expansion_rule(self, grammar_term):
+        expansions = []
+        if grammar_term.grammar_term_kind == GrammarTermKind.CONSTANT:
+            expansions.extend(self.handle_constant_expansion())
+        elif grammar_term.grammar_term_kind == GrammarTermKind.VARIABLE:
+            expansions.extend(self.handle_variable_expansion())
+        elif grammar_term.grammar_term_kind == GrammarTermKind.BINDER_FREE:
+            expansions.extend(self.handle_binder_free_expansion())
+        return expansions
+
+    def handle_constant_expansion(self):
+        constant_terms = []
+        for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+            constant_terms.append(z3.IntVal(const))
+
+        return constant_terms
+
+    def handle_variable_expansion(self):
+        return []
+
+    def handle_binder_free_expansion(self):
+        arithmetic_terms = []
+        for op in ['+', '-', '*', '/']:
+            for operand1 in self.operand_pool:
+                for operand2 in self.operand_pool:
+                    if operand2 != operand1:  # avoid expressions like x - x
+                        term = self.create_arithmetic_term(op, operand1, operand2)
+                        if term is not None:
+                            arithmetic_terms.append(term)
+        return arithmetic_terms
+
+    def initialize_operand_pool(self):
+        self.operand_pool = list(self.z3variables.values())
+        integer_constants = [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)]
+        self.operand_pool.extend(integer_constants)
+
+    def create_arithmetic_term(self, op, operand1, operand2):
+        if op == '+':
+            return operand1 + operand2
+        elif op == '-':
+            return operand1 - operand2
+        elif op == '*':
+            return operand1 * operand2
+
     def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0):
-        """
-        Generates linear integer expressions up to a given depth,
-        yields size limited candidate expressions.
-        """
         # if the current depth == 0 or current_size exceeds the limit, yield integer values and variables
         if depth == 0 or current_size >= size_limit:
-            yield from [z3.IntVal(i) for i in range(-10, 10)] + list(self.z3variables.values())
+            yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)] + list(self.z3variables.values())
         else:
             # for each variable, generate expressions by combining with other expressions of lesser depth
             for var_name, var in self.z3variables.items():
@@ -194,116 +212,22 @@ class SynthesisProblem:
                             yield z3.If(var == other_expr, var, expr)
                             yield z3.If(var != other_expr, var, expr)
 
-    @lru_cache(maxsize=None)
-    def generate_linear_integer_expressions_v2(self, depth):
-        """
-        Generates linear integer expressions up to a given depth using memoisation to reduce computation.
-        Performance isn't great so commented out other operations
-        """
-
+    def enumerate_expressions(self, depth):
         if depth == 0:
-            return [z3.IntVal(i) for i in range(-11, 10)] + list(self.z3variables.values())
-
-        expressions = []
-        for var_name, var in self.z3variables.items():
-            for expr in self.generate_linear_integer_expressions_v2(depth - 1):
-                expressions.extend([
-                    var + expr,
-                    var - expr,
-                    var * z3.IntVal(2),
-                    var * z3.IntVal(-1),
-                ])
-
-                # generate conditional expressions only once per pair to reduce computation
-                for other_expr in (expr2 for expr2 in self.generate_linear_integer_expressions_v2(depth - 1) if
-                                   expr2 is not expr):
-                    expressions.extend([
-                        z3.If(var > other_expr, var, other_expr),
-                        z3.If(var < other_expr, var, other_expr),
-                        z3.If(var == other_expr, var, expr),
-                        z3.If(var != other_expr, var, expr),
-                    ])
-        return iter(expressions)
-
-    def generate_linear_integer_expressions_v3(self, depth):
-
-        # Base case: yield integer constants and variables directly without recursion as getting recursion errors in v1
-        if depth == 0:
-            for i in range(-6, 5):
-                yield z3.IntVal(i)
-            for var in self.z3variables.values():
-                yield var
+            return self.z3variables.values() + [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)]
         else:
-            # Generate expressions from previous depth
-            previous_expressions = list(self.generate_linear_integer_expressions_v3(depth - 1))
-            for expr in previous_expressions:
-                for var in self.z3variables.values():
-                    yield var + expr
-                    yield var - expr
-                    yield expr - var
-                    yield var * z3.IntVal(2)
-                    yield var * z3.IntVal(-1)
-                    # Generate combinations + avoiding recursion by using previously generated expressions
-                    for other_expr in previous_expressions:
-                        if expr.sort() == other_expr.sort():  # check sorts to prevent invalid operations
-                            yield expr + other_expr
-                            yield expr - other_expr
-                            yield z3.If(var > other_expr, expr, other_expr)
-                            yield z3.If(var < other_expr, expr, other_expr)
+            prev_level_expressions = self.enumerate_expressions(depth - 1)
+            new_expressions = []
 
-    def generate_linear_integer_expressions_v4(self, depth, size_limit, current_size=0):
+            for expr1 in prev_level_expressions:
+                for expr2 in prev_level_expressions:
+                    if isinstance(expr1, z3.ArithRef) and isinstance(expr2, z3.ArithRef):
+                        new_expressions.append(expr1 + expr2)
+                        new_expressions.append(expr1 - expr2)
+                        new_expressions.append(expr1 * expr2)
 
-        if depth == 0 or current_size >= size_limit:
-            yield from [z3.IntVal(i) for i in range(-10, 11)]
-        else:
-            for var_name, var in self.z3variables.items():
-                if current_size < size_limit:
-                    yield var
-
-                for expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit, current_size + 1):
-                    # impose size limit
-                    if current_size + 1 < size_limit:
-                        yield var + expr
-                        yield var - expr
-                        yield var * z3.IntVal(2)
-                        yield var * z3.IntVal(-1)
-
-                        for other_expr in self.generate_linear_integer_expressions_v4(depth - 1, size_limit, current_size + 2):
-                            if current_size + 2 < size_limit:
-                                yield z3.If(var > other_expr, var, other_expr)
-                                yield z3.If(var < other_expr, var, other_expr)
-
-    def generate_linear_integer_expressions_v5(self, depth):
-
-        if depth == 0:
-            yield from [z3.IntVal(i) for i in range(-10, 11)]
-            yield from self.z3variables.values()
-        else:
-            sub_expressions = list(self.generate_linear_integer_expressions_v5(depth - 1))
-            # combine expressions from sub_expressions
-            for i in range(len(sub_expressions)):
-                for j in range(i, len(sub_expressions)):
-                    expr1 = sub_expressions[i]
-                    expr2 = sub_expressions[j]
-
-                    # ite expressions
-                    yield z3.If(expr1 > expr2, expr1, expr2)
-                    yield z3.If(expr1 < expr2, expr1, expr2)
-                    yield z3.If(expr1 == expr2, expr1, z3.IntVal(0))
-
-                    # logical operations in conditions
-                    for cond in [expr1 > expr2, expr1 < expr2, expr1 == expr2]:
-                        yield z3.If(cond, expr1 + expr2, expr1 - expr2)
-                        yield z3.If(cond, expr1 * expr2, expr1)
-
-                    # logical combinations
-                    logical_conditions = [
-                        z3.And(expr1 > 0, expr2 < 0),
-                        z3.Or(expr1 > 0, expr2 < 0),
-                        z3.Not(expr1 == expr2),
-                    ]
-
-                    for cond in logical_conditions:
-                        yield z3.If(cond, expr1, expr2)
-                        yield z3.If(cond, expr2, expr1)
-
+                    new_expressions.append(z3.If(expr1 > expr2, expr1, expr2))
+                    new_expressions.append(z3.If(expr1 < expr2, expr1, expr2))
+                    new_expressions.append(z3.If(expr1 == expr2, expr1, expr2))
+                    new_expressions.append(z3.If(expr1 != expr2, expr1, expr2))
+            return new_expressions
