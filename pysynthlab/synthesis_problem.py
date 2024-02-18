@@ -10,6 +10,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
+    MIN_CONST = -10
+    MAX_CONST = 10
 
     def __init__(self, problem: str, solver: z3.Solver, sygus_standard: int = 1, options: object = None):
 
@@ -26,9 +28,10 @@ class SynthesisProblem:
             else SygusV1ASTPrinter(self.symbol_table, options)
         self.solver = solver
         self.commands = [x for x in self.problem.commands]
+        self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
+
         self.z3variables = {}
         self.z3function_definitions = []
-        self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
 
         pyparsing.ParserElement.enablePackrat()
         self.smt_problem = self.convert_sygus_to_smt()
@@ -37,10 +40,9 @@ class SynthesisProblem:
         self.z3functions = {}
         self.initialise_z3_functions()
         self.operand_pool = []
-        self.initialize_operand_pool();
+        self.initialize_operand_pool()
 
-        self.MIN_CONST = -10
-        self.MAX_CONST = 10
+
 
     def __str__(self) -> str:
         return self.printer.run(self.problem, self.symbol_table)
