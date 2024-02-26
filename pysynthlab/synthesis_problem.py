@@ -199,12 +199,10 @@ class SynthesisProblem:
                     yield var
                 for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                     # arithmetic operations constrained to the size limit
-                    if current_size + 1 < size_limit:
+                    if current_size + 1 < size_limit and expr != var:
                         yield var + expr
                         yield var - expr
                         yield expr - var
-                        yield var * z3.IntVal(2)
-                        yield var * z3.IntVal(-1)
 
                     # conditional expressions also constrained to the size limit
                     for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):

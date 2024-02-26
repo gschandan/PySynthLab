@@ -19,17 +19,18 @@ def main(args):
 
     solver.add(z3.parse_smt2_string(problem.convert_sygus_to_smt()))
     depth = 0
-    depth_limit = 50  # prevent excessive search depth
-    breadth_limit = 50  # limit the number of expressions evaluated at each depth
-    size_limit = 15
+    depth_limit = 200  # prevent excessive search depth
+    breadth_limit = 200  # limit the number of expressions evaluated at each depth
+    size_limit = 5
 
     func_name, z3_func = list(problem.z3functions.items())[0]
     func = problem.get_synth_func(func_name)
     arg_sorts = [problem.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in func.argument_sorts]
     func_args = [z3.Const(name, sort) for name, sort in zip(func.argument_names, arg_sorts)]
     found_valid_candidate = False
+    best_candidate = None
 
-    while not found_valid_candidate:
+    while not found_valid_candidate and depth <= depth_limit:
         candidate_expressions = problem.generate_linear_integer_expressions(depth, size_limit)
 
         for candidate_expr in itertools.islice(candidate_expressions, breadth_limit):
@@ -57,20 +58,15 @@ def main(args):
 
             solver.pop()
 
-        if found_valid_candidate:
-            break
-
         depth += 1
         print("Depth: ", depth)
-        if depth > depth_limit:
-            print("Depth limit reached without finding a valid candidate.")
-            break
+
+    if depth > depth_limit:
+        print("Depth limit reached without finding a valid candidate.")
     if found_valid_candidate:
         print("Best candidate:", best_candidate)
-        return best_candidate
     else:
         print("No valid candidate found within the depth limit.")
-        return None
 
     print("Stats: ", solver.statistics())
 
