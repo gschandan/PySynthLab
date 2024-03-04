@@ -139,24 +139,23 @@ class SynthesisProblem:
             yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
                 self.z3variables.values())
             return
-        # p = list(self.z3variables.values())
-        # yield z3.If(p[0] <= p[1], p[1], p[0])
+
         for var in self.z3variables.values():
-            # if current_size < size_limit:
-            #     yield var
+            if current_size < size_limit:
+                yield var
 
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                 yield var + expr
                 yield var - expr
-                yield var * 2
-                yield var * -1
+                yield expr - var
+                yield var * z3.IntVal(2)
+                yield var * z3.IntVal(-1)
 
-            for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
-                if current_size + 3 <= size_limit:
-                    yield z3.If(var > other_expr, var, other_expr)
-                    yield z3.If(var < other_expr, var, other_expr)
-                    yield z3.If(var != other_expr, expr, other_expr)
-                    yield z3.If(var <= other_expr, other_expr, var)
+                for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
+                    if current_size + 3 <= size_limit:
+                        yield z3.If(var > other_expr, var, other_expr)
+                        yield z3.If(var < other_expr, var, other_expr)
+                        yield z3.If(var != other_expr, var, expr)
 
     def check_counterexample(self, model):
         for constraint in self.solver.assertions():
@@ -188,7 +187,6 @@ class SynthesisProblem:
                 negated_children = [z3.Not(assertion.arg(i)) for i in range(assertion.num_args())]
                 negated_assertions.append(z3.Or(*negated_children))
             else:
-                # Handle non-conjunction assertions or single non-conjunction assertion
                 negated_assertions.append(z3.Not(assertion))
 
         return negated_assertions

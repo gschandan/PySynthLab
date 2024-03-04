@@ -64,9 +64,9 @@ def main(args):
                 break
             else:
                 solver.pop()
-                additional_constraint = problem.z3_func(*problem.func_args) != candidate_expression
-                print(additional_constraint)
-                solver.add(additional_constraint)
+                additional_constraints = [problem.z3_func(*problem.func_args) != candidate_expression, *problem.get_additional_constraints(counterexample)]
+                print(additional_constraints)
+                solver.add(*additional_constraints)
         else:
             found_valid_candidate = True
             break
@@ -75,7 +75,7 @@ def main(args):
         print(f"Depth {depth}, Iteration {itr}")
 
     if found_valid_candidate:
-        print("Best candidate:", candidate_expression)
+        print("Expression:", expression)
     else:
         print("No valid candidate found within the depth/loop/time limit.")
 
