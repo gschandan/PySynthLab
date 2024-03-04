@@ -12,8 +12,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
-    MIN_CONST = -3
-    MAX_CONST = 3
+    MIN_CONST = -1
+    MAX_CONST = 1
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
@@ -120,51 +120,42 @@ class SynthesisProblem:
                 z3_var = z3.Int(variable.symbol, self.solver.ctx)
                 self.z3variables[variable.symbol] = z3_var
 
-
     def initialise_z3_synth_functions(self):
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            self.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
+            self.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
+                                                                          z3_range_sort)
 
     def initialise_z3_predefined_functions(self):
         for func in self.get_predefined_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
-
-
-    @staticmethod
-    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
-        sort_symbol = sort_descriptor.identifier.symbol
-        return {
-            'Int': z3.IntSort(),
-            'Bool': z3.BoolSort(),
-        }.get(sort_symbol, None)
+            self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
+                                                                               z3_range_sort)
 
     def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0):
-        # if the current depth == 0 or current_size exceeds the limit, yield integer values and variables
         if depth == 0 or current_size >= size_limit:
-            yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)] + list(self.z3variables.values())
-        else:
-            # for each variable, generate expressions by combining with other expressions of lesser depth
-            for var_name, var in self.z3variables.items():
-                # if the current size is within the limit, just yield the variable
-                if current_size < size_limit:
-                    yield var
-                for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
-                    if current_size + 1 < size_limit and not z3.eq(expr, var):
-                        yield var + expr
-                        yield var - expr
-                        yield expr - var
+            yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
+                self.z3variables.values())
+            return
 
-                    # conditional expressions also constrained to the size limit
-                    for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
-                        if current_size + 2 < size_limit:
-                            yield z3.If(var > other_expr, var, other_expr)
-                            yield z3.If(var < other_expr, var, other_expr)
-                            yield z3.If(var == other_expr, var, expr)
-                            yield z3.If(var != other_expr, var, expr)
+        for var in self.z3variables.values():
+            if current_size < size_limit:
+                yield var
+
+            for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
+                yield var + expr
+                yield var - expr
+                yield var * expr
+                yield var * -1
+
+            for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
+                if current_size + 3 <= size_limit:
+                    yield z3.If(var > other_expr, var, other_expr)
+                    yield z3.If(var < other_expr, var, other_expr)
+                    yield z3.If(var != other_expr, expr, other_expr)
+                    yield z3.If(var <= other_expr, other_expr, var)
 
     def check_counterexample(self, model):
         for constraint in self.solver.assertions():
@@ -180,3 +171,24 @@ class SynthesisProblem:
         for expr in itertools.islice(expressions, 200):  # limit breadth
             return expr
 
+    @staticmethod
+    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
+        sort_symbol = sort_descriptor.identifier.symbol
+        return {
+            'Int': z3.IntSort(),
+            'Bool': z3.BoolSort(),
+        }.get(sort_symbol, None)
+
+    @staticmethod
+    def negate_assertions(assertions):
+        negated_assertions = []
+        for assertion in assertions:
+            if z3.is_and(assertion):
+                # Negate each child (literal) of the AND and join with OR
+                negated_children = [z3.Not(child) for child in assertion.args()]
+                negated_assertions.append(z3.Or(*negated_children))
+            else:
+                # Handle non-conjunction assertions or single non-conjunction assertion
+                negated_assertions.append(z3.Not(assertion))
+
+        return negated_assertions

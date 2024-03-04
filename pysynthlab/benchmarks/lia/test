@@ -4,8 +4,7 @@ verification file 1:
 (define-fun f ((x Int) (y Int)) Int x )
 (declare-fun x () Int)
 (declare-fun y ()Int)
-(assert(or (not(= (f x y) (f y x)))
-(not (and (<= x (f x y)) (<= y (f x y))))))
+(assert(or (not(= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))
 (check-sat)
 (get-model)
 
@@ -30,7 +29,8 @@ verification file 2:
 (declare-fun x () Int)
 (declare-fun y ()Int)
 (assert(or (not(= (f x y) (f y x)))
-(not (and (<= x (f x y)) (<= y (f x y))))))
+        (not (and (<= x (f x y))
+             (<= y (f x y))))))
 
 (check-sat)
 (get-model)
@@ -55,6 +55,19 @@ No counterexample
 (declare-fun y ()Int)
 (assert(or (not(= (f x y) (f y x)))
 (not (and (<= x (f x y)) (<= y (f x y))))))
+(check-sat)
+(get-model)
 
+
+
+(set-logic LIA)
+
+(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
+
+(declare-fun x () Int)
+(declare-fun y ()Int)
+(assert(or (not(= (f x y) (f y x)))
+        (not (and (<= x (f x y))
+             (<= y (f x y))))))
 (check-sat)
 (get-model)

@@ -20,22 +20,21 @@ def main(args):
     print(parsed_sygus_problem)
 
     depth = 0
-    depth_limit = 200
-    loop_limit = 500
     itr = 0;
+    depth_limit = 200
     found_valid_candidate = False
     candidate_expression = None
     assertions = problem.solver.assertions();
     solver.reset()
-    for assertion in assertions:
-        solver.add(z3.Not(assertion))
+
+    solver.add(problem.negate_assertions(assertions))
 
     solver.set("timeout", 30000)
     set_param("smt.random_seed", 1234)
     candidate_expressions = problem.generate_linear_integer_expressions(depth)
 
-    while not found_valid_candidate or itr < loop_limit:
-        print("CURRENT_ASSERTIONS: \n", problem.solver.assertions());
+    while not found_valid_candidate:
+        #print("CURRENT_ASSERTIONS: \n", problem.solver.assertions());
         try:
             candidate_expression = next(candidate_expressions)
         except StopIteration:
@@ -63,14 +62,14 @@ def main(args):
             else:
                 additional_constraints = problem.get_additional_constraints(counterexample)
                 solver.add(*additional_constraints)
-        # solver.pop()
+        solver.pop()
         itr += 1
         print(f"Depth {depth}, Iteration {itr}")
 
     if found_valid_candidate:
         print("Best candidate:", candidate_expression)
     else:
-        print("No valid candidate found within the depth limit.")
+        print("No valid candidate found within the depth/loop/time limit.")
 
     print("SMT: ", solver.to_smt2())
     print("Stats: ", solver.statistics())

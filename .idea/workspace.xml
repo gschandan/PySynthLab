@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/test" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/synthesis_problem.py" afterDir="false" />
     </list>
@@ -104,7 +105,7 @@
       <recent name="$PROJECT_DIR$/.." />
     </key>
   </component>
-  <component name="RunManager" selected="Python.runner_sygus_small">
+  <component name="RunManager" selected="Python.runner_max2ints">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -364,7 +365,7 @@
       <workItem from="1706441725032" duration="12729000" />
       <workItem from="1706967862883" duration="22518000" />
       <workItem from="1707647387900" duration="7997000" />
-      <workItem from="1709239769059" duration="20976000" />
+      <workItem from="1709239769059" duration="23828000" />
     </task>
     <servers />
   </component>
@@ -395,6 +396,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pysynthlab/synthesis_problem.py</url>
+          <line>192</line>
+          <option name="timeStamp" value="106" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -405,7 +413,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Dissertation$runner_max2ints.coverage" NAME="runner_max2ints Coverage Results" MODIFIED="1709545742490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+    <SUITE FILE_PATH="coverage/Dissertation$runner_max2ints.coverage" NAME="runner_max2ints Coverage Results" MODIFIED="1709568729458" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$runner_sygus.coverage" NAME="runner_sygus_large Coverage Results" MODIFIED="1702237950586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$runner_sygus_small_linear.coverage" NAME="runner_sygus_small_linear Coverage Results" MODIFIED="1709553385741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
     <SUITE FILE_PATH="coverage/Dissertation$runner_smt.coverage" NAME="runner_large Coverage Results" MODIFIED="1707077080737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
