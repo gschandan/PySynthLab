@@ -24,7 +24,7 @@ def main(args):
     depth_limit = 200
     found_valid_candidate = False
     candidate_expression = None
-    assertions = problem.solver.assertions();
+    assertions = problem.solver.assertions()
     solver.reset()
 
     solver.add(problem.negate_assertions(assertions))
@@ -53,7 +53,7 @@ def main(args):
         print("SMT: ", solver.to_smt2())
         solver.add(expression)
         result = solver.check()
-
+        print(result)
         if result == z3.sat:
             model = solver.model()
             print("Candidate model:", model)

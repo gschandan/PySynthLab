@@ -12,8 +12,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
-    MIN_CONST = -1
-    MAX_CONST = 1
+    MIN_CONST = 1
+    MAX_CONST = 10
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
@@ -134,7 +134,7 @@ class SynthesisProblem:
             self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
                                                                                z3_range_sort)
 
-    def generate_linear_integer_expressions(self, depth, size_limit=5, current_size=0):
+    def generate_linear_integer_expressions(self, depth, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
             yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
                 self.z3variables.values())
@@ -142,8 +142,8 @@ class SynthesisProblem:
         # p = list(self.z3variables.values())
         # yield z3.If(p[0] <= p[1], p[1], p[0])
         for var in self.z3variables.values():
-            if current_size < size_limit:
-                yield var
+            # if current_size < size_limit:
+            #     yield var
 
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                 yield var + expr
@@ -184,9 +184,8 @@ class SynthesisProblem:
     def negate_assertions(assertions):
         negated_assertions = []
         for assertion in assertions:
-            if z3.is_and(assertion):
-                # Negate each child (literal) of the AND and join with OR
-                negated_children = [z3.Not(child) for child in assertion.args()]
+            if assertion.num_args() > 1:
+                negated_children = [z3.Not(assertion.arg(i)) for i in range(assertion.num_args())]
                 negated_assertions.append(z3.Or(*negated_children))
             else:
                 # Handle non-conjunction assertions or single non-conjunction assertion
