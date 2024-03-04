@@ -52,9 +52,9 @@ class SynthesisProblem:
         # todo: refactor for problems with more than one func to synthesisise
         self.func_name, self.z3_func = list(self.z3_synth_functions.items())[0]
         self.func_to_synthesise = self.get_synth_func(self.func_name)
+        self.func_args = [z3.Int(name) for name in self.func_to_synthesise.argument_names]
         self.arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in
                           self.func_to_synthesise.argument_sorts]
-        self.func_args = [z3.Int(name) for name in self.func_to_synthesise.argument_names]
 
     def __str__(self) -> str:
         return self.printer.run(self.problem, self.symbol_table)
@@ -134,12 +134,13 @@ class SynthesisProblem:
             self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
                                                                                z3_range_sort)
 
-    def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0):
+    def generate_linear_integer_expressions(self, depth, size_limit=5, current_size=0):
         if depth == 0 or current_size >= size_limit:
             yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
                 self.z3variables.values())
             return
-
+        # p = list(self.z3variables.values())
+        # yield z3.If(p[0] <= p[1], p[1], p[0])
         for var in self.z3variables.values():
             if current_size < size_limit:
                 yield var
@@ -147,7 +148,7 @@ class SynthesisProblem:
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                 yield var + expr
                 yield var - expr
-                yield var * expr
+                yield var * 2
                 yield var * -1
 
             for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):

@@ -46,9 +46,12 @@ def main(args):
             candidate_expression = next(candidate_expressions)
 
         solver.push()
-        expression = problem.z3_func(*problem.func_args) == candidate_expression
+        #p = list(problem.z3variables.values())
+        #expression = problem.z3_func(*problem.func_args) == z3.If(p[0] <= p[1], p[1], p[0]) # (ite (<= x y) y x) - correct
+        expression = problem.z3_func(*problem.func_args) == candidate_expression # (ite (<= x y) y x)
         print("expr:", expression)
-
+        print("SMT: ", solver.to_smt2())
+        solver.add(expression)
         result = solver.check()
 
         if result == z3.sat:
@@ -60,9 +63,14 @@ def main(args):
                 found_valid_candidate = True
                 break
             else:
-                additional_constraints = problem.get_additional_constraints(counterexample)
-                solver.add(*additional_constraints)
-        solver.pop()
+                solver.pop()
+                additional_constraint = problem.z3_func(*problem.func_args) != candidate_expression
+                print(additional_constraint)
+                solver.add(additional_constraint)
+        else:
+            found_valid_candidate = True
+            break
+
         itr += 1
         print(f"Depth {depth}, Iteration {itr}")
 
