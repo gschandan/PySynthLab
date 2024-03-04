@@ -14,8 +14,9 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 class SynthesisProblem:
     MIN_CONST = -10
     MAX_CONST = 10
+    pyparsing.ParserElement.enablePackrat()
 
-    def __init__(self, problem: str, solver: z3.Solver, sygus_standard: int = 1, options: object = None):
+    def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
 
         if options is None:
             options = {}
@@ -28,28 +29,32 @@ class SynthesisProblem:
         self.printer: SygusV2ASTPrinter | SygusV1ASTPrinter = SygusV2ASTPrinter(self.symbol_table) \
             if sygus_standard == 2 \
             else SygusV1ASTPrinter(self.symbol_table, options)
-        self.solver = solver
+
+        self.solver = z3.Solver()
         self.commands = [x for x in self.problem.commands]
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
+        self.smt_problem = self.convert_sygus_to_smt()
+        self.synthesis_functions = []
 
         self.z3variables = {}
         self.z3function_definitions = []
+        self.z3_synth_functions = {}
+        self.z3_predefined_functions = {}
+        self.z3_constraints = []
 
-        pyparsing.ParserElement.enablePackrat()
-        self.smt_problem = self.convert_sygus_to_smt()
+        self.initialise_z3_variables()
+        self.initialise_z3_synth_functions()
+        self.initialise_z3_predefined_functions()
+        self.initialise_z3_predefined_constraints()
 
-        self.initialise_variables()
-        self.z3functions = {}
-        self.initialise_z3_functions()
-        self.operand_pool = []
-        self.initialize_operand_pool()
         self.additional_constraints = []
 
-        self.func_name, self.z3_func = list(self.z3functions.items())[0]  # todo: refactor for problems with more than one
-        self.func = self.get_synth_func(self.func_name)
+        # todo: refactor for problems with more than one func to synthesisise
+        self.func_name, self.z3_func = list(self.z3_synth_functions.items())[0]
+        self.func_to_synthesise = self.get_synth_func(self.func_name)
         self.arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in
-                          self.func.argument_sorts]
-        self.func_args = [z3.Const(name, sort) for name, sort in zip(self.func.argument_names, self.arg_sorts)]
+                          self.func_to_synthesise.argument_sorts]
+        self.func_args = [z3.Const(name, sort) for name, sort in zip(self.func_to_synthesise.argument_names, self.arg_sorts)]
 
     def __str__(self) -> str:
         return self.printer.run(self.problem, self.symbol_table)
@@ -73,6 +78,8 @@ class SynthesisProblem:
             elif statement[0] == 'synth-fun':
                 statement[0] = 'declare-fun'
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
+                self.synthesis_functions.append(" ".join(statement))
+
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
@@ -84,6 +91,9 @@ class SynthesisProblem:
 
     def get_synth_funcs(self):
         return self.symbol_table.synth_functions
+
+    def get_predefined_funcs(self):
+        return self.symbol_table.user_defined_functions
 
     def get_synth_func(self, symbol):
         return next(filter(lambda x:
@@ -106,17 +116,27 @@ class SynthesisProblem:
 
         return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
 
-    def initialise_variables(self):
+    def initialise_z3_variables(self):
         for variable in self.problem.commands:
             if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
                 z3_var = z3.Int(variable.symbol, self.solver.ctx)
                 self.z3variables[variable.symbol] = z3_var
 
-    def initialise_z3_functions(self):
+
+    def initialise_z3_synth_functions(self):
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            self.z3functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
+            self.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
+
+    def initialise_z3_predefined_functions(self):
+        for func in self.get_predefined_funcs().values():
+            z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
+            z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
+            self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
+
+    def initialise_z3_predefined_constraints(self):
+        self.solver.add(z3.parse_smt2_string("(assert (= (f x y) (f y x)))"))
 
     @staticmethod
     def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
@@ -164,92 +184,3 @@ class SynthesisProblem:
         for expr in itertools.islice(expressions, 200):  # limit breadth
             return expr
 
-    ## Fast enumerative synth
-
-    def enumerate_expressions(self, depth):
-        if depth == 0:
-            return self.z3variables.values() + [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)]
-        else:
-            prev_level_expressions = self.enumerate_expressions(depth - 1)
-            new_expressions = []
-
-            for expr1 in prev_level_expressions:
-                for expr2 in prev_level_expressions:
-                    if isinstance(expr1, z3.ArithRef) and isinstance(expr2, z3.ArithRef):
-                        new_expressions.append(expr1 + expr2)
-                        new_expressions.append(expr1 - expr2)
-                        new_expressions.append(expr1 * expr2)
-
-                    new_expressions.append(z3.If(expr1 > expr2, expr1, expr2))
-                    new_expressions.append(z3.If(expr1 < expr2, expr1, expr2))
-                    new_expressions.append(z3.If(expr1 == expr2, expr1, expr2))
-                    new_expressions.append(z3.If(expr1 != expr2, expr1, expr2))
-            return new_expressions
-
-    def get_grammar(self):
-        grammars = {}
-        for synth_func_cmd in self.get_synth_funcs().values():
-            synth_grammar = synth_func_cmd.synthesis_grammar
-            if synth_grammar is None:
-                continue
-
-            output_sort = self.convert_sort_descriptor_to_z3_sort(synth_func_cmd.range_sort)
-
-            if output_sort not in grammars:
-                grammars[output_sort] = {'nonterminals': [], 'rules': {}}
-
-            for nt_symbol, nt_sort in synth_grammar.nonterminals:
-                nt_sort_z3 = self.convert_sort_descriptor_to_z3_sort(nt_sort)
-                grammars[output_sort]['nonterminals'].append((nt_symbol, nt_sort_z3))
-                if nt_symbol in synth_grammar.grouped_rule_lists:
-                    grouped_rule_list = synth_grammar.grouped_rule_lists[nt_symbol]
-                    grammars[output_sort]['rules'][nt_symbol] = []
-                    for expansion_rule in grouped_rule_list.expansion_rules:
-                        processed_rule = self.process_expansion_rule(expansion_rule)
-                        grammars[output_sort]['rules'][nt_symbol].append(processed_rule)
-
-        return grammars
-
-    def process_expansion_rule(self, grammar_term):
-        expansions = []
-        if grammar_term.grammar_term_kind == GrammarTermKind.CONSTANT:
-            expansions.extend(self.handle_constant_expansion())
-        elif grammar_term.grammar_term_kind == GrammarTermKind.VARIABLE:
-            expansions.extend(self.handle_variable_expansion())
-        elif grammar_term.grammar_term_kind == GrammarTermKind.BINDER_FREE:
-            expansions.extend(self.handle_binder_free_expansion())
-        return expansions
-
-    def handle_constant_expansion(self):
-        constant_terms = []
-        for const in range(self.MIN_CONST, self.MAX_CONST + 1):
-            constant_terms.append(z3.IntVal(const))
-
-        return constant_terms
-
-    def handle_variable_expansion(self):
-        return []
-
-    def handle_binder_free_expansion(self):
-        arithmetic_terms = []
-        for op in ['+', '-', '*', '/']:
-            for operand1 in self.operand_pool:
-                for operand2 in self.operand_pool:
-                    if operand2 != operand1:  # avoid expressions like x - x
-                        term = self.create_arithmetic_term(op, operand1, operand2)
-                        if term is not None:
-                            arithmetic_terms.append(term)
-        return arithmetic_terms
-
-    def initialize_operand_pool(self):
-        self.operand_pool = list(self.z3variables.values())
-        integer_constants = [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)]
-        self.operand_pool.extend(integer_constants)
-
-    def create_arithmetic_term(self, op, operand1, operand2):
-        if op == '+':
-            return operand1 + operand2
-        elif op == '-':
-            return operand1 - operand2
-        elif op == '*':
-            return operand1 * operand2

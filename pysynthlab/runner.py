@@ -12,13 +12,12 @@ from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 def main(args):
     file = args.input_file.read()
 
-    solver = z3.Solver()
-    solver.set("timeout", 30000)
-    problem = SynthesisProblem(file, solver, int(args.sygus_standard))
+    problem = SynthesisProblem(file, int(args.sygus_standard))
     problem.info()
     print(problem.get_logic())
 
-    solver.add(z3.parse_smt2_string(problem.convert_sygus_to_smt()))
+    solver = problem.solver
+    solver.set("timeout", 30000)
     set_param("smt.random_seed", 1234)
 
     depth = 0
