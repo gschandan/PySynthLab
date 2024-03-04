@@ -12,8 +12,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
-    MIN_CONST = -10
-    MAX_CONST = 10
+    MIN_CONST = -3
+    MAX_CONST = 3
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
@@ -31,6 +31,7 @@ class SynthesisProblem:
             else SygusV1ASTPrinter(self.symbol_table, options)
 
         self.solver = z3.Solver()
+        self.solver.push()
         self.commands = [x for x in self.problem.commands]
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
         self.smt_problem = self.convert_sygus_to_smt()
@@ -45,7 +46,6 @@ class SynthesisProblem:
         self.initialise_z3_variables()
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
-        self.initialise_z3_predefined_constraints()
 
         self.additional_constraints = []
 
@@ -54,7 +54,7 @@ class SynthesisProblem:
         self.func_to_synthesise = self.get_synth_func(self.func_name)
         self.arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in
                           self.func_to_synthesise.argument_sorts]
-        self.func_args = [z3.Const(name, sort) for name, sort in zip(self.func_to_synthesise.argument_names, self.arg_sorts)]
+        self.func_args = [z3.Int(name) for name in self.func_to_synthesise.argument_names]
 
     def __str__(self) -> str:
         return self.printer.run(self.problem, self.symbol_table)
@@ -78,8 +78,6 @@ class SynthesisProblem:
             elif statement[0] == 'synth-fun':
                 statement[0] = 'declare-fun'
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
-                self.synthesis_functions.append(" ".join(statement))
-
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
@@ -135,8 +133,6 @@ class SynthesisProblem:
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
             self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort)
 
-    def initialise_z3_predefined_constraints(self):
-        self.solver.add(z3.parse_smt2_string("(assert (= (f x y) (f y x)))"))
 
     @staticmethod
     def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
@@ -172,15 +168,15 @@ class SynthesisProblem:
 
     def check_counterexample(self, model):
         for constraint in self.solver.assertions():
-            if not model.eval(constraint, model_completion=True):
+            if model.eval(constraint, model_completion=True):
                 return {str(arg): model[arg] for arg in self.func_args}
         return None
 
     def get_additional_constraints(self, counterexample):
-        return [var != counterexample[var] for var in self.func_args]
+        return [var != counterexample[var.__str__()] for var in self.func_args]
 
-    def generate_candidate_expression(self):
-        expressions = self.generate_linear_integer_expressions(depth=0)
+    def generate_candidate_expression(self, depth=0):
+        expressions = self.generate_linear_integer_expressions(depth)
         for expr in itertools.islice(expressions, 200):  # limit breadth
             return expr
 

@@ -13,12 +13,11 @@ def main(args):
     file = args.input_file.read()
 
     problem = SynthesisProblem(file, int(args.sygus_standard))
-    problem.info()
-    print(problem.get_logic())
-
     solver = problem.solver
-    solver.set("timeout", 30000)
-    set_param("smt.random_seed", 1234)
+    parsed_sygus_problem = problem.convert_sygus_to_smt()
+    solver.add(z3.parse_smt2_string(parsed_sygus_problem))
+    problem.info()
+    print(parsed_sygus_problem)
 
     depth = 0
     depth_limit = 200
@@ -26,14 +25,31 @@ def main(args):
     itr = 0;
     found_valid_candidate = False
     candidate_expression = None
-    while not found_valid_candidate or itr < loop_limit:
+    assertions = problem.solver.assertions();
+    solver.reset()
+    for assertion in assertions:
+        solver.add(z3.Not(assertion))
 
-        candidate_expression = problem.generate_candidate_expression()
+    solver.set("timeout", 30000)
+    set_param("smt.random_seed", 1234)
+    candidate_expressions = problem.generate_linear_integer_expressions(depth)
+
+    while not found_valid_candidate or itr < loop_limit:
+        print("CURRENT_ASSERTIONS: \n", problem.solver.assertions());
+        try:
+            candidate_expression = next(candidate_expressions)
+        except StopIteration:
+            depth += 1
+            if depth > depth_limit:
+                print("Depth limit reached without finding a valid candidate.")
+                break
+            candidate_expressions = problem.generate_linear_integer_expressions(depth)
+            candidate_expression = next(candidate_expressions)
 
         solver.push()
-        expr = problem.z3_func(*problem.func_args) == candidate_expression
-        print("Expr:", expr)
-        solver.add(expr)
+        expression = problem.z3_func(*problem.func_args) == candidate_expression
+        print("expr:", expression)
+
         result = solver.check()
 
         if result == z3.sat:
@@ -47,21 +63,20 @@ def main(args):
             else:
                 additional_constraints = problem.get_additional_constraints(counterexample)
                 solver.add(*additional_constraints)
-
-        solver.pop()
+        # solver.pop()
         itr += 1
+        print(f"Depth {depth}, Iteration {itr}")
 
-    if depth > depth_limit:
-        print("Depth limit reached without finding a valid candidate.")
     if found_valid_candidate:
         print("Best candidate:", candidate_expression)
     else:
         print("No valid candidate found within the depth limit.")
 
+    print("SMT: ", solver.to_smt2())
     print("Stats: ", solver.statistics())
 
-    #fast_enum_synth = FastEnumSynth(problem)
-    #fast_enum_synth.generate(max_depth=10)
+    # fast_enum_synth = FastEnumSynth(problem)
+    # fast_enum_synth.generate(max_depth=10)
 
 
 if __name__ == '__main__':
