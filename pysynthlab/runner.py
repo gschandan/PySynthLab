@@ -1,7 +1,8 @@
 import itertools
+import time
 from functools import lru_cache
 
-import z3
+from z3 import *
 
 from pysynthlab.fast_enumerative_synthesis import FastEnumSynth
 from pysynthlab.synthesis_problem import SynthesisProblem
@@ -18,53 +19,43 @@ def main(args):
     print(problem.get_logic())
 
     solver.add(z3.parse_smt2_string(problem.convert_sygus_to_smt()))
+    set_param("smt.random_seed", 1234)
+
     depth = 0
-    depth_limit = 200  # prevent excessive search depth
-    breadth_limit = 200  # limit the number of expressions evaluated at each depth
-    size_limit = 5
-
-    func_name, z3_func = list(problem.z3functions.items())[0]
-    func = problem.get_synth_func(func_name)
-    arg_sorts = [problem.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in func.argument_sorts]
-    func_args = [z3.Const(name, sort) for name, sort in zip(func.argument_names, arg_sorts)]
+    depth_limit = 200
+    loop_limit = 500
+    itr = 0;
     found_valid_candidate = False
-    best_candidate = None
+    candidate_expression = None
+    while not found_valid_candidate or itr < loop_limit:
 
-    while not found_valid_candidate and depth <= depth_limit:
-        candidate_expressions = problem.generate_linear_integer_expressions(depth, size_limit)
+        candidate_expression = problem.generate_candidate_expression()
 
-        for candidate_expr in itertools.islice(candidate_expressions, breadth_limit):
-            solver.push()
-            expr = z3_func(*func_args) == candidate_expr
-            solver.add(expr)
-            print("Expr:", expr)
-            result = solver.check()
+        solver.push()
+        expr = problem.z3_func(*problem.func_args) == candidate_expression
+        print("Expr:", expr)
+        solver.add(expr)
+        result = solver.check()
 
-            if result == z3.sat:
-                model = solver.model()
-                print("model", model)
-                counterexample = {str(var): model.evaluate(var, model_completion=True) for var in func_args}
-                print("Counterexample:", counterexample)
-                additional_constraints = [var != counterexample[str(var)] for var in func_args]
-                solver.add(*additional_constraints)
+        if result == z3.sat:
+            model = solver.model()
+            print("Candidate model:", model)
+
+            counterexample = problem.check_counterexample(model)
+            if counterexample is None:
+                found_valid_candidate = True
+                break
             else:
-                validation_solver = z3.Solver()
-                validation_solver.add(solver.assertions())
-                validation_result = validation_solver.check()
-                if validation_result == z3.sat:
-                    found_valid_candidate = True
-                    best_candidate = candidate_expr
-                    break
+                additional_constraints = problem.get_additional_constraints(counterexample)
+                solver.add(*additional_constraints)
 
-            solver.pop()
-
-        depth += 1
-        print("Depth: ", depth)
+        solver.pop()
+        itr += 1
 
     if depth > depth_limit:
         print("Depth limit reached without finding a valid candidate.")
     if found_valid_candidate:
-        print("Best candidate:", best_candidate)
+        print("Best candidate:", candidate_expression)
     else:
         print("No valid candidate found within the depth limit.")
 

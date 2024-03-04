@@ -1,3 +1,5 @@
+import itertools
+
 import z3
 import pyparsing
 from pysynthlab.helpers.parser.src import symbol_table_builder
@@ -41,8 +43,13 @@ class SynthesisProblem:
         self.initialise_z3_functions()
         self.operand_pool = []
         self.initialize_operand_pool()
+        self.additional_constraints = []
 
-
+        self.func_name, self.z3_func = list(self.z3functions.items())[0]  # todo: refactor for problems with more than one
+        self.func = self.get_synth_func(self.func_name)
+        self.arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in
+                          self.func.argument_sorts]
+        self.func_args = [z3.Const(name, sort) for name, sort in zip(self.func.argument_names, self.arg_sorts)]
 
     def __str__(self) -> str:
         return self.printer.run(self.problem, self.symbol_table)
@@ -119,6 +126,66 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
+    def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0):
+        # if the current depth == 0 or current_size exceeds the limit, yield integer values and variables
+        if depth == 0 or current_size >= size_limit:
+            yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)] + list(self.z3variables.values())
+        else:
+            # for each variable, generate expressions by combining with other expressions of lesser depth
+            for var_name, var in self.z3variables.items():
+                # if the current size is within the limit, just yield the variable
+                if current_size < size_limit:
+                    yield var
+                for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
+                    if current_size + 1 < size_limit and not z3.eq(expr, var):
+                        yield var + expr
+                        yield var - expr
+                        yield expr - var
+
+                    # conditional expressions also constrained to the size limit
+                    for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
+                        if current_size + 2 < size_limit:
+                            yield z3.If(var > other_expr, var, other_expr)
+                            yield z3.If(var < other_expr, var, other_expr)
+                            yield z3.If(var == other_expr, var, expr)
+                            yield z3.If(var != other_expr, var, expr)
+
+    def check_counterexample(self, model):
+        for constraint in self.solver.assertions():
+            if not model.eval(constraint, model_completion=True):
+                return {str(arg): model[arg] for arg in self.func_args}
+        return None
+
+    def get_additional_constraints(self, counterexample):
+        return [var != counterexample[var] for var in self.func_args]
+
+    def generate_candidate_expression(self):
+        expressions = self.generate_linear_integer_expressions(depth=0)
+        for expr in itertools.islice(expressions, 200):  # limit breadth
+            return expr
+
+    ## Fast enumerative synth
+
+    def enumerate_expressions(self, depth):
+        if depth == 0:
+            return self.z3variables.values() + [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)]
+        else:
+            prev_level_expressions = self.enumerate_expressions(depth - 1)
+            new_expressions = []
+
+            for expr1 in prev_level_expressions:
+                for expr2 in prev_level_expressions:
+                    if isinstance(expr1, z3.ArithRef) and isinstance(expr2, z3.ArithRef):
+                        new_expressions.append(expr1 + expr2)
+                        new_expressions.append(expr1 - expr2)
+                        new_expressions.append(expr1 * expr2)
+
+                    new_expressions.append(z3.If(expr1 > expr2, expr1, expr2))
+                    new_expressions.append(z3.If(expr1 < expr2, expr1, expr2))
+                    new_expressions.append(z3.If(expr1 == expr2, expr1, expr2))
+                    new_expressions.append(z3.If(expr1 != expr2, expr1, expr2))
+            return new_expressions
+
     def get_grammar(self):
         grammars = {}
         for synth_func_cmd in self.get_synth_funcs().values():
@@ -186,48 +253,3 @@ class SynthesisProblem:
             return operand1 - operand2
         elif op == '*':
             return operand1 * operand2
-
-    def generate_linear_integer_expressions(self, depth, size_limit=10, current_size=0):
-        # if the current depth == 0 or current_size exceeds the limit, yield integer values and variables
-        if depth == 0 or current_size >= size_limit:
-            yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)] + list(self.z3variables.values())
-        else:
-            # for each variable, generate expressions by combining with other expressions of lesser depth
-            for var_name, var in self.z3variables.items():
-                # if the current size is within the limit, just yield the variable
-                if current_size < size_limit:
-                    yield var
-                for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
-                    # arithmetic operations constrained to the size limit
-                    if current_size + 1 < size_limit and expr != var:
-                        yield var + expr
-                        yield var - expr
-                        yield expr - var
-
-                    # conditional expressions also constrained to the size limit
-                    for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
-                        if current_size + 2 < size_limit:
-                            yield z3.If(var > other_expr, var, other_expr)
-                            yield z3.If(var < other_expr, var, other_expr)
-                            yield z3.If(var == other_expr, var, expr)
-                            yield z3.If(var != other_expr, var, expr)
-
-    def enumerate_expressions(self, depth):
-        if depth == 0:
-            return self.z3variables.values() + [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST)]
-        else:
-            prev_level_expressions = self.enumerate_expressions(depth - 1)
-            new_expressions = []
-
-            for expr1 in prev_level_expressions:
-                for expr2 in prev_level_expressions:
-                    if isinstance(expr1, z3.ArithRef) and isinstance(expr2, z3.ArithRef):
-                        new_expressions.append(expr1 + expr2)
-                        new_expressions.append(expr1 - expr2)
-                        new_expressions.append(expr1 * expr2)
-
-                    new_expressions.append(z3.If(expr1 > expr2, expr1, expr2))
-                    new_expressions.append(z3.If(expr1 < expr2, expr1, expr2))
-                    new_expressions.append(z3.If(expr1 == expr2, expr1, expr2))
-                    new_expressions.append(z3.If(expr1 != expr2, expr1, expr2))
-            return new_expressions
