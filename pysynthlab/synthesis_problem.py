@@ -50,6 +50,7 @@ class SynthesisProblem:
         self.assertions = set()
         self.negated_assertions = set()
         self.additional_constraints = []
+        self.original_assertions = []
 
         # todo: refactor for problems with more than one func to synthesisise
         self.func_name, self.z3_func = list(self.z3_synth_functions.items())[0]
@@ -75,6 +76,7 @@ class SynthesisProblem:
         for statement in ast:
             if statement[0] == 'constraint':
                 statement[0] = 'assert'
+                # conjoin as AND here
             elif statement[0] == 'check-synth':
                 statement[0] = 'check-sat'
             elif statement[0] == 'synth-fun':
@@ -152,15 +154,15 @@ class SynthesisProblem:
                 yield var - expr
                 yield expr - var
 
-            for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
+            for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
-                    yield z3.If(var > other_expr, var, other_expr)
-                    yield z3.If(var < other_expr, var, other_expr)
-                    yield z3.If(var != other_expr, var, other_expr)
+                    yield z3.If(var > expr, var, expr)
+                    yield z3.If(var < expr, var, expr)
+                    yield z3.If(var != expr, var, expr)
 
     def check_counterexample(self, model):
-        for constraint in self.solver.assertions():
-            if model.eval(constraint, model_completion=True):
+        for constraint in self.original_assertions:
+            if not model.eval(constraint, model_completion=True):
                 return {str(arg): model[arg] for arg in self.func_args}
         return None
 

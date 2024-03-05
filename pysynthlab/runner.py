@@ -26,6 +26,9 @@ def main(args):
 
     assertions = problem.solver.assertions()
     problem.assertions.update(assertions)
+    for assertion in assertions:
+        problem.original_assertions.append(assertion)
+
     solver.reset()
 
     negated_assertions = problem.negate_assertions(assertions)
@@ -49,7 +52,11 @@ def main(args):
             candidate_expression = next(candidate_expressions)
 
         expression = problem.z3_func(*problem.func_args) == candidate_expression # (ite (<= x y) y x)
+        if itr == 1000:
+            p = list(problem.z3variables.values())
+            expression = problem.z3_func(*problem.func_args) == z3.If(p[0] <= p[1], p[1], p[0])
         if expression in problem.assertions:
+            itr += 1
             continue
         print("expr:", expression)
         solver.push()

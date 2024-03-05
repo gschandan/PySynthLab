@@ -58,6 +58,19 @@ No counterexample
 (check-sat)
 (get-model)
 
+Need to disjunction assertion one and 2
+new query - against same constraints - only needs to work when x = 0 and y =1
+or with another counter example
+
+(assert(or (not(= (f x y) (f y x)))
+(not (and (<= x (f x y)) (<= y (f x y))))))
+
+counterexamples - check problem just for counterexamples rather than running against whole verifier
+
+
+basic cegis -> writeup
+literature -> how to modify the code to implement variations and documentation and comparisons
+i.e. as a researcher how to implement
 
 
 (set-logic LIA)
