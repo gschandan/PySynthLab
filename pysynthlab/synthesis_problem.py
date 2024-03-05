@@ -12,8 +12,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
-    MIN_CONST = 1
-    MAX_CONST = 10
+    MIN_CONST = -1
+    MAX_CONST = 2
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
@@ -47,6 +47,8 @@ class SynthesisProblem:
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
 
+        self.assertions = set()
+        self.negated_assertions = set()
         self.additional_constraints = []
 
         # todo: refactor for problems with more than one func to synthesisise
@@ -143,19 +145,19 @@ class SynthesisProblem:
         for var in self.z3variables.values():
             if current_size < size_limit:
                 yield var
+                yield var * z3.IntVal(2)
+                yield var * z3.IntVal(-1)
 
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
                 yield var + expr
                 yield var - expr
                 yield expr - var
-                yield var * z3.IntVal(2)
-                yield var * z3.IntVal(-1)
 
-                for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
-                    if current_size + 3 <= size_limit:
-                        yield z3.If(var > other_expr, var, other_expr)
-                        yield z3.If(var < other_expr, var, other_expr)
-                        yield z3.If(var != other_expr, var, expr)
+            for other_expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
+                if current_size + 3 <= size_limit:
+                    yield z3.If(var > other_expr, var, other_expr)
+                    yield z3.If(var < other_expr, var, other_expr)
+                    yield z3.If(var != other_expr, var, other_expr)
 
     def check_counterexample(self, model):
         for constraint in self.solver.assertions():
@@ -172,6 +174,33 @@ class SynthesisProblem:
             return expr
 
     @staticmethod
+    def negate_assertions(assertions):
+
+        negated_assertions = []
+        for assertion in assertions:
+            args = assertion.num_args()
+            if z3.is_and(assertion) or z3.is_or(assertion) or z3.is_not(assertion):
+                if args > 1:
+                    negated_children = [z3.Not(assertion.arg(i)) for i in range(args)]
+                    negated_assertions.append(z3.Or(*negated_children))
+                else:
+                    negated_assertions.append(z3.Not(assertion))
+            elif z3.is_expr(assertion) and args == 2:
+                if z3.is_eq(assertion):
+                    negated_assertions.append(assertion.arg(0) != assertion.arg(1))
+                elif z3.is_ge(assertion):
+                    negated_assertions.append(assertion.arg(0) < assertion.arg(1))
+                elif z3.is_gt(assertion):
+                    negated_assertions.append(assertion.arg(0) <= assertion.arg(1))
+                elif z3.is_le(assertion):
+                    negated_assertions.append(assertion.arg(0) > assertion.arg(1))
+                elif z3.is_lt(assertion):
+                    negated_assertions.append(assertion.arg(0) >= assertion.arg(1))
+                else:
+                    raise ValueError("Unsupported assertion type: {}".format(assertion))
+        return negated_assertions
+
+    @staticmethod
     def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
         sort_symbol = sort_descriptor.identifier.symbol
         return {
@@ -179,14 +208,4 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    @staticmethod
-    def negate_assertions(assertions):
-        negated_assertions = []
-        for assertion in assertions:
-            if assertion.num_args() > 1:
-                negated_children = [z3.Not(assertion.arg(i)) for i in range(assertion.num_args())]
-                negated_assertions.append(z3.Or(*negated_children))
-            else:
-                negated_assertions.append(z3.Not(assertion))
 
-        return negated_assertions

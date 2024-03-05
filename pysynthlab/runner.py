@@ -23,11 +23,14 @@ def main(args):
     itr = 0;
     depth_limit = 200
     found_valid_candidate = False
-    candidate_expression = None
+
     assertions = problem.solver.assertions()
+    problem.assertions.update(assertions)
     solver.reset()
 
-    solver.add(problem.negate_assertions(assertions))
+    negated_assertions = problem.negate_assertions(assertions)
+    solver.add(*negated_assertions)
+    problem.negated_assertions.update(negated_assertions)
 
     solver.set("timeout", 30000)
     set_param("smt.random_seed", 1234)
@@ -45,31 +48,30 @@ def main(args):
             candidate_expressions = problem.generate_linear_integer_expressions(depth)
             candidate_expression = next(candidate_expressions)
 
-        solver.push()
-        #p = list(problem.z3variables.values())
-        #expression = problem.z3_func(*problem.func_args) == z3.If(p[0] <= p[1], p[1], p[0]) # (ite (<= x y) y x) - correct
         expression = problem.z3_func(*problem.func_args) == candidate_expression # (ite (<= x y) y x)
+        if expression in problem.assertions:
+            continue
         print("expr:", expression)
-        print("SMT: ", solver.to_smt2())
+        solver.push()
         solver.add(expression)
         result = solver.check()
         print(result)
         if result == z3.sat:
             model = solver.model()
             print("Candidate model:", model)
-
             counterexample = problem.check_counterexample(model)
             if counterexample is None:
                 found_valid_candidate = True
-                break
             else:
                 solver.pop()
-                additional_constraints = [problem.z3_func(*problem.func_args) != candidate_expression, *problem.get_additional_constraints(counterexample)]
-                print(additional_constraints)
-                solver.add(*additional_constraints)
+                problem.assertions.add(expression)
+                negated = problem.negate_assertions([expression])
+                problem.negated_assertions.update(negated)
+                solver.add(*negated)
+                #print(problem.assertions)
+                #print(problem.negated_assertions)
         else:
-            found_valid_candidate = True
-            break
+            solver.pop()
 
         itr += 1
         print(f"Depth {depth}, Iteration {itr}")
