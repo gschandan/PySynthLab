@@ -12,8 +12,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
-    MIN_CONST = -1
-    MAX_CONST = 2
+    MIN_CONST = 0
+    MAX_CONST = 1
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
@@ -145,7 +145,6 @@ class SynthesisProblem:
         for var in self.z3variables.values():
             if current_size < size_limit:
                 yield var
-                yield var * z3.IntVal(2)
                 yield var * z3.IntVal(-1)
 
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
