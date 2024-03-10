@@ -73,15 +73,29 @@ class SynthesisProblem:
         sygus_parser = pyparsing.ZeroOrMore(s_expr)
         ast = sygus_parser.parseString(self.input_problem, parseAll=True).asList()
 
-        for statement in ast:
+        constraints = []
+        constraint_indices = []
+
+        for i, statement in enumerate(ast):
             if statement[0] == 'constraint':
-                statement[0] = 'assert'
-                # conjoin as AND here
+                constraints.append(statement[1])
+                constraint_indices.append(i)
             elif statement[0] == 'check-synth':
                 statement[0] = 'check-sat'
             elif statement[0] == 'synth-fun':
                 statement[0] = 'declare-fun'
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
+
+        if constraints:
+            conjoined_constraints = ['and'] + constraints
+            ast[constraint_indices[0]] = ['assert', conjoined_constraints]
+            for index in reversed(constraint_indices[1:]):
+                del ast[index]
+
+        def serialise(line):
+            return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
+
+        return '\n'.join(serialise(statement) for statement in ast)
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
