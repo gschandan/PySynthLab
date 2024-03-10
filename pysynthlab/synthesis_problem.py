@@ -12,8 +12,8 @@ from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblem:
-    MIN_CONST = 0
-    MAX_CONST = 1
+    MIN_CONST = -2
+    MAX_CONST = 2
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
@@ -30,8 +30,11 @@ class SynthesisProblem:
             if sygus_standard == 2 \
             else SygusV1ASTPrinter(self.symbol_table, options)
 
-        self.solver = z3.Solver()
-        self.solver.push()
+        self.counterexample_solver = z3.Solver()
+        self.counterexample_solver.push()
+        self.verification_solver = z3.Solver()
+        self.verification_solver.push()
+
         self.commands = [x for x in self.problem.commands]
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
         self.smt_problem = self.convert_sygus_to_smt()
@@ -135,7 +138,7 @@ class SynthesisProblem:
     def initialise_z3_variables(self):
         for variable in self.problem.commands:
             if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
-                z3_var = z3.Int(variable.symbol, self.solver.ctx)
+                z3_var = z3.Int(variable.symbol, self.counterexample_solver.ctx)
                 self.z3variables[variable.symbol] = z3_var
 
     def initialise_z3_synth_functions(self):
@@ -181,7 +184,8 @@ class SynthesisProblem:
         return None
 
     def get_additional_constraints(self, counterexample):
-        return [var != counterexample[var.__str__()] for var in self.func_args]
+        constraints = [var != counterexample[var.__str__()] for var in self.func_args]
+        return z3.And(*constraints)
 
     def generate_candidate_expression(self, depth=0):
         expressions = self.generate_linear_integer_expressions(depth)

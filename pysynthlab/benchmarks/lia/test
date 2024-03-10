@@ -1,5 +1,12 @@
-verification file 1:
+Problem:
+(set-logic LIA)
+(synth-fun f ((x Int) (y Int)) Int)
+(declare-var x Int)
+(declare-var y Int)
+(constraint (= (f x y) (f y x)))
+(constraint (and (<= x (f x y)) (<= y (f x y))))
 
+verification file 1 (negated and conjoined the constraints):
 (set-logic LIA)
 (define-fun f ((x Int) (y Int)) Int x )
 (declare-fun x () Int)
@@ -41,7 +48,7 @@ counterexaple 2: sat
 (define-fun x () Int 1)
 (define-fun y () Int 0)
 )
-
+counterexamples - check problem just for counterexamples rather than running against whole verifier
 continue enumerating until something works for counterexamples
 synthesis guess 3:
 (define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
