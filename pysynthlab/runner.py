@@ -34,16 +34,21 @@ def main(args):
         verifier.mkTerm(Kind.LEQ, x, verifier.mkTerm(Kind.APPLY_UF, f, x, y)),
         verifier.mkTerm(Kind.LEQ, y, verifier.mkTerm(Kind.APPLY_UF, f, x, y))
     ]
-    # TODO: fix these
-    negated_constraints = verifier.mkTerm(Kind.OR,
-                                        verifier.mkTerm(Kind.NOT,
-                                                      verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y),
-                                                                    verifier.mkTerm(Kind.APPLY_UF, f, y, x))),
-                                        verifier.mkTerm(Kind.OR,
-                                                      verifier.mkTerm(Kind.GT, x, verifier.mkTerm(Kind.APPLY_UF, f, x, y)),
-                                                      verifier.mkTerm(Kind.GT, y, verifier.mkTerm(Kind.APPLY_UF, f, y, x))
-                                                      )
-                                        )
+    negated_constraints = verifier.mkTerm(
+        Kind.OR,
+        verifier.mkTerm(
+            Kind.NOT,
+            verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y),
+                            verifier.mkTerm(Kind.APPLY_UF, f, y, x))
+        ),
+        verifier.mkTerm(
+            Kind.OR,
+            verifier.mkTerm(Kind.GT, x, verifier.mkTerm(Kind.APPLY_UF, f, x, y)),
+            verifier.mkTerm(Kind.GT, y, verifier.mkTerm(Kind.APPLY_UF, f, y, x))
+        )
+    )
+    for constraint in constraints:
+        enumerator.assertFormula(constraint)
 
     verifier.assertFormula(negated_constraints)
 
