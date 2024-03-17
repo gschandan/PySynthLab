@@ -1,4 +1,4 @@
-from z3 import *
+from cvc5 import *
 
 from pysynthlab.synthesis_problem import SynthesisProblem
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
@@ -11,81 +11,114 @@ def main(args):
     # problem.info()
     # print(parsed_sygus_problem)
 
-    x, y = Ints('x y')
-    f = Function('f', IntSort(), IntSort(), IntSort())
-    constraints = [f(x, y) == f(y, x), And(x <= f(x, y), y <= f(x, y))]
-
     # Create solvers
     verifier = Solver()
+    verifier.setLogic("UFLIA")
+    verifier.setOption("produce-models", "true")
+    verifier.setOption("produce-unsat-cores", "true")
     enumerator = Solver()
+    enumerator.setLogic("UFLIA")
+    enumerator.setOption("produce-models", "true")
+    enumerator.setOption("produce-unsat-cores", "true")
 
-    # Adding the original problem constraints to the verifier
-    verifier.add(constraints)
+    intSort = verifier.getIntegerSort()
+    x = verifier.mkConst(intSort, "x")
+    y = verifier.mkConst(intSort, "y")
+    # Declare the uninterpreted function f of sort (Int, Int) -> Int
+    f_sort = verifier.mkFunctionSort([intSort, intSort], intSort)  # Function sort from Int, Int to Int
+    f = verifier.mkConst(f_sort, "f")
 
-    # Guess 1: f as x
+    # Create the constraints
+    constraints = [
+        verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y), verifier.mkTerm(Kind.APPLY_UF, f, y, x)),
+        verifier.mkTerm(Kind.LEQ, x, verifier.mkTerm(Kind.APPLY_UF, f, x, y)),
+        verifier.mkTerm(Kind.LEQ, y, verifier.mkTerm(Kind.APPLY_UF, f, x, y))
+    ]
+    # TODO: fix these
+    negated_constraints = verifier.mkTerm(Kind.OR,
+                                        verifier.mkTerm(Kind.NOT,
+                                                      verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y),
+                                                                    verifier.mkTerm(Kind.APPLY_UF, f, y, x))),
+                                        verifier.mkTerm(Kind.OR,
+                                                      verifier.mkTerm(Kind.GT, x, verifier.mkTerm(Kind.APPLY_UF, f, x, y)),
+                                                      verifier.mkTerm(Kind.GT, y, verifier.mkTerm(Kind.APPLY_UF, f, y, x))
+                                                      )
+                                        )
+
+    verifier.assertFormula(negated_constraints)
+
     print("Guess 1: f(x, y) = x")
     enumerator.push()
-    enumerator.add(f(x, y) == x)
-    print("Enumerator Solver State:", enumerator.to_smt2())
-    if enumerator.check() == sat:
+    f_x_y = enumerator.mkTerm(Kind.APPLY_UF, f, x, y)  # Correctly apply function 'f' to x and y
+    enumerator.assertFormula(enumerator.mkTerm(Kind.EQUAL, f_x_y, x))
+    if enumerator.checkSat().isSat():
         print("Candidate satisfies counterexamples")
         verifier.push()
-        verifier.add(f(x, y) == x)
-        print("Verifier Solver State:", verifier.to_smt2())
-        if verifier.check() == sat:
-            m = verifier.model()
+        verifier.assertFormula(verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y), x))
+        if verifier.checkSat().isSat():
+            m = verifier.getModel([],[x,y,f])
             print("Counterexample found:")
             print(m)
             enumerator.pop()
-            enumerator.add(f(m[x], m[y]) != m.evaluate(f(m[x], m[y])))
-            print("Enumerator Solver State:", enumerator.to_smt2())
+            xVal = m.evaluate(x)
+            yVal = m.evaluate(y)
+            enumerator.assertFormula(
+                enumerator.mkTerm(Kind.DISTINCT, enumerator.mkTerm(Kind.APPLY_UF, f, [xVal, yVal]),
+                                  m.evaluate(enumerator.mkTerm(Kind.APPLY_UF, f, [xVal, yVal]))))
         verifier.pop()
     else:
         print("Candidate does not satisfy counterexamples")
 
-    # Guess 2: f as constant 0
-    print("Guess 2: f(x, y) = 0")
-    enumerator.push()
-    enumerator.add(f(x, y) == 0)
-    print("Enumerator Solver State:", enumerator.to_smt2())
-    if enumerator.check() == sat:
-        print("Candidate satisfies counterexamples")
-        verifier.push()
-        verifier.add(f(x, y) == 0)
-        print("Verifier Solver State:", verifier.to_smt2())
-        if verifier.check() == sat:
-            m = verifier.model()
-            print("Counterexample found:")
-            print(m)
-            enumerator.pop()
-            enumerator.add(f(m[x], m[y]) != m.evaluate(f(m[x], m[y])))
-            print("Enumerator Solver State:", enumerator.to_smt2())
-        verifier.pop()
-    else:
-        print("Candidate does not satisfy counterexamples")
-
-    # Guess 3: correct solution
-    print("Guess 3: f(x, y) = If(x <= y, y, x)")
-    enumerator.push()
-    enumerator.add(f(x, y) == If(x <= y, y, x))
-    print("Enumerator Solver State:", enumerator.to_smt2())
-    if enumerator.check() == sat:
-        print("Candidate satisfies counterexamples")
-        verifier.push()
-        verifier.add(f(x, y) == If(x <= y, y, x))
-        print("Verifier Solver State:", verifier.to_smt2())
-        if verifier.check() == sat:
-            m = verifier.model()
-            print("Counterexample found:")
-            print(m)
-            enumerator.pop()
-            enumerator.add(f(m[x], m[y]) != m.evaluate(f(m[x], m[y])))
-            print("Enumerator Solver State:", enumerator.to_smt2())
-        else:
-            print("Valid solution found with the third guess")
-        verifier.pop()
-    else:
-        print("Candidate does not satisfy counterexamples")
+    # # Guess 2: f as constant 0
+    # print("Guess 2: f(x, y) = 0")
+    # enumerator.push()
+    # enumerator.assertFormula(
+    #     enumerator.mkTerm(Kind.EQUAL, enumerator.mkTerm(Kind.APPLY_UF, f, x, y), enumerator.mkInteger(0)))
+    # if enumerator.checkSat().isSat():
+    #     print("Candidate satisfies counterexamples")
+    #     verifier.push()
+    #     verifier.assertFormula(
+    #         verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y), verifier.mkInteger(0)))
+    #     if verifier.checkSat().isSat():
+    #         m = verifier.getModel([], constants)
+    #         print("Counterexample found:")
+    #         print(m)
+    #         enumerator.pop()
+    #         xVal = m.evaluate(x)
+    #         yVal = m.evaluate(y)
+    #         enumerator.assertFormula(
+    #             enumerator.mkTerm(Kind.DISTINCT, enumerator.mkTerm(Kind.APPLY_UF, f, xVal, yVal),
+    #                               m.evaluate(enumerator.mkTerm(Kind.APPLY_UF, f, xVal, yVal))))
+    #     verifier.pop()
+    # else:
+    #     print("Candidate does not satisfy counterexamples")
+    #
+    # # Guess 3: correct solution
+    # print("Guess 3: f(x, y) = If(x <= y, y, x)")
+    # enumerator.push()
+    # enumerator.assertFormula(enumerator.mkTerm(Kind.EQUAL, enumerator.mkTerm(Kind.APPLY_UF, f, x, y),
+    #                                            enumerator.mkTerm(Kind.ITE, enumerator.mkTerm(Kind.LEQ, x, y), y,
+    #                                                              x)))
+    # if enumerator.checkSat().isSat():
+    #     print("Candidate satisfies counterexamples")
+    #     verifier.push()
+    #     verifier.assertFormula(verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y),
+    #                                            verifier.mkTerm(Kind.ITE, verifier.mkTerm(Kind.LEQ, x, y), y, x)))
+    #     if verifier.checkSat().isSat():
+    #         m = verifier.getModel([], constants)
+    #         print("Counterexample found:")
+    #         print(m)
+    #         enumerator.pop()
+    #         xVal = m.evaluate(x)
+    #         yVal = m.evaluate(y)
+    #         enumerator.assertFormula(
+    #             enumerator.mkTerm(Kind.DISTINCT, enumerator.mkTerm(Kind.APPLY_UF, f, xVal, yVal),
+    #                               m.evaluate(enumerator.mkTerm(Kind.APPLY_UF, f, xVal, yVal))))
+    #     else:
+    #         print("Valid solution found with the third guess")
+    #     verifier.pop()
+    # else:
+    #     print("Candidate does not satisfy counterexamples")
 
     # depth = 0
     # itr = 0
