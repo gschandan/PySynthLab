@@ -30,8 +30,8 @@ class SynthesisProblem:
             if sygus_standard == 2 \
             else SygusV1ASTPrinter(self.symbol_table, options)
 
-        self.counterexample_solver = z3.Solver()
-        self.counterexample_solver.push()
+        self.enumerator_solver = z3.Solver()
+        self.enumerator_solver.push()
         self.verification_solver = z3.Solver()
         self.verification_solver.push()
 
@@ -51,6 +51,7 @@ class SynthesisProblem:
         self.initialise_z3_predefined_functions()
 
         self.assertions = set()
+        self.counterexamples = set()
         self.negated_assertions = set()
         self.additional_constraints = []
         self.original_assertions = []
@@ -86,7 +87,7 @@ class SynthesisProblem:
             elif statement[0] == 'check-synth':
                 statement[0] = 'check-sat'
             elif statement[0] == 'synth-fun':
-                statement[0] = 'declare-fun'
+                statement[0] = 'define-fun'
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
 
         if constraints:
@@ -138,7 +139,7 @@ class SynthesisProblem:
     def initialise_z3_variables(self):
         for variable in self.problem.commands:
             if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
-                z3_var = z3.Int(variable.symbol, self.counterexample_solver.ctx)
+                z3_var = z3.Int(variable.symbol, self.enumerator_solver.ctx)
                 self.z3variables[variable.symbol] = z3_var
 
     def initialise_z3_synth_functions(self):

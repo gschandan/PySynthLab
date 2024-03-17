@@ -48,12 +48,22 @@ counterexaple 2: sat
 (define-fun x () Int 1)
 (define-fun y () Int 0)
 )
-counterexamples - check problem just for counterexamples rather than running against whole verifier
-continue enumerating until something works for counterexamples
-synthesis guess 3:
-(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
-No counterexample
 
+synthesis guess 3:
+(set-logic LIA)
+
+(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
+
+(declare-fun x () Int)
+(declare-fun y ()Int)
+(assert(or (not(= (f x y) (f y x)))
+(not (and (<= x (f x y)) (<= y (f x y))))))
+(check-sat)
+(get-model)
+No counterexample -> end as we have a valid candidate program
+
+counterexamples - check candidate just for counterexamples rather than running against whole verifier
+continue enumerating until something works for counterexamples
 (set-logic LIA)
 
 (define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
