@@ -50,7 +50,7 @@ def main(args):
 
     verifier.assertFormula(negated_constraints)
 
-    verifier.push()  # Isolate verification context
+    verifier.push()
     verifier.assertFormula(verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y), verifier.mkInteger(0)))
     result = verifier.checkSat()
     if result.isSat():
@@ -62,7 +62,7 @@ def main(args):
     verifier.pop()  # Reset solver state
 
     # Guess 3: f(x, y) = If(x <= y, y, x)
-    verifier.push()  # Isolate verification context
+    verifier.push()
     ite_expr = verifier.mkTerm(Kind.ITE, verifier.mkTerm(Kind.LEQ, x, y), y, x)
     verifier.assertFormula(verifier.mkTerm(Kind.EQUAL, verifier.mkTerm(Kind.APPLY_UF, f, x, y), ite_expr))
     result = verifier.checkSat()
@@ -72,7 +72,7 @@ def main(args):
         print(f"y: {verifier.getValue(y)}")
     else:
         print("Guess 3: No counterexamples found; candidate might satisfy the constraints.")
-    verifier.pop()  # Reset solver state
+    verifier.pop()
 
     # print("Guess 1: f(x, y) = x")
     # enumerator.push()
