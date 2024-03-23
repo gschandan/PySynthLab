@@ -3,6 +3,7 @@ from z3 import *
 from pysynthlab.synthesis_problem import SynthesisProblem
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
+
 def main(args):
     # file = args.input_file.read()
     #
@@ -11,81 +12,34 @@ def main(args):
     # problem.info()
     # print(parsed_sygus_problem)
 
-    x, y = Ints('x y')
-    f = Function('f', IntSort(), IntSort(), IntSort())
-    constraints = [f(x, y) == f(y, x), And(x <= f(x, y), y <= f(x, y))]
+    base_problem = """
+    (declare-fun x () Int)
+    (declare-fun y () Int)
+    (assert(or (not(= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))
+    """
 
-    # Create solvers
-    verifier = Solver()
-    enumerator = Solver()
+    guesses = [
+        "(define-fun f ((x Int) (y Int)) Int x)",  # Guess 1: f(x, y) = x
+        "(define-fun f ((x Int) (y Int)) Int y)",  # Guess 2: f(x, y) = y
+        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))"  # Guess 3: f(x, y) = max(x, y)
+    ]
 
-    # Adding the original problem constraints to the verifier
-    verifier.add(constraints)
-
-    # Guess 1: f as x
-    print("Guess 1: f(x, y) = x")
-    enumerator.push()
-    enumerator.add(f(x, y) == x)
-    print("Enumerator Solver State:", enumerator.to_smt2())
-    if enumerator.check() == sat:
-        print("Candidate satisfies counterexamples")
-        verifier.push()
-        verifier.add(f(x, y) == x)
-        print("Verifier Solver State:", verifier.to_smt2())
-        if verifier.check() == sat:
-            m = verifier.model()
-            print("Counterexample found:")
-            print(m)
-            enumerator.pop()
-            enumerator.add(f(m[x], m[y]) != m.evaluate(f(m[x], m[y])))
-            print("Enumerator Solver State:", enumerator.to_smt2())
-        verifier.pop()
-    else:
-        print("Candidate does not satisfy counterexamples")
-
-    # Guess 2: f as constant 0
-    print("Guess 2: f(x, y) = 0")
-    enumerator.push()
-    enumerator.add(f(x, y) == 0)
-    print("Enumerator Solver State:", enumerator.to_smt2())
-    if enumerator.check() == sat:
-        print("Candidate satisfies counterexamples")
-        verifier.push()
-        verifier.add(f(x, y) == 0)
-        print("Verifier Solver State:", verifier.to_smt2())
-        if verifier.check() == sat:
-            m = verifier.model()
-            print("Counterexample found:")
-            print(m)
-            enumerator.pop()
-            enumerator.add(f(m[x], m[y]) != m.evaluate(f(m[x], m[y])))
-            print("Enumerator Solver State:", enumerator.to_smt2())
-        verifier.pop()
-    else:
-        print("Candidate does not satisfy counterexamples")
-
-    # Guess 3: correct solution
-    print("Guess 3: f(x, y) = If(x <= y, y, x)")
-    enumerator.push()
-    enumerator.add(f(x, y) == If(x <= y, y, x))
-    print("Enumerator Solver State:", enumerator.to_smt2())
-    if enumerator.check() == sat:
-        print("Candidate satisfies counterexamples")
-        verifier.push()
-        verifier.add(f(x, y) == If(x <= y, y, x))
-        print("Verifier Solver State:", verifier.to_smt2())
-        if verifier.check() == sat:
-            m = verifier.model()
-            print("Counterexample found:")
-            print(m)
-            enumerator.pop()
-            enumerator.add(f(m[x], m[y]) != m.evaluate(f(m[x], m[y])))
-            print("Enumerator Solver State:", enumerator.to_smt2())
+    def try_guess(base_problem, guess):
+        smt_lib_str = guess + base_problem + "(check-sat)(get-model)"
+        solver = z3.Solver()
+        solver.from_string(smt_lib_str)
+        print("SMT:", solver.to_smt2())
+        if solver.check() == z3.sat:
+            print(f"Guess '{guess}' is not valid, found counterexample:")
+            print(solver.model())
+            return False
         else:
-            print("Valid solution found with the third guess")
-        verifier.pop()
-    else:
-        print("Candidate does not satisfy counterexamples")
+            print(f"Guess '{guess}' is potentially correct, no counterexample found.")
+            return True
+
+    for guess in guesses:
+        if try_guess(base_problem, guess):
+            break
 
     # depth = 0
     # itr = 0

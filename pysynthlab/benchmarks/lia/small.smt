@@ -18,3 +18,17 @@ i.e.
 (not (and (<= x (f x y)) (<= y (f x y))))
 
 if (define-fun f ((x Int) (y Int)) Int x ) incorrect -> counterexample
+
+
+(set-logic LIA)
+
+(declare-fun f (Int Int) Int)
+(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))
+
+(declare-fun x () Int)
+(declare-fun y () Int)
+
+(assert(or (not(= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))
+
+(check-sat)
+(get-model)
