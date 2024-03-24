@@ -42,31 +42,55 @@ def main(args):
             break
 
     print("v2")
-    x, y = Ints('x y')
+
+    def add_negated_constraints(solver, f_guess):
+        x, y = Ints('x y')
+        f_x_y = f_guess(x, y)
+        f_y_x = f_guess(y, x)
+        solver.add(Or(Not(f_x_y == f_y_x), Not(And(x <= f_x_y, y <= f_x_y))))
+
+    def add_original_constraints(solver, f_guess):
+        x, y = Ints('x y')
+        f_x_y = f_guess(x, y)
+        f_y_x = f_guess(y, x)
+        solver.add(And((f_x_y == f_y_x), And(x <= f_x_y, y <= f_x_y)))
+
     guesses = [
-        lambda a, b: a,  # f(x, y) = x
-        lambda a, b: b,  # f(x, y) = y
-        lambda a, b: If(a <= b, b, a),  # f(x, y) = max(x, y)
+        (lambda a, b: 0, "f(x, y) = 0"),
+        (lambda a, b: a, "f(x, y) = x"),
+        (lambda a, b: b, "f(x, y) = y"),
+        (lambda a, b: a - b, "f(x, y) = x - y"),
+        (lambda a, b: If(a <= b, b, a), "f(x, y) = max(x, y)"),
     ]
 
-    for guess_num, guess in enumerate(guesses, start=1):
-        s = Solver()
-        f_x_y = guess(x, y)
-        f_y_x = guess(y, x)
+    for guess, name in guesses:
+        enumerator = Solver()
+        add_negated_constraints(enumerator, guess)
+        print("ENUMAERATOR:", enumerator.to_smt2())
 
-        s.add(Or(Not(f_x_y == f_y_x), Not(And(x <= f_x_y, y <= f_x_y))))
+        if enumerator.check() == sat:
+            model = enumerator.model()
+            print(
+                f"Counterexample for guess {name}: x = {model.evaluate(Int('x'))}, y = {model.evaluate(Int('y'))}")
 
-        result = s.check()
+            verifier = Solver()
+            add_original_constraints(verifier, guess)
+            verifier.add(Int('x') == model[Int('x')], Int('y') == model[Int('y')])
+            print("VERIFIER:", verifier.to_smt2())
 
-        print(f"Guess {guess_num}:")
-        print(s.to_smt2())
-
-        if result == sat:
-            print("Satisfiable, found a counterexample:", s.model())
+            if verifier.check() == sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+            else:
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
         else:
-            print("Unsatisfiable, no counterexample found; potentially correct.")
-        print('-' * 50)
-
+            verifier = Solver()
+            add_original_constraints(verifier, guess)
+            print("VERIFIER:", verifier.to_smt2())
+            if verifier.check() == sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+        print("-"*50)
     # depth = 0
     # itr = 0
     # depth_limit = 200
