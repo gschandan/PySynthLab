@@ -41,6 +41,32 @@ def main(args):
         if try_guess(base_problem, guess):
             break
 
+    print("v2")
+    x, y = Ints('x y')
+    guesses = [
+        lambda a, b: a,  # f(x, y) = x
+        lambda a, b: b,  # f(x, y) = y
+        lambda a, b: If(a <= b, b, a),  # f(x, y) = max(x, y)
+    ]
+
+    for guess_num, guess in enumerate(guesses, start=1):
+        s = Solver()
+        f_x_y = guess(x, y)
+        f_y_x = guess(y, x)
+
+        s.add(Or(Not(f_x_y == f_y_x), Not(And(x <= f_x_y, y <= f_x_y))))
+
+        result = s.check()
+
+        print(f"Guess {guess_num}:")
+        print(s.to_smt2())
+
+        if result == sat:
+            print("Satisfiable, found a counterexample:", s.model())
+        else:
+            print("Unsatisfiable, no counterexample found; potentially correct.")
+        print('-' * 50)
+
     # depth = 0
     # itr = 0
     # depth_limit = 200
