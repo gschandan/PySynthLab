@@ -87,7 +87,7 @@ class SynthesisProblem:
             elif statement[0] == 'check-synth':
                 statement[0] = 'check-sat'
             elif statement[0] == 'synth-fun':
-                statement[0] = 'define-fun'
+                statement[0] = 'declare-fun'
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
 
         if constraints:
@@ -95,11 +95,6 @@ class SynthesisProblem:
             ast[constraint_indices[0]] = ['assert', conjoined_constraints]
             for index in reversed(constraint_indices[1:]):
                 del ast[index]
-
-        def serialise(line):
-            return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
-
-        return '\n'.join(serialise(statement) for statement in ast)
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
@@ -177,6 +172,32 @@ class SynthesisProblem:
                     yield z3.If(var > expr, var, expr)
                     yield z3.If(var < expr, var, expr)
                     yield z3.If(var != expr, var, expr)
+
+    def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
+        if depth == 0 or current_size >= size_limit:
+            yield from ([lambda *args: i for i in range(self.MIN_CONST, self.MAX_CONST + 1)] +
+                        [lambda *args: var for var in self.z3variables.keys()])
+            return
+
+        for var_name, var in self.z3variables.items():
+            if current_size < size_limit:
+                yield lambda *args: args[list(self.z3variables.keys()).index(var_name)]
+                yield lambda *args: -args[list(self.z3variables.keys()).index(var_name)]
+
+            for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
+                yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] + func(*args)
+                yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] - func(*args)
+                yield lambda *args: func(*args) - args[list(self.z3variables.keys()).index(var_name)]
+
+            for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
+                if current_size + 3 <= size_limit:
+                    yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] if args[list(
+                        self.z3variables.keys()).index(var_name)] > func(*args) else func(*args)
+                    yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] if args[list(
+                        self.z3variables.keys()).index(var_name)] < func(*args) else func(*args)
+                    yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] if args[list(
+                        self.z3variables.keys()).index(var_name)] != func(*args) else func(*args)
+
 
     def check_counterexample(self, model):
         for constraint in self.original_assertions:
