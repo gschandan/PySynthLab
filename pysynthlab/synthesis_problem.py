@@ -79,27 +79,29 @@ class SynthesisProblem:
 
         constraints = []
         constraint_indices = []
+        filtered_ast = []
 
         for i, statement in enumerate(ast):
             if statement[0] == 'constraint':
                 constraints.append(statement[1])
-                constraint_indices.append(i)
+                constraint_indices.append(len(filtered_ast))
+                filtered_ast.append(statement)
             elif statement[0] == 'check-synth':
                 statement[0] = 'check-sat'
-            elif statement[0] == 'synth-fun':
-                statement[0] = 'declare-fun'
-                statement[2] = [var_decl[1] for var_decl in statement[2]]
+                filtered_ast.append(statement)
+            elif statement[0] != 'synth-fun':
+                filtered_ast.append(statement)
 
         if constraints:
             conjoined_constraints = ['and'] + constraints
-            ast[constraint_indices[0]] = ['assert', conjoined_constraints]
+            filtered_ast[constraint_indices[0]] = ['assert', conjoined_constraints]
             for index in reversed(constraint_indices[1:]):
-                del ast[index]
+                del filtered_ast[index]
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
 
-        return '\n'.join(serialise(statement) for statement in ast)
+        return '\n'.join(serialise(statement) for statement in filtered_ast)
 
     def get_logic(self):
         return self.symbol_table.logic_name

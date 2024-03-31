@@ -6,6 +6,39 @@ from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
 
 def manual_loops():
+    print("METHOD 1: string maniuplation")
+    base_problem = """
+        (declare-fun x () Int)
+        (declare-fun y () Int)
+        (assert(or (not(= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))
+        """
+
+    guesses = [
+        "(define-fun f ((x Int) (y Int)) Int x)",  # Guess 1: f(x, y) = x
+        "(define-fun f ((x Int) (y Int)) Int y)",  # Guess 2: f(x, y) = y
+        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) x y))",  # Guess 3: f(x, y) = min(x, y)
+        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))",  # Guess 4: f(x, y) = max(x, y)
+    ]
+
+    def try_guess(base_problem, guess):
+        smt_lib_str = guess + base_problem + "(check-sat)(get-model)"
+        solver = z3.Solver()
+        solver.from_string(smt_lib_str)
+        print("SMT:", solver.to_smt2())
+        if solver.check() == z3.sat:
+            print(f"Guess '{guess}' is not valid, found counterexample:")
+            print(solver.model())
+            return False
+        else:
+            print(f"Guess '{guess}' is potentially correct, no counterexample found.")
+            return True
+
+    for guess in guesses:
+        if try_guess(base_problem, guess):
+            break
+
+    print("METOD 2: python function substitution")
+
     def add_negated_constraints(solver, f_guess):
         x, y = Ints('x y')
         f_x_y = f_guess(x, y)
@@ -66,7 +99,6 @@ def main(args):
     parsed_sygus_problem = problem.convert_sygus_to_smt()
     problem.info()
     print(parsed_sygus_problem)
-
 
 
 

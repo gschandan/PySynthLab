@@ -174,3 +174,35 @@ print("METOD 2: python function substitution")
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
         print("-" * 50)
+
+ print("METHOD 1: string maniuplation")
+    base_problem = """
+        (declare-fun f (Int Int) Int)
+        (declare-fun x () Int)
+        (declare-fun y () Int)
+        (assert(or (not(= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))
+        """
+
+    guesses = [
+        "(define-fun f ((x Int) (y Int)) Int x)",  # Guess 1: f(x, y) = x
+        "(define-fun f ((x Int) (y Int)) Int y)",  # Guess 2: f(x, y) = y
+        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) x y))",  # Guess 3: f(x, y) = min(x, y)
+        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))",  # Guess 4: f(x, y) = max(x, y)
+    ]
+
+    def try_guess(base_problem, guess):
+        smt_lib_str = guess + base_problem + "(check-sat)(get-model)"
+        solver = z3.Solver()
+        solver.from_string(smt_lib_str)
+        print("SMT:", solver.to_smt2())
+        if solver.check() == z3.sat:
+            print(f"Guess '{guess}' is not valid, found counterexample:")
+            print(solver.model())
+            return False
+        else:
+            print(f"Guess '{guess}' is potentially correct, no counterexample found.")
+            return True
+
+    for guess in guesses:
+        if try_guess(base_problem, guess):
+            break
