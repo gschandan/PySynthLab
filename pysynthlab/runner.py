@@ -9,36 +9,6 @@ from typing import Optional, Tuple, List
 
 
 def manual_loops():
-    print("METHOD 1: string maniuplation")
-    base_problem = """
-        (declare-fun x () Int)
-        (declare-fun y () Int)
-        (assert(or (not(= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))
-        """
-
-    guesses = [
-        "(define-fun f ((x Int) (y Int)) Int x)",  # Guess 1: f(x, y) = x
-        "(define-fun f ((x Int) (y Int)) Int y)",  # Guess 2: f(x, y) = y
-        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) x y))",  # Guess 3: f(x, y) = min(x, y)
-        "(define-fun f ((x Int) (y Int)) Int (ite (<= x y) y x))",  # Guess 4: f(x, y) = max(x, y)
-    ]
-
-    def try_guess(base_problem, guess):
-        smt_lib_str = guess + base_problem + "(check-sat)(get-model)"
-        solver = z3.Solver()
-        solver.from_string(smt_lib_str)
-        print("SMT:", solver.to_smt2())
-        if solver.check() == z3.sat:
-            print(f"Guess '{guess}' is not valid, found counterexample:")
-            print(solver.model())
-            return False
-        else:
-            print(f"Guess '{guess}' is potentially correct, no counterexample found.")
-            return True
-
-    for guess in guesses:
-        if try_guess(base_problem, guess):
-            break
 
     print("METOD 2: python function substitution")
 
@@ -94,7 +64,7 @@ def manual_loops():
         print("-" * 50)
 
 def main(args):
-
+    manual_loops()
     def create_solver_with_vars():
         solver = cvc5.Solver()
         solver.setOption("produce-models", "true")
@@ -144,7 +114,7 @@ def main(args):
 
         result = solver.checkSat()
         if result.isSat():
-            model = solver.getModel([], [x,y])  # Adjust variable names if needed
+            model = solver.getModel([], [x,y])
             print(f"Model for guess {name}: x = {model[0]}, y = {model[1]}")
         else:
             print(f"No model for guess {name}.")
