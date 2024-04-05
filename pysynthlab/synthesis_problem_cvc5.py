@@ -179,14 +179,21 @@ class SynthesisProblemCvc5:
                 raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
         elif isinstance(term, ast.FunctionApplicationTerm):
             func_symbol = term.function_identifier.symbol
-            if func_symbol in self.cvc5_synth_functions:
-                func = self.cvc5_synth_functions[func_symbol]
+            if func_symbol == "=":
+                assert len(term.arguments) == 2, " == should have 2 arguments"
+                lhs = self.parse_term(term.arguments[0])
+                rhs = self.parse_term(term.arguments[1])
+                return self.enumerator_solver.mkTerm(Kind.EQUAL, lhs, rhs)
+            elif func_symbol in self.cvc5_synth_functions:
+                args = [self.parse_term(arg) for arg in term.arguments]
+                return self.enumerator_solver.mkTerm(Kind.APPLY_UF, self.enumerator_solver.mkConst(
+                    self.enumerator_solver.getBooleanSort(), func_symbol), *args)
             elif func_symbol in self.cvc5_predefined_functions:
                 func = self.cvc5_predefined_functions[func_symbol]
+                args = [self.parse_term(arg) for arg in term.arguments]
+                return self.enumerator_solver.mkTerm(func.getKind(), *args)
             else:
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
-            args = [self.parse_term(arg) for arg in term.arguments]
-            return self.enumerator_solver.mkTerm(func, args)
         elif isinstance(term, ast.QuantifiedTerm):
             variables = [(v.symbol, self.enumerator_solver.mkConst(self.enumerator_solver.getIntegerSort(), v.symbol))
                          for v in term.quantified_variables]
