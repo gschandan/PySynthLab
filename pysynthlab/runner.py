@@ -1,5 +1,6 @@
 from z3 import *
 import cvc5
+from cvc5 import Kind
 import pyparsing
 
 from pysynthlab.synthesis_problem_cvc5 import SynthesisProblemCvc5
@@ -108,86 +109,81 @@ def main(args):
     manual_loops()
 
     file = args.input_file.read()
+
     problem = SynthesisProblemCvc5(file, int(args.sygus_standard))
     parsed_sygus_problem = problem.convert_sygus_to_smt()
     problem.info()
     print(parsed_sygus_problem)
 
+    depth = 0
+    itr = 0
+    depth_limit = 200
+    found_valid_candidate = False
+
+    problem.verification_solver.assertFormula(
+        problem.enumerator_solver.mkTerm(Kind.CONST_BOOLEAN, problem.assertions[0]))
+
+    assertions = problem.verification_solver.getAssertions()
+    problem.assertions.update(assertions)
+    for assertion in assertions:
+        problem.original_assertions.append(assertion)
+
+    problem.enumerator_solver.resetAssertions()
+
+    negated_assertions = problem.negate_assertions(assertions)
+    for assertion in negated_assertions:
+        problem.enumerator_solver.assertFormula(assertion)
+    problem.negated_assertions.update(negated_assertions)
+
+    candidate_functions = problem.generate_candidate_functions(depth)
+    candidate_function = None
+
+    while not found_valid_candidate and itr < 101:
+        try:
+            candidate_function = next(candidate_functions)
+        except StopIteration:
+            depth += 1
+            if depth > depth_limit:
+                print("Depth limit reached without finding a valid candidate.")
+                break
+            candidate_functions = problem.generate_candidate_functions(depth)
+            candidate_function = next(candidate_functions)
+
+        if itr == 100:
+            p = list(problem.cvc5variables.values())
+            def candidate_function(a, b): problem.enumerator_solver.mkTerm(Kind.ITE,problem.enumerator_solver.mkTerm(Kind.LEQ, a, b),b, a)
+
+        if candidate_function in problem.assertions:
+            itr += 1
+            continue
+        print("func:", candidate_function)
+
+        problem.enumerator_solver.push()
+        problem.enumerator_solver.assertFormula(candidate_function(*problem.func_args))
+        enumerator_solver_result = problem.enumerator_solver.checkSat()
+        print("Verification result:", enumerator_solver_result)
+        problem.enumerator_solver.pop()
+
+        if enumerator_solver_result.isSat():
+            model = problem.enumerator_solver.getModel([], problem.func_args)
+            counterexample = problem.check_counterexample(model)
+            if counterexample is not None:
+                additional_constraint = problem.get_additional_constraints(counterexample)
+                problem.enumerator_solver.assertFormula(additional_constraint)
+            else:
+                found_valid_candidate = True
+        itr += 1
+        print(f"Depth {depth}, Iteration {itr}")
+
+    if found_valid_candidate:
+        print("VALID CANDIDATE:", candidate_function)
+    else:
+        print("No valid candidate found within the depth/loop/time limit.")
+
+    print("VERIFICATION SMT: ", problem.verification_solver.toString())
+    print("COUNTEREXAMPLE SMT: ", problem.enumerator_solver.toString())
 
 
-# def main(args):
-#     #manual_loops()
-#     file = args.input_file.read()
-#
-#     problem = SynthesisProblem(file, int(args.sygus_standard))
-#     parsed_sygus_problem = problem.convert_sygus_to_smt()
-#     problem.info()
-#     print(parsed_sygus_problem)
-#
-#     depth = 0
-#     itr = 0
-#     depth_limit = 200
-#     found_valid_candidate = False
-#
-#     problem.verification_solver.add(z3.parse_smt2_string(parsed_sygus_problem))
-#
-#     assertions = problem.verification_solver.assertions()
-#     problem.assertions.update(assertions)
-#     for assertion in assertions:
-#         problem.original_assertions.append(assertion)
-#
-#     problem.enumerator_solver.reset()
-#
-#     negated_assertions = problem.negate_assertions(assertions)
-#     problem.enumerator_solver.add(*negated_assertions)
-#     problem.negated_assertions.update(negated_assertions)
-#
-#     # problem.counterexample_solver.set("timeout", 30000)
-#     # problem.verification_solver.set("timeout", 30000)
-#
-#     set_param("smt.random_seed", 1234)
-#     candidate_functions = problem.generate_candidate_functions(depth)
-#     candidate_function = None
-#
-#     while not found_valid_candidate and itr < 101:
-#         try:
-#             candidate_function = next(candidate_functions)
-#         except StopIteration:
-#             depth += 1
-#             if depth > depth_limit:
-#                 print("Depth limit reached without finding a valid candidate.")
-#                 break
-#             candidate_functions = problem.generate_candidate_functions(depth)
-#             candidate_function = next(candidate_functions)
-#
-#         if itr == 100:
-#             p = list(problem.z3variables.values())
-#             candidate_function = lambda a, b: If(a <= b, b, a)
-#         if candidate_function in problem.assertions:
-#             itr += 1
-#             continue
-#         print("func:", candidate_function)
-    #
-    #     problem.enumerator_solver.push()
-    #     problem.enumerator_solver.add(expression)
-    #     enumerator_solver_result = problem.enumerator_solver.check()
-    #     print("Verification result:", enumerator_solver_result)
-    #     problem.enumerator_solver.pop()
-    #     model = problem.enumerator_solver.model()
-    #     counterexample = problem.check_counterexample(model)
-    #     if counterexample is not None:
-    #         additional_constraint = problem.get_additional_constraints(counterexample)
-    #         problem.enumerator_solver.add(additional_constraint)
-    #     itr += 1
-    #     print(f"Depth {depth}, Iteration {itr}")
-    #
-    # if found_valid_candidate:
-    #     print("VALID CANDIDATE:", expression)
-    # else:
-    #     print("No valid candidate found within the depth/loop/time limit.")
-    #
-    # print("VERIFICATION SMT: ", problem.verification_solver.to_smt2())
-    # print("COUNTEREXAMPLE SMT: ", problem.enumerator_solver.to_smt2())
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
