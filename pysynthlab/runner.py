@@ -2,7 +2,8 @@ from z3 import *
 import cvc5
 import pyparsing
 
-from pysynthlab.synthesis_problem import SynthesisProblem
+from pysynthlab.synthesis_problem_cvc5 import SynthesisProblemCvc5
+from pysynthlab.synthesis_problem_z3 import SynthesisProblemZ3
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 import time
 from typing import Optional, Tuple, List
@@ -63,8 +64,8 @@ def manual_loops():
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
         print("-" * 50)
 
-def main(args):
-    manual_loops()
+    print("CVC5")
+
     def create_solver_with_vars():
         solver = cvc5.Solver()
         solver.setOption("produce-models", "true")
@@ -76,36 +77,18 @@ def main(args):
         f_x_y = f_guess(x, y)
         f_y_x = f_guess(y, x)
         not_equal = solver.mkTerm(cvc5.Kind.NOT, solver.mkTerm(cvc5.Kind.EQUAL, f_x_y, f_y_x))
-        not_monotonic = solver.mkTerm(cvc5.Kind.NOT, solver.mkTerm(cvc5.Kind.AND, solver.mkTerm(cvc5.Kind.LEQ, x, f_x_y), solver.mkTerm(cvc5.Kind.LEQ, y, f_x_y)))
+        not_monotonic = solver.mkTerm(cvc5.Kind.NOT,
+                                      solver.mkTerm(cvc5.Kind.AND, solver.mkTerm(cvc5.Kind.LEQ, x, f_x_y),
+                                                    solver.mkTerm(cvc5.Kind.LEQ, y, f_x_y)))
         solver.assertFormula(solver.mkTerm(cvc5.Kind.OR, not_equal, not_monotonic))
-
-    def add_original_constraints(solver, x, y, f_guess):
-        f_x_y = f_guess(x, y)
-        f_y_x = f_guess(y, x)
-        equal = solver.mkTerm(cvc5.Kind.EQUAL, f_x_y, f_y_x)
-        monotonic = solver.mkTerm(cvc5.Kind.AND, solver.mkTerm(cvc5.Kind.LEQ, x, f_x_y), solver.mkTerm(cvc5.Kind.LEQ, y, f_x_y))
-        solver.assertFormula(solver.mkTerm(cvc5.Kind.AND, equal, monotonic))
-
-    def lambda_to_cvc5_term(solver, lambda_expr, a, b):
-        if lambda_expr == 0:
-            return solver.mkInteger(0)
-        elif lambda_expr == a:
-            return a
-        elif lambda_expr == b:
-            return b
-        elif "max" in str(lambda_expr):
-            return solver.mkTerm(cvc5.Kind.ITE, solver.mkTerm(cvc5.Kind.LEQ, a, b), b, a)
-        else:
-            if lambda_expr == a - b:
-                return solver.mkTerm(cvc5.Kind.MINUS, a, b)
-            raise ValueError(f"Unsupported lambda expression: {lambda_expr}")
 
     guesses = [
         (lambda a, b: solver.mkInteger(0), "f(x, y) = 0"),
         (lambda a, b: a, "f(x, y) = x"),
         (lambda a, b: b, "f(x, y) = y"),
         (lambda a, b: solver.mkTerm(cvc5.Kind.SUB, a, b), "f(x, y) = x - y"),
-        (lambda a, b: solver.mkTerm(cvc5.Kind.ITE, solver.mkTerm(cvc5.Kind.LEQ, a, b), b, a), "f(x, y) = max(x, y)"),
+        (
+        lambda a, b: solver.mkTerm(cvc5.Kind.ITE, solver.mkTerm(cvc5.Kind.LEQ, a, b), b, a), "f(x, y) = max(x, y)"),
     ]
 
     for guess_func, name in guesses:
@@ -114,12 +97,23 @@ def main(args):
 
         result = solver.checkSat()
         if result.isSat():
-            model = solver.getModel([], [x,y])
+            model = solver.getModel([], [x, y])
             print(f"Model for guess {name}: x = {model[0]}, y = {model[1]}")
         else:
             print(f"No model for guess {name}.")
 
         print("-" * 50)
+
+def main(args):
+    manual_loops()
+
+    file = args.input_file.read()
+    problem = SynthesisProblemCvc5(file, int(args.sygus_standard))
+    parsed_sygus_problem = problem.convert_sygus_to_smt()
+    problem.info()
+    print(parsed_sygus_problem)
+
+
 
 # def main(args):
 #     #manual_loops()

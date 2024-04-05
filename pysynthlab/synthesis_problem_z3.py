@@ -11,7 +11,7 @@ from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
-class SynthesisProblem:
+class SynthesisProblemZ3:
     MIN_CONST = -2
     MAX_CONST = 2
     pyparsing.ParserElement.enablePackrat()
