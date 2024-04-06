@@ -120,8 +120,7 @@ def main(args):
     depth_limit = 200
     found_valid_candidate = False
 
-    problem.verification_solver.assertFormula(
-        problem.enumerator_solver.mkTerm(Kind.CONST_BOOLEAN, problem.assertions[0]))
+    problem.verification_solver.assertFormula(problem.enumerator_solver.mkTerm(Kind.CONST_BOOLEAN, problem.assertions[0]))
 
     assertions = problem.verification_solver.getAssertions()
     problem.assertions.update(assertions)

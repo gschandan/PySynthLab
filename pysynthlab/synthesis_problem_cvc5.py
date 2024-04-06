@@ -44,6 +44,10 @@ class SynthesisProblemCvc5:
         self.cvc5_predefined_functions = {}
         self.cvc5_constraints = []
 
+        self.funcs_to_synthesize = []
+        self.func_args_map = {}
+        self.arg_sorts_map = {}
+
         self.initialise_cvc5_variables()
         self.initialise_cvc5_synth_functions()
         self.initialise_cvc5_predefined_functions()
@@ -53,14 +57,6 @@ class SynthesisProblemCvc5:
         self.negated_assertions = set()
         self.additional_constraints = []
         self.original_assertions = []
-
-        # todo: refactor for problems with more than one func to synthesize
-        self.func_name, self.cvc5_func = list(self.cvc5_synth_functions.items())[0]
-        self.func_to_synthesise = self.get_synth_func(self.func_name)
-        self.func_args = [self.enumerator_solver.mkConst(self.enumerator_solver.getIntegerSort(), name) for name in
-                          self.func_to_synthesise.argument_names]
-        self.arg_sorts = [self.convert_sort_descriptor_to_cvc5_sort(sort_descriptor) for sort_descriptor in
-                          self.func_to_synthesise.argument_sorts]
 
         self.parse_constraints()
 
@@ -142,15 +138,24 @@ class SynthesisProblemCvc5:
 
     def initialise_cvc5_synth_functions(self):
         for func in self.get_synth_funcs().values():
+            func_name = func.identifier.symbol
             cvc5_arg_sorts = [self.convert_sort_descriptor_to_cvc5_sort(s) for s in func.argument_sorts]
             cvc5_range_sort = self.convert_sort_descriptor_to_cvc5_sort(func.range_sort)
-            self.cvc5_synth_functions[func.identifier.symbol] = self.enumerator_solver.mkConst(cvc5_range_sort,func.identifier.symbol)
+            func_sort = self.enumerator_solver.mkFunctionSort(cvc5_arg_sorts, cvc5_range_sort)
+
+            self.cvc5_synth_functions[func_name] = self.enumerator_solver.mkConst(func_sort, func_name)
+            self.funcs_to_synthesize.append(func_name)
+            self.func_args_map[func_name] = [self.enumerator_solver.mkConst(sort, arg_name) for sort, arg_name in
+                                             zip(cvc5_arg_sorts, func.argument_names)]
+            self.arg_sorts_map[func_name] = cvc5_arg_sorts
 
     def initialise_cvc5_predefined_functions(self):
         for func in self.get_predefined_funcs().values():
+            func_name = func.identifier.symbol
             cvc5_arg_sorts = [self.convert_sort_descriptor_to_cvc5_sort(s) for s in func.argument_sorts]
             cvc5_range_sort = self.convert_sort_descriptor_to_cvc5_sort(func.range_sort)
-            self.cvc5_predefined_functions[func.identifier.symbol] = self.enumerator_solver.mkConst(cvc5_range_sort,func.identifier.symbol)
+            func_sort = self.enumerator_solver.mkFunctionSort(cvc5_arg_sorts, cvc5_range_sort)
+            self.cvc5_predefined_functions[func_name] = self.enumerator_solver.mkConst(func_sort, func_name)
 
     def parse_constraints(self):
         for constraint in self.constraints:
@@ -179,18 +184,38 @@ class SynthesisProblemCvc5:
                 raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
         elif isinstance(term, ast.FunctionApplicationTerm):
             func_symbol = term.function_identifier.symbol
-            if func_symbol == "=":
-                assert len(term.arguments) == 2, " == should have 2 arguments"
-                lhs = self.parse_term(term.arguments[0])
-                rhs = self.parse_term(term.arguments[1])
-                return self.enumerator_solver.mkTerm(Kind.EQUAL, lhs, rhs)
+            args = [self.parse_term(arg) for arg in term.arguments]
+            operator_map = {
+                "and": Kind.AND,
+                "or": Kind.OR,
+                "not": Kind.NOT,
+                "=": Kind.EQUAL,
+                ">": Kind.GT,
+                "<": Kind.LT,
+                ">=": Kind.GEQ,
+                "<=": Kind.LEQ,
+                "+": Kind.ADD,
+                "*": Kind.MULT,
+                "/": Kind.INTS_DIVISION
+            }
+            if func_symbol in operator_map:
+                kind = operator_map[func_symbol]
+                if func_symbol == "not":
+                    assert len(args) == 1, "'not' should have 1 argument"
+                else:
+                    assert len(args) >= 2, f"'{func_symbol}' should have at least 2 arguments"
+                return self.enumerator_solver.mkTerm(kind, *args)
+            elif func_symbol == "-":
+                if len(args) == 1:
+                    return self.enumerator_solver.mkTerm(Kind.NEG, args[0])
+                elif len(args) == 2:
+                    return self.enumerator_solver.mkTerm(Kind.MINUS, args[0], args[1])
+                raise ValueError("Minus operator '-' should have 1 or 2 arguments")
             elif func_symbol in self.cvc5_synth_functions:
-                args = [self.parse_term(arg) for arg in term.arguments]
-                return self.enumerator_solver.mkTerm(Kind.APPLY_UF, self.enumerator_solver.mkConst(
-                    self.enumerator_solver.getBooleanSort(), func_symbol), *args)
+                func_term = self.cvc5_synth_functions[func_symbol]
+                return self.enumerator_solver.mkTerm(Kind.APPLY_UF, func_term, *args)
             elif func_symbol in self.cvc5_predefined_functions:
                 func = self.cvc5_predefined_functions[func_symbol]
-                args = [self.parse_term(arg) for arg in term.arguments]
                 return self.enumerator_solver.mkTerm(func.getKind(), *args)
             else:
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
@@ -209,7 +234,8 @@ class SynthesisProblemCvc5:
 
     def generate_linear_integer_expressions(self, depth, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
-            yield from [self.enumerator_solver.mkInteger(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(self.cvc5variables.values())
+            yield from [self.enumerator_solver.mkInteger(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
+                self.cvc5variables.values())
             return
 
         for var in self.cvc5variables.values():
@@ -224,20 +250,25 @@ class SynthesisProblemCvc5:
 
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
-                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.GT, var, expr),var, expr)
-                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.LT, var, expr),var, expr)
-                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, var, expr),var, expr)
+                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.GT, var, expr),
+                                                        var, expr)
+                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.LT, var, expr),
+                                                        var, expr)
+                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, var, expr),
+                                                        var, expr)
 
     def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
             for i in range(self.MIN_CONST, self.MAX_CONST + 1):
                 def const_func(*args):
                     return self.enumerator_solver.mkInteger(i)
+
                 yield const_func
 
             for var in self.cvc5variables.keys():
                 def var_func(*args):
                     return var
+
                 yield var_func
             return
 
@@ -245,40 +276,60 @@ class SynthesisProblemCvc5:
             if current_size < size_limit:
                 def identity_func(*args):
                     return args[list(self.cvc5variables.keys()).index(var_name)]
+
                 yield identity_func
 
                 def neg_func(*args):
-                    return self.enumerator_solver.mkTerm(Kind.NEG,args[list(self.cvc5variables.keys()).index(var_name)])
+                    return self.enumerator_solver.mkTerm(Kind.NEG,
+                                                         args[list(self.cvc5variables.keys()).index(var_name)])
+
                 yield neg_func
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
                 def add_func(*args):
-                    return self.enumerator_solver.mkTerm(Kind.ADD,args[list(self.cvc5variables.keys()).index(var_name)], func(*args))
+                    return self.enumerator_solver.mkTerm(Kind.ADD,
+                                                         args[list(self.cvc5variables.keys()).index(var_name)],
+                                                         func(*args))
+
                 yield add_func
 
                 def sub_func(*args):
-                    return self.enumerator_solver.mkTerm(Kind.SUB,args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
+                    return self.enumerator_solver.mkTerm(Kind.SUB,
+                                                         args[list(self.cvc5variables.keys()).index(var_name)],
+                                                         func(*args))
+
                 yield sub_func
 
                 def sub_func_rev(*args):
-                    return self.enumerator_solver.mkTerm(Kind.SUB, func(*args), args[list(self.cvc5variables.keys()).index(var_name)])
+                    return self.enumerator_solver.mkTerm(Kind.SUB, func(*args),
+                                                         args[list(self.cvc5variables.keys()).index(var_name)])
+
                 yield sub_func_rev
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
                     def ite_gt_func(*args):
-                        return self.enumerator_solver.mkTerm(Kind.ITE,self.enumerator_solver.mkTerm(Kind.GT, args[list(self.cvc5variables.keys()).index(var_name)],func(*args)),
-                                                             args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
+                        return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.GT, args[
+                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),
+                                                             args[list(self.cvc5variables.keys()).index(var_name)],
+                                                             func(*args))
+
                     yield ite_gt_func
 
                     def ite_lt_func(*args):
-                        return self.enumerator_solver.mkTerm(Kind.ITE,self.enumerator_solver.mkTerm(Kind.LT, args[list(self.cvc5variables.keys()).index(var_name)],func(*args)),
-                                                             args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
+                        return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.LT, args[
+                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),
+                                                             args[list(self.cvc5variables.keys()).index(var_name)],
+                                                             func(*args))
+
                     yield ite_lt_func
 
                     def ite_neq_func(*args):
-                        return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, args[list(self.cvc5variables.keys()).index(var_name)],func(*args)),
-                                                             args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
+                        return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, args[
+                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),
+                                                             args[list(self.cvc5variables.keys()).index(var_name)],
+                                                             func(*args))
+
                     yield ite_neq_func
 
     def check_counterexample(self, model):
