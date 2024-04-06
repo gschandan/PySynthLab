@@ -32,7 +32,14 @@ class SynthesisProblemCvc5:
             else SygusV1ASTPrinter(self.symbol_table, options)
 
         self.enumerator_solver = cvc5.Solver()
+        self.enumerator_solver.setLogic("LIA")
+        self.enumerator_solver.setOption("produce-models", "true")
+        self.enumerator_solver.setOption("sygus", "true")
+
         self.verification_solver = cvc5.Solver()
+        self.verification_solver.setLogic("LIA")
+        self.verification_solver.setOption("produce-models", "true")
+        self.verification_solver.setOption("sygus", "true")
 
         self.commands = [x for x in self.problem.commands]
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]

@@ -120,18 +120,30 @@ def main(args):
     depth_limit = 200
     found_valid_candidate = False
 
-    problem.verification_solver.assertFormula(problem.enumerator_solver.mkTerm(Kind.CONST_BOOLEAN, problem.assertions[0]))
+    # setup solvers
+    verification_solver = problem.verification_solver
+    # add variables
+    for variable_name, variable in problem.cvc5variables.items():
+        verification_solver.mkConst(variable.getSort(),variable_name)
+    # add constraints
+    for constraint in problem.cvc5_constraints:
+        verification_solver.addSygusConstraint(constraint)
 
-    assertions = problem.verification_solver.getAssertions()
-    problem.assertions.update(assertions)
-    for assertion in assertions:
-        problem.original_assertions.append(assertion)
+    constraints = problem.verification_solver.getSygusConstraints()
+    problem.assertions.update(constraints)
+    for constraint in constraints:
+        problem.original_assertions.append(constraint)
 
-    problem.enumerator_solver.resetAssertions()
-
-    negated_assertions = problem.negate_assertions(assertions)
-    for assertion in negated_assertions:
-        problem.enumerator_solver.assertFormula(assertion)
+    enumerator_solver = problem.enumerator_solver
+    # add variables
+    for variable_name, variable in problem.cvc5variables.items():
+        enumerator_solver.mkConst(variable.getSort(), variable_name)
+    # add constraints
+    for assertion in problem.cvc5_constraints:
+        enumerator_solver.addSygusConstraint(assertion)
+    negated_assertions = problem.negate_assertions(constraints)
+    for constraint in negated_assertions:
+        problem.enumerator_solver.assertFormula(constraint)
     problem.negated_assertions.update(negated_assertions)
 
     candidate_functions = problem.generate_candidate_functions(depth)

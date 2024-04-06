@@ -206,3 +206,43 @@ print("METOD 2: python function substitution")
     for guess in guesses:
         if try_guess(base_problem, guess):
             break
+
+print("CVC5")
+
+    def create_solver_with_vars():
+        solver = cvc5.Solver()
+        solver.setOption("produce-models", "true")
+        x = solver.mkConst(solver.getIntegerSort(), "x")
+        y = solver.mkConst(solver.getIntegerSort(), "y")
+        return solver, x, y
+
+    def add_negated_constraints(solver, x, y, f_guess):
+        f_x_y = f_guess(x, y)
+        f_y_x = f_guess(y, x)
+        not_equal = solver.mkTerm(cvc5.Kind.NOT, solver.mkTerm(cvc5.Kind.EQUAL, f_x_y, f_y_x))
+        not_monotonic = solver.mkTerm(cvc5.Kind.NOT,
+                                      solver.mkTerm(cvc5.Kind.AND, solver.mkTerm(cvc5.Kind.LEQ, x, f_x_y),
+                                                    solver.mkTerm(cvc5.Kind.LEQ, y, f_x_y)))
+        solver.assertFormula(solver.mkTerm(cvc5.Kind.OR, not_equal, not_monotonic))
+
+    guesses = [
+        (lambda a, b: solver.mkInteger(0), "f(x, y) = 0"),
+        (lambda a, b: a, "f(x, y) = x"),
+        (lambda a, b: b, "f(x, y) = y"),
+        (lambda a, b: solver.mkTerm(cvc5.Kind.SUB, a, b), "f(x, y) = x - y"),
+        (
+        lambda a, b: solver.mkTerm(cvc5.Kind.ITE, solver.mkTerm(cvc5.Kind.LEQ, a, b), b, a), "f(x, y) = max(x, y)"),
+    ]
+
+    for guess_func, name in guesses:
+        solver, x, y = create_solver_with_vars()
+        add_negated_constraints(solver, x, y, guess_func)
+
+        result = solver.checkSat()
+        if result.isSat():
+            model = solver.getModel([], [x, y])
+            print(f"Model for guess {name}: x = {model[0]}, y = {model[1]}")
+        else:
+            print(f"No model for guess {name}.")
+
+        print("-" * 50)
