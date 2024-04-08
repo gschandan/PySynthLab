@@ -165,10 +165,17 @@ class SynthesisProblemCvc5:
             self.cvc5_predefined_functions[func_name] = self.enumerator_solver.mkConst(func_sort, func_name)
 
     def parse_constraints(self):
+        constraint_terms = []
         for constraint in self.constraints:
             if isinstance(constraint, ast.ConstraintCommand):
                 term = self.parse_term(constraint.constraint)
+                constraint_terms.append(term)
                 self.cvc5_constraints.append(term)
+        print("parsed individual constraints", constraint_terms)
+        # if constraint_terms:
+        #     combined_constraint = self.enumerator_solver.mkTerm(Kind.AND, *constraint_terms)
+        #     self.cvc5_constraints.append(combined_constraint)
+        # print("Combined constraints", self.cvc5_constraints)
 
     def parse_term(self, term: ast.Term) -> cvc5.Term:
         if isinstance(term, ast.IdentifierTerm):
@@ -363,28 +370,37 @@ class SynthesisProblemCvc5:
             'Bool': self.enumerator_solver.getBooleanSort(),
         }.get(sort_symbol, None)
 
-    @staticmethod
-    def negate_assertions(assertions):
+    def negate_assertions(self, assertions: list[cvc5.Term], solver: cvc5.Solver) -> list[cvc5.Term]:
         negated_assertions = []
-        for assertion in assertions:
+        i: int
+        assertion: cvc5.Term
+        for i, assertion in enumerate(assertions):
+            print("ASSERTION:",i, assertion)
             args = assertion.getNumChildren()
             if assertion.getKind() in [Kind.AND, Kind.OR, Kind.NOT]:
                 if args > 1:
-                    negated_children = [assertion.notTerm(assertion.getChild(i)) for i in range(args)]
+                    negated_children = [child.notTerm() for child in assertion]
+                    print(negated_children)
                     negated_assertions.append(assertion.orTerm(*negated_children))
                 else:
-                    negated_assertions.append(assertion.notTerm(assertion))
-            elif assertion.getKind() == Kind.APPLY_UF and args == 2:
-                if assertion.getOp().getKind() == Kind.EQUAL:
-                    negated_assertions.append(assertion.eqTerm(assertion.getChild(0), assertion.getChild(1)).notTerm())
-                elif assertion.getOp().getKind() == Kind.GEQ:
-                    negated_assertions.append(assertion.geqTerm(assertion.getChild(0), assertion.getChild(1)).notTerm())
-                elif assertion.getOp().getKind() == Kind.GT:
-                    negated_assertions.append(assertion.gtTerm(assertion.getChild(0), assertion.getChild(1)).notTerm())
-                elif assertion.getOp().getKind() == Kind.LEQ:
-                    negated_assertions.append(assertion.leqTerm(assertion.getChild(0), assertion.getChild(1)).notTerm())
-                elif assertion.getOp().getKind() == Kind.LT:
-                    negated_assertions.append(assertion.ltTerm(assertion.getChild(0), assertion.getChild(1)).notTerm())
-                else:
-                    raise ValueError("Unsupported assertion type: {}".format(assertion))
-        return negated_assertions
+                    negated_assertions.append(assertion.notTerm())
+            elif assertion.getKind() == Kind.EQUAL:
+                negated_assertions.append(assertion[0].eqTerm(assertion[1]).notTerm())
+            elif assertion.getKind() == Kind.GEQ:
+                negated_assertions.append(assertion[0].ltTerm(assertion[1]))
+            elif assertion.getKind() == Kind.GT:
+                negated_assertions.append(assertion[0].leTerm(assertion[1]))
+            elif assertion.getKind() == Kind.LEQ:
+                negated_assertions.append(assertion[0].gtTerm(assertion[1]))
+            elif assertion.getKind() == Kind.LT:
+                negated_assertions.append(assertion[0].geTerm(assertion[1]))
+            else:
+                raise ValueError("Unsupported assertion type: {}".format(assertion))
+            print("negated:", i, negated_assertions[i])
+
+        if len(negated_assertions) > 1:
+            combined_negation = solver.mkTerm(cvc5.Kind.OR, *negated_assertions)
+        else:
+            combined_negation = negated_assertions[0]
+        print("combined negated:", combined_negation)
+        return combined_negation

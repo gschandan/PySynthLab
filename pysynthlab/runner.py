@@ -133,15 +133,13 @@ def main(args):
     problem.assertions.update(constraints)
     for constraint in constraints:
         problem.original_assertions.append(constraint)
-
+    print("Constraints", constraints)
     enumerator_solver = problem.enumerator_solver
     # add variables
     for variable_name, variable in problem.cvc5variables.items():
         enumerator_solver.mkConst(variable.getSort(), variable_name)
-    # add constraints
-    for assertion in problem.cvc5_constraints:
-        enumerator_solver.addSygusConstraint(assertion)
-    negated_assertions = problem.negate_assertions(constraints)
+    # negate and add to enumerator solver
+    negated_assertions = problem.negate_assertions(constraints, enumerator_solver)
     for constraint in negated_assertions:
         problem.enumerator_solver.assertFormula(constraint)
     problem.negated_assertions.update(negated_assertions)
