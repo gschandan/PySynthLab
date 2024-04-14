@@ -264,12 +264,41 @@ class SynthesisProblemCvc5:
 
             for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
-                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.GT, var, expr),
-                                                        var, expr)
-                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.LT, var, expr),
-                                                        var, expr)
-                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, var, expr),
-                                                        var, expr)
+                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.GT, var, expr),var, expr)
+                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.LT, var, expr),var, expr)
+                    yield self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, var, expr),var, expr)
+
+    def generate_candidate_functions_2(self, depth: int, size_limit: int = 6, current_size: int = 0) -> list[tuple[cvc5.Term, str]]:
+        candidates = []
+        if depth == 0 or current_size >= size_limit:
+            for i in range(self.MIN_CONST, self.MAX_CONST + 1):
+                term = self.enumerator_solver.mkInteger(i)
+                candidates.append((term, f"{i}"))
+            for var_name in self.cvc5variables:
+                term = self.cvc5variables[var_name]
+                candidates.append((term, var_name))
+            return candidates
+
+        for var_name, var in self.cvc5variables.items():
+            neg_term = self.enumerator_solver.mkTerm(Kind.NEG, var)
+            candidates.append((neg_term, f"(- {var_name})"))
+            next_candidates = self.generate_candidate_functions(depth - 1, size_limit, current_size + 1)
+
+            for func_term, func_repr in next_candidates:
+                add_term = self.enumerator_solver.mkTerm(Kind.ADD, var, func_term)
+                candidates.append((add_term, f"({var_name} + {func_repr})"))
+
+                sub_term = self.enumerator_solver.mkTerm(Kind.SUB, var, func_term)
+                candidates.append((sub_term, f"({var_name} - {func_repr})"))
+
+                ite_gt_term = self.enumerator_solver.mkTerm(Kind.ITE,self.enumerator_solver.mkTerm(Kind.GT, var, func_term), var,func_term)
+                candidates.append((ite_gt_term, f"(ite (> {var_name} {func_repr}) {var_name} {func_repr})"))
+
+                ite_lt_term = self.enumerator_solver.mkTerm(Kind.ITE,self.enumerator_solver.mkTerm(Kind.LT, var, func_term), var,func_term)
+                candidates.append((ite_lt_term, f"(ite (< {var_name} {func_repr}) {var_name} {func_repr})"))
+
+        return candidates
+
 
     def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
@@ -290,64 +319,44 @@ class SynthesisProblemCvc5:
             if current_size < size_limit:
                 def identity_func(*args):
                     return args[list(self.cvc5variables.keys()).index(var_name)]
-
                 yield identity_func
 
                 def neg_func(*args):
-                    return self.enumerator_solver.mkTerm(Kind.NEG,
-                                                         args[list(self.cvc5variables.keys()).index(var_name)])
-
+                    return self.enumerator_solver.mkTerm(Kind.NEG,args[list(self.cvc5variables.keys()).index(var_name)])
                 yield neg_func
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
                 def add_func(*args):
-                    return self.enumerator_solver.mkTerm(Kind.ADD,
-                                                         args[list(self.cvc5variables.keys()).index(var_name)],
-                                                         func(*args))
-
+                    return self.enumerator_solver.mkTerm(Kind.ADD,args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
                 yield add_func
 
                 def sub_func(*args):
-                    return self.enumerator_solver.mkTerm(Kind.SUB,
-                                                         args[list(self.cvc5variables.keys()).index(var_name)],
-                                                         func(*args))
-
+                    return self.enumerator_solver.mkTerm(Kind.SUB,args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
                 yield sub_func
 
                 def sub_func_rev(*args):
-                    return self.enumerator_solver.mkTerm(Kind.SUB, func(*args),
-                                                         args[list(self.cvc5variables.keys()).index(var_name)])
-
+                    return self.enumerator_solver.mkTerm(Kind.SUB, func(*args),args[list(self.cvc5variables.keys()).index(var_name)])
                 yield sub_func_rev
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
                     def ite_gt_func(*args):
                         return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.GT, args[
-                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),
-                                                             args[list(self.cvc5variables.keys()).index(var_name)],
-                                                             func(*args))
-
+                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
                     yield ite_gt_func
 
                     def ite_lt_func(*args):
                         return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.LT, args[
-                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),
-                                                             args[list(self.cvc5variables.keys()).index(var_name)],
-                                                             func(*args))
-
+                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),args[list(self.cvc5variables.keys()).index(var_name)], func(*args))
                     yield ite_lt_func
 
                     def ite_neq_func(*args):
                         return self.enumerator_solver.mkTerm(Kind.ITE, self.enumerator_solver.mkTerm(Kind.NEQ, args[
-                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),
-                                                             args[list(self.cvc5variables.keys()).index(var_name)],
-                                                             func(*args))
-
+                            list(self.cvc5variables.keys()).index(var_name)], func(*args)),args[list(self.cvc5variables.keys()).index(var_name)],func(*args))
                     yield ite_neq_func
 
-    def check_counterexample(self, model):
-        for constraint in self.original_assertions:
+    def check_counterexample(self, model: str):
+        for constraint in self.cvc5_constraints:
             if not model.eval(constraint, model_completion=True).getBooleanValue():
                 return {str(arg): model.eval(arg, model_completion=True).getIntegerValue() for arg in self.func_args}
         return None
@@ -375,13 +384,12 @@ class SynthesisProblemCvc5:
         i: int
         assertion: cvc5.Term
         for i, assertion in enumerate(assertions):
-            print("ASSERTION:",i, assertion)
             args = assertion.getNumChildren()
             if assertion.getKind() in [Kind.AND, Kind.OR, Kind.NOT]:
                 if args > 1:
                     negated_children = [child.notTerm() for child in assertion]
                     print(negated_children)
-                    negated_assertions.append(assertion.orTerm(*negated_children))
+                    negated_assertions.append(solver.mkTerm(Kind.OR, *negated_children))
                 else:
                     negated_assertions.append(assertion.notTerm())
             elif assertion.getKind() == Kind.EQUAL:
@@ -396,11 +404,10 @@ class SynthesisProblemCvc5:
                 negated_assertions.append(assertion[0].geTerm(assertion[1]))
             else:
                 raise ValueError("Unsupported assertion type: {}".format(assertion))
-            print("negated:", i, negated_assertions[i])
 
         if len(negated_assertions) > 1:
             combined_negation = solver.mkTerm(cvc5.Kind.OR, *negated_assertions)
         else:
             combined_negation = negated_assertions[0]
-        print("combined negated:", combined_negation)
+        self.negated_assertions = combined_negation
         return combined_negation

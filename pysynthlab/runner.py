@@ -107,6 +107,13 @@ def manual_loops():
 
 def main(args):
     manual_loops()
+    guesses = [
+        (lambda vars, solver: solver.mkTerm(cvc5.Kind.EQUAL, solver.mkInteger(0), vars[0]), "f(...) = 0 = x"),
+        (lambda vars, solver: solver.mkTerm(cvc5.Kind.EQUAL, vars[0], vars[0]), "f(x, ...) = x = x"),
+        (lambda vars, solver: solver.mkTerm(cvc5.Kind.EQUAL, vars[1], vars[1]), "f(..., y) = y = y"),
+        (lambda vars, solver: solver.mkTerm(cvc5.Kind.LEQ, vars[0], vars[1]), "f(x, y) = x <= y"),
+        (lambda vars, solver: solver.mkTerm(cvc5.Kind.GEQ, vars[0], vars[1]), "f(x, y) = x >= y"),
+    ]
 
     file = args.input_file.read()
 
@@ -115,83 +122,52 @@ def main(args):
     problem.info()
     print(parsed_sygus_problem)
 
-    depth = 0
-    itr = 0
-    depth_limit = 200
-    found_valid_candidate = False
-
-    # setup solvers
-    verification_solver = problem.verification_solver
-    # add variables
-    for variable_name, variable in problem.cvc5variables.items():
-        verification_solver.mkConst(variable.getSort(),variable_name)
-    # add constraints
-    for constraint in problem.cvc5_constraints:
-        verification_solver.addSygusConstraint(constraint)
-
-    constraints = problem.verification_solver.getSygusConstraints()
-    problem.assertions.update(constraints)
-    for constraint in constraints:
-        problem.original_assertions.append(constraint)
-    print("Constraints", constraints)
     enumerator_solver = problem.enumerator_solver
-    # add variables
-    for variable_name, variable in problem.cvc5variables.items():
-        enumerator_solver.mkConst(variable.getSort(), variable_name)
-    # negate and add to enumerator solver
-    negated_assertions = problem.negate_assertions(constraints, enumerator_solver)
-    for constraint in negated_assertions:
-        problem.enumerator_solver.assertFormula(constraint)
-    problem.negated_assertions.update(negated_assertions)
+    verifier_solver = problem.verification_solver
 
-    candidate_functions = problem.generate_candidate_functions(depth)
-    candidate_function = None
+    variables = [problem.cvc5variables[var] for var in problem.cvc5variables]
 
-    while not found_valid_candidate and itr < 101:
-        try:
-            candidate_function = next(candidate_functions)
-        except StopIteration:
-            depth += 1
-            if depth > depth_limit:
-                print("Depth limit reached without finding a valid candidate.")
-                break
-            candidate_functions = problem.generate_candidate_functions(depth)
-            candidate_function = next(candidate_functions)
+    original_constraints = problem.cvc5_constraints
+    for constraint in original_constraints:
+        verifier_solver.assertFormula(constraint)
+    negated_constraints = problem.negate_assertions(original_constraints, enumerator_solver)
+    for negated_constraint in negated_constraints:
+        enumerator_solver.assertFormula(negated_constraint)
 
-        if itr == 100:
-            p = list(problem.cvc5variables.values())
-            def candidate_function(a, b): problem.enumerator_solver.mkTerm(Kind.ITE,problem.enumerator_solver.mkTerm(Kind.LEQ, a, b),b, a)
-
-        if candidate_function in problem.assertions:
-            itr += 1
-            continue
-        print("func:", candidate_function)
-
-        problem.enumerator_solver.push()
-        problem.enumerator_solver.assertFormula(candidate_function(*problem.func_args))
-        enumerator_solver_result = problem.enumerator_solver.checkSat()
-        print("Verification result:", enumerator_solver_result)
-        problem.enumerator_solver.pop()
-
-        if enumerator_solver_result.isSat():
-            model = problem.enumerator_solver.getModel([], problem.func_args)
-            counterexample = problem.check_counterexample(model)
-            if counterexample is not None:
-                additional_constraint = problem.get_additional_constraints(counterexample)
-                problem.enumerator_solver.assertFormula(additional_constraint)
+    found_valid_candidate = False
+    depth = 0
+    depth_limit = 200
+    while not found_valid_candidate and depth < depth_limit:
+        for func, description in guesses:
+            candidate_expression = func(variables, enumerator_solver)
+            print(f"Candidate expression {description}: {candidate_expression}")
+            enumerator_solver.push()
+            enumerator_solver.assertFormula(candidate_expression)
+            if enumerator_solver.checkSat().isSat():
+                print("Enumerator SAT")
+                model = enumerator_solver.getModel([],variables)
+                counterexample = problem.check_counterexample(model)
+                if counterexample:
+                    print("Counterexample")
+                    additional_constraints = problem.get_additional_constraints(counterexample)
+                    enumerator_solver.pop()
+                    enumerator_solver.assertFormula(additional_constraints)
+                else:
+                    found_valid_candidate = True
+                    enumerator_solver.pop()
+                    break
             else:
-                found_valid_candidate = True
-        itr += 1
-        print(f"Depth {depth}, Iteration {itr}")
+                enumerator_solver.pop()
+
+        depth += 1
 
     if found_valid_candidate:
-        print("VALID CANDIDATE:", candidate_function)
+        print("Valid synthesis candidate found.")
     else:
-        print("No valid candidate found within the depth/loop/time limit.")
+        print("No valid candidate found within the depth limit.")
 
-    print("VERIFICATION SMT: ", problem.verification_solver.toString())
-    print("COUNTEREXAMPLE SMT: ", problem.enumerator_solver.toString())
-
+    print("Verification solver state:", verifier_solver.toString())
+    print("Enumerator solver state:", enumerator_solver.toString())
 
 
 if __name__ == '__main__':
