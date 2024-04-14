@@ -100,6 +100,71 @@ def main(args):
     problem.info()
     print(parsed_sygus_problem)
 
+    depth = 0
+    itr = 0
+    depth_limit = 200
+    found_valid_candidate = False
+
+    problem.verification_solver.add(problem.z3_constraints)
+
+    assertions = problem.verification_solver.assertions()
+    problem.assertions.update(assertions)
+    for assertion in assertions:
+        problem.original_assertions.append(assertion)
+
+    problem.enumerator_solver.reset()
+
+    negated_assertions = problem.negate_assertions(assertions)
+    problem.enumerator_solver.add(*negated_assertions)
+    problem.negated_assertions.update(negated_assertions)
+
+    #problem.counterexample_solver.set("timeout", 30000)
+    #problem.verification_solver.set("timeout", 30000)
+
+    set_param("smt.random_seed", 1234)
+    candidate_expressions = problem.generate_linear_integer_expressions(depth)
+    expression = None
+
+    # while not found_valid_candidate:
+    #     try:
+    #         candidate_expression = next(candidate_expressions)
+    #     except StopIteration:
+    #         depth += 1
+    #         if depth > depth_limit:
+    #             print("Depth limit reached without finding a valid candidate.")
+    #             break
+    #         candidate_expressions = problem.generate_linear_integer_expressions(depth)
+    #         candidate_expression = next(candidate_expressions)
+    #
+    #     expression = problem.z3_func(*problem.func_args) == candidate_expression # (ite (<= x y) y x)
+    #     if itr == 100:
+    #         p = list(problem.z3variables.values())
+    #         expression = problem.z3_func(*problem.func_args) == z3.If(p[0] <= p[1], p[1], p[0])
+    #     if expression in problem.assertions:
+    #         itr += 1
+    #         continue
+    #     print("expr:", expression)
+    #
+    #     problem.enumerator_solver.push()
+    #     problem.enumerator_solver.add(expression)
+    #     enumerator_solver_result = problem.enumerator_solver.check()
+    #     print("Verification result:", enumerator_solver_result)
+    #     problem.enumerator_solver.pop()
+    #     model = problem.enumerator_solver.model()
+    #     counterexample = problem.check_counterexample(model)
+    #     if counterexample is not None:
+    #         additional_constraint = problem.get_additional_constraints(counterexample)
+    #         problem.enumerator_solver.add(additional_constraint)
+    #     itr += 1
+    #     print(f"Depth {depth}, Iteration {itr}")
+
+    if found_valid_candidate:
+        print("VALID CANDIDATE:", expression)
+    else:
+        print("No valid candidate found within the depth/loop/time limit.")
+
+    print("VERIFICATION SMT: ", problem.verification_solver.to_smt2())
+    print("COUNTEREXAMPLE SMT: ", problem.enumerator_solver.to_smt2())
 
 
 if __name__ == '__main__':

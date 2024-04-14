@@ -1,10 +1,13 @@
 import itertools
+from typing import List
 
 import z3
 import pyparsing
-from pysynthlab.helpers.parser.src import symbol_table_builder
-from pysynthlab.helpers.parser.src.ast import Program, CommandKind, GrammarTermKind
-from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind, SortDescriptor
+
+from pysynthlab.helpers.parser.src import ast
+from pysynthlab.helpers.parser.src.ast import Program, CommandKind
+from pysynthlab.helpers.parser.src.resolution import  FunctionKind, SortDescriptor
+from pysynthlab.helpers.parser.src.symbol_table_builder import SymbolTableBuilder
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
@@ -17,31 +20,25 @@ class SynthesisProblem:
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
-
         if options is None:
             options = {}
-        self.options: object = options
-        self.sygus_standard: int = sygus_standard
-        self.parser: SygusV1Parser | SygusV2Parser = SygusV2Parser() if sygus_standard == 2 else SygusV1Parser()
+
         self.input_problem: str = problem
+        self.options = options
+        self.sygus_standard = sygus_standard
+        self.parser = SygusV2Parser() if sygus_standard == 2 else SygusV1Parser()
         self.problem: Program = self.parser.parse(problem)
-        self.symbol_table: SymbolTable = symbol_table_builder.SymbolTableBuilder.run(self.problem)
-        self.printer: SygusV2ASTPrinter | SygusV1ASTPrinter = SygusV2ASTPrinter(self.symbol_table) \
-            if sygus_standard == 2 \
-            else SygusV1ASTPrinter(self.symbol_table, options)
+        self.symbol_table = SymbolTableBuilder.run(self.problem)
+        self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(self.symbol_table, options)
 
         self.enumerator_solver = z3.Solver()
-        self.enumerator_solver.push()
+        self.enumerator_solver.set()
         self.verification_solver = z3.Solver()
-        self.verification_solver.push()
+        self.original_assertions = []
 
-        self.commands = [x for x in self.problem.commands]
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
         self.smt_problem = self.convert_sygus_to_smt()
-        self.synthesis_functions = []
-
-        self.z3variables = {}
-        self.z3function_definitions = []
+        self.z3_variables = {}
         self.z3_synth_functions = {}
         self.z3_predefined_functions = {}
         self.z3_constraints = []
@@ -49,19 +46,14 @@ class SynthesisProblem:
         self.initialise_z3_variables()
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
+        self.parse_constraints()
 
         self.assertions = set()
         self.counterexamples = set()
         self.negated_assertions = set()
         self.additional_constraints = []
-        self.original_assertions = []
 
-        # todo: refactor for problems with more than one func to synthesisise
-        self.func_name, self.z3_func = list(self.z3_synth_functions.items())[0]
-        self.func_to_synthesise = self.get_synth_func(self.func_name)
-        self.func_args = [z3.Int(name) for name in self.func_to_synthesise.argument_names]
-        self.arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor) for sort_descriptor in
-                          self.func_to_synthesise.argument_sorts]
+        self.synth_functions = []
 
     def __str__(self) -> str:
         return self.printer.run(self.problem, self.symbol_table)
@@ -79,29 +71,26 @@ class SynthesisProblem:
 
         constraints = []
         constraint_indices = []
-        filtered_ast = []
-
         for i, statement in enumerate(ast):
             if statement[0] == 'constraint':
                 constraints.append(statement[1])
-                constraint_indices.append(len(filtered_ast))
-                filtered_ast.append(statement)
+                constraint_indices.append(i)
             elif statement[0] == 'check-synth':
                 statement[0] = 'check-sat'
-                filtered_ast.append(statement)
-            elif statement[0] != 'synth-fun':
-                filtered_ast.append(statement)
+            elif statement[0] == 'synth-fun':
+                statement[0] = 'declare-fun'
+                statement[2] = [var_decl[1] for var_decl in statement[2]]
 
         if constraints:
             conjoined_constraints = ['and'] + constraints
-            filtered_ast[constraint_indices[0]] = ['assert', conjoined_constraints]
+            ast[constraint_indices[0]] = ['assert', conjoined_constraints]
             for index in reversed(constraint_indices[1:]):
-                del filtered_ast[index]
+                del ast[index]
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
 
-        return '\n'.join(serialise(statement) for statement in filtered_ast)
+        return '\n'.join(serialise(statement) for statement in ast)
 
     def get_logic(self):
         return self.symbol_table.logic_name
@@ -123,6 +112,20 @@ class SynthesisProblem:
     def get_function_symbols(self):
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]
 
+    def initialize_synth_functions(self):
+        for func_name, func in self.get_synth_funcs().items():
+            func_args = [z3.Int(arg_name) for arg_name in func.argument_names]
+            func_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor)
+                              for sort_descriptor in func.argument_sorts]
+            func_return_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
+
+            self.synth_functions.append({
+                "name": func_name,
+                "args": func_args,
+                "arg_sorts": func_arg_sorts,
+                "return_sort": func_return_sort,
+            })
+
     def extract_synth_function(self, function_symbol) -> str:
         synthesis_function = self.get_synth_func(function_symbol)
         func_problem = next(filter(lambda x:
@@ -137,7 +140,7 @@ class SynthesisProblem:
         for variable in self.problem.commands:
             if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
                 z3_var = z3.Int(variable.symbol, self.enumerator_solver.ctx)
-                self.z3variables[variable.symbol] = z3_var
+                self.z3_variables[variable.symbol] = z3_var
 
     def initialise_z3_synth_functions(self):
         for func in self.get_synth_funcs().values():
@@ -156,10 +159,10 @@ class SynthesisProblem:
     def generate_linear_integer_expressions(self, depth, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
             yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
-                self.z3variables.values())
+                self.z3_variables.values())
             return
 
-        for var in self.z3variables.values():
+        for var in self.z3_variables.values():
             if current_size < size_limit:
                 yield var
                 yield var * z3.IntVal(-1)
@@ -178,47 +181,46 @@ class SynthesisProblem:
     def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
             yield from ([lambda *args: i for i in range(self.MIN_CONST, self.MAX_CONST + 1)] +
-                        [lambda *args: var for var in self.z3variables.keys()])
+                        [lambda *args: var for var in self.z3_variables.keys()])
             return
 
-        for var_name, var in self.z3variables.items():
+        for var_name, var in self.z3_variables.items():
             if current_size < size_limit:
-                yield lambda *args: args[list(self.z3variables.keys()).index(var_name)]
-                yield lambda *args: -args[list(self.z3variables.keys()).index(var_name)]
+                yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)]
+                yield lambda *args: -args[list(self.z3_variables.keys()).index(var_name)]
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
-                yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] + func(*args)
-                yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] - func(*args)
-                yield lambda *args: func(*args) - args[list(self.z3variables.keys()).index(var_name)]
+                yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] + func(*args)
+                yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] - func(*args)
+                yield lambda *args: func(*args) - args[list(self.z3_variables.keys()).index(var_name)]
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
-                    yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] if args[list(
-                        self.z3variables.keys()).index(var_name)] > func(*args) else func(*args)
-                    yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] if args[list(
-                        self.z3variables.keys()).index(var_name)] < func(*args) else func(*args)
-                    yield lambda *args: args[list(self.z3variables.keys()).index(var_name)] if args[list(
-                        self.z3variables.keys()).index(var_name)] != func(*args) else func(*args)
+                    yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
+                        self.z3_variables.keys()).index(var_name)] > func(*args) else func(*args)
+                    yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
+                        self.z3_variables.keys()).index(var_name)] < func(*args) else func(*args)
+                    yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
+                        self.z3_variables.keys()).index(var_name)] != func(*args) else func(*args)
 
 
-    def check_counterexample(self, model):
+    def check_counterexample(self, model: z3.ModelRef) -> dict:
         for constraint in self.original_assertions:
             if not model.eval(constraint, model_completion=True):
-                return {str(arg): model[arg] for arg in self.func_args}
-        return None
+                return {str(arg): model[arg].as_long() for arg in self.func_args}
+        return {}
 
-    def get_additional_constraints(self, counterexample):
-        constraints = [var != counterexample[var.__str__()] for var in self.func_args]
+    def get_additional_constraints(self, counterexample: dict) -> z3.ExprRef:
+        constraints = [var != z3.IntVal(counterexample[var.__str__()]) for var in self.func_args]
         return z3.And(*constraints)
 
-    def generate_candidate_expression(self, depth=0):
+    def generate_candidate_expression(self, depth: int = 0) -> z3.ExprRef:
         expressions = self.generate_linear_integer_expressions(depth)
         for expr in itertools.islice(expressions, 200):  # limit breadth
             return expr
 
     @staticmethod
-    def negate_assertions(assertions):
-
+    def negate_assertions(assertions: List[z3.ExprRef]) -> List[z3.ExprRef]:
         negated_assertions = []
         for assertion in assertions:
             args = assertion.num_args()
@@ -243,8 +245,86 @@ class SynthesisProblem:
                     raise ValueError("Unsupported assertion type: {}".format(assertion))
         return negated_assertions
 
+    def parse_constraints(self) -> None:
+        for constraint in self.constraints:
+            if isinstance(constraint, ast.ConstraintCommand):
+                term = self.parse_term(constraint.constraint)
+                self.z3_constraints.append(term)
+                self.original_assertions.append(term)
+
+        self.negated_assertions = self.negate_assertions(self.original_assertions)
+
+    def parse_term(self, term: ast.Term) -> z3.ExprRef:
+        if isinstance(term, ast.IdentifierTerm):
+            symbol = term.identifier.symbol
+            if symbol in self.z3_variables:
+                return self.z3_variables[symbol]
+            elif symbol in self.z3_synth_functions:
+                return self.z3_synth_functions[symbol]
+            elif symbol in self.z3_predefined_functions:
+                return self.z3_predefined_functions[symbol]
+            else:
+                raise ValueError(f"Undefined symbol: {symbol}")
+        elif isinstance(term, ast.LiteralTerm):
+            literal = term.literal
+            if literal.literal_kind == ast.LiteralKind.NUMERAL:
+                return z3.IntVal(int(literal.literal_value))
+            elif literal.literal_kind == ast.LiteralKind.BOOLEAN:
+                return z3.BoolVal(literal.literal_value.lower() == "true")
+            else:
+                raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
+        elif isinstance(term, ast.FunctionApplicationTerm):
+            func_symbol = term.function_identifier.symbol
+            args = [self.parse_term(arg) for arg in term.arguments]
+            operator_map = {
+                "and": lambda *args: z3.And(*args),
+                "or": lambda *args: z3.Or(*args),
+                "not": lambda arg: z3.Not(arg),
+                "=": lambda arg1, arg2: arg1 == arg2,
+                ">": lambda arg1, arg2: arg1 > arg2,
+                "<": lambda arg1, arg2: arg1 < arg2,
+                ">=": lambda arg1, arg2: arg1 >= arg2,
+                "<=": lambda arg1, arg2: arg1 <= arg2,
+                "+": lambda *args: z3.Sum(args),
+                "*": lambda *args: z3.Product(*args),
+                "/": lambda arg1, arg2: arg1 / arg2,
+            }
+            if func_symbol in operator_map:
+                op = operator_map[func_symbol]
+                if func_symbol == "not":
+                    assert len(args) == 1, "'not' should have 1 argument"
+                    return op(args[0])
+                else:
+                    assert len(args) >= 2, f"'{func_symbol}' should have at least 2 arguments"
+                    return op(*args)
+            elif func_symbol == "-":
+                if len(args) == 1:
+                    return -args[0]
+                elif len(args) == 2:
+                    return args[0] - args[1]
+                raise ValueError("Minus operator '-' should have 1 or 2 arguments")
+            elif func_symbol in self.z3_synth_functions:
+                func_term = self.z3_synth_functions[func_symbol]
+                return func_term(*args)
+            elif func_symbol in self.z3_predefined_functions:
+                func = self.z3_predefined_functions[func_symbol]
+                return func(*args)
+            else:
+                raise ValueError(f"Undefined function symbol: {func_symbol}")
+        elif isinstance(term, ast.QuantifiedTerm):
+            variables = [(v.symbol, z3.Int(v.symbol)) for v in term.quantified_variables]
+            body = self.parse_term(term.term_body)
+            if term.quantifier_kind == ast.QuantifierKind.FORALL:
+                return z3.ForAll(variables, body)
+            elif term.quantifier_kind == ast.QuantifierKind.EXISTS:
+                return z3.Exists(variables, body)
+            else:
+                raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
+        else:
+            raise ValueError(f"Unsupported term type: {type(term)}")
+
     @staticmethod
-    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor):
+    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor) -> z3.SortRef:
         sort_symbol = sort_descriptor.identifier.symbol
         return {
             'Int': z3.IntSort(),
