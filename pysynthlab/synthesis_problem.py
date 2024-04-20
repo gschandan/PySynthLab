@@ -32,8 +32,11 @@ class SynthesisProblem:
         self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(self.symbol_table, options)
 
         self.enumerator_solver = z3.Solver()
-        self.enumerator_solver.set()
+        self.enumerator_solver.set('smt.macro_finder', True)
+
         self.verification_solver = z3.Solver()
+        self.verification_solver.set('smt.macro_finder', True)
+
         self.original_assertions = []
 
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
