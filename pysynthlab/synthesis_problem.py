@@ -39,22 +39,26 @@ class SynthesisProblem:
 
         self.original_assertions = []
 
-        self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
         self.smt_problem = self.convert_sygus_to_smt()
+        self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
         self.z3_variables = {}
         self.z3_synth_functions = {}
+        self.z3_synth_function_args = {}
         self.z3_predefined_functions = {}
         self.z3_constraints = []
+        self.assertions = set()
+        self.counterexamples = set()
+        self.negated_assertions = set()
+        self.additional_constraints = []
+        self.original_assertions = set(self.assertions)
 
         self.initialise_z3_variables()
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
         self.parse_constraints()
 
-        self.assertions = set()
-        self.counterexamples = set()
-        self.negated_assertions = set()
-        self.additional_constraints = []
+        self.verification_solver.add(self.z3_constraints)
+        self.enumerator_solver.add(self.negated_assertions)
 
         self.synth_functions = []
 
@@ -149,6 +153,9 @@ class SynthesisProblem:
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
+            args = [z3.Const(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
+            arg_mapping = dict(zip(func.argument_names, args))
+            self.z3_synth_function_args[func.identifier.symbol] = arg_mapping
             self.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
                                                                           z3_range_sort)
 
@@ -159,7 +166,7 @@ class SynthesisProblem:
             self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
                                                                                z3_range_sort)
 
-    def generate_linear_integer_expressions(self, depth, size_limit=6, current_size=0):
+    def generate_linear_integer_expressions(self, depth=0, size_limit=6, current_size=0):
         if depth == 0 or current_size >= size_limit:
             yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
                 self.z3_variables.values())
@@ -206,15 +213,14 @@ class SynthesisProblem:
                     yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
                         self.z3_variables.keys()).index(var_name)] != func(*args) else func(*args)
 
-
     def check_counterexample(self, model: z3.ModelRef) -> dict:
         for constraint in self.original_assertions:
             if not model.eval(constraint, model_completion=True):
-                return {str(arg): model[arg].as_long() for arg in self.func_args}
+                return {str(arg): model[arg].as_long() for arg in self.z3_synth_function_args.items()}
         return {}
 
     def get_additional_constraints(self, counterexample: dict) -> z3.ExprRef:
-        constraints = [var != z3.IntVal(counterexample[var.__str__()]) for var in self.func_args]
+        constraints = [var != z3.IntVal(counterexample[var.__str__()]) for var in self.self.z3_synth_function_args.items()]
         return z3.And(*constraints)
 
     def generate_candidate_expression(self, depth: int = 0) -> z3.ExprRef:
@@ -249,13 +255,21 @@ class SynthesisProblem:
         return negated_assertions
 
     def parse_constraints(self) -> None:
+        all_constraints = []
+
         for constraint in self.constraints:
             if isinstance(constraint, ast.ConstraintCommand):
                 term = self.parse_term(constraint.constraint)
-                self.z3_constraints.append(term)
-                self.original_assertions.append(term)
+                all_constraints.append(term)
+                self.original_assertions.add(term)
 
-        self.negated_assertions = self.negate_assertions(self.original_assertions)
+        if all_constraints:
+            combined_constraint = z3.And(*all_constraints)
+            self.z3_constraints.append(combined_constraint)
+        else:
+            print("Warning: No constraints found or generated.")
+
+        self.negated_assertions = self.negate_assertions(self.z3_constraints)
 
     def parse_term(self, term: ast.Term) -> z3.ExprRef:
         if isinstance(term, ast.IdentifierTerm):
@@ -334,4 +348,47 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
+    def test_candidate(self, candidate):
+        self.enumerator_solver.push()
+        self.enumerator_solver.add(candidate)
 
+        if self.enumerator_solver.check() == z3.sat:
+            model = self.enumerator_solver.model()
+            self.enumerator_solver.pop()
+            return False, model
+        else:
+            self.enumerator_solver.pop()
+            return True, None
+
+    def handle_counterexample(self, counterexample):
+        negated = self.negate_assertions(counterexample)
+        self.additional_constraints.append(negated)
+        self.enumerator_solver.add(negated)
+
+    def extract_counterexample(self, model, func_name):
+        counterexample = {str(var): model.eval(var, model_completion=True) for var in self.z3_variables.values()}
+        incorrect_output = model.eval(func_name, model_completion=True)
+        return counterexample, incorrect_output
+
+    def execute_cegis(self):
+        while True:
+            solution_found = False
+            for func_name, func in self.z3_synth_functions.items():
+                args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func_name]]
+                for candidate_expression in self.generate_linear_integer_expressions():
+                    assert_expression = func(*args) == candidate_expression
+                    valid, model = self.test_candidate(assert_expression)
+                    if valid:
+                        print(f"Valid solution found for {func_name} with model: {model}")
+                        solution_found = True
+                        break
+                    else:
+                        counterexample,incorrect_output = self.extract_counterexample(model, func_name)
+                        self.handle_counterexample(counterexample)
+
+                if solution_found:
+                    break
+
+            if not solution_found:
+                print("No valid solution found, exhausted all candidates.")
+                break
