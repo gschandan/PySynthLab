@@ -1,3 +1,5 @@
+import itertools
+
 from z3 import *
 import pyparsing
 
@@ -147,6 +149,225 @@ def manual_loops():
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
         print("-" * 50)
 
+    print("-" * 100)
+    print("METHOD 4: More generic")
+
+    def create_solver_with_config():
+        solver = z3.Solver()
+        solver.set('smt.macro_finder', False)
+        return solver
+
+    def add_constraints(solver, variables, f_guess, negated=False):
+        var_objs = [Int(var) for var in variables]
+        constraints = []
+        for i, var1 in enumerate(var_objs):
+            for var2 in var_objs[i + 1:]:
+                f_var1_var2 = f_guess(var1, var2)
+                f_var2_var1 = f_guess(var2, var1)
+                if negated:
+                    constraints.append(
+                        Or(Not(f_var1_var2 == f_var2_var1), Not(And(var1 <= f_var1_var2, var2 <= f_var1_var2))))
+                else:
+                    constraints.append(And(f_var1_var2 == f_var2_var1, var1 <= f_var1_var2, var2 <= f_var1_var2))
+        solver.add(*constraints)
+
+    def print_model(model, variables):
+        results = ", ".join(f"{var} = {model.evaluate(Int(var))}" for var in variables)
+        print("Counterexample: ", results)
+
+    variables = ['x', 'y']
+    guesses = [
+        (lambda a, b: a + b, "f(x, y) = x + y"),
+        (lambda a, b: a - b, "f(x, y) = x - y"),
+        (lambda a, b: 0, "f(x, y) = 0"),
+        (lambda a, b: a, "f(x, y) = x"),
+        (lambda a, b: b, "f(x, y) = y"),
+        (lambda a, b: If(a <= b, b, a), "f(x, y) = max(x, y)"),
+        (lambda a, b: If(a <= b, a, b), "f(x, y) = min(x, y)"),
+    ]
+
+    for guess, name in guesses:
+        enumerator = create_solver_with_config()
+        add_constraints(enumerator, variables, guess, negated=True)
+        print("ENUMERATOR:", enumerator.to_smt2())
+
+        if enumerator.check() == sat:
+            model = enumerator.model()
+            print_model(model, variables)
+
+            verifier = create_solver_with_config()
+            add_constraints(verifier, variables, guess, negated=False)
+            for var in variables:
+                verifier.add(Int(var) == model[Int(var)])
+            print("VERIFIER:", verifier.to_smt2())
+
+            if verifier.check() == sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+            else:
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
+        else:
+            verifier = create_solver_with_config()
+            add_constraints(verifier, variables, guess, negated=False)
+            print("VERIFIER:", verifier.to_smt2())
+            if verifier.check() == sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+        print("-" * 50)
+
+    print("METHOD 5: Even more generic")
+
+    def add_constraints(solver, variables, guess, constraints, negated_constraints=[]):
+        var_objs = {var: z3.Int(var) for var in variables}
+        f = z3.Function('f', z3.IntSort(), z3.IntSort(), z3.IntSort())
+
+        for var1, var2 in itertools.product(var_objs.values(), repeat=2):
+            solver.add(f(var1, var2) == guess(var1, var2))
+
+        parsed_constraints = parse_constraints(constraints, variables, f)
+        parsed_negated_constraints = parse_constraints(negated_constraints, variables, f)
+
+        for constraint in parsed_constraints:
+            solver.add(constraint)
+
+        for negated_constraint in parsed_negated_constraints:
+            solver.add(z3.Not(negated_constraint))
+
+    def parse_constraints(constraints, variables, f):
+        var_objs = {var: z3.Int(var) for var in variables}
+        var_objs['f'] = f  # Include the function definition in the declaration
+        parsed_constraints = []
+        for constraint in constraints:
+            # Replace the constraint definition in the string directly with f call
+            constraint = constraint.replace('f', 'f(x, y)')
+            parsed_constraint = z3.parse_smt2_string(constraint, decls=var_objs)
+            parsed_constraints.extend(parsed_constraint)
+        return parsed_constraints
+
+    def print_model(model, variables):
+        results = ", ".join(f"{var} = {model.evaluate(z3.Int(var))}" for var in variables)
+        print("Counterexample: ", results)
+
+    variables = ['x', 'y']
+    constraints = ["(assert (and (= (f x y) (f y x)) (and (<= x (f x y)) (<= y (f x y)))))"]
+    negated_constraints = ["(assert (or (not (= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))"]
+
+    guesses = [
+        (lambda a, b: a + b, "f(x, y) = x + y"),
+        (lambda a, b: a - b, "f(x, y) = x - y"),
+        (lambda a, b: 0, "f(x, y) = 0"),
+        (lambda a, b: a, "f(x, y) = x"),
+        (lambda a, b: b, "f(x, y) = y"),
+        (lambda a, b: z3.If(a <= b, b, a), "f(x, y) = max(x, y)"),
+        (lambda a, b: z3.If(a <= b, a, b), "f(x, y) = min(x, y)"),
+    ]
+
+    for guess, name in guesses:
+        enumerator = create_solver_with_config()
+        add_constraints(enumerator, variables, guess, constraints, negated_constraints)
+        print("ENUMERATOR:", enumerator.to_smt2())
+
+        if enumerator.check() == z3.sat:
+            model = enumerator.model()
+            print_model(model, variables)
+
+            verifier = create_solver_with_config()
+            add_constraints(verifier, variables, guess, constraints, [])
+            for var in variables:
+                verifier.add(z3.Int(var) == model[z3.Int(var)])
+            print("VERIFIER:", verifier.to_smt2())
+
+            if verifier.check() == z3.sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+            else:
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
+        else:
+            verifier = create_solver_with_config()
+            add_constraints(verifier, variables, guess, constraints, [])
+            print("VERIFIER:", verifier.to_smt2())
+            if verifier.check() == z3.sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+        print("-" * 50)
+
+    print("METHOD 6: Even more generic (using substitute)")
+
+    guesses = [
+        (lambda a, b: a + b, "f(x, y) = x + y"),
+        (lambda a, b: a - b, "f(x, y) = x - y"),
+        (lambda a, b: 0, "f(x, y) = 0"),
+        (lambda a, b: a, "f(x, y) = x"),
+        (lambda a, b: b, "f(x, y) = y"),
+        (lambda a, b: z3.If(a <= b, b, a), "f(x, y) = max(x, y)"),
+        (lambda a, b: z3.If(a <= b, a, b), "f(x, y) = min(x, y)"),
+    ]
+
+    def create_solver_with_config():
+        solver = z3.Solver()
+        solver.set('smt.macro_finder', False)
+        return solver
+
+    def parse_constraints(constraints, variables):
+        var_objs = {var: z3.Int(var) for var in variables}
+        parsed_constraints = []
+        for constraint in constraints:
+            parsed_constraint = z3.parse_smt2_string(constraint, decls=var_objs)
+            parsed_constraints.extend(parsed_constraint)
+        return parsed_constraints
+
+    def add_constraints(solver, variables, guess, constraints, negated_constraints=[]):
+
+        f = z3.Function('f', z3.IntSort(), z3.IntSort(), z3.IntSort())
+
+        parsed_constraints = parse_constraints(constraints, variables)
+        parsed_negated_constraints = parse_constraints(negated_constraints, variables)
+
+        substituted_constraints = [constraint.substitute(f, lambda x, y: guess(x, y)) for constraint in parsed_constraints]
+        substituted_negated_constraints = [constraint.substitute(f, lambda x, y: guess(x, y)) for constraint in parsed_negated_constraints]
+
+        for constraint in substituted_constraints:
+            solver.add(constraint)
+
+        for negated_constraint in substituted_negated_constraints:
+            solver.add(z3.Not(negated_constraint))
+
+    def print_model(model, variables):
+        results = ", ".join(f"{var} = {model.evaluate(z3.Int(var))}" for var in variables)
+        print("Counterexample: ", results)
+
+    variables = ['x', 'y']
+    constraints = ["(assert (and (= (f x y) (f y x)) (and (<= x (f x y)) (<= y (f x y)))))"]
+    negated_constraints = ["(assert (or (not (= (f x y) (f y x))) (not (and (<= x (f x y)) (<= y (f x y))))))"]
+
+    for guess, name in guesses:
+        enumerator = create_solver_with_config()
+        add_constraints(enumerator, variables, guess, constraints, negated_constraints)
+        print("ENUMERATOR:", enumerator.to_smt2())
+
+        if enumerator.check() == z3.sat:
+            model = enumerator.model()
+            print_model(model, variables)
+
+            verifier = create_solver_with_config()
+            add_constraints(verifier, variables, guess, constraints, [])
+            for var in variables:
+                verifier.add(z3.Int(var) == model[z3.Int(var)])
+            print("VERIFIER:", verifier.to_smt2())
+
+            if verifier.check() == z3.sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+            else:
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
+        else:
+            verifier = create_solver_with_config()
+            add_constraints(verifier, variables, guess, constraints, [])
+            print("VERIFIER:", verifier.to_smt2())
+            if verifier.check() == z3.sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+        print("-" * 50)
 
 def main(args):
 
