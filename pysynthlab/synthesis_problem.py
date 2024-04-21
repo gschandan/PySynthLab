@@ -87,7 +87,6 @@ class SynthesisProblem:
             elif statement[0] == 'synth-fun':
                 statement[0] = 'declare-fun'
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
-
         if constraints:
             conjoined_constraints = ['and'] + constraints
             ast[constraint_indices[0]] = ['assert', conjoined_constraints]
@@ -189,39 +188,33 @@ class SynthesisProblem:
                     yield z3.If(var != expr, var, expr)
 
     def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
+        print(f"Generating at depth={depth}, size_limit={size_limit}, current_size={current_size}")
         if depth == 0 or current_size >= size_limit:
-            yield from ([lambda *args: i for i in range(self.MIN_CONST, self.MAX_CONST + 1)] +
-                        [lambda *args: var for var in self.z3_variables.keys()])
+            for i in range(self.MIN_CONST, self.MAX_CONST + 1):
+                print(f"Yielding constant function for value {i}")
+                yield lambda args, i=i: i
+            for var in self.z3_variables.values():
+                print(f"Yielding identity function for variable {var}")
+                yield lambda args, var=var: var
             return
 
         for var_name, var in self.z3_variables.items():
+            index = list(self.z3_variables.keys()).index(var_name)
+            print(f"Processing variable {var_name} at index {index}")
             if current_size < size_limit:
-                yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)]
-                yield lambda *args: -args[list(self.z3_variables.keys()).index(var_name)]
+                yield lambda args, index=index: args[index]
+                yield lambda args, index=index: -args[index]
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
-                yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] + func(*args)
-                yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] - func(*args)
-                yield lambda *args: func(*args) - args[list(self.z3_variables.keys()).index(var_name)]
+                yield lambda args, index=index, func=func: args[index] + func(args)
+                yield lambda args, index=index, func=func: args[index] - func(args)
+                yield lambda args, index=index, func=func: func(args) - args[index]
 
             for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
                 if current_size + 3 <= size_limit:
-                    yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
-                        self.z3_variables.keys()).index(var_name)] > func(*args) else func(*args)
-                    yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
-                        self.z3_variables.keys()).index(var_name)] < func(*args) else func(*args)
-                    yield lambda *args: args[list(self.z3_variables.keys()).index(var_name)] if args[list(
-                        self.z3_variables.keys()).index(var_name)] != func(*args) else func(*args)
-
-    def check_counterexample(self, model: z3.ModelRef) -> dict:
-        for constraint in self.original_assertions:
-            if not model.eval(constraint, model_completion=True):
-                return {str(arg): model[arg].as_long() for arg in self.z3_synth_function_args.items()}
-        return {}
-
-    def get_additional_constraints(self, counterexample: dict) -> z3.ExprRef:
-        constraints = [var != z3.IntVal(counterexample[var.__str__()]) for var in self.self.z3_synth_function_args.items()]
-        return z3.And(*constraints)
+                    yield lambda args, index=index, func=func: args[index] if args[index] > func(args) else func(args)
+                    yield lambda args, index=index, func=func: args[index] if args[index] < func(args) else func(args)
+                    yield lambda args, index=index, func=func: args[index] if args[index] != func(args) else func(args)
 
     def generate_candidate_expression(self, depth: int = 0) -> z3.ExprRef:
         expressions = self.generate_linear_integer_expressions(depth)
@@ -351,7 +344,7 @@ class SynthesisProblem:
     def test_candidate(self, candidate):
         self.enumerator_solver.push()
         self.enumerator_solver.add(candidate)
-
+        print(f"enumerator_solver SMT for candidate {candidate}: ", self.enumerator_solver.to_smt2())
         if self.enumerator_solver.check() == z3.sat:
             model = self.enumerator_solver.model()
             self.enumerator_solver.pop()
@@ -360,35 +353,70 @@ class SynthesisProblem:
             self.enumerator_solver.pop()
             return True, None
 
-    def handle_counterexample(self, counterexample):
-        negated = self.negate_assertions(counterexample)
-        self.additional_constraints.append(negated)
-        self.enumerator_solver.add(negated)
-
-    def extract_counterexample(self, model, func_name):
-        counterexample = {str(var): model.eval(var, model_completion=True) for var in self.z3_variables.values()}
-        incorrect_output = model.eval(func_name, model_completion=True)
-        return counterexample, incorrect_output
+    # def handle_counterexample(self, counterexample):
+    #     negated = self.negate_assertions(counterexample)
+    #     self.additional_constraints.append(negated)
+    #     self.enumerator_solver.add(negated)
+    #
+    # def extract_counterexample(self, model, func_name):
+    #     counterexample = {str(var): model.eval(var, model_completion=True) for var in self.z3_variables.values()}
+    #     incorrect_output = model.eval(func_name, model_completion=True)
+    #     return counterexample, incorrect_output
 
     def execute_cegis(self):
+        depth = 0
         while True:
+            self.add_additional_constraints()
             solution_found = False
+
             for func_name, func in self.z3_synth_functions.items():
                 args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func_name]]
-                for candidate_expression in self.generate_linear_integer_expressions():
-                    assert_expression = func(*args) == candidate_expression
-                    valid, model = self.test_candidate(assert_expression)
-                    if valid:
-                        print(f"Valid solution found for {func_name} with model: {model}")
-                        solution_found = True
-                        break
-                    else:
-                        counterexample,incorrect_output = self.extract_counterexample(model, func_name)
-                        self.handle_counterexample(counterexample)
+                candidate_functions = self.generate_candidate_functions(depth)
+
+                try:
+                    while True:
+                        candidate_func = next(candidate_functions)
+                        candidate_expression = candidate_func(*args)
+                        assert_expression = func(*args) == candidate_expression
+                        print("assert expression", assert_expression)
+
+                        valid, model = self.test_candidate(assert_expression)
+                        if valid:
+                            print(f"Valid solution found for {func_name} with model: {model}")
+                            solution_found = True
+                            break
+                        else:
+                            self.handle_counterexample(model, func, args)
+
+                except StopIteration:
+                    print(f"No more candidates at depth {depth} for function {func_name}.")
 
                 if solution_found:
                     break
 
-            if not solution_found:
-                print("No valid solution found, exhausted all candidates.")
-                break
+                if solution_found:
+                    break
+
+                depth += 1  # Increase depth after trying all candidates at the current depth
+                print(f"Increasing depth to {depth}. Trying more complex candidates.")
+
+                if not any(
+                        self.generate_candidate_functions(depth)):  # Check if any candidates are possible at new depth
+                    print("No valid solution found, exhausted all candidates at all depths.")
+                    break
+
+    def handle_counterexample(self, model, func, func_args):
+        counterexample = {var_name: model.eval(var, model_completion=True) for var_name, var in self.z3_variables.items()}
+        print("counterexample", counterexample)
+
+        incorrect_output = model.eval(func(*[self.z3_variables[arg] for arg in self.z3_synth_function_args[func.__str__()]]),model_completion=True)
+        print("incorrect_output", incorrect_output)
+
+        constraint_to_add = func(*counterexample.values()) != incorrect_output
+        self.enumerator_solver.add(constraint_to_add)
+        self.additional_constraints.append(constraint_to_add)
+        print(f"Added constraint to avoid f({func_args}) == {incorrect_output}")
+
+    def add_additional_constraints(self):
+        for constraint in self.additional_constraints:
+            self.enumerator_solver.add(constraint)

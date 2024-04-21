@@ -302,8 +302,13 @@ def main(args):
     problem.info()
     print(parsed_sygus_problem)
 
-    print("INITIAL STATE VERIFICATION SMT: ", problem.verification_solver.to_smt2())
-    print("INITIAL COUNTEREXAMPLE SMT: ", problem.enumerator_solver.to_smt2())
+    print("INITIAL enumerator_solver SMT: ", problem.enumerator_solver.to_smt2())
+    print("INITIAL verification_solver SMT: ", problem.verification_solver.to_smt2())
+
+    print("-" * 100)
+    generator = problem.generate_candidate_functions(0, 3, 0)
+    for func in generator:
+        print(func(["x", "y", "z"]))  # Assuming 'args' would be something like this
 
     problem.execute_cegis()
 
