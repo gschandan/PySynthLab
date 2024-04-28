@@ -331,9 +331,129 @@ def manual_loops():
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
         print("-" * 50)
 
+    print("Method 7")
+
+    def create_variables(num_vars, var_type=Int):
+        return [var_type(f'var{i}') for i in range(num_vars)]
+
+    def add_constraints(solver, variables, funcs, condition_func):
+        solver.add(condition_func(variables, funcs))
+
+    def original_constraints(variables, funcs):
+        results = funcs(*variables)
+        conditions = []
+        for f_x, f_y in results:
+            conditions.append(And(f_x == f_y, *[v <= f_x for v in variables]))
+        return And(*conditions)
+
+    def negated_constraints(variables, funcs):
+        results = funcs(*variables)
+        conditions = []
+        for f_x, f_y in results:
+            conditions.append(Or(Not(f_x == f_y), Not(And(*[v <= f_x for v in variables]))))
+        return Or(*conditions)
+
+    def function_wrapper(f_guess):
+        def compute(*args):
+            return [(f_guess(*args), f_guess(*reversed(args)))]
+
+        return compute
+
+    guesses = [
+        (lambda a, b: 0, "f(x, y) = 0"),
+        (lambda a, b: a, "f(x, y) = x"),
+        (lambda a, b: b, "f(x, y) = y"),
+        (lambda a, b: a - b, "f(x, y) = x - y"),
+        (lambda a, b: If(a <= b, b, a), "f(x, y) = max(x, y)"),
+        (lambda a, b: If(a <= b, a, b), "f(x, y) = min(x, y)"),
+
+    ]
+
+    num_vars = 2
+    variables = create_variables(num_vars, Int)
+
+    for guess, name in guesses:
+        enumerator = Solver()
+        add_constraints(enumerator, variables, function_wrapper(guess), negated_constraints)
+        print("ENUMERATOR:", enumerator.to_smt2())
+
+        if enumerator.check() == sat:
+            model = enumerator.model()
+            var_vals = [model[v] for v in variables]
+            print(f"Counterexample for guess {name}: ",
+                  ', '.join(f"{v} = {val}" for v, val in zip(variables, var_vals)))
+
+            verifier = Solver()
+            add_constraints(verifier, variables, function_wrapper(guess), original_constraints)
+            for var, val in zip(variables, var_vals):
+                verifier.add(var == val)
+            print("VERIFIER:", verifier.to_smt2())
+
+            if verifier.check() == sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+            else:
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
+        else:
+            verifier = Solver()
+            add_constraints(verifier, variables, function_wrapper(guess), original_constraints)
+            print("VERIFIER:", verifier.to_smt2())
+            if verifier.check() == sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+        print("-" * 50)
+
+    print("method 8")
+
+    f = Function('f', IntSort(), IntSort(), IntSort())
+    args = Ints('x y')
+
+    def setup_constraints():
+        f_x_y = f(*args)
+        f_y_x = f(*args)
+        return [Or(Not(f_x_y == f_y_x), Not(And(x <= f_x_y, y <= f_x_y)))]
+
+    solver = Solver()
+    constraints = setup_constraints()
+    for constraint in constraints:
+        solver.add(constraint)
+
+    def substitute_function(solver, func_def):
+        new_constraints = [
+            substitute(c, (f(*args), func_def(*args)), (f(*args[::-1]), func_def(*args[::-1]))) for c in constraints
+        ]
+        solver.reset()
+        for c in new_constraints:
+            solver.add(c)
+
+    def guess_a(x, y):
+        return x + y
+
+    def guess_b(x, y):
+        return x - y
+
+    def guess_c(x, y):
+        return If(x <= y, y, x)
+
+    substitute_function(solver, guesses[0][0])
+    if solver.check() == sat:
+        print("SAT with guess A:", solver.model())
+    else:
+        print("UNSAT with guess A")
+
+    substitute_function(solver, guess_b)
+    if solver.check() == sat:
+        print("SAT with guess B:", solver.model())
+    else:
+        print("UNSAT with guess B")
+
+    substitute_function(solver, guess_c)
+    if solver.check() == sat:
+        print("SAT with guess B:", solver.model())
+    else:
+        print("UNSAT with guess B")
 
 def main(args):
-
     manual_loops()
     # file = args.input_file.read()
     #
