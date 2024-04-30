@@ -410,7 +410,7 @@ def manual_loops():
 
     def setup_constraints():
         f_x_y = f(*args)
-        f_y_x = f(*args)
+        f_y_x = f(*args[::-1])
         return [Or(Not(f_x_y == f_y_x), Not(And(x <= f_x_y, y <= f_x_y)))]
 
     solver = Solver()
@@ -435,7 +435,7 @@ def manual_loops():
     def guess_c(x, y):
         return If(x <= y, y, x)
 
-    substitute_function(solver, guesses[0][0])
+    substitute_function(solver, guess_a)
     if solver.check() == sat:
         print("SAT with guess A:", solver.model())
     else:
@@ -449,9 +449,9 @@ def manual_loops():
 
     substitute_function(solver, guess_c)
     if solver.check() == sat:
-        print("SAT with guess B:", solver.model())
+        print("SAT with guess c:", solver.model())
     else:
-        print("UNSAT with guess B")
+        print("UNSAT with guess c")
 
 def main(args):
     manual_loops()
