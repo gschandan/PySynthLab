@@ -347,110 +347,73 @@ class SynthesisProblem:
     #             yield lambda args, index=index, func=func: args[index] if args[index] < func(args) else func(args)
     #             yield lambda args, index=index, func=func: args[index] if args[index] != func(args) else func(args)
 
-    guessesv2 = [
-        (lambda a, b: 0, "f(x, y) = 0"),
-        (lambda a, b: a, "f(x, y) = x"),
-        (lambda a, b: b, "f(x, y) = y"),
-        (lambda a, b: a - b, "f(x, y) = x - y"),
-        (lambda a, b: z3.If(a <= b, b, a), "f(x, y) = max(x, y)"),
-    ]
+    def substitute_constraints(self, constraints, func, candidate_expression):
+        def reconstruct_expression(expr):
+            if is_app(expr) and expr.decl() == func:
+                return candidate_expression(*[reconstruct_expression(arg) for arg in expr.children()])
+            elif is_app(expr):
+                return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
+            else:
+                return expr
 
+        substituted_constraints = [reconstruct_expression(c) for c in constraints]
+        return substituted_constraints
 
-
-    def test_candidate(self, candidate_expression, description):
-        x, y = self.z3_variables['x'], self.z3_variables['y']
-        f = self.z3_synth_functions['f']
-        constraints = [
-            f(x, y) == f(y, x),
-            And(x <= f(x, y), y <= f(x, y))
-        ]
-        substituted_constraints = [substitute_funs(constr, (f, candidate_expression)) for constr in constraints]
-
+    def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
         self.enumerator_solver.reset()
+        substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
         self.enumerator_solver.add(substituted_constraints)
+
+        self.verification_solver.reset()
+        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
+        self.verification_solver.add(substituted_constraints)
+
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
-            counterexample = {var_name: model[var] for var_name, var in self.z3_variables.items()}
-            print(f"Counterexample for {description}: {counterexample}")
+            counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
+            incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
+            print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
 
-            # Verification test
-            self.verification_solver.reset()
-            self.verification_solver.add(substituted_constraints)
-            if self.verification_solver.check() != sat:
-                print(f"Verification failed for {description}, counterexample confirmed.")
+            if self.verification_solver.check() == sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
             else:
-                print(f"Verification passed unexpectedly for {description}. Possible error in logic.")
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
         else:
-            print(f"No counterexample found for {description}. Guess should be correct.")
-
+            print("No counterexample found for guess", name)
+            if self.verification_solver.check() == sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
 
     def execute_cegis(self):
-        x, y = self.z3_variables['x'], self.z3_variables['y']
+
+        def guess_a(x, y):
+            return x + y
+
+        def guess_b(x, y):
+            return x - y
+
+        def guess_c(x, y):
+            return If(x <= y, y, x)
+
+        def guess_d(x, y):
+            return If(x > y, y, x)
+
+        def guess_e(x, y):
+            return IntVal(0)
 
         guesses = [
-            (0, "f(x, y) = 0"),
-            (x, "f(x, y) = x"),
-            (y, "f(x, y) = y"),
-            (x - y, "f(x, y) = x - y"),
-            (If(x <= y, y, x), "f(x, y) = max(x, y)"),
+            (guess_e, "0"),
+            (guess_a, "x+y"),
+            (guess_b, "x-y"),
+            (guess_c, "max(x, y)"),
+            (guess_d, "min(x, y)"),
         ]
+        func = list(self.z3_synth_functions.values())[0]
+        args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+        for candidate, name in guesses:
+            candidate_expression = Lambda(args, candidate(*args))
+            print("Testing guess:", name)
+            self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args, candidate_expression)
 
-        for candidate_func, description in guesses:
-            print("Testing guess:", description)
-            self.test_candidate(candidate_func, description)
-            print("-" * 50)
-
-    # def test_candidate(self, assert_expression, candidate_expression, name, func, args):
-    #     self.enumerator_solver.reset()
-    #     substituted_constraints = []
-    #     for constr in self.negated_assertions:
-    #         print("Constraint to be substituted:", constr)
-    #         if callable(candidate_expression):
-    #             subbed_constr = z3.substitute(constr, [(func(*args), candidate_expression(*args))])
-    #         else:
-    #             subbed_constr = z3.substitute(constr, [(func(*args), candidate_expression)])
-    #         substituted_constraints.append(subbed_constr)
-    #     self.enumerator_solver.add(substituted_constraints)
-    #
-    #     self.verification_solver.reset()
-    #     substituted_constraints = []
-    #     for constr in self.z3_constraints:
-    #         if callable(candidate_expression):
-    #             subbed_constr = z3.substitute(constr, [(func(*args), candidate_expression(*args))])
-    #         else:
-    #             subbed_constr = z3.substitute(constr, [(func(*args), candidate_expression)])
-    #         substituted_constraints.append(subbed_constr)
-    #     self.verification_solver.add(substituted_constraints)
-    #
-    #     if self.enumerator_solver.check() == z3.sat:
-    #         model = self.enumerator_solver.model()
-    #         counterexample = {var_name: model.eval(var, model_completion=True) for var_name, var in self.z3_variables.items()}
-    #         incorrect_output = model.eval(func(*[self.z3_variables[arg] for arg in self.z3_synth_function_args[func.__str__()]]),model_completion=True)
-    #         print(f"incorrect_output {func.__str__()}({counterexample}) == {incorrect_output}")
-    #         #verifier.add(Int('x') == model[Int('x')], Int('y') == model[Int('y')])
-    #
-    #         if self.verification_solver.check() == z3.sat:
-    #             print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
-    #         else:
-    #             print(f"Verification failed for guess {name}, counterexample confirmed.")
-    #     else:
-    #         print("VERIFIER:", self.verification_solver.to_smt2())
-    #         if self.verification_solver.check() == z3.sat:
-    #             print(f"No counterexample found for guess {name}. Guess should be correct.")
-    #         else:
-    #             print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
-    #
-    #     self.verification_solver.pop()
-    #     self.enumerator_solver.pop()
-    #
-    # def execute_cegis(self):
-    #     for func_name, func in self.z3_synth_functions.items():
-    #         args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func_name]]
-    #         for candidate, desc in self.guesses:
-    #             print("Testing guess:", desc)
-    #             candidate_expression = candidate(*args)
-    #             assert_expression = func(*args) == candidate_expression
-    #             print("assert_expression:", assert_expression)
-    #             self.test_candidate(assert_expression,candidate_expression, desc, func, args)
-    #
-    #     print("-" * 50)
+        print("-" * 50)

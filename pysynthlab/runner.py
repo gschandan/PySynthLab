@@ -502,14 +502,96 @@ def manual_loops():
     else:
         print("UNSAT with guess c")
 
+    print("method 10")
+    f = Function('f', IntSort(), IntSort(), IntSort())
+
+    x, y, z = Ints('x y z')
+    constraints = [
+        f(x, y) > f(y, x),
+        f(x, z) == z,
+        And(f(y, z) <= y, f(z, x) > x)
+    ]
+
+    def substitute_function_dynamically(solver, constraints, func_def):
+        def reconstruct_expression(expr):
+            if is_app(expr) and expr.decl() == f:
+                return func_def(*[reconstruct_expression(arg) for arg in expr.children()])
+            elif is_app(expr):
+                return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
+            else:
+                return expr
+
+        solver.reset()
+        for c in constraints:
+            new_c = reconstruct_expression(c)
+            solver.add(new_c)
+
+
+    def new_func_def(*args):
+        return sum(args)
+
+    solver = Solver()
+    substitute_function_dynamically(solver, constraints, new_func_def)
+
+    print("Substituted Constraints in Solver:")
+    print(solver)
+
+    print("Method 11")
+
+    f = Function('f', IntSort(), IntSort(), IntSort())
+
+    x, y = Ints('x y')
+
+    def setup_constraints():
+        return [Or(Not(f(x, y) == f(y, x)), Not(And(x <= f(x, y), y <= f(x, y))))]
+
+    solver = Solver()
+    constraints = setup_constraints()
+    for constraint in constraints:
+        solver.add(constraint)
+
+    def substitute_function_dynamically(solver, constraints, func_def):
+        def reconstruct_expression(expr):
+            if is_app(expr) and expr.decl() == f:
+                return func_def(*[reconstruct_expression(arg) for arg in expr.children()])
+            elif is_app(expr):
+                return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
+            else:
+                return expr
+
+        solver.reset()
+        for c in constraints:
+            new_c = reconstruct_expression(c)
+            solver.add(new_c)
+
+    def guess_a(x, y):
+        return x + y
+
+    def guess_b(x, y):
+        return x - y
+
+    def guess_c(x, y):
+        return If(x <= y, y, x)
+
+    for guess, name in [(guess_a, "A"), (guess_b, "B"), (guess_c, "C")]:
+        substitute_function_dynamically(solver, constraints, guess)
+        result = solver.check()
+        if result == sat:
+            print(f"SAT with guess {name}:", solver.model())
+        else:
+            print(f"UNSAT with guess {name}")
+
 def main(args):
     manual_loops()
-    # file = args.input_file.read()
-    #
-    # problem = SynthesisProblem(file, int(args.sygus_standard))
-    # parsed_sygus_problem = problem.convert_sygus_to_smt()
-    # problem.info()
-    # print(parsed_sygus_problem)
+    file = args.input_file.read()
+
+    problem = SynthesisProblem(file, int(args.sygus_standard))
+    parsed_sygus_problem = problem.convert_sygus_to_smt()
+    problem.info()
+    print(parsed_sygus_problem)
+
+    problem.execute_cegis()
+
     #
     # print("INITIAL enumerator_solver SMT: ", problem.enumerator_solver.to_smt2())
     # print("INITIAL verification_solver SMT: ", problem.verification_solver.to_smt2())
@@ -519,7 +601,6 @@ def main(args):
     # for func in generator:
     #     print(func(["x", "y", "z"]))  # Assuming 'args' would be something like this
     #
-    # problem.execute_cegis()
 
     # while not found_valid_candidate:
     #     try:
