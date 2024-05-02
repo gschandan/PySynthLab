@@ -350,14 +350,25 @@ class SynthesisProblem:
     def substitute_constraints(self, constraints, func, candidate_expression):
         def reconstruct_expression(expr):
             if is_app(expr) and expr.decl() == func:
-                return candidate_expression(*[reconstruct_expression(arg) for arg in expr.children()])
+                new_args = [reconstruct_expression(arg) for arg in expr.children()]
+                if isinstance(candidate_expression, FuncDeclRef):
+                    return candidate_expression(*new_args)
+                elif isinstance(candidate_expression, QuantifierRef):
+                    var_map = [(candidate_expression.body().arg(i), new_args[i]) for i in
+                               range(candidate_expression.body().num_args())]
+                    new_body = substitute(candidate_expression.body(), var_map)
+                    return new_body
+                elif callable(getattr(candidate_expression, '__call__', None)):
+                    return candidate_expression(*new_args)
+                else:
+                    return candidate_expression
             elif is_app(expr):
                 return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
             else:
                 return expr
 
-        substituted_constraints = [reconstruct_expression(c) for c in constraints]
-        return substituted_constraints
+        return [reconstruct_expression(c) for c in constraints]
+
 
     def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
         self.enumerator_solver.reset()
@@ -371,9 +382,12 @@ class SynthesisProblem:
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
-            incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
+            incorrect_output = model.eval(candidate_expression if isinstance(candidate_expression, QuantifierRef) else candidate_expression(*args), model_completion=True)
             print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
 
+            var_vals = [model[v] for v in args]
+            for var, val in zip(args, var_vals):
+                self.verification_solver.add(var == val)
             if self.verification_solver.check() == sat:
                 print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
             else:
@@ -412,7 +426,7 @@ class SynthesisProblem:
         func = list(self.z3_synth_functions.values())[0]
         args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
         for candidate, name in guesses:
-            candidate_expression = Lambda(args, candidate(*args))
+            candidate_expression = candidate(*args)
             print("Testing guess:", name)
             self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args, candidate_expression)
 
