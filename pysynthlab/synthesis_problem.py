@@ -382,7 +382,12 @@ class SynthesisProblem:
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
-            incorrect_output = model.eval(candidate_expression if isinstance(candidate_expression, QuantifierRef) else candidate_expression(*args), model_completion=True)
+
+            if callable(getattr(candidate_expression, '__call__', None)):
+                incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
+            elif isinstance(candidate_expression, QuantifierRef) or isinstance(candidate_expression, ExprRef):
+                incorrect_output = model.eval(candidate_expression, model_completion=True)
+
             print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
 
             var_vals = [model[v] for v in args]
