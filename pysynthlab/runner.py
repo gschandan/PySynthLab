@@ -581,6 +581,98 @@ def manual_loops():
         else:
             print(f"UNSAT with guess {name}")
 
+    # print("method something")
+    #
+    # def substitute_constraints(self, constraints, func, candidate_expression):
+    #     def reconstruct_expression(expr):
+    #         if is_app(expr) and expr.decl() == func:
+    #             new_args = [reconstruct_expression(arg) for arg in expr.children()]
+    #             if isinstance(candidate_expression, FuncDeclRef):
+    #                 return candidate_expression(*new_args)
+    #             elif isinstance(candidate_expression, QuantifierRef):
+    #                 var_map = [(candidate_expression.body().arg(i), new_args[i]) for i in
+    #                            range(candidate_expression.body().num_args())]
+    #                 new_body = substitute(candidate_expression.body(), var_map)
+    #                 return new_body
+    #             elif callable(getattr(candidate_expression, '__call__', None)):
+    #                 return candidate_expression(*new_args)
+    #             else:
+    #                 return candidate_expression
+    #         elif is_app(expr):
+    #             return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
+    #         else:
+    #             return expr
+    #
+    #     return [reconstruct_expression(c) for c in constraints]
+    #
+    #
+    # def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
+    #     self.enumerator_solver.reset()
+    #     substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
+    #     self.enumerator_solver.add(substituted_constraints)
+    #
+    #     self.verification_solver.reset()
+    #     substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
+    #     self.verification_solver.add(substituted_constraints)
+    #
+    #     if self.enumerator_solver.check() == sat:
+    #         model = self.enumerator_solver.model()
+    #         counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
+    #
+    #         if callable(getattr(candidate_expression, '__call__', None)):
+    #             incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
+    #         elif isinstance(candidate_expression, QuantifierRef) or isinstance(candidate_expression, ExprRef):
+    #             incorrect_output = model.eval(candidate_expression, model_completion=True)
+    #
+    #         print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
+    #
+    #         var_vals = [model[v] for v in args]
+    #         for var, val in zip(args, var_vals):
+    #             self.verification_solver.add(var == val)
+    #         if self.verification_solver.check() == sat:
+    #             print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+    #         else:
+    #             print(f"Verification failed for guess {name}, counterexample confirmed.")
+    #     else:
+    #         print("No counterexample found for guess", name)
+    #         if self.verification_solver.check() == sat:
+    #             print(f"No counterexample found for guess {name}. Guess should be correct.")
+    #         else:
+    #             print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+    #
+    # def execute_cegis(self):
+    #
+    #     def guess_a(x, y):
+    #         return x + y
+    #
+    #     def guess_b(x, y):
+    #         return x - y
+    #
+    #     def guess_c(x, y):
+    #         return If(x <= y, y, x)
+    #
+    #     def guess_d(x, y):
+    #         return If(x > y, y, x)
+    #
+    #     def guess_e(x, y):
+    #         return IntVal(0)
+    #
+    #     guesses = [
+    #         (guess_e, "0"),
+    #         (guess_a, "x+y"),
+    #         (guess_b, "x-y"),
+    #         (guess_c, "max(x, y)"),
+    #         (guess_d, "min(x, y)"),
+    #     ]
+    #     func = list(self.z3_synth_functions.values())[0]
+    #     args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+    #     for candidate, name in guesses:
+    #         candidate_expression = candidate(*args)
+    #         print("Testing guess:", name)
+    #         self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args, candidate_expression)
+    #
+    #     print("-" * 50)
+
 def main(args):
     manual_loops()
     file = args.input_file.read()
@@ -591,57 +683,6 @@ def main(args):
     print(parsed_sygus_problem)
 
     problem.execute_cegis()
-
-    #
-    # print("INITIAL enumerator_solver SMT: ", problem.enumerator_solver.to_smt2())
-    # print("INITIAL verification_solver SMT: ", problem.verification_solver.to_smt2())
-    #
-    # print("-" * 100)
-    # generator = problem.generate_candidate_functions(0, 3, 0)
-    # for func in generator:
-    #     print(func(["x", "y", "z"]))  # Assuming 'args' would be something like this
-    #
-
-    # while not found_valid_candidate:
-    #     try:
-    #         candidate_expression = next(candidate_expressions)
-    #     except StopIteration:
-    #         depth += 1
-    #         if depth > depth_limit:
-    #             print("Depth limit reached without finding a valid candidate.")
-    #             break
-    #         candidate_expressions = problem.generate_linear_integer_expressions(depth)
-    #         candidate_expression = next(candidate_expressions)
-    #
-    #     expression = problem.z3_func(*problem.func_args) == candidate_expression # (ite (<= x y) y x)
-    #     if itr == 100:
-    #         p = list(problem.z3variables.values())
-    #         expression = problem.z3_func(*problem.func_args) == z3.If(p[0] <= p[1], p[1], p[0])
-    #     if expression in problem.assertions:
-    #         itr += 1
-    #         continue
-    #     print("expr:", expression)
-    #
-    #     problem.enumerator_solver.push()
-    #     problem.enumerator_solver.add(expression)
-    #     enumerator_solver_result = problem.enumerator_solver.check()
-    #     print("Verification result:", enumerator_solver_result)
-    #     problem.enumerator_solver.pop()
-    #     model = problem.enumerator_solver.model()
-    #     counterexample = problem.check_counterexample(model)
-    #     if counterexample is not None:
-    #         additional_constraint = problem.get_additional_constraints(counterexample)
-    #         problem.enumerator_solver.add(additional_constraint)
-    #     itr += 1
-    #     print(f"Depth {depth}, Iteration {itr}")
-
-    # if found_valid_candidate:
-    #     print("VALID CANDIDATE:", expression)
-    # else:
-    #     print("No valid candidate found within the depth/loop/time limit.")
-
-    # print("VERIFICATION SMT: ", problem.verification_solver.to_smt2())
-    # print("COUNTEREXAMPLE SMT: ", problem.enumerator_solver.to_smt2())
 
 
 if __name__ == '__main__':

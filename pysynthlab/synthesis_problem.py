@@ -404,32 +404,39 @@ class SynthesisProblem:
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
 
+    def generate_arithmetic_function(self, args, depth, complexity):
+        if len(args) < 2:
+            raise ValueError("At least two Z3 variables are required.")
+
+        expr = args[0]
+
+        for i in range(1, depth + 1):
+            for j in range(1, complexity + 1):
+                condition = args[0] < args[1]  # Basic condition for the If
+                increment = IntVal(j + 1)  # Increasing integer values
+                true_branch = expr + args[j % len(args)] + increment
+                false_branch = expr - args[j % len(args)] - increment
+                expr = If(condition, true_branch, false_branch)
+
+        def generated_function(*values):
+            if len(values) != len(args):
+                raise ValueError("incorrect number of values provided.")
+            solver = Solver()
+            for arg, value in zip(args, values):
+                solver.add(arg == value)
+            if solver.check() == sat:
+                return solver.model().eval(expr, model_completion=True)
+            else:
+                raise Exception("solver failed to find a solution.")
+
+        return generated_function
+
     def execute_cegis(self):
-
-        def guess_a(x, y):
-            return x + y
-
-        def guess_b(x, y):
-            return x - y
-
-        def guess_c(x, y):
-            return If(x <= y, y, x)
-
-        def guess_d(x, y):
-            return If(x > y, y, x)
-
-        def guess_e(x, y):
-            return IntVal(0)
-
-        guesses = [
-            (guess_e, "0"),
-            (guess_a, "x+y"),
-            (guess_b, "x-y"),
-            (guess_c, "max(x, y)"),
-            (guess_d, "min(x, y)"),
-        ]
         func = list(self.z3_synth_functions.values())[0]
         args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+
+        num_functions = 10
+        guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
         for candidate, name in guesses:
             candidate_expression = candidate(*args)
             print("Testing guess:", name)
