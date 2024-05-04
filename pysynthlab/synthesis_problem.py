@@ -412,8 +412,8 @@ class SynthesisProblem:
 
         for i in range(1, depth + 1):
             for j in range(1, complexity + 1):
-                condition = args[0] < args[1]  # Basic condition for the If
-                increment = IntVal(j + 1)  # Increasing integer values
+                condition = args[0] < args[1]
+                increment = IntVal(j + 1)
                 true_branch = expr + args[j % len(args)] + increment
                 false_branch = expr - args[j % len(args)] - increment
                 expr = If(condition, true_branch, false_branch)
@@ -425,7 +425,8 @@ class SynthesisProblem:
             for arg, value in zip(args, values):
                 solver.add(arg == value)
             if solver.check() == sat:
-                return solver.model().eval(expr, model_completion=True)
+                model = solver.model()
+                return model.eval(expr, model_completion=True)
             else:
                 raise Exception("solver failed to find a solution.")
 
@@ -439,7 +440,7 @@ class SynthesisProblem:
         guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
         for candidate, name in guesses:
             candidate_expression = candidate(*args)
-            print("Testing guess:", name)
+            print("Testing guess:", name, simplify(candidate_expression))
             self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args, candidate_expression)
 
         print("-" * 50)
