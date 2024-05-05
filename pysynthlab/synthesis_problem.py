@@ -1,6 +1,6 @@
 import itertools
 from typing import List
-
+import random
 from z3 import *
 import pyparsing
 
@@ -370,13 +370,13 @@ class SynthesisProblem:
         return [reconstruct_expression(c) for c in constraints]
 
 
-    def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
+    def test_candidate(self,  name, func, args, candidate_expression):
         self.enumerator_solver.reset()
-        substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
+        substituted_constraints = self.substitute_constraints(self.negated_assertions, func, candidate_expression)
         self.enumerator_solver.add(substituted_constraints)
 
         self.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
+        substituted_constraints = self.substitute_constraints(self.z3_constraints,  func, candidate_expression)
         self.verification_solver.add(substituted_constraints)
 
         if self.enumerator_solver.check() == sat:
@@ -395,28 +395,56 @@ class SynthesisProblem:
                 self.verification_solver.add(var == val)
             if self.verification_solver.check() == sat:
                 print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+                return False
             else:
                 print(f"Verification failed for guess {name}, counterexample confirmed.")
+                return False
         else:
             print("No counterexample found for guess", name)
             if self.verification_solver.check() == sat:
                 print(f"No counterexample found for guess {name}. Guess should be correct.")
+                return True
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+                return False
+        return False
 
-    def generate_arithmetic_function(self, args, depth, complexity):
+    def generate_arithmetic_function_random(self, args, depth, complexity):
         if len(args) < 2:
             raise ValueError("At least two Z3 variables are required.")
 
-        expr = args[0]
+        operations = [
+            (lambda x, y: IntVal(0), "0"),
+            (lambda x, y: IntVal(-1), "-1"),
+            (lambda x, y: IntVal(1), "1"),
+            (lambda x, y: IntVal(-1), "-2"),
+            (lambda x, y: IntVal(2), "2"),
+            (lambda x, y: x, "x"),
+            (lambda x, y: y, "y"),
+            (lambda x, y: x + y, "x + y"),
+            (lambda x, y: x - y, "x - y"),
+            (lambda x, y: x * y, "x * y"),
+            (lambda x, y: If(x == 0, 0, x / y), "x / y"),
+            (lambda x, y: If(x <= y, y, x), "max(x, y)"),
+            (lambda x, y: If(x <= y, x, y), "min(x, y)"),
+        ]
 
-        for i in range(1, depth + 1):
-            for j in range(1, complexity + 1):
-                condition = args[0] < args[1]
-                increment = IntVal(j + 1)
-                true_branch = expr + args[j % len(args)] + increment
-                false_branch = expr - args[j % len(args)] - increment
-                expr = If(condition, true_branch, false_branch)
+        def generate_expression(depth, complexity):
+            if depth == 0 or complexity == 0:
+                return random.choice(args)
+
+            num_operations = random.randint(1, complexity)
+            expr = random.choice(args)
+
+            for _ in range(num_operations):
+                op, _ = random.choice(operations)
+                arg1 = generate_expression(depth - 1, complexity // 2)
+                arg2 = generate_expression(depth - 1, complexity // 2)
+                expr = op(arg1, arg2)
+
+            return expr
+
+        generated_expr = generate_expression(depth, complexity)
 
         def generated_function(*values):
             if len(values) != len(args):
@@ -426,21 +454,91 @@ class SynthesisProblem:
                 solver.add(arg == value)
             if solver.check() == sat:
                 model = solver.model()
-                return model.eval(expr, model_completion=True)
+                return model.eval(generated_expr, model_completion=True)
             else:
                 raise Exception("solver failed to find a solution.")
 
-        return generated_function
+        function_str = simplify(generated_expr)
+        return generated_function, function_str
+
+    def generate_arithmetic_function_enumerative(self, args, depth, complexity):
+        if len(args) < 2:
+            raise ValueError("At least two Z3 variables are required.")
+
+        operations = [
+            (lambda x, y: IntVal(0), "0"),
+            (lambda x, y: IntVal(-1), "-1"),
+            (lambda x, y: IntVal(1), "1"),
+            (lambda x, y: IntVal(-1), "-2"),
+            (lambda x, y: IntVal(2), "2"),
+            (lambda x, y: x, "x"),
+            (lambda x, y: y, "y"),
+            (lambda x, y: x + y, "x + y"),
+            (lambda x, y: x - y, "x - y"),
+            (lambda x, y: x * y, "x * y"),
+            (lambda x, y: If(x == 0, 0, x / y), "x / y"),
+            (lambda x, y: If(x <= y, y, x), "max(x, y)"),
+            (lambda x, y: If(x <= y, x, y), "min(x, y)"),
+        ]
+        expressions = []
+
+        def generate_expressions(args, depth, complexity):
+            if depth == 0 or complexity == 0:
+                return args
+
+            expressions = []
+
+            for op, _ in operations:
+                if complexity == 1:
+                    for arg in args:
+                        expressions.append(op(arg, arg))
+                else:
+                    for arg1 in generate_expressions(args, depth - 1, complexity - 1):
+                        for arg2 in generate_expressions(args, depth - 1, complexity - 1):
+                            expressions.append(op(arg1, arg2))
+
+            return expressions
+
+        expressions = generate_expressions(args, depth, complexity)
+
+        def generated_function(*values):
+            if len(values) != len(args):
+                raise ValueError("Incorrect number of values provided.")
+            solver = Solver()
+            for arg, value in zip(args, values):
+                solver.add(arg == value)
+            if solver.check() == sat:
+                model = solver.model()
+                results = []
+                for expr in expressions:
+                    results.append(model.eval(expr, model_completion=True))
+                return results
+            else:
+                raise Exception("Solver failed to find a solution.")
+
+        function_str = [str(simplify(expr)) for expr in expressions]
+        return generated_function, function_str
+
 
     def execute_cegis(self):
-        func = list(self.z3_synth_functions.values())[0]
-        args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
 
-        num_functions = 10
-        guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
-        for candidate, name in guesses:
-            candidate_expression = candidate(*args)
-            print("Testing guess:", name, simplify(candidate_expression))
-            self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args, candidate_expression)
+        max_depth = 10
+        max_complexity = 10
 
-        print("-" * 50)
+        for func in list(self.z3_synth_functions.values()):
+            args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+
+            for depth in range(1, max_depth + 1):
+                for complexity in range(1, max_complexity + 1):
+                    # guesses = [(self.generate_arithmetic_function_random(args, depth, complexity), f'guess_d{depth}_c{3}')]  # random at each depth/complexity
+                    guesses = [(self.generate_arithmetic_function_enumerative(args, depth, complexity), f'guess_d{depth}_c{3}')]
+                    for candidate, name in guesses:
+                        candidate_function, candidate_expression = candidate
+                        print("Testing guess:", name, simplify(candidate_expression))
+                        result = self.test_candidate(name, func, args, candidate_function)
+                        if result:
+                            print("Found a satisfying candidate!")
+                            return
+                    print("-" * 50)
+
+            print("No satisfying candidate found.")
