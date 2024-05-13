@@ -310,15 +310,15 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
-        print(f"Generating at depth={depth}, size_limit={size_limit}, current_size={current_size}")
-        # if depth == 1:
-        #     print("Yielding the correct maximum function for testing")
-        #     yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
-        #     return
-        print("Yielding the correct maximum function for testing")
-        yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
-        return
+    # def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
+    #     print(f"Generating at depth={depth}, size_limit={size_limit}, current_size={current_size}")
+    #     # if depth == 1:
+    #     #     print("Yielding the correct maximum function for testing")
+    #     #     yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
+    #     #     return
+    #     print("Yielding the correct maximum function for testing")
+    #     yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
+    #     return
 
     # if depth == 0 or current_size >= size_limit:
     #     for i in range(self.MIN_CONST, self.MAX_CONST + 1):
@@ -369,8 +369,37 @@ class SynthesisProblem:
 
         return [reconstruct_expression(c) for c in constraints]
 
+    def collect_function_io_pairs(self, func):
+        io_pairs = []
+        for constraint in self.constraints:
+            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint, ast.FunctionApplicationTerm):
+                if constraint.constraint.function_identifier.symbol == func.name():
+                    example_inputs = [self.parse_term(arg) for arg in constraint.constraint.arguments]
+                    example_output = self.parse_term(constraint.constraint.arguments[-1])
+                    io_pairs.append((example_inputs, example_output))
+        return io_pairs
 
     def test_candidate(self,  name, func, args, candidate_expression):
+        func_input_output_pairs = self.collect_function_io_pairs(func)
+        for func_input, expected_output in func_input_output_pairs:
+            try:
+                candidate_outputs = func(*func_input)
+                if isinstance(candidate_outputs, list):
+                    if any(candidate_output != expected_output for candidate_output in candidate_outputs):
+                        print(f"Incorrect output for {name}: {dict(zip(args, func_input))} == {expected_output}")
+                        print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        return False
+                else:
+                    if candidate_outputs != expected_output:
+                        print(f"Incorrect output for {name}: {dict(zip(args, func_input))} == {expected_output}")
+                        print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        return False
+            except Exception as e:
+                print(f"Error occurred while executing {name}: {str(e)}")
+                return False
+
+        print(f"All tests passed for guess {name}, attempting verification.")
+
         self.enumerator_solver.reset()
         substituted_constraints = self.substitute_constraints(self.negated_assertions, func, candidate_expression)
         self.enumerator_solver.add(substituted_constraints)
@@ -407,7 +436,6 @@ class SynthesisProblem:
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
                 return False
-        return False
 
     def generate_arithmetic_function_random(self, args, depth, complexity):
         if len(args) < 2:
@@ -530,8 +558,8 @@ class SynthesisProblem:
 
             for depth in range(1, max_depth + 1):
                 for complexity in range(1, max_complexity + 1):
-                    # guesses = [(self.generate_arithmetic_function_random(args, depth, complexity), f'guess_d{depth}_c{3}')]  # random at each depth/complexity
-                    guesses = [(self.generate_arithmetic_function_enumerative(args, depth, complexity), f'guess_d{depth}_c{3}')]
+                    guesses = [(self.generate_arithmetic_function_random(args, depth, complexity), f'guess_d{depth}_c{3}')]  # random at each depth/complexity
+                    #guesses = [(self.generate_arithmetic_function_enumerative(args, depth, complexity), f'guess_d{depth}_c{3}')]
                     for candidate, name in guesses:
                         candidate_function, candidate_expression = candidate
                         print("Testing guess:", name, simplify(candidate_expression))
