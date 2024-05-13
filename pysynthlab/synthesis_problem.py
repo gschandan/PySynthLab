@@ -310,6 +310,16 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
+    def collect_function_io_pairs(self, func):
+        io_pairs = []
+        for constraint in self.constraints:
+            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint, ast.FunctionApplicationTerm):
+                if constraint.constraint.function_identifier.symbol == func.name():
+                    example_inputs = [self.parse_term(arg) for arg in constraint.constraint.arguments]
+                    example_output = self.parse_term(constraint.constraint.arguments[-1])
+                    io_pairs.append((example_inputs, example_output))
+        return io_pairs
+
     def substitute_constraints(self, constraints, func, candidate_expression):
         def reconstruct_expression(expr):
             if is_app(expr) and expr.decl() == func:
@@ -332,20 +342,7 @@ class SynthesisProblem:
 
         return [reconstruct_expression(c) for c in constraints]
 
-    def collect_function_io_pairs(self, func):
-        io_pairs = []
-        for constraint in self.constraints:
-            if is_app(constraint) and constraint.decl().name() == "synth-fun":
-                if constraint.arg(0).as_string() == func.__name__:
-                    example_inputs = constraint.arg(2).children()
-                    example_outputs = constraint.arg(3).children()
-                    for i in range(len(example_inputs)):
-                        input_values = [int(val.as_long()) for val in example_inputs[i].children()]
-                        output_value = int(example_outputs[i].as_long())
-                        io_pairs.append((input_values, output_value))
-        return io_pairs
-
-    def test_candidate(self, name, func, args, candidate_function):
+    def test_candidate(self, name, func, args, candidate_function, candidate_expression):
         func_input_output_pairs = self.collect_function_io_pairs(func)
         for func_input, expected_output in func_input_output_pairs:
             try:
@@ -366,20 +363,36 @@ class SynthesisProblem:
 
         print(f"All tests passed for guess {name}, attempting verification.")
 
-        solver = Solver()
-        for assertion in self.assertions:
-            solver.add(assertion)
+        # test against negated assertions
+        self.enumerator_solver.reset()
+        substituted_constraints = self.substitute_constraints(self.negated_assertions, func, candidate_expression)
+        self.enumerator_solver.add(substituted_constraints)
 
-        solver.add(Not(And([candidate_output == expected_output for candidate_output, expected_output in
-                            zip(candidate_function(*[self.z3_variables[arg] for arg in args]), func(*args))])))
+        self.verification_solver.reset()
+        substituted_constraints = self.substitute_constraints(self.z3_constraints, func, candidate_expression)
+        self.verification_solver.add(substituted_constraints)
 
-        if solver.check() == unsat:
-            print(f"Verification succeeded for guess {name}, no counterexample found.")
-            return True
+        if self.enumerator_solver.check() == sat:
+            model = self.enumerator_solver.model()
+            counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
+            print("Counterexample", counterexample)
+            var_vals = [model[v] for v in args]
+            for var, val in zip(args, var_vals):
+                self.verification_solver.add(var == val)
+            if self.verification_solver.check() == sat:
+                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+                return False
+            else:
+                print(f"Verification failed for guess {name}, counterexample confirmed.")
+                return False
         else:
-            model = solver.model()
-            print(f"Verification failed for guess {name}, counterexample found: {model}")
-            return False
+            print("No counterexample found for guess", name)
+            if self.verification_solver.check() == sat:
+                print(f"No counterexample found for guess {name}. Guess should be correct.")
+                return True
+            else:
+                print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+                return False
 
     def generate_arithmetic_function_random(self, args, depth, complexity):
         if len(args) < 2:
@@ -500,15 +513,21 @@ class SynthesisProblem:
 
             for depth in range(1, max_depth + 1):
                 for complexity in range(1, max_complexity + 1):
-                    guesses = [(self.generate_arithmetic_function_enumerative(args, depth, complexity),f'guess_d{depth}_c{complexity}')]
+                    guesses = [(self.generate_arithmetic_function_enumerative(args, depth, complexity),
+                                f'guess_d{depth}_c{complexity}')]
                     for candidate, name in guesses:
                         candidate_function, candidate_expressions_str = candidate
                         print("Testing guess:", name)
                         print("Candidate expressions:", candidate_expressions_str)
-                        result = self.test_candidate(name, func, args, candidate_function)
-                        if result:
-                            print("Found a satisfying candidate!")
-                            return
-                    print("-" * 50)
+
+                        for candidate_expression in candidate_expressions_str:
+                            result = self.test_candidate(name, func, args, candidate_function, candidate_expression)
+                            if result:
+                                print("Found a satisfying candidate!")
+                                return
+                            else:
+                                print("Candidate failed verification.")
+
+                        print("-" * 50)
 
             print("No satisfying candidate found.")
