@@ -367,13 +367,21 @@ class SynthesisProblem:
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
 
-    def generate_correct_function(self):
+    def generate_correct_abs_max_function(self):
 
         def absolute_max_function(*values):
             x, y = values
             return If(If(x >= 0, x, -x) > If(y >= 0, y, -y), If(x >= 0, x, -x), If(y >= 0, y, -y))
 
         return absolute_max_function
+
+    def generate_max_function(self):
+
+        def max_function(*values):
+            x, y = values
+            return If(x <= y, y, x)
+
+        return max_function
 
     def generate_arithmetic_function(self, args, depth, complexity):
         if len(args) < 2:
@@ -409,7 +417,8 @@ class SynthesisProblem:
 
         num_functions = 10
         guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
-        guesses.append((self.generate_correct_function(), "CORRECT"))
+        guesses.append((self.generate_correct_abs_max_function(), "abs max"))
+        guesses.append((self.generate_max_function(), "max"))
         for candidate, name in guesses:
             candidate_expression = candidate(*args)
             print("Testing guess:", name, simplify(candidate_expression))
