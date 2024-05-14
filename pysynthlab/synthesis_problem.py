@@ -346,6 +346,11 @@ class SynthesisProblem:
 
     def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
 
+        for counterexample_input, expected_output in self.counterexamples:
+            if func(*counterexample_input) == expected_output:
+                print("HERE")
+            print("THERE")
+
         func_input_output_pairs = self.collect_function_io_pairs(func)
         for func_input, expected_output in func_input_output_pairs:
             try:
@@ -463,8 +468,7 @@ class SynthesisProblem:
                 candidate_expression = candidate(*args)
                 candidate_simplified = simplify(candidate_expression)
                 print("Testing guess:", name, simplify(candidate_expression))
-                result = self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args,
-                                             candidate_expression)
+                result = self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args,candidate_expression)
                 if result:
                     print(f"Found a satisfying candidate! {candidate_simplified}")
                     print("-" * 150)
