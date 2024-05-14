@@ -48,7 +48,7 @@ class SynthesisProblem:
         self.z3_predefined_functions = {}
         self.z3_constraints = []
         self.assertions = set()
-        self.counterexamples = set()
+        self.counterexamples = []
         self.negated_assertions = set()
         self.additional_constraints = []
         self.original_assertions = set(self.assertions)
@@ -332,8 +332,42 @@ class SynthesisProblem:
 
         return [reconstruct_expression(c) for c in constraints]
 
+    def collect_function_io_pairs(self, func):
+        io_pairs = []
+        for constraint in self.constraints:
+            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,
+                                                                            ast.FunctionApplicationTerm):
+                if constraint.constraint.function_identifier.symbol == func.name():
+                    example_inputs = {arg.identifier.symbol: self.parse_term(arg) for arg in
+                                      constraint.constraint.arguments[:-1]}
+                    example_output = self.parse_term(constraint.constraint.arguments[-1])
+                    io_pairs.append((example_inputs, example_output))
+        return io_pairs
 
     def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
+
+        func_input_output_pairs = self.collect_function_io_pairs(func)
+        for func_input, expected_output in func_input_output_pairs:
+            try:
+                candidate_outputs = candidate_expression(func_input)
+                if isinstance(candidate_outputs, list):
+                    if any(candidate_output != expected_output for candidate_output in candidate_outputs):
+                        print(f"Incorrect output for {name}: {func_input} == {expected_output}")
+                        print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        self.counterexamples.append((func_input, expected_output))
+                        return False
+                else:
+                    if candidate_outputs != expected_output:
+                        print(f"Incorrect output for {name}: {func_input} == {expected_output}")
+                        print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        self.counterexamples.append((func_input, expected_output))
+                        return False
+            except Exception as e:
+                print(f"Error occurred while executing {name}: {str(e)}")
+                return False
+
+        print(f"All tests passed for guess {name}, attempting verification.")
+
         self.enumerator_solver.reset()
         substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
         self.enumerator_solver.add(substituted_constraints)
@@ -345,12 +379,13 @@ class SynthesisProblem:
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
-
+            incorrect_output = None
             if callable(getattr(candidate_expression, '__call__', None)):
                 incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
             elif isinstance(candidate_expression, QuantifierRef) or isinstance(candidate_expression, ExprRef):
                 incorrect_output = model.eval(candidate_expression, model_completion=True)
 
+            self.counterexamples.append((counterexample, incorrect_output))
             print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
 
             var_vals = [model[v] for v in args]
@@ -358,14 +393,18 @@ class SynthesisProblem:
                 self.verification_solver.add(var == val)
             if self.verification_solver.check() == sat:
                 print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
+                return False
             else:
                 print(f"Verification failed for guess {name}, counterexample confirmed.")
+                return False
         else:
             print("No counterexample found for guess", name)
             if self.verification_solver.check() == sat:
                 print(f"No counterexample found for guess {name}. Guess should be correct.")
+                return True
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
+                return False
 
     def generate_correct_abs_max_function(self):
 
@@ -412,16 +451,22 @@ class SynthesisProblem:
         return generated_function
 
     def execute_cegis(self):
-        func = list(self.z3_synth_functions.values())[0]
-        args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
 
-        num_functions = 10
-        guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
-        guesses.append((self.generate_correct_abs_max_function(), "abs max"))
-        guesses.append((self.generate_max_function(), "max"))
-        for candidate, name in guesses:
-            candidate_expression = candidate(*args)
-            print("Testing guess:", name, simplify(candidate_expression))
-            self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args, candidate_expression)
+        for func in list(self.z3_synth_functions.values()):
+            args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+            num_functions = 10
+            guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
+            guesses.append((self.generate_correct_abs_max_function(), "abs max"))
+            guesses.append((self.generate_max_function(), "max"))
 
-        print("-" * 50)
+            for candidate, name in guesses:
+                candidate_expression = candidate(*args)
+                candidate_simplified = simplify(candidate_expression)
+                print("Testing guess:", name, simplify(candidate_expression))
+                result = self.test_candidate(self.z3_constraints, self.negated_assertions, name, func, args,
+                                             candidate_expression)
+                if result:
+                    print(f"Found a satisfying candidate! {candidate_simplified}")
+                    print("-" * 150)
+                    return
+                print("No satisfying candidate found.")
