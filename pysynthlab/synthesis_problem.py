@@ -335,73 +335,68 @@ class SynthesisProblem:
     def collect_function_io_pairs(self, func):
         io_pairs = []
         for constraint in self.constraints:
-            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,
-                                                                            ast.FunctionApplicationTerm):
+            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,ast.FunctionApplicationTerm):
                 if constraint.constraint.function_identifier.symbol == func.name():
-                    example_inputs = {arg.identifier.symbol: self.parse_term(arg) for arg in
-                                      constraint.constraint.arguments[:-1]}
+                    example_inputs = {arg.identifier.symbol: self.parse_term(arg) for arg in constraint.constraint.arguments[:-1]}
                     example_output = self.parse_term(constraint.constraint.arguments[-1])
                     io_pairs.append((example_inputs, example_output))
         return io_pairs
 
     def test_candidate(self, constraints, negated_constraints, name, func, args, candidate_expression):
-
-        for counterexample_input, expected_output in self.counterexamples:
-            if func(*counterexample_input) == expected_output:
-                print("HERE")
-            print("THERE")
-
         func_input_output_pairs = self.collect_function_io_pairs(func)
-        for func_input, expected_output in func_input_output_pairs:
-            try:
-                candidate_outputs = candidate_expression(func_input)
-                if isinstance(candidate_outputs, list):
-                    if any(candidate_output != expected_output for candidate_output in candidate_outputs):
-                        print(f"Incorrect output for {name}: {func_input} == {expected_output}")
-                        print(f"Verification failed for guess {name}, counterexample confirmed.")
-                        self.counterexamples.append((func_input, expected_output))
-                        return False
-                else:
-                    if candidate_outputs != expected_output:
-                        print(f"Incorrect output for {name}: {func_input} == {expected_output}")
-                        print(f"Verification failed for guess {name}, counterexample confirmed.")
-                        self.counterexamples.append((func_input, expected_output))
-                        return False
-            except Exception as e:
-                print(f"Error occurred while executing {name}: {str(e)}")
-                return False
 
-        print(f"All tests passed for guess {name}, attempting verification.")
+        if not func_input_output_pairs:
+            for counterexample_input, incorrect_output in self.counterexamples:
+                func_input_output_pairs.append((counterexample_input, incorrect_output))
 
-        self.enumerator_solver.reset()
+        self.counterexample_solver.reset()
         substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
-        self.enumerator_solver.add(substituted_constraints)
+        self.counterexample_solver.add(substituted_constraints)
 
         self.verification_solver.reset()
         substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
         self.verification_solver.add(substituted_constraints)
 
+        for func_input, incorrect_output in func_input_output_pairs:
+            if isinstance(candidate_expression, ArithRef):
+                substituted_expression = substitute(candidate_expression,
+                                                    [(var, value) for var, value in zip(args, func_input.values())])
+                candidate_outputs = self.verification_solver.check()
+                current_output = self.verification_solver.model().eval(substituted_expression, model_completion=True)
+            else:
+                candidate_outputs = candidate_expression(func_input)
+
+            if incorrect_output is None:
+                if self.counterexample_solver.check() == sat:
+                    model = self.counterexample_solver.model()
+                    incorrect_output = model.eval(candidate_expression, model_completion=True)
+                    print(f"Incorrect output for {name}: {func_input} == {incorrect_output}")
+                    print(f"Verification failed for guess {name}, counterexample confirmed.")
+                    self.counterexamples.append((func_input, incorrect_output))
+                    return False
+            else:
+                if isinstance(candidate_outputs, list):
+                    if any(candidate_output != incorrect_output for candidate_output in candidate_outputs):
+                        print(f"Incorrect output for {name}: {func_input} == {incorrect_output}")
+                        print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        self.counterexamples.append((func_input, incorrect_output))
+                        return False
+                else:
+                    if candidate_outputs != incorrect_output:
+                        print(f"Incorrect output for {name}: {func_input} == {incorrect_output}")
+                        print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        self.counterexamples.append((func_input, incorrect_output))
+                        return False
+
+        print(f"All tests passed for guess {name}, attempting verification.")
+
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
-            incorrect_output = None
-            if callable(getattr(candidate_expression, '__call__', None)):
-                incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
-            elif isinstance(candidate_expression, QuantifierRef) or isinstance(candidate_expression, ExprRef):
-                incorrect_output = model.eval(candidate_expression, model_completion=True)
-
+            incorrect_output = model.eval(candidate_expression, model_completion=True)
             self.counterexamples.append((counterexample, incorrect_output))
             print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
-
-            var_vals = [model[v] for v in args]
-            for var, val in zip(args, var_vals):
-                self.verification_solver.add(var == val)
-            if self.verification_solver.check() == sat:
-                print(f"Verification passed unexpectedly for guess {name}. Possible error in logic.")
-                return False
-            else:
-                print(f"Verification failed for guess {name}, counterexample confirmed.")
-                return False
+            return False
         else:
             print("No counterexample found for guess", name)
             if self.verification_solver.check() == sat:
