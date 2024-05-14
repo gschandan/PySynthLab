@@ -310,43 +310,6 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
-        print(f"Generating at depth={depth}, size_limit={size_limit}, current_size={current_size}")
-        # if depth == 1:
-        #     print("Yielding the correct maximum function for testing")
-        #     yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
-        #     return
-        print("Yielding the correct maximum function for testing")
-        yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
-        return
-
-    # if depth == 0 or current_size >= size_limit:
-    #     for i in range(self.MIN_CONST, self.MAX_CONST + 1):
-    #         print(f"Yielding constant function for value {i}")
-    #         yield lambda args, i=i: z3.IntVal(i)  # Explicitly wrap i with z3.IntVal to ensure correct type
-    #     for var_name, var in self.z3_variables.items():
-    #         print(f"Yielding identity function for variable {var_name}")
-    #         yield lambda args, var=var: var
-    #     return
-    #
-    # for var_name, var in self.z3_variables.items():
-    #     index = list(self.z3_variables.keys()).index(var_name)
-    #     print(f"Processing variable {var_name} at index {index}")
-    #     if current_size < size_limit:
-    #         yield lambda args, index=index: args[index]
-    #         yield lambda args, index=index: -args[index]
-    #
-    #     for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
-    #         yield lambda args, index=index, func=func: args[index] + func(args)
-    #         yield lambda args, index=index, func=func: args[index] - func(args)
-    #         yield lambda args, index=index, func=func: func(args) - args[index]
-    #
-    #     for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
-    #         if current_size + 3 <= size_limit:
-    #             yield lambda args, index=index, func=func: args[index] if args[index] > func(args) else func(args)
-    #             yield lambda args, index=index, func=func: args[index] if args[index] < func(args) else func(args)
-    #             yield lambda args, index=index, func=func: args[index] if args[index] != func(args) else func(args)
-
     def substitute_constraints(self, constraints, func, candidate_expression):
         def reconstruct_expression(expr):
             if is_app(expr) and expr.decl() == func:
@@ -404,6 +367,14 @@ class SynthesisProblem:
             else:
                 print(f"Verification failed unexpectedly for guess {name}. Possible error in logic.")
 
+    def generate_correct_function(self):
+
+        def absolute_max_function(*values):
+            x, y = values
+            return If(If(x >= 0, x, -x) > If(y >= 0, y, -y), If(x >= 0, x, -x), If(y >= 0, y, -y))
+
+        return absolute_max_function
+
     def generate_arithmetic_function(self, args, depth, complexity):
         if len(args) < 2:
             raise ValueError("At least two Z3 variables are required.")
@@ -438,6 +409,7 @@ class SynthesisProblem:
 
         num_functions = 10
         guesses = [(self.generate_arithmetic_function(args, i, i), f'guess_{i}') for i in range(num_functions)]
+        guesses.append((self.generate_correct_function(), "CORRECT"))
         for candidate, name in guesses:
             candidate_expression = candidate(*args)
             print("Testing guess:", name, simplify(candidate_expression))
