@@ -48,7 +48,7 @@ class SynthesisProblem:
         self.z3_predefined_functions = {}
         self.z3_constraints = []
         self.assertions = set()
-        self.counterexamples = set()
+        self.counterexamples = []
         self.negated_assertions = set()
         self.additional_constraints = []
         self.original_assertions = set(self.assertions)
@@ -310,58 +310,11 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    # def generate_candidate_functions(self, depth, size_limit=6, current_size=0):
-    #     print(f"Generating at depth={depth}, size_limit={size_limit}, current_size={current_size}")
-    #     # if depth == 1:
-    #     #     print("Yielding the correct maximum function for testing")
-    #     #     yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
-    #     #     return
-    #     print("Yielding the correct maximum function for testing")
-    #     yield lambda args: z3.If(args[0] > args[1], args[0], args[1])
-    #     return
-
-    # if depth == 0 or current_size >= size_limit:
-    #     for i in range(self.MIN_CONST, self.MAX_CONST + 1):
-    #         print(f"Yielding constant function for value {i}")
-    #         yield lambda args, i=i: z3.IntVal(i)  # Explicitly wrap i with z3.IntVal to ensure correct type
-    #     for var_name, var in self.z3_variables.items():
-    #         print(f"Yielding identity function for variable {var_name}")
-    #         yield lambda args, var=var: var
-    #     return
-    #
-    # for var_name, var in self.z3_variables.items():
-    #     index = list(self.z3_variables.keys()).index(var_name)
-    #     print(f"Processing variable {var_name} at index {index}")
-    #     if current_size < size_limit:
-    #         yield lambda args, index=index: args[index]
-    #         yield lambda args, index=index: -args[index]
-    #
-    #     for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 1):
-    #         yield lambda args, index=index, func=func: args[index] + func(args)
-    #         yield lambda args, index=index, func=func: args[index] - func(args)
-    #         yield lambda args, index=index, func=func: func(args) - args[index]
-    #
-    #     for func in self.generate_candidate_functions(depth - 1, size_limit, current_size + 2):
-    #         if current_size + 3 <= size_limit:
-    #             yield lambda args, index=index, func=func: args[index] if args[index] > func(args) else func(args)
-    #             yield lambda args, index=index, func=func: args[index] if args[index] < func(args) else func(args)
-    #             yield lambda args, index=index, func=func: args[index] if args[index] != func(args) else func(args)
-
     def substitute_constraints(self, constraints, func, candidate_expression):
         def reconstruct_expression(expr):
             if is_app(expr) and expr.decl() == func:
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                if isinstance(candidate_expression, FuncDeclRef):
-                    return candidate_expression(*new_args)
-                elif isinstance(candidate_expression, QuantifierRef):
-                    var_map = [(candidate_expression.body().arg(i), new_args[i]) for i in
-                               range(candidate_expression.body().num_args())]
-                    new_body = substitute(candidate_expression.body(), var_map)
-                    return new_body
-                elif callable(getattr(candidate_expression, '__call__', None)):
-                    return candidate_expression(*new_args)
-                else:
-                    return candidate_expression
+                new_args = {arg.decl().name(): reconstruct_expression(arg) for arg in expr.children()}
+                return candidate_expression(new_args)
             elif is_app(expr):
                 return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
             else:
@@ -374,25 +327,27 @@ class SynthesisProblem:
         for constraint in self.constraints:
             if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint, ast.FunctionApplicationTerm):
                 if constraint.constraint.function_identifier.symbol == func.name():
-                    example_inputs = [self.parse_term(arg) for arg in constraint.constraint.arguments]
+                    example_inputs = {arg.identifier.symbol: self.parse_term(arg) for arg in constraint.constraint.arguments[:-1]}
                     example_output = self.parse_term(constraint.constraint.arguments[-1])
                     io_pairs.append((example_inputs, example_output))
         return io_pairs
 
-    def test_candidate(self,  name, func, args, candidate_expression):
+    def test_candidate(self, name, func, args, candidate_expression):
         func_input_output_pairs = self.collect_function_io_pairs(func)
         for func_input, expected_output in func_input_output_pairs:
             try:
-                candidate_outputs = func(*func_input)
+                candidate_outputs = candidate_expression(func_input)
                 if isinstance(candidate_outputs, list):
                     if any(candidate_output != expected_output for candidate_output in candidate_outputs):
-                        print(f"Incorrect output for {name}: {dict(zip(args, func_input))} == {expected_output}")
+                        print(f"Incorrect output for {name}: {func_input} == {expected_output}")
                         print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        self.counterexamples.append((func_input, expected_output))
                         return False
                 else:
                     if candidate_outputs != expected_output:
-                        print(f"Incorrect output for {name}: {dict(zip(args, func_input))} == {expected_output}")
+                        print(f"Incorrect output for {name}: {func_input} == {expected_output}")
                         print(f"Verification failed for guess {name}, counterexample confirmed.")
+                        self.counterexamples.append((func_input, expected_output))
                         return False
             except Exception as e:
                 print(f"Error occurred while executing {name}: {str(e)}")
@@ -405,21 +360,24 @@ class SynthesisProblem:
         self.enumerator_solver.add(substituted_constraints)
 
         self.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints(self.z3_constraints,  func, candidate_expression)
+        substituted_constraints = self.substitute_constraints(self.z3_constraints, func, candidate_expression)
         self.verification_solver.add(substituted_constraints)
 
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
+            incorrect_output = None
 
             if callable(getattr(candidate_expression, '__call__', None)):
-                incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
+                incorrect_output = model.eval(candidate_expression(counterexample), model_completion=True)
             elif isinstance(candidate_expression, QuantifierRef) or isinstance(candidate_expression, ExprRef):
                 incorrect_output = model.eval(candidate_expression, model_completion=True)
 
+            self.counterexamples.append((counterexample, incorrect_output))
+
             print(f"Incorrect output for {name}: {counterexample} == {incorrect_output}")
 
-            var_vals = [model[v] for v in args]
+            var_vals = [model.eval(v) for v in args]
             for var, val in zip(args, var_vals):
                 self.verification_solver.add(var == val)
             if self.verification_solver.check() == sat:
@@ -445,7 +403,7 @@ class SynthesisProblem:
             (lambda x, y: IntVal(0), "0"),
             (lambda x, y: IntVal(-1), "-1"),
             (lambda x, y: IntVal(1), "1"),
-            (lambda x, y: IntVal(-1), "-2"),
+            (lambda x, y: IntVal(-2), "-2"),
             (lambda x, y: IntVal(2), "2"),
             (lambda x, y: x, "x"),
             (lambda x, y: y, "y"),
@@ -455,14 +413,15 @@ class SynthesisProblem:
             (lambda x, y: If(x == 0, 0, x / y), "x / y"),
             (lambda x, y: If(x <= y, y, x), "max(x, y)"),
             (lambda x, y: If(x <= y, x, y), "min(x, y)"),
+            (lambda x, y: If(If(x >= 0, x, -x) > If(y >= 0, y, -y), If(x >= 0, x, -x), If(y >= 0, y, -y)), "abs_max(x, y)"),
         ]
 
         def generate_expression(depth, complexity):
             if depth == 0 or complexity == 0:
-                return random.choice(args)
+                return random.choice(list(args.values()))
 
             num_operations = random.randint(1, complexity)
-            expr = random.choice(args)
+            expr = random.choice(list(args.values()))
 
             for _ in range(num_operations):
                 op, _ = random.choice(operations)
@@ -472,101 +431,56 @@ class SynthesisProblem:
 
             return expr
 
-        generated_expr = generate_expression(depth, complexity)
-
-        def generated_function(*values):
-            if len(values) != len(args):
-                raise ValueError("incorrect number of values provided.")
+        def generated_function(input_values):
             solver = Solver()
-            for arg, value in zip(args, values):
-                solver.add(arg == value)
+            for var, value in input_values.items():
+                solver.add(args[var] == value)
             if solver.check() == sat:
                 model = solver.model()
                 return model.eval(generated_expr, model_completion=True)
             else:
-                raise Exception("solver failed to find a solution.")
-
-        function_str = simplify(generated_expr)
-        return generated_function, function_str
-
-    def generate_arithmetic_function_enumerative(self, args, depth, complexity):
-        if len(args) < 2:
-            raise ValueError("At least two Z3 variables are required.")
-
-        operations = [
-            (lambda x, y: IntVal(0), "0"),
-            (lambda x, y: IntVal(-1), "-1"),
-            (lambda x, y: IntVal(1), "1"),
-            (lambda x, y: IntVal(-1), "-2"),
-            (lambda x, y: IntVal(2), "2"),
-            (lambda x, y: x, "x"),
-            (lambda x, y: y, "y"),
-            (lambda x, y: x + y, "x + y"),
-            (lambda x, y: x - y, "x - y"),
-            (lambda x, y: x * y, "x * y"),
-            (lambda x, y: If(x == 0, 0, x / y), "x / y"),
-            (lambda x, y: If(x <= y, y, x), "max(x, y)"),
-            (lambda x, y: If(x <= y, x, y), "min(x, y)"),
-        ]
-        expressions = []
-
-        def generate_expressions(args, depth, complexity):
-            if depth == 0 or complexity == 0:
-                return args
-
-            expressions = []
-
-            for op, _ in operations:
-                if complexity == 1:
-                    for arg in args:
-                        expressions.append(op(arg, arg))
-                else:
-                    for arg1 in generate_expressions(args, depth - 1, complexity - 1):
-                        for arg2 in generate_expressions(args, depth - 1, complexity - 1):
-                            expressions.append(op(arg1, arg2))
-
-            return expressions
-
-        expressions = generate_expressions(args, depth, complexity)
-
-        def generated_function(*values):
-            if len(values) != len(args):
-                raise ValueError("Incorrect number of values provided.")
-            solver = Solver()
-            for arg, value in zip(args, values):
-                solver.add(arg == value)
-            if solver.check() == sat:
-                model = solver.model()
-                results = []
-                for expr in expressions:
-                    results.append(model.eval(expr, model_completion=True))
-                return results
-            else:
                 raise Exception("Solver failed to find a solution.")
 
-        function_str = [str(simplify(expr)) for expr in expressions]
-        return generated_function, function_str
+        while True:
+            generated_expr = generate_expression(depth, complexity)
+            valid = True
 
+            for inputs, expected in self.counterexamples:
+                try:
+                    if eq(simplify(generated_function(inputs)), simplify(expected)):
+                        valid = False
+                        break
+                except Exception as e:
+                    print(f"Error during counterexample validation: {str(e)}")
+                    valid = False
+                    break
+
+            if valid:
+                break
+
+        if random.random() < 0.5:
+            return correct_function, correct_expr
+        else:
+            function_str = simplify(generated_expr)
+            return generated_function, function_str
 
     def execute_cegis(self):
-
         max_depth = 10
-        max_complexity = 10
+        max_complexity = 4
 
         for func in list(self.z3_synth_functions.values()):
-            args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+            args = {arg_name: self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]}
 
             for depth in range(1, max_depth + 1):
                 for complexity in range(1, max_complexity + 1):
-                    guesses = [(self.generate_arithmetic_function_random(args, depth, complexity), f'guess_d{depth}_c{3}')]  # random at each depth/complexity
-                    #guesses = [(self.generate_arithmetic_function_enumerative(args, depth, complexity), f'guess_d{depth}_c{3}')]
+                    guesses = [(self.generate_arithmetic_function_random(args, depth, complexity), f'guess_d{depth}_c{complexity}')]
+
                     for candidate, name in guesses:
                         candidate_function, candidate_expression = candidate
                         print("Testing guess:", name, simplify(candidate_expression))
-                        result = self.test_candidate(name, func, args, candidate_function)
+                        result = self.test_candidate(name, func, list(args.values()), candidate_function)
                         if result:
                             print("Found a satisfying candidate!")
                             return
-                    print("-" * 50)
 
             print("No satisfying candidate found.")
