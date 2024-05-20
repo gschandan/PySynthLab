@@ -474,4 +474,4 @@ class SynthesisProblem:
                     print(f"Found a satisfying candidate! {func_str}")
                     print("-" * 150)
                     return
-                print("No satisfying candidate found.")
+            print("No satisfying candidate found.")

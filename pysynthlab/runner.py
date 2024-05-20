@@ -3,7 +3,7 @@ import itertools
 from z3 import *
 import pyparsing
 
-from pysynthlab.synthesis_problem import SynthesisProblem
+from pysynthlab.synthesis_problem_z3 import SynthesisProblem
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
 
