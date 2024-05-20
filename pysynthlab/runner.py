@@ -6,10 +6,7 @@ def main(args):
     file = args.input_file.read()
 
     problem = SynthesisProblem(file, int(args.sygus_standard))
-    parsed_sygus_problem = problem.convert_sygus_to_smt()
     problem.info()
-    print(parsed_sygus_problem)
-
     problem.execute_cegis()
 
 
