@@ -83,24 +83,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "Python.runner_sygus_small_windows.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "refactor",
-    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation/pysynthlab/solvers",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
-    "vue.rearranger.settings.migration": "true",
-    "zielu.gittoolbox.prj.config.selected.tab.id": "zielu.gittoolbox.config.shared.autoFetch"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;Python.runner_sygus_small_windows.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;refactor&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/data/Documents/Data Science/Courses/Dissertation/pysynthlab/solvers&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;zielu.gittoolbox.prj.config.selected.tab.id&quot;: &quot;zielu.gittoolbox.config.shared.autoFetch&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pysynthlab/solvers" />
@@ -381,17 +381,17 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.comp_2018_CLIA_Track_diff.sl" />
       <item itemvalue="Python.runner_abs" />
       <item itemvalue="Python.runner_large" />
-      <item itemvalue="Python.runner_sygus_small" />
-      <item itemvalue="Python.runner_sygus_small_windows" />
-      <item itemvalue="Python.comp_2018_CLIA_Track_diff.sl" />
-      <item itemvalue="Python.runner_sygus_small_linear" />
-      <item itemvalue="Python.runner_sygus_two" />
       <item itemvalue="Python.runner_max2ints" />
-      <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
+      <item itemvalue="Python.runner_sygus_small" />
+      <item itemvalue="Python.runner_sygus_small_linear" />
+      <item itemvalue="Python.runner_sygus_small_windows" />
+      <item itemvalue="Python.runner_sygus_two" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" />
+      <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
     </list>
     <recent_temporary>
       <list>
