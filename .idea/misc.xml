@@ -3,7 +3,6 @@
   <component name="Black">
     <option name="executionMode" value="BINARY" />
     <option name="pathToExecutable" value="/usr/bin/black" />
-    <option name="sdkUUID" value="5b27db3f-064a-4012-9bb1-dbe63a982377" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (Dissertation)" project-jdk-type="Python SDK" />
 </project>

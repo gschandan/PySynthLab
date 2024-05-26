@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/small.sl" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/small.sl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,23 +87,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/Documents/Data Science/Courses/Dissertation/pysynthlab/solvers&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;zielu.gittoolbox.prj.config.selected.tab.id&quot;: &quot;zielu.gittoolbox.config.shared.autoFetch&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Python.runner_sygus_small_windows.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "refactor",
+    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation/pysynthlab/solvers",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
+    "vue.rearranger.settings.migration": "true",
+    "zielu.gittoolbox.prj.config.selected.tab.id": "zielu.gittoolbox.config.shared.autoFetch"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pysynthlab/solvers" />
@@ -117,7 +118,7 @@
       <recent name="$PROJECT_DIR$/.." />
     </key>
   </component>
-  <component name="RunManager" selected="Python.runner_sygus_small">
+  <component name="RunManager" selected="Python.runner_sygus_small_windows">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -152,6 +153,7 @@
     </configuration>
     <configuration name="comp_2018_CLIA_Track_diff.sl" type="PythonConfigurationType" factoryName="Python">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -174,6 +176,7 @@
     </configuration>
     <configuration name="runner_abs" type="PythonConfigurationType" factoryName="Python">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -196,6 +199,7 @@
     </configuration>
     <configuration name="runner_large" type="PythonConfigurationType" factoryName="Python">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -218,6 +222,7 @@
     </configuration>
     <configuration name="runner_max2ints" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -240,6 +245,7 @@
     </configuration>
     <configuration name="runner_sygus_small" type="PythonConfigurationType" factoryName="Python">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -262,6 +268,7 @@
     </configuration>
     <configuration name="runner_sygus_small_linear" type="PythonConfigurationType" factoryName="Python">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -282,8 +289,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="runner_sygus_small_windows" type="PythonConfigurationType" factoryName="Python">
+      <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (PySynthLab)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pysynthlab/helpers/parser/bin" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
+      <option name="PARAMETERS" value="-s 1 $PROJECT_DIR$/pysynthlab/benchmarks/lia/small.sl" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="runner_sygus_two" type="PythonConfigurationType" factoryName="Python">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -306,6 +338,7 @@
     </configuration>
     <configuration name="Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -321,6 +354,7 @@
     </configuration>
     <configuration name="Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -336,6 +370,7 @@
     </configuration>
     <configuration name="Python tests for test_syugus_parser.test_opening" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -353,6 +388,7 @@
       <item itemvalue="Python.runner_abs" />
       <item itemvalue="Python.runner_large" />
       <item itemvalue="Python.runner_sygus_small" />
+      <item itemvalue="Python.runner_sygus_small_windows" />
       <item itemvalue="Python.comp_2018_CLIA_Track_diff.sl" />
       <item itemvalue="Python.runner_sygus_small_linear" />
       <item itemvalue="Python.runner_sygus_two" />
@@ -437,7 +473,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/refactor" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
