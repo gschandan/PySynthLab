@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="adding windows config">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parsetab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/runner.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -305,7 +308,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pysynthlab/runner.py" />
-      <option name="PARAMETERS" value="-s 1 $PROJECT_DIR$/pysynthlab/benchmarks/lia/small.sl" />
+      <option name="PARAMETERS" value="-v 0 -s 1 $PROJECT_DIR$/pysynthlab/benchmarks/lia/small.sl" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />

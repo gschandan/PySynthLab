@@ -1,10 +1,10 @@
-import typing
-from typing import List, Dict, Tuple, Union, Set,  Callable, Collection
-from z3 import *
-import pyparsing
 import random
+import typing
+from typing import List, Dict, Tuple, Union, Set, Callable, Collection, Any
 
-from z3 import ExprRef, FuncDeclRef, IntNumRef, BoolRef, Probe, ArithRef, PatternRef, QuantifierRef, RatNumRef, \
+import pyparsing
+from z3 import *
+from z3 import ExprRef, FuncDeclRef, QuantifierRef, IntNumRef, BoolRef, Probe, ArithRef, PatternRef, RatNumRef, \
     AlgebraicNumRef, BitVecNumRef, BitVecRef, ArrayRef, DatatypeRef, FPNumRef, FPRef, FiniteDomainNumRef, \
     FiniteDomainRef, FPRMRef, SeqRef, CharRef, ReRef
 
@@ -17,6 +17,7 @@ from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
+
 class SynthesisProblem:
     """
     A class representing a synthesis problem in the SyGuS format.
@@ -25,16 +26,19 @@ class SynthesisProblem:
     MAX_CONST = 2
     pyparsing.ParserElement.enablePackrat()
 
-    def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
+    def __init__(self, problem: str, sygus_standard: int = 1, options: object = None, verbose: int = 1):
         """
         Initialize a SynthesisProblem instance.
 
         :param problem: The input problem in the SyGuS format.
         :param sygus_standard: The SyGuS standard version (default: 1).
         :param options: Additional options (default: None).
+        :param verbose: Verbosity level: 0 = suppress nothing, 1 = suppress warnings, 2 = suppress all output except success/failure (default: 1).
         """
         if options is None:
             options = {}
+
+        self.verbose = verbose
 
         self.input_problem: str = problem
         self.options = options
@@ -42,7 +46,8 @@ class SynthesisProblem:
         self.parser = SygusV2Parser() if sygus_standard == 2 else SygusV1Parser()
         self.problem: Program = self.parser.parse(problem)
         self.symbol_table = SymbolTableBuilder.run(self.problem)
-        self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(self.symbol_table, options)
+        self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(
+            self.symbol_table, options)
 
         self.enumerator_solver = z3.Solver()
         self.enumerator_solver.set('smt.macro_finder', True)
@@ -72,6 +77,16 @@ class SynthesisProblem:
 
         self.synth_functions: List[Dict[str, Union[str, List[z3.ExprRef], z3.SortRef]]] = []
 
+    def print_msg(self, msg: str, level: int = 0) -> None:
+        """
+        Print a message based on the specified verbosity level.
+
+        :param msg: The message to print.
+        :param level: The verbosity level required to print the message (default: 0).
+        """
+        if self.verbose <= level:
+            print(msg)
+
     def __str__(self) -> str:
         """
         Return the string representation of the synthesis problem.
@@ -82,7 +97,7 @@ class SynthesisProblem:
         """
         Print the string representation of the synthesis problem.
         """
-        print(self)
+        self.print_msg(str(self), level=1)
 
     def convert_sygus_to_smt(self) -> str:
         """
@@ -283,11 +298,11 @@ class SynthesisProblem:
             combined_constraint = z3.And(*all_constraints)
             self.z3_constraints.append(combined_constraint)
         else:
-            print("Warning: No constraints found or generated.")
+            self.print_msg("Warning: No constraints found or generated.", level=1)
 
         self.negated_assertions = self.negate_assertions(self.z3_constraints)
 
-    def parse_term(self, term: ast.Term) -> z3.ExprRef:
+    def parse_term(self, term: ast.Term) -> ExprRef | FuncDeclRef | bool | int:
         """
         Parse a term from the AST and convert it to a Z3 expression.
 
@@ -363,7 +378,7 @@ class SynthesisProblem:
             raise ValueError(f"Unsupported term type: {type(term)}")
 
     @staticmethod
-    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor) -> z3.SortRef:
+    def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor) -> z3.SortRef | None:
         """
         Convert a sort descriptor to a Z3 sort.
 
@@ -376,7 +391,9 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef, candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[z3.ExprRef]:
+    def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef,
+                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[
+        z3.ExprRef]:
         """
         Substitute a candidate expression into a list of constraints.
 
@@ -385,6 +402,7 @@ class SynthesisProblem:
         :param candidate_expression: The candidate expression to substitute.
         :return: The substituted constraints.
         """
+
         def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
             if is_app(expr) and expr.decl() == func:
                 new_args = [reconstruct_expression(arg) for arg in expr.children()]
@@ -424,7 +442,9 @@ class SynthesisProblem:
                     io_pairs.append((example_inputs, example_output))
         return io_pairs
 
-    def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str, func: z3.FuncDeclRef, args: List[z3.ExprRef], candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> bool:
+    def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str,
+                       func: z3.FuncDeclRef, args: List[z3.ExprRef],
+                       candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> bool:
         """
         Test a candidate expression against the constraints and negated constraints.
 
@@ -454,24 +474,26 @@ class SynthesisProblem:
                 incorrect_output = model.eval(candidate_expression, model_completion=True)
 
             self.counterexamples.append((counterexample, incorrect_output))
-            print(f"Incorrect output for {func_str}: {counterexample} == {incorrect_output}")
+            self.print_msg(f"Incorrect output for {func_str}: {counterexample} == {incorrect_output}", level=0)
 
             var_vals = [model[v] for v in args]
             for var, val in zip(args, var_vals):
                 self.verification_solver.add(var == val)
             if self.verification_solver.check() == sat:
-                print(f"Verification passed unexpectedly for guess {func_str}. Possible error in logic.")
+                self.print_msg(f"Verification passed unexpectedly for guess {func_str}. Possible error in logic.",
+                               level=0)
                 return False
             else:
-                print(f"Verification failed for guess {func_str}, counterexample confirmed.")
+                self.print_msg(f"Verification failed for guess {func_str}, counterexample confirmed.", level=0)
                 return False
         else:
-            print("No counterexample found for guess", func_str)
+            self.print_msg(f"No counterexample found for guess {func_str}", level=0)
             if self.verification_solver.check() == sat:
-                print(f"No counterexample found for guess {func_str}. Guess should be correct.")
+                self.print_msg(f"No counterexample found for guess {func_str}. Guess should be correct.", level=0)
                 return True
             else:
-                print(f"Verification failed unexpectedly for guess {func_str}. Possible error in logic.")
+                self.print_msg(f"Verification failed unexpectedly for guess {func_str}. Possible error in logic.",
+                               level=0)
                 return False
 
     def generate_correct_abs_max_function(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
@@ -481,6 +503,7 @@ class SynthesisProblem:
         :param args: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
+
         def absolute_max_function(*values):
             if len(values) != 2:
                 raise ValueError("absolute_max_function expects exactly 2 arguments.")
@@ -499,6 +522,7 @@ class SynthesisProblem:
         :param args: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
+
         def max_function(*values):
             if len(values) != 2:
                 raise ValueError("max_function expects exactly 2 arguments.")
@@ -510,7 +534,8 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return max_function, func_str
 
-    def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int, operations: List[str] = None) -> Tuple[Callable, str]:
+    def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int,
+                                     operations: List[str] = None) -> Tuple[Callable, str]:
         """
         Generate an arithmetic function based on the given arguments, depth, complexity, and operations.
 
@@ -581,11 +606,12 @@ class SynthesisProblem:
 
             for candidate, func_str in guesses:
                 candidate_expression = candidate(*args)
-                print("Testing guess:", func_str)
-                result = self.test_candidate(self.z3_constraints, self.negated_assertions, func_str, func, args, candidate_expression)
-                print("\n")
+                self.print_msg(f"Testing guess: {func_str}", level=1)
+                result = self.test_candidate(self.z3_constraints, self.negated_assertions, func_str, func, args,
+                                             candidate_expression)
+                self.print_msg("\n", level=1)
                 if result:
-                    print(f"Found a satisfying candidate! {func_str}")
-                    print("-" * 150)
+                    self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                    self.print_msg("-" * 150, level=0)
                     return
-            print("No satisfying candidate found.")
+            self.print_msg("No satisfying candidate found.", level=0)

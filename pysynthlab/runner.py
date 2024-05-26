@@ -1,12 +1,19 @@
+import argparse
 from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblem
-from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 
 
-def main(args):
+def main(args: argparse.Namespace) -> None:
+    """
+    Main function to run the synthesis problem.
+
+    :param args: Command-line arguments.
+    """
     file = args.input_file.read()
 
-    problem = SynthesisProblem(file, int(args.sygus_standard))
-    problem.info()
+    problem = SynthesisProblem(file, int(args.sygus_standard), verbose=args.verbose)
+    if args.verbose < 2:
+        problem.info()
     problem.execute_cegis()
 
 
@@ -14,8 +21,11 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        '-q', '--quiet', action='store_true',
-        help='Suppress all messages and debugging output')
+        '-v', '--verbose', type=int, default=1, choices=[0, 1, 2],
+        help='Verbosity level:\n'
+             '\t 0 = no suppression; all output printed to console\n'
+             '\t 1 = suppress warnings\n'
+             '\t 2 = suppress all output except success/failure')
 
     parser.add_argument(
         '-s', '--sygus-standard', default='2', choices=['1', '2'],
