@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="adding windows config">
-      <change afterPath="$PROJECT_DIR$/tests/given_a_LIA_problem.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/enumerator.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/verifier.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -324,7 +321,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for given_a_LIA_problem.WhenTheProblemISTheMaxOfTwoIntegers" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for given_a_LIA_problem.WhenTheProblemISTheMaxOfTwoIntegers" type="tests" factoryName="Autodetect" nameIsGenerated="true">
       <module name="Dissertation" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -422,8 +419,8 @@
       <item itemvalue="Python.comp_2018_CLIA_Track_diff.sl" />
       <item itemvalue="Python.runner_sygus_small_linear" />
       <item itemvalue="Python.runner_sygus_two" />
-      <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem" />
       <item itemvalue="Python tests.Python tests for given_a_LIA_problem.WhenTheProblemISTheMaxOfTwoIntegers" />
+      <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem" />
       <item itemvalue="Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
       <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem.test_get_logic" />
       <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem.test_get_synth_funcs" />
@@ -432,7 +429,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
-        <item itemvalue="Python tests.Python tests for given_a_LIA_problem.WhenTheProblemISTheMaxOfTwoIntegers" />
         <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem.test_initialise_z3_variables" />
         <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem.test_get_synth_funcs" />
         <item itemvalue="Python tests.Python tests for tests.given_a_LIA_problem.TestSynthesisProblem.test_get_logic" />

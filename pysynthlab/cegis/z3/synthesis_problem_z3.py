@@ -411,19 +411,15 @@ class SynthesisProblem:
         def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
             if is_app(expr) and expr.decl() == func:
                 new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                if isinstance(candidate_expression, FuncDeclRef):
+                if callable(candidate_expression):
                     return candidate_expression(*new_args)
-                elif isinstance(candidate_expression, QuantifierRef):
-                    var_map = [(candidate_expression.body().arg(i), new_args[i]) for i in
-                               range(candidate_expression.body().num_args())]
-                    new_body = substitute(candidate_expression.body(), var_map)
-                    return new_body
-                elif callable(getattr(candidate_expression, '__call__', None)):
+                elif isinstance(candidate_expression, (FuncDeclRef, QuantifierRef)):
                     return candidate_expression(*new_args)
                 else:
                     return candidate_expression
             elif is_app(expr):
-                return expr.decl()(*[reconstruct_expression(arg) for arg in expr.children()])
+                new_args = [reconstruct_expression(arg) for arg in expr.children()]
+                return expr.decl()(*new_args)
             else:
                 return expr
 
