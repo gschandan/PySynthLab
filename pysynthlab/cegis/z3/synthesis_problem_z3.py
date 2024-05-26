@@ -1,12 +1,10 @@
 import random
 import typing
-from typing import List, Dict, Tuple, Union, Set, Callable, Collection, Any
+from typing import List, Dict, Tuple, Union, Set, Callable, Collection
 
 import pyparsing
 from z3 import *
-from z3 import ExprRef, FuncDeclRef, QuantifierRef, IntNumRef, BoolRef, Probe, ArithRef, PatternRef, RatNumRef, \
-    AlgebraicNumRef, BitVecNumRef, BitVecRef, ArrayRef, DatatypeRef, FPNumRef, FPRef, FiniteDomainNumRef, \
-    FiniteDomainRef, FPRMRef, SeqRef, CharRef, ReRef
+from z3 import ExprRef, FuncDeclRef, QuantifierRef
 
 from pysynthlab.helpers.parser.src import ast
 from pysynthlab.helpers.parser.src.ast import Program, CommandKind
