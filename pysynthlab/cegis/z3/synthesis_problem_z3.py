@@ -1,24 +1,38 @@
-import itertools
-from typing import List
+import typing
+from typing import List, Dict, Tuple, Union, Set,  Callable, Collection
 from z3 import *
 import pyparsing
 import random
+
+from z3 import ExprRef, FuncDeclRef, IntNumRef, BoolRef, Probe, ArithRef, PatternRef, QuantifierRef, RatNumRef, \
+    AlgebraicNumRef, BitVecNumRef, BitVecRef, ArrayRef, DatatypeRef, FPNumRef, FPRef, FiniteDomainNumRef, \
+    FiniteDomainRef, FPRMRef, SeqRef, CharRef, ReRef
+
 from pysynthlab.helpers.parser.src import ast
 from pysynthlab.helpers.parser.src.ast import Program, CommandKind
-from pysynthlab.helpers.parser.src.resolution import FunctionKind, SortDescriptor
+from pysynthlab.helpers.parser.src.resolution import FunctionKind, SortDescriptor, FunctionDescriptor
 from pysynthlab.helpers.parser.src.symbol_table_builder import SymbolTableBuilder
 from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
 from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
 from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
-
 class SynthesisProblem:
+    """
+    A class representing a synthesis problem in the SyGuS format.
+    """
     MIN_CONST = -2
     MAX_CONST = 2
     pyparsing.ParserElement.enablePackrat()
 
     def __init__(self, problem: str, sygus_standard: int = 1, options: object = None):
+        """
+        Initialize a SynthesisProblem instance.
+
+        :param problem: The input problem in the SyGuS format.
+        :param sygus_standard: The SyGuS standard version (default: 1).
+        :param options: Additional options (default: None).
+        """
         if options is None:
             options = {}
 
@@ -28,8 +42,7 @@ class SynthesisProblem:
         self.parser = SygusV2Parser() if sygus_standard == 2 else SygusV1Parser()
         self.problem: Program = self.parser.parse(problem)
         self.symbol_table = SymbolTableBuilder.run(self.problem)
-        self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(
-            self.symbol_table, options)
+        self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(self.symbol_table, options)
 
         self.enumerator_solver = z3.Solver()
         self.enumerator_solver.set('smt.macro_finder', True)
@@ -37,35 +50,46 @@ class SynthesisProblem:
         self.verification_solver = z3.Solver()
         self.verification_solver.set('smt.macro_finder', True)
 
-        self.original_assertions = []
+        self.original_assertions: List[z3.ExprRef] = []
 
-        self.smt_problem = self.convert_sygus_to_smt()
+        self.smt_problem: str = self.convert_sygus_to_smt()
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
-        self.z3_variables = {}
-        self.z3_synth_functions = {}
-        self.z3_synth_function_args = {}
-        self.z3_predefined_functions = {}
-        self.z3_constraints = []
-        self.assertions = set()
-        self.counterexamples = []
-        self.negated_assertions = set()
-        self.additional_constraints = []
-        self.original_assertions = set(self.assertions)
+        self.z3_variables: Dict[str, z3.ExprRef] = {}
+        self.z3_synth_functions: Dict[str, z3.FuncDeclRef] = {}
+        self.z3_synth_function_args: Dict[str, Dict[str, z3.ExprRef]] = {}
+        self.z3_predefined_functions: Dict[str, z3.FuncDeclRef] = {}
+        self.z3_constraints: List[z3.ExprRef] = []
+        self.assertions: Set[z3.ExprRef] = set()
+        self.counterexamples: List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]] = []
+        self.negated_assertions: Set[z3.ExprRef] = set()
+        self.additional_constraints: List[z3.ExprRef] = []
+        self.original_assertions: Set[z3.ExprRef] = set(self.assertions)
 
         self.initialise_z3_variables()
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
         self.parse_constraints()
 
-        self.synth_functions = []
+        self.synth_functions: List[Dict[str, Union[str, List[z3.ExprRef], z3.SortRef]]] = []
 
     def __str__(self) -> str:
+        """
+        Return the string representation of the synthesis problem.
+        """
         return self.printer.run(self.problem, self.symbol_table)
 
     def info(self) -> None:
+        """
+        Print the string representation of the synthesis problem.
+        """
         print(self)
 
-    def convert_sygus_to_smt(self):
+    def convert_sygus_to_smt(self) -> str:
+        """
+        Convert the synthesis problem from SyGuS format to SMT-LIB format.
+
+        :return: The synthesis problem in SMT-LIB format.
+        """
         i_expr = pyparsing.QuotedString(quoteChar='"') | pyparsing.QuotedString(quoteChar='|', unquoteResults=False)
         s_expr = pyparsing.nestedExpr(opener='(', closer=')', ignoreExpr=i_expr)
         s_expr.ignore(';' + pyparsing.restOfLine)
@@ -95,27 +119,61 @@ class SynthesisProblem:
 
         return '\n'.join(serialise(statement) for statement in ast)
 
-    def get_logic(self):
+    def get_logic(self) -> str:
+        """
+        Get the logic of the synthesis problem.
+
+        :return: The logic name.
+        """
         return self.symbol_table.logic_name
 
-    def get_synth_funcs(self):
+    def get_synth_funcs(self) -> Dict[str, FunctionDescriptor]:
+        """
+        Get the synthesis functions of the problem.
+
+        :return: A dictionary mapping function names to their declaration commands.
+        """
         return self.symbol_table.synth_functions
 
-    def get_predefined_funcs(self):
+    def get_predefined_funcs(self) -> Dict[str, FunctionDescriptor]:
+        """
+        Get the predefined functions of the problem.
+
+        :return: A dictionary mapping function names to their declaration commands.
+        """
         return self.symbol_table.user_defined_functions
 
-    def get_synth_func(self, symbol):
+    def get_synth_func(self, symbol: str) -> FunctionDescriptor:
+        """
+        Get a specific synthesis function by its symbol.
+
+        :param symbol: The symbol of the synthesis function.
+        :return: The function declaration command.
+        """
         return next(filter(lambda x:
                            x.function_kind == FunctionKind.SYNTH_FUN and x.identifier.symbol == symbol,
                            list(self.symbol_table.synth_functions.values())))
 
-    def get_var_symbols(self):
+    def get_var_symbols(self) -> List[str]:
+        """
+        Get the variable symbols of the problem.
+
+        :return: A list of variable symbols.
+        """
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]
 
-    def get_function_symbols(self):
+    def get_function_symbols(self) -> List[str]:
+        """
+        Get the function symbols of the problem.
+
+        :return: A list of function symbols.
+        """
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]
 
-    def initialize_synth_functions(self):
+    def initialize_synth_functions(self) -> None:
+        """
+        Initialize the synthesis functions.
+        """
         for func_name, func in self.get_synth_funcs().items():
             func_args = [z3.Int(arg_name) for arg_name in func.argument_names]
             func_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor)
@@ -129,7 +187,13 @@ class SynthesisProblem:
                 "return_sort": func_return_sort,
             })
 
-    def extract_synth_function(self, function_symbol) -> str:
+    def extract_synth_function(self, function_symbol: str) -> str:
+        """
+        Extract the synthesis function declaration from the problem.
+
+        :param function_symbol: The symbol of the synthesis function.
+        :return: The synthesis function declaration in SMT-LIB format.
+        """
         synthesis_function = self.get_synth_func(function_symbol)
         func_problem = next(filter(lambda x:
                                    x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
@@ -139,13 +203,19 @@ class SynthesisProblem:
 
         return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
 
-    def initialise_z3_variables(self):
+    def initialise_z3_variables(self) -> None:
+        """
+        Initialize the Z3 variables.
+        """
         for variable in self.problem.commands:
             if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
                 z3_var = z3.Int(variable.symbol, self.enumerator_solver.ctx)
                 self.z3_variables[variable.symbol] = z3_var
 
-    def initialise_z3_synth_functions(self):
+    def initialise_z3_synth_functions(self) -> None:
+        """
+        Initialize the Z3 synthesis functions.
+        """
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
@@ -155,42 +225,24 @@ class SynthesisProblem:
             self.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
                                                                           z3_range_sort)
 
-    def initialise_z3_predefined_functions(self):
+    def initialise_z3_predefined_functions(self) -> None:
+        """
+        Initialize the Z3 predefined functions.
+        """
         for func in self.get_predefined_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
             self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
                                                                                z3_range_sort)
 
-    def generate_linear_integer_expressions(self, depth=0, size_limit=6, current_size=0):
-        if depth == 0 or current_size >= size_limit:
-            yield from [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)] + list(
-                self.z3_variables.values())
-            return
-
-        for var in self.z3_variables.values():
-            if current_size < size_limit:
-                yield var
-                yield var * z3.IntVal(-1)
-
-            for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 1):
-                yield var + expr
-                yield var - expr
-                yield expr - var
-
-            for expr in self.generate_linear_integer_expressions(depth - 1, size_limit, current_size + 2):
-                if current_size + 3 <= size_limit:
-                    yield z3.If(var > expr, var, expr)
-                    yield z3.If(var < expr, var, expr)
-                    yield z3.If(var != expr, var, expr)
-
-    def generate_candidate_expression(self, depth: int = 0) -> z3.ExprRef:
-        expressions = self.generate_linear_integer_expressions(depth)
-        for expr in itertools.islice(expressions, 200):  # limit breadth
-            return expr
-
     @staticmethod
     def negate_assertions(assertions: List[z3.ExprRef]) -> List[z3.ExprRef]:
+        """
+        Negate a list of assertions.
+
+        :param assertions: The list of assertions to negate.
+        :return: The negated assertions.
+        """
         negated_assertions = []
         for assertion in assertions:
             args = assertion.num_args()
@@ -216,6 +268,9 @@ class SynthesisProblem:
         return negated_assertions
 
     def parse_constraints(self) -> None:
+        """
+        Parse the constraints of the synthesis problem.
+        """
         all_constraints = []
 
         for constraint in self.constraints:
@@ -233,6 +288,12 @@ class SynthesisProblem:
         self.negated_assertions = self.negate_assertions(self.z3_constraints)
 
     def parse_term(self, term: ast.Term) -> z3.ExprRef:
+        """
+        Parse a term from the AST and convert it to a Z3 expression.
+
+        :param term: The term to parse.
+        :return: The Z3 expression representing the term.
+        """
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
             if symbol in self.z3_variables:
@@ -303,14 +364,28 @@ class SynthesisProblem:
 
     @staticmethod
     def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor) -> z3.SortRef:
+        """
+        Convert a sort descriptor to a Z3 sort.
+
+        :param sort_descriptor: The sort descriptor to convert.
+        :return: The corresponding Z3 sort.
+        """
         sort_symbol = sort_descriptor.identifier.symbol
         return {
             'Int': z3.IntSort(),
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    def substitute_constraints(self, constraints, func, candidate_expression):
-        def reconstruct_expression(expr):
+    def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef, candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[z3.ExprRef]:
+        """
+        Substitute a candidate expression into a list of constraints.
+
+        :param constraints: The list of constraints.
+        :param func: The function to substitute.
+        :param candidate_expression: The candidate expression to substitute.
+        :return: The substituted constraints.
+        """
+        def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
             if is_app(expr) and expr.decl() == func:
                 new_args = [reconstruct_expression(arg) for arg in expr.children()]
                 if isinstance(candidate_expression, FuncDeclRef):
@@ -331,7 +406,13 @@ class SynthesisProblem:
 
         return [reconstruct_expression(c) for c in constraints]
 
-    def collect_function_io_pairs(self, func):
+    def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:
+        """
+        Collect input-output pairs for a function from the constraints.
+
+        :param func: The function to collect input-output pairs for.
+        :return: A list of input-output pairs.
+        """
         io_pairs = []
         for constraint in self.constraints:
             if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,
@@ -343,8 +424,18 @@ class SynthesisProblem:
                     io_pairs.append((example_inputs, example_output))
         return io_pairs
 
-    def test_candidate(self, constraints, negated_constraints, func_str, func, args, candidate_expression):
+    def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str, func: z3.FuncDeclRef, args: List[z3.ExprRef], candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> bool:
+        """
+        Test a candidate expression against the constraints and negated constraints.
 
+        :param constraints: The list of constraints.
+        :param negated_constraints: The list of negated constraints.
+        :param func_str: The string representation of the function.
+        :param func: The function to test.
+        :param args: The arguments of the function.
+        :param candidate_expression: The candidate expression to test.
+        :return: True if the candidate expression satisfies the constraints, False otherwise.
+        """
         self.enumerator_solver.reset()
         substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
         self.enumerator_solver.add(substituted_constraints)
@@ -383,7 +474,13 @@ class SynthesisProblem:
                 print(f"Verification failed unexpectedly for guess {func_str}. Possible error in logic.")
                 return False
 
-    def generate_correct_abs_max_function(self, args):
+    def generate_correct_abs_max_function(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+        """
+        Generate a correct implementation of the absolute_max function.
+
+        :param args: The arguments of the function.
+        :return: A tuple containing the function implementation and its string representation.
+        """
         def absolute_max_function(*values):
             if len(values) != 2:
                 raise ValueError("absolute_max_function expects exactly 2 arguments.")
@@ -395,7 +492,13 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return absolute_max_function, func_str
 
-    def generate_max_function(self, args):
+    def generate_max_function(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+        """
+        Generate a correct implementation of the max function.
+
+        :param args: The arguments of the function.
+        :return: A tuple containing the function implementation and its string representation.
+        """
         def max_function(*values):
             if len(values) != 2:
                 raise ValueError("max_function expects exactly 2 arguments.")
@@ -407,14 +510,23 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return max_function, func_str
 
-    def generate_arithmetic_function(self, args, depth, complexity, operations=None):
+    def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int, operations: List[str] = None) -> Tuple[Callable, str]:
+        """
+        Generate an arithmetic function based on the given arguments, depth, complexity, and operations.
+
+        :param args: The arguments of the function.
+        :param depth: The maximum depth of the generated expression.
+        :param complexity: The maximum complexity of the generated expression.
+        :param operations: The list of allowed operations (default: ['+', '-', '*', 'If']).
+        :return: A tuple containing the function implementation and its string representation.
+        """
         if len(args) < 2:
             raise ValueError("At least two Z3 variables are required.")
 
         if operations is None:
             operations = ['+', '-', '*', 'If']
 
-        def generate_expression(curr_depth, curr_complexity):
+        def generate_expression(curr_depth: int, curr_complexity: int) -> z3.ExprRef | int:
             if curr_depth == 0 or curr_complexity == 0:
                 if random.random() < 0.5:
                     return random.choice(args)
@@ -456,8 +568,10 @@ class SynthesisProblem:
 
         return arithmetic_function, func_str
 
-    def execute_cegis(self):
-
+    def execute_cegis(self) -> None:
+        """
+        Execute the chosen counterexample-guided inductive synthesis algorithm.
+        """
         for func in list(self.z3_synth_functions.values()):
             args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
             num_functions = 10
