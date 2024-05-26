@@ -586,10 +586,13 @@ class SynthesisProblem:
                     return left_expr * right_expr
 
         expr = generate_expression(depth, complexity)
-
+        self.print_msg(f"Generated expression: {expr}", level=1)
+        self.print_msg(f"Expression type: {type(expr)}", level=1)
         def arithmetic_function(*values):
             if len(values) != len(args):
                 raise ValueError("Incorrect number of values provided.")
+            if not is_expr(expr):
+                raise ValueError(f"Invalid expression generated: {expr}")
             return simplify(substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
 
         func_str = f"def arithmetic_function({', '.join(str(arg) for arg in args)}):\n"
@@ -610,14 +613,21 @@ class SynthesisProblem:
             guesses.append(self.generate_max_function(args))
 
             for candidate, func_str in guesses:
-                candidate_expression = candidate(*args)
-                self.print_msg(f"Testing guess: {func_str}", level=1)
-                result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
-                                             func, args,
-                                             candidate_expression)
-                self.print_msg("\n", level=1)
-                if result:
-                    self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
-                    self.print_msg("-" * 150, level=0)
-                    return
+                try:
+                    candidate_expression = candidate(*args)
+                    self.print_msg(f"Testing guess: {func_str}", level=1)
+                    result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
+                                                 func, args,
+                                                 candidate_expression)
+                    self.print_msg("\n", level=1)
+                    if result:
+                        self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                        self.print_msg("-" * 150, level=0)
+                        return
+                except Exception as e:
+                    self.print_msg(f"Error occurred while testing candidate: {func_str}", level=0)
+                    self.print_msg(f"Error message: {str(e)}", level=0)
+                    self.print_msg("Skipping this candidate.", level=0)
+                    self.print_msg("\n", level=1)
+                    continue
             self.print_msg("No satisfying candidate found.", level=0)
