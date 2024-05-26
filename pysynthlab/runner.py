@@ -1,5 +1,5 @@
 import argparse
-from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblem
+from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblem, SynthesisProblemOptions
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 
 
@@ -9,11 +9,19 @@ def main(args: argparse.Namespace) -> None:
 
     :param args: Command-line arguments.
     """
-    file = args.input_file.read()
 
-    problem = SynthesisProblem(file, int(args.sygus_standard), verbose=args.verbose)
-    if args.verbose < 2:
+    file_content = args.input_file.read()
+
+    options = SynthesisProblemOptions(
+        sygus_standard=int(args.sygus_standard),
+        verbose=args.verbose
+    )
+
+    problem = SynthesisProblem(file_content, options)
+
+    if options.verbose < 2:
         problem.info()
+
     problem.execute_cegis()
 
 

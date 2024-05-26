@@ -1,8 +1,9 @@
 import random
 import typing
-from typing import List, Dict, Tuple, Union, Set, Callable, Collection
+from typing import List, Dict, Tuple, Set, Callable, Collection
 
 import pyparsing
+import dataclasses
 from z3 import *
 from z3 import ExprRef, FuncDeclRef, QuantifierRef
 
@@ -16,6 +17,32 @@ from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
 from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
+@dataclasses.dataclass
+class SynthesisProblemOptions:
+    options: object = dataclasses.field(default_factory=dict)
+    sygus_standard: int = 1
+    verbose: int = 1
+
+
+@dataclasses.dataclass
+class SynthesisProblemContext:
+    enumerator_solver: Solver = dataclasses.field(default_factory=Solver)
+    verification_solver: Solver = dataclasses.field(default_factory=Solver)
+    original_assertions: List[ExprRef] = dataclasses.field(default_factory=list)
+    constraints: List[ast.Command] = dataclasses.field(default_factory=list)
+    z3_variables: Dict[str, ExprRef] = dataclasses.field(default_factory=dict)
+    z3_synth_functions: Dict[str, FuncDeclRef] = dataclasses.field(default_factory=dict)
+    z3_synth_function_args: Dict[str, Dict[str, ExprRef]] = dataclasses.field(default_factory=dict)
+    z3_predefined_functions: Dict[str, FuncDeclRef] = dataclasses.field(default_factory=dict)
+    z3_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
+    assertions: Set[ExprRef] = dataclasses.field(default_factory=set)
+    counterexamples: List[Tuple[Dict[str, ExprRef], ExprRef]] = dataclasses.field(default_factory=list)
+    negated_assertions: Set[ExprRef] = dataclasses.field(default_factory=set)
+    additional_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
+    synth_functions: List[Dict[str, typing.Union[str, List[ExprRef], SortRef]]] = dataclasses.field(default_factory=list)
+    smt_problem: str = ""
+
+
 class SynthesisProblem:
     """
     A class representing a synthesis problem in the SyGuS format.
@@ -24,56 +51,34 @@ class SynthesisProblem:
     MAX_CONST = 2
     pyparsing.ParserElement.enablePackrat()
 
-    def __init__(self, problem: str, sygus_standard: int = 1, options: object = None, verbose: int = 1):
+    def __init__(self, problem: str, options: object = None):
         """
         Initialize a SynthesisProblem instance.
 
         :param problem: The input problem in the SyGuS format.
-        :param sygus_standard: The SyGuS standard version (default: 1).
         :param options: Additional options (default: None).
-        :param verbose: Verbosity level: 0 = suppress nothing, 1 = suppress warnings, 2 = suppress all output except success/failure (default: 1).
         """
         if options is None:
-            options = {}
-
-        self.verbose = verbose
+            options = SynthesisProblemOptions()
 
         self.input_problem: str = problem
         self.options = options
-        self.sygus_standard = sygus_standard
-        self.parser = SygusV2Parser() if sygus_standard == 2 else SygusV1Parser()
+        self.parser = SygusV2Parser() if options.sygus_standard == 2 else SygusV1Parser()
         self.problem: Program = self.parser.parse(problem)
         self.symbol_table = SymbolTableBuilder.run(self.problem)
-        self.printer = SygusV2ASTPrinter(self.symbol_table) if sygus_standard == 2 else SygusV1ASTPrinter(
-            self.symbol_table, options)
+        self.printer = SygusV2ASTPrinter(self.symbol_table) if options.sygus_standard == 2 else SygusV1ASTPrinter(
+            self.symbol_table, options.options)
 
-        self.enumerator_solver = z3.Solver()
-        self.enumerator_solver.set('smt.macro_finder', True)
-
-        self.verification_solver = z3.Solver()
-        self.verification_solver.set('smt.macro_finder', True)
-
-        self.original_assertions: List[z3.ExprRef] = []
-
-        self.smt_problem: str = self.convert_sygus_to_smt()
-        self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
-        self.z3_variables: Dict[str, z3.ExprRef] = {}
-        self.z3_synth_functions: Dict[str, z3.FuncDeclRef] = {}
-        self.z3_synth_function_args: Dict[str, Dict[str, z3.ExprRef]] = {}
-        self.z3_predefined_functions: Dict[str, z3.FuncDeclRef] = {}
-        self.z3_constraints: List[z3.ExprRef] = []
-        self.assertions: Set[z3.ExprRef] = set()
-        self.counterexamples: List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]] = []
-        self.negated_assertions: Set[z3.ExprRef] = set()
-        self.additional_constraints: List[z3.ExprRef] = []
-        self.original_assertions: Set[z3.ExprRef] = set(self.assertions)
+        self.context = SynthesisProblemContext()
+        self.context.enumerator_solver.set('smt.macro_finder', True)
+        self.context.verification_solver.set('smt.macro_finder', True)
+        self.context.smt_problem = self.convert_sygus_to_smt()
+        self.context.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
 
         self.initialise_z3_variables()
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
         self.parse_constraints()
-
-        self.synth_functions: List[Dict[str, Union[str, List[z3.ExprRef], z3.SortRef]]] = []
 
     def print_msg(self, msg: str, level: int = 0) -> None:
         """
@@ -82,7 +87,7 @@ class SynthesisProblem:
         :param msg: The message to print.
         :param level: The verbosity level required to print the message (default: 0).
         """
-        if self.verbose <= level:
+        if self.options.verbose <= level:
             print(msg)
 
     def __str__(self) -> str:
@@ -108,11 +113,11 @@ class SynthesisProblem:
         s_expr.ignore(';' + pyparsing.restOfLine)
 
         sygus_parser = pyparsing.ZeroOrMore(s_expr)
-        ast = sygus_parser.parseString(self.input_problem, parseAll=True).asList()
+        sygus_ast = sygus_parser.parseString(self.input_problem, parseAll=True).asList()
 
         constraints = []
         constraint_indices = []
-        for i, statement in enumerate(ast):
+        for i, statement in enumerate(sygus_ast):
             if statement[0] == 'constraint':
                 constraints.append(statement[1])
                 constraint_indices.append(i)
@@ -123,14 +128,14 @@ class SynthesisProblem:
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
         if constraints:
             conjoined_constraints = ['and'] + constraints
-            ast[constraint_indices[0]] = ['assert', conjoined_constraints]
+            sygus_ast[constraint_indices[0]] = ['assert', conjoined_constraints]
             for index in reversed(constraint_indices[1:]):
-                del ast[index]
+                del sygus_ast[index]
 
         def serialise(line):
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
 
-        return '\n'.join(serialise(statement) for statement in ast)
+        return '\n'.join(serialise(statement) for statement in sygus_ast)
 
     def get_logic(self) -> str:
         """
@@ -193,7 +198,7 @@ class SynthesisProblem:
                               for sort_descriptor in func.argument_sorts]
             func_return_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
 
-            self.synth_functions.append({
+            self.context.synth_functions.append({
                 "name": func_name,
                 "args": func_args,
                 "arg_sorts": func_arg_sorts,
@@ -222,8 +227,8 @@ class SynthesisProblem:
         """
         for variable in self.problem.commands:
             if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
-                z3_var = z3.Int(variable.symbol, self.enumerator_solver.ctx)
-                self.z3_variables[variable.symbol] = z3_var
+                z3_var = z3.Int(variable.symbol, self.context.enumerator_solver.ctx)
+                self.context.z3_variables[variable.symbol] = z3_var
 
     def initialise_z3_synth_functions(self) -> None:
         """
@@ -234,9 +239,9 @@ class SynthesisProblem:
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
             args = [z3.Const(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
             arg_mapping = dict(zip(func.argument_names, args))
-            self.z3_synth_function_args[func.identifier.symbol] = arg_mapping
-            self.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
-                                                                          z3_range_sort)
+            self.context.z3_synth_function_args[func.identifier.symbol] = arg_mapping
+            self.context.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
+                                                                                  z3_range_sort)
 
     def initialise_z3_predefined_functions(self) -> None:
         """
@@ -245,8 +250,9 @@ class SynthesisProblem:
         for func in self.get_predefined_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            self.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
-                                                                               z3_range_sort)
+            self.context.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol,
+                                                                                       *z3_arg_sorts,
+                                                                                       z3_range_sort)
 
     @staticmethod
     def negate_assertions(assertions: List[z3.ExprRef]) -> List[z3.ExprRef]:
@@ -286,19 +292,19 @@ class SynthesisProblem:
         """
         all_constraints = []
 
-        for constraint in self.constraints:
+        for constraint in self.context.constraints:
             if isinstance(constraint, ast.ConstraintCommand):
                 term = self.parse_term(constraint.constraint)
                 all_constraints.append(term)
-                self.original_assertions.add(term)
+                self.context.original_assertions.append(term)
 
         if all_constraints:
             combined_constraint = z3.And(*all_constraints)
-            self.z3_constraints.append(combined_constraint)
+            self.context.z3_constraints.append(combined_constraint)
         else:
             self.print_msg("Warning: No constraints found or generated.", level=1)
 
-        self.negated_assertions = self.negate_assertions(self.z3_constraints)
+        self.context.negated_assertions = self.negate_assertions(self.context.z3_constraints)
 
     def parse_term(self, term: ast.Term) -> ExprRef | FuncDeclRef | bool | int:
         """
@@ -309,12 +315,12 @@ class SynthesisProblem:
         """
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
-            if symbol in self.z3_variables:
-                return self.z3_variables[symbol]
-            elif symbol in self.z3_synth_functions:
-                return self.z3_synth_functions[symbol]
-            elif symbol in self.z3_predefined_functions:
-                return self.z3_predefined_functions[symbol]
+            if symbol in self.context.z3_variables:
+                return self.context.z3_variables[symbol]
+            elif symbol in self.context.z3_synth_functions:
+                return self.context.z3_synth_functions[symbol]
+            elif symbol in self.context.z3_predefined_functions:
+                return self.context.z3_predefined_functions[symbol]
             else:
                 raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, ast.LiteralTerm):
@@ -355,11 +361,11 @@ class SynthesisProblem:
                 elif len(args) == 2:
                     return args[0] - args[1]
                 raise ValueError("Minus operator '-' should have 1 or 2 arguments")
-            elif func_symbol in self.z3_synth_functions:
-                func_term = self.z3_synth_functions[func_symbol]
+            elif func_symbol in self.context.z3_synth_functions:
+                func_term = self.context.z3_synth_functions[func_symbol]
                 return func_term(*args)
-            elif func_symbol in self.z3_predefined_functions:
-                func = self.z3_predefined_functions[func_symbol]
+            elif func_symbol in self.context.z3_predefined_functions:
+                func = self.context.z3_predefined_functions[func_symbol]
                 return func(*args)
             else:
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
@@ -430,7 +436,7 @@ class SynthesisProblem:
         :return: A list of input-output pairs.
         """
         io_pairs = []
-        for constraint in self.constraints:
+        for constraint in self.context.constraints:
             if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,
                                                                             ast.FunctionApplicationTerm):
                 if constraint.constraint.function_identifier.symbol == func.name():
@@ -454,16 +460,16 @@ class SynthesisProblem:
         :param candidate_expression: The candidate expression to test.
         :return: True if the candidate expression satisfies the constraints, False otherwise.
         """
-        self.enumerator_solver.reset()
+        self.context.enumerator_solver.reset()
         substituted_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
-        self.enumerator_solver.add(substituted_constraints)
+        self.context.enumerator_solver.add(substituted_constraints)
 
-        self.verification_solver.reset()
+        self.context.verification_solver.reset()
         substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
-        self.verification_solver.add(substituted_constraints)
+        self.context.verification_solver.add(substituted_constraints)
 
-        if self.enumerator_solver.check() == sat:
-            model = self.enumerator_solver.model()
+        if self.context.enumerator_solver.check() == sat:
+            model = self.context.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
             incorrect_output = None
             if callable(getattr(candidate_expression, '__call__', None)):
@@ -471,13 +477,13 @@ class SynthesisProblem:
             elif isinstance(candidate_expression, QuantifierRef) or isinstance(candidate_expression, ExprRef):
                 incorrect_output = model.eval(candidate_expression, model_completion=True)
 
-            self.counterexamples.append((counterexample, incorrect_output))
+            self.context.counterexamples.append((counterexample, incorrect_output))
             self.print_msg(f"Incorrect output for {func_str}: {counterexample} == {incorrect_output}", level=0)
 
             var_vals = [model[v] for v in args]
             for var, val in zip(args, var_vals):
-                self.verification_solver.add(var == val)
-            if self.verification_solver.check() == sat:
+                self.context.verification_solver.add(var == val)
+            if self.context.verification_solver.check() == sat:
                 self.print_msg(f"Verification passed unexpectedly for guess {func_str}. Possible error in logic.",
                                level=0)
                 return False
@@ -486,7 +492,7 @@ class SynthesisProblem:
                 return False
         else:
             self.print_msg(f"No counterexample found for guess {func_str}", level=0)
-            if self.verification_solver.check() == sat:
+            if self.context.verification_solver.check() == sat:
                 self.print_msg(f"No counterexample found for guess {func_str}. Guess should be correct.", level=0)
                 return True
             else:
@@ -595,8 +601,9 @@ class SynthesisProblem:
         """
         Execute the chosen counterexample-guided inductive synthesis algorithm.
         """
-        for func in list(self.z3_synth_functions.values()):
-            args = [self.z3_variables[arg_name] for arg_name in self.z3_synth_function_args[func.__str__()]]
+        for func in list(self.context.z3_synth_functions.values()):
+            args = [self.context.z3_variables[arg_name] for arg_name in
+                    self.context.z3_synth_function_args[func.__str__()]]
             num_functions = 10
             guesses = [self.generate_arithmetic_function(args, 2, 3) for i in range(num_functions)]
             guesses.append(self.generate_correct_abs_max_function(args))
@@ -605,7 +612,8 @@ class SynthesisProblem:
             for candidate, func_str in guesses:
                 candidate_expression = candidate(*args)
                 self.print_msg(f"Testing guess: {func_str}", level=1)
-                result = self.test_candidate(self.z3_constraints, self.negated_assertions, func_str, func, args,
+                result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
+                                             func, args,
                                              candidate_expression)
                 self.print_msg("\n", level=1)
                 if result:
