@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="" />
+    <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="adding windows config">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,24 +86,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;Python.runner_sygus_small_windows.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;refactor&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/Documents/Data Science/Courses/Dissertation/pysynthlab/solvers&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;zielu.gittoolbox.prj.config.selected.tab.id&quot;: &quot;zielu.gittoolbox.config.shared.autoFetch&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Python.runner_sygus_small_windows.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "refactor",
+    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation/pysynthlab/solvers",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true",
+    "zielu.gittoolbox.prj.config.selected.tab.id": "zielu.gittoolbox.config.shared.autoFetch"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pysynthlab/solvers" />
@@ -381,17 +384,17 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.comp_2018_CLIA_Track_diff.sl" />
       <item itemvalue="Python.runner_abs" />
       <item itemvalue="Python.runner_large" />
-      <item itemvalue="Python.runner_max2ints" />
       <item itemvalue="Python.runner_sygus_small" />
-      <item itemvalue="Python.runner_sygus_small_linear" />
       <item itemvalue="Python.runner_sygus_small_windows" />
+      <item itemvalue="Python.comp_2018_CLIA_Track_diff.sl" />
+      <item itemvalue="Python.runner_sygus_small_linear" />
       <item itemvalue="Python.runner_sygus_two" />
+      <item itemvalue="Python.runner_max2ints" />
+      <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" />
-      <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
     </list>
     <recent_temporary>
       <list>
@@ -401,6 +404,13 @@
         <item itemvalue="Python tests.Python tests for test_syugus_parser.TestSyGusIFProblemFileHandling" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -448,6 +458,15 @@
       <workItem from="1716029727962" duration="2621000" />
       <workItem from="1716221084744" duration="2501000" />
     </task>
+    <task id="LOCAL-00001" summary="adding windows config">
+      <option name="closed" value="true" />
+      <created>1716720223396</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716720223396</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -486,6 +505,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adding windows config" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding windows config" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
