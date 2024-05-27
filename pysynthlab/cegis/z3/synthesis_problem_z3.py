@@ -552,7 +552,7 @@ class SynthesisProblem:
 
     def generate_non_commutative_solution(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
         """
-        Generate a solution that breaks commutativity.
+        Generate a solution that breaks the commutativity constraint.
 
         :param args: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
@@ -560,14 +560,15 @@ class SynthesisProblem:
 
         def invalid_function(*values):
             if len(values) != 2:
-                raise ValueError("max_function expects exactly 2 arguments.")
+                raise ValueError("invalid_function expects exactly 2 arguments.")
             x, y = values
-            return If(x > y, If(x > y, x, 1), y - 0)
-
+            return If(x > y, x, y - 1)
+        
         expr = invalid_function(*args[:2])
         func_str = f"def invalid_function({', '.join(str(arg) for arg in args[:2])}):\n"
         func_str += f"    return {str(expr)}\n"
         return invalid_function, func_str
+
 
     def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
@@ -580,6 +581,9 @@ class SynthesisProblem:
         :param operations: The list of allowed operations (default: ['+', '-', '*', 'If']).
         :return: A tuple containing the function implementation and its string representation.
         """
+        if depth == 0 or complexity == 0:
+            return random.choice(args)
+
         if len(args) < 2:
             raise ValueError("At least two Z3 variables are required.")
 
