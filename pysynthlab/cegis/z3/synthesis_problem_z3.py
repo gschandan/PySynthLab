@@ -407,35 +407,45 @@ class SynthesisProblem:
         :return: The substituted constraints.
         """
 
-        def mkExpr(a):
-            if is_expr(a):
-                print(f"mkExpr: {a} is already an expression")
-                return a
-            elif isinstance(a, int):
-                print(f"mkExpr: Converting {a} to IntVal")
-                return z3.IntVal(a)
+        def make_expression(possible_expression):
+            if is_expr(possible_expression):
+                print(f"make_expression: {possible_expression} is already an expression")
+                return possible_expression
+            elif isinstance(possible_expression, int):
+                print(f"make_expression: Converting {possible_expression} to IntVal")
+                return z3.IntVal(possible_expression)
             else:
-                raise Exception("Cannot convert convert: %s" % a.__repr__())
+                raise Exception("Cannot convert the following to an expression: %s" % possible_expression.__repr__())
     
-        def functionFromExpr(args, expr):
-            print(f"functionFromExpr: args={args}, expr={expr}")
-            return lambda *fargs: substitute(expr, zip(args, [mkExpr(e) for e in fargs]))
-    
-        substituted_constraints = []
-        for constraint in constraints:
-            print(f"Processing constraint: {constraint}")
-            if callable(candidate_expression):
-                print(f"Candidate expression is callable: {candidate_expression}")
-                f = functionFromExpr(func.arity() * [z3.Int('x')], candidate_expression(*(func.arity() * [z3.Int('x')])))
-                print(f"Substituting function {func} with {f} in constraint {constraint}")
-                substituted_constraint = substitute(constraint, (func, f))
+        def function_from_expression(args, expression):
+            print(f"function_from_expression: args={args}, expr={expression}")
+            return lambda *fargs: substitute(expression, [(arg, make_expression(val)) for arg, val in zip(args, fargs)])
+            #return lambda *fargs: substitute(expr, zip(args, [make_expression(e) for e in fargs]))
+        
+        def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
+            if is_app(expr) and expr.decl() == func:
+                new_args = [reconstruct_expression(arg) for arg in expr.children()]
+                if callable(candidate_expression):
+                    return candidate_expression(*new_args)
+                elif isinstance(candidate_expression, (FuncDeclRef, QuantifierRef)):
+                    return candidate_expression(*new_args)
+                else:
+                    return make_expression(candidate_expression)
+            elif is_app(expr):
+                new_args = [reconstruct_expression(arg) for arg in expr.children()]
+                return expr.decl()(*new_args)
             else:
-                print(f"Candidate expression is not callable: {candidate_expression}")
-                substituted_constraint = substitute(constraint, (func, mkExpr(candidate_expression)))
-            print(f"Substituted constraint: {substituted_constraint}")
-            substituted_constraints.append(substituted_constraint)
+                return expr
+
+        if isinstance(candidate_expression, (int, z3.IntNumRef)):
+            substitution_pairs = [(func, make_expression(candidate_expression))]
+        else:
+            def mkCandidateExpr(*args):
+                return substitute(make_expression(candidate_expression), *[(func.args[i], args[i]) for i in range(len(func.args))])
     
-        return substituted_constraints
+            substitution_pairs = [(func, mkCandidateExpr)]
+    
+        return [substitute_funs(c, *substitution_pairs) for c in constraints]
 
 
     def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:
@@ -670,7 +680,8 @@ class SynthesisProblem:
             args = [self.context.z3_variables[arg_name] for arg_name in
                     self.context.z3_synth_function_args[func.__str__()]]
             num_functions = 10
-            guesses = [self.generate_arithmetic_function(args, 2, 3) for i in range(num_functions)]
+            #guesses = [self.generate_arithmetic_function(args, 2, 3) for i in range(num_functions)]
+            guesses = []
             guesses.append(self.generate_invalid_solution_one(args))
             guesses.append(self.generate_invalid_solution_two(args))
             guesses.append(self.generate_correct_abs_max_function(args))
