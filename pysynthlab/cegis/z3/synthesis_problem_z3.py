@@ -397,33 +397,46 @@ class SynthesisProblem:
         }.get(sort_symbol, None)
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef,
-                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[
-        ExprRef]:
+                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable, z3.ExprRef, int]) -> List[ExprRef]:
         """
         Substitute a candidate expression into a list of constraints.
-
+    
         :param constraints: The list of constraints.
         :param func: The function to substitute.
         :param candidate_expression: The candidate expression to substitute.
         :return: The substituted constraints.
         """
 
-        def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
-            if is_app(expr) and expr.decl() == func:
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                if callable(candidate_expression):
-                    return candidate_expression(*new_args)
-                elif isinstance(candidate_expression, (FuncDeclRef, QuantifierRef)):
-                    return candidate_expression(*new_args)
-                else:
-                    return candidate_expression
-            elif is_app(expr):
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                return expr.decl()(*new_args)
+        def mkExpr(a):
+            if is_expr(a):
+                print(f"mkExpr: {a} is already an expression")
+                return a
+            elif isinstance(a, int):
+                print(f"mkExpr: Converting {a} to IntVal")
+                return z3.IntVal(a)
             else:
-                return expr
+                raise Exception("Cannot convert convert: %s" % a.__repr__())
+    
+        def functionFromExpr(args, expr):
+            print(f"functionFromExpr: args={args}, expr={expr}")
+            return lambda *fargs: substitute(expr, zip(args, [mkExpr(e) for e in fargs]))
+    
+        substituted_constraints = []
+        for constraint in constraints:
+            print(f"Processing constraint: {constraint}")
+            if callable(candidate_expression):
+                print(f"Candidate expression is callable: {candidate_expression}")
+                f = functionFromExpr(func.arity() * [z3.Int('x')], candidate_expression(*(func.arity() * [z3.Int('x')])))
+                print(f"Substituting function {func} with {f} in constraint {constraint}")
+                substituted_constraint = substitute(constraint, (func, f))
+            else:
+                print(f"Candidate expression is not callable: {candidate_expression}")
+                substituted_constraint = substitute(constraint, (func, mkExpr(candidate_expression)))
+            print(f"Substituted constraint: {substituted_constraint}")
+            substituted_constraints.append(substituted_constraint)
+    
+        return substituted_constraints
 
-        return [reconstruct_expression(c) for c in constraints]
 
     def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:
         """
