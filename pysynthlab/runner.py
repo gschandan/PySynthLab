@@ -1,6 +1,6 @@
 import argparse
-from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblem, SynthesisProblemOptions
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
+from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
 
 
 def main(args: argparse.Namespace) -> None:
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        '-v', '--verbose', type=int, default=1, choices=[0, 1, 2],
+        '-v', '--verbose', type=int, default=0, choices=[0, 1, 2],
         help='Verbosity level:\n'
              '\t 0 = no suppression; all output printed to console\n'
              '\t 1 = suppress warnings\n'

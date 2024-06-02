@@ -462,6 +462,10 @@ class SynthesisProblem:
         substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
+        self.context.verification_solver.reset()
+        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
+        self.context.verification_solver.add(substituted_constraints)
+
         if self.context.enumerator_solver.check() == sat:
             model = self.context.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
@@ -488,24 +492,9 @@ class SynthesisProblem:
         else:
             self.print_msg(f"No counterexample found for guess {func_str}", level=0)
             self.print_msg(f"enumeration solver state {self.context.enumerator_solver.to_smt2()}", level=0)
-            self.print_msg(
-                f"verification solver state before checking counterexamples {self.context.verification_solver.to_smt2()}",
-                level=0)
-            distinct_counterexamples = {tuple(ce.items()) for ce, _ in self.context.counterexamples}
-
-            valid = True
-            for ce_tuple in distinct_counterexamples:
-                self.context.verification_solver.push()
-                counterexample = dict(ce_tuple)
-                input_values = [counterexample[str(arg)] for arg in args]
-                for var, val in zip(args, input_values):
-                    self.context.verification_solver.add(var == val)
-                if self.context.verification_solver.check() == sat:
-                    valid = False
-                    self.print_msg(f"verification solver model: {self.context.verification_solver.model()}", level=0)
-                self.context.verification_solver.pop()
-
-            if valid:
+            self.print_msg(f"verification solver state {self.context.verification_solver.to_smt2()}",level=0)
+            
+            if self.context.verification_solver.check() == sat:
                 self.print_msg(f"No counterexample found for guess {func_str}. Guess should be correct.", level=0)
                 return True
             else:
@@ -550,7 +539,26 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return max_function, func_str
 
-    def generate_non_commutative_solution(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+    def generate_invalid_solution_one(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+        """
+        Generate a solution that breaks the commutativity constraint.
+
+        :param args: The arguments of the function.
+        :return: A tuple containing the function implementation and its string representation.
+        """
+
+        def invalid_function(*values):
+            if len(values) != 2:
+                raise ValueError("invalid_function expects exactly 2 arguments.")
+            x, y = values
+            return If(x > y, If(x > y, x, 1), y - 0)
+        
+        expr = invalid_function(*args[:2])
+        func_str = f"def invalid_function_one({', '.join(str(arg) for arg in args[:2])}):\n"
+        func_str += f"    return {str(expr)}\n"
+        return invalid_function, func_str
+    
+    def generate_invalid_solution_two(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
         """
         Generate a solution that breaks the commutativity constraint.
 
@@ -563,12 +571,11 @@ class SynthesisProblem:
                 raise ValueError("invalid_function expects exactly 2 arguments.")
             x, y = values
             return If(x > y, x, y - 1)
-        
+
         expr = invalid_function(*args[:2])
-        func_str = f"def invalid_function({', '.join(str(arg) for arg in args[:2])}):\n"
+        func_str = f"def invalid_function_two({', '.join(str(arg) for arg in args[:2])}):\n"
         func_str += f"    return {str(expr)}\n"
         return invalid_function, func_str
-
 
     def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
@@ -651,7 +658,8 @@ class SynthesisProblem:
                     self.context.z3_synth_function_args[func.__str__()]]
             num_functions = 10
             guesses = [self.generate_arithmetic_function(args, 2, 3) for i in range(num_functions)]
-            guesses.append(self.generate_non_commutative_solution(args))
+            guesses.append(self.generate_invalid_solution_one(args))
+            guesses.append(self.generate_invalid_solution_two(args))
             guesses.append(self.generate_correct_abs_max_function(args))
             guesses.append(self.generate_max_function(args))
 
