@@ -7,7 +7,7 @@
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" beforeDir="false" afterPath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/utils.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +29,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="KEEP" />
   </component>
   <component name="GitToolBoxStore">
     <option name="recentBranches">
@@ -92,6 +93,7 @@
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity.executor": "Run",
     "Python tests.Python tests in given_constraints_to_substitute.py.executor": "Run",
+    "Python.small.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -387,12 +389,12 @@
       <item itemvalue="Python.runner_sygus_small" />
       <item itemvalue="Python.runner_sygus_small_linear" />
       <item itemvalue="Python.runner_sygus_two" />
+      <item itemvalue="Python.small" />
       <item itemvalue="Python.runner_max2ints" />
       <item itemvalue="Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
       <item itemvalue="Python tests.Python tests in given_constraints_to_substitute.py" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
-      <item itemvalue="Python.small" />
     </list>
     <recent_temporary>
       <list>

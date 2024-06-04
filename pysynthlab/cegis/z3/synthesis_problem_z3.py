@@ -579,9 +579,10 @@ class SynthesisProblem:
 
     def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
+        
         """
         Generate an arithmetic function based on the given arguments, depth, complexity, and operations.
-
+    
         :param args: The arguments of the function.
         :param depth: The maximum depth of the generated expression.
         :param complexity: The maximum complexity of the generated expression.
@@ -590,24 +591,18 @@ class SynthesisProblem:
         """
         if depth == 0 or complexity == 0:
             return random.choice(args)
-
+    
         if len(args) < 2:
             raise ValueError("At least two Z3 variables are required.")
-
+    
         if operations is None:
             operations = ['+', '-', '*', 'If']
-
+    
         def generate_expression(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or curr_complexity == 0:
-                return z3.IntVal(
-                    random.randint(self.MIN_CONST, self.MAX_CONST)) if random.random() < 0.5 else random.choice(args)
-
-            if curr_depth == depth:
-                num_int_values = min(self.MAX_CONST - self.MIN_CONST + 1, curr_complexity)
-                int_expressions = [z3.IntVal(i) for i in range(self.MIN_CONST, self.MAX_CONST + 1)]
-                if num_int_values > 0:
-                    return random.choice(int_expressions)
-
+                return random.choice(args) if random.random() < 0.5 else z3.IntVal(
+                    random.randint(self.MIN_CONST, self.MAX_CONST))
+    
             op = random.choice(operations)
             if op == 'If':
                 condition = random.choice(
@@ -620,7 +615,7 @@ class SynthesisProblem:
                 )
                 true_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 false_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
-                return If(condition, true_expr, false_expr)
+                return z3.If(condition, true_expr, false_expr)
             else:
                 left_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 right_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
@@ -630,23 +625,19 @@ class SynthesisProblem:
                     return left_expr - right_expr
                 elif op == '*':
                     return left_expr * right_expr
-
+    
         expr = generate_expression(depth, complexity)
         self.print_msg(f"Generated expression: {expr}", level=1)
         self.print_msg(f"Expression type: {type(expr)}", level=1)
-
+    
         def arithmetic_function(*values):
             if len(values) != len(args):
                 raise ValueError("Incorrect number of values provided.")
-            if isinstance(expr, int):
-                return expr
-            if not is_expr(expr):
-                raise ValueError(f"Invalid expression generated: {expr}")
-            return simplify(substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
-
+            return z3.simplify(z3.substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
+    
         func_str = f"def arithmetic_function({', '.join(str(arg) for arg in args)}):\n"
         func_str += f"    return {str(expr)}\n"
-
+    
         return arithmetic_function, func_str
 
     def execute_cegis(self) -> None:
@@ -657,7 +648,7 @@ class SynthesisProblem:
             args = [self.context.z3_variables[arg_name] for arg_name in
                     self.context.z3_synth_function_args[func.__str__()]]
             num_functions = 10
-            guesses = [self.generate_arithmetic_function(args, 2, 3) for i in range(num_functions)]
+            guesses = [self.generate_arithmetic_function(args, 3, 2) for i in range(num_functions)]
             guesses.append(self.generate_invalid_solution_one(args))
             guesses.append(self.generate_invalid_solution_two(args))
             guesses.append(self.generate_correct_abs_max_function(args))
