@@ -21,10 +21,12 @@ class SygusV1Lexer(SygusLexerBase):
     reserved['Enum'] = 'TK_ENUM'
     reserved['Array'] = 'TK_ARRAY'
 
-    tokens += list(set(reserved.values()))
-    tokens.append('TK_DOUBLE_COLON')
+    for token_name in set(reserved.values()):
+        if token_name not in tokens:
+            tokens.append(token_name)
 
-    t_TK_DOUBLE_COLON = r'::'
+    if 'TK_DOUBLE_COLON' not in tokens:
+        tokens.append('TK_DOUBLE_COLON')
 
     @ply.lex.TOKEN(SygusLexerBase._symbol)
     def t_TK_SYMBOL(self, t):

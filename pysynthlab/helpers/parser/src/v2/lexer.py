@@ -16,8 +16,9 @@ class SygusV2Lexer(SygusLexerBase):
     reserved['set-info'] = 'TK_SET_INFO'
     reserved['set-option'] = 'TK_SET_OPTION'
 
-    tokens += list(set(reserved.values()))
-
+    for token_name in set(reserved.values()):
+        if token_name not in tokens:
+            tokens.append(token_name)
     @ply.lex.TOKEN(SygusLexerBase._symbol)
     def t_TK_SYMBOL(self, t):
         if t.value == '_':
