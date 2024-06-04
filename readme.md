@@ -37,10 +37,6 @@ or alternatively using Make:
 make init
 ```
 
-## Options
-
-
-
 ## Run Program
 
 Either provide a path to the sygus input file:
@@ -60,6 +56,23 @@ python -m src.runner -s 1 - <<EOF                                               
 EOF
 
 ```
+## Command Line Options
+
+The following command line options are available:  
+`-s, --sygus-standard:` Specify the SyGuS language standard used in the input file. Accepted values are:
+- `1`: SyGuS language standard version 1.
+- `2`: SyGuS language standard version 2 (default).
+
+`-v, --verbose`  
+  Set the verbosity level of the program output. Accepted values are:
+- `0`: No suppression; all output is printed to the console (default).
+- `1`: Suppress warnings.
+- `2`: Suppress all output except success/failure messages.
+
+`input_file`: Path to the input file containing the synthesis problem.   
+If `-` is provided, the program will read the input from STDIN.
+
+
 
 ## Run Tests
 ```shell
