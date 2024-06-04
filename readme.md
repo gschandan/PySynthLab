@@ -6,6 +6,7 @@ This project is a synthesis engine for solving LIA synthesis problems using CEGI
 
 - Python 3.8 or higher
 - Virtualenv
+- z3
 
 ## Installation
 
@@ -13,7 +14,7 @@ This project is a synthesis engine for solving LIA synthesis problems using CEGI
 
 ```shell
 git clone git@github.com:gschandan/PySynthLab.git
-cd Dissertation
+cd PySynthLab
 ```
 
 2. Create a virtual environment:
@@ -31,7 +32,11 @@ source venv/bin/activate
 ```shell
 pip install -r requirements.txt
 ```
-or alternatively using Make:
+or
+```shell
+./venv/bin/pip install -r requirements.txt  
+```
+or using Make:
 
 ```shell
 make init
