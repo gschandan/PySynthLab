@@ -4,14 +4,14 @@ import cvc5
 from cvc5 import Kind
 
 import pyparsing
-from pysynthlab.helpers.parser.src import symbol_table_builder, ast
-from pysynthlab.helpers.parser.src.ast import Program, CommandKind, GrammarTermKind, ConstraintCommand, IdentifierTerm, \
+from src.helpers.parser.src import symbol_table_builder, ast
+from src.helpers.parser.src.ast import Program, CommandKind, GrammarTermKind, ConstraintCommand, IdentifierTerm, \
     LiteralTerm, LiteralKind, FunctionApplicationTerm, QuantifiedTerm, QuantifierKind
-from pysynthlab.helpers.parser.src.resolution import SymbolTable, FunctionKind, SortDescriptor
-from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
-from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
-from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
-from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from src.helpers.parser.src.resolution import SymbolTable, FunctionKind, SortDescriptor
+from src.helpers.parser.src.v1.parser import SygusV1Parser
+from src.helpers.parser.src.v1.printer import SygusV1ASTPrinter
+from src.helpers.parser.src.v2.parser import SygusV2Parser
+from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 class SynthesisProblemCvc5:

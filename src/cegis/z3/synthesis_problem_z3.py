@@ -7,14 +7,14 @@ import dataclasses
 from z3 import *
 from z3 import ExprRef, FuncDeclRef, QuantifierRef
 
-from pysynthlab.helpers.parser.src import ast
-from pysynthlab.helpers.parser.src.ast import Program, CommandKind
-from pysynthlab.helpers.parser.src.resolution import FunctionKind, SortDescriptor, FunctionDescriptor
-from pysynthlab.helpers.parser.src.symbol_table_builder import SymbolTableBuilder
-from pysynthlab.helpers.parser.src.v1.parser import SygusV1Parser
-from pysynthlab.helpers.parser.src.v1.printer import SygusV1ASTPrinter
-from pysynthlab.helpers.parser.src.v2.parser import SygusV2Parser
-from pysynthlab.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from src.helpers.parser.src import ast
+from src.helpers.parser.src.ast import Program, CommandKind
+from src.helpers.parser.src.resolution import FunctionKind, SortDescriptor, FunctionDescriptor
+from src.helpers.parser.src.symbol_table_builder import SymbolTableBuilder
+from src.helpers.parser.src.v1.parser import SygusV1Parser
+from src.helpers.parser.src.v1.printer import SygusV1ASTPrinter
+from src.helpers.parser.src.v2.parser import SygusV2Parser
+from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 
 
 @dataclasses.dataclass
@@ -588,9 +588,6 @@ class SynthesisProblem:
         :param operations: The list of allowed operations (default: ['+', '-', '*', 'If', 'Neg']).
         :return: A tuple containing the function implementation and its string representation.
         """
-        if depth == 0 or complexity == 0:
-            return random.choice(args) if args else z3.IntVal(random.randint(self.MIN_CONST, self.MAX_CONST))
-
         if operations is None:
             operations = ['+', '-', '*', 'If', 'Neg']
 
@@ -615,7 +612,7 @@ class SynthesisProblem:
             elif op == 'Neg':
                 expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 return -expr
-            else:
+            elif op in ['+', '-', '*']:
                 left_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 right_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 if op == '+':
@@ -624,10 +621,11 @@ class SynthesisProblem:
                     return left_expr - right_expr
                 elif op == '*':
                     return left_expr * right_expr
+            else:
+                raise ValueError(f"Unsupported operation: {op}")
 
         expr = generate_expression(depth, complexity)
         self.print_msg(f"Generated expression: {expr}", level=1)
-        self.print_msg(f"Simplified expr: {z3.simplify(expr)}", level=1)
         self.print_msg(f"Expression type: {type(expr)}", level=1)
 
         def arithmetic_function(*values):

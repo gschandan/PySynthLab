@@ -1,6 +1,6 @@
 import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
-from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from .cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
 
 
 def main(args: argparse.Namespace) -> None:
