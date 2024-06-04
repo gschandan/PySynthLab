@@ -28,18 +28,21 @@ python -m venv venv
 ```shell
 source venv/bin/activate
 ```
-4. Install the requirements:
+4. Install the requirements without using the venv:
 ```shell
 pip install -r requirements.txt
 ```
-or
+or using Make:
+```shell
+make init
+```
+or install using the venv
 ```shell
 ./venv/bin/pip install -r requirements.txt  
 ```
-or using Make:
-
+or using the venv via Make
 ```shell
-make init
+make init_venv  
 ```
 
 ## Run Program
@@ -50,7 +53,7 @@ python src/runner.py -s 1 /path_to_file/small.sl
 ```
 or provide the input problem via STDIN:
 ```shell
-python -m src.runner -s 1 - <<EOF                                                                                                                                                                                                                                                         2 ↵ gii@gii
+python -m src.runner -s 1 - <<EOF
 (set-logic LIA)
 (synth-fun f ((x Int) (y Int)) Int)
 (declare-var x Int)
@@ -59,7 +62,21 @@ python -m src.runner -s 1 - <<EOF                                               
 (constraint (and (<= x (f x y)) (<= y (f x y))))
 (check-synth)
 EOF
-
+```
+or if you have used the venv
+```shell
+./venv/bin/python src/runner.py -s 1 /path_to_file/small.sl  
+```
+```shell
+./venv/bin/python -m src.runner -s 1 - <<EOF
+(set-logic LIA)
+(synth-fun f ((x Int) (y Int)) Int)
+(declare-var x Int)
+(declare-var y Int)
+(constraint (= (f x y) (f y x)))
+(constraint (and (<= x (f x y)) (<= y (f x y))))
+(check-synth)
+EOF
 ```
 ## Command Line Options
 
