@@ -492,8 +492,8 @@ class SynthesisProblem:
         else:
             self.print_msg(f"No counterexample found for guess {func_str}", level=0)
             self.print_msg(f"enumeration solver state {self.context.enumerator_solver.to_smt2()}", level=0)
-            self.print_msg(f"verification solver state {self.context.verification_solver.to_smt2()}",level=0)
-            
+            self.print_msg(f"verification solver state {self.context.verification_solver.to_smt2()}", level=0)
+
             if self.context.verification_solver.check() == sat:
                 self.print_msg(f"No counterexample found for guess {func_str}. Guess should be correct.", level=0)
                 return True
@@ -552,12 +552,12 @@ class SynthesisProblem:
                 raise ValueError("invalid_function expects exactly 2 arguments.")
             x, y = values
             return If(x > y, If(x > y, x, 1), y - 0)
-        
+
         expr = invalid_function(*args[:2])
         func_str = f"def invalid_function_one({', '.join(str(arg) for arg in args[:2])}):\n"
         func_str += f"    return {str(expr)}\n"
         return invalid_function, func_str
-    
+
     def generate_invalid_solution_two(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
         """
         Generate a solution that breaks the commutativity constraint.
@@ -579,32 +579,28 @@ class SynthesisProblem:
 
     def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
-        
         """
         Generate an arithmetic function based on the given arguments, depth, complexity, and operations.
     
         :param args: The arguments of the function.
         :param depth: The maximum depth of the generated expression.
         :param complexity: The maximum complexity of the generated expression.
-        :param operations: The list of allowed operations (default: ['+', '-', '*', 'If']).
+        :param operations: The list of allowed operations (default: ['+', '-', '*', 'If', 'Neg']).
         :return: A tuple containing the function implementation and its string representation.
         """
         if depth == 0 or complexity == 0:
-            return random.choice(args)
-    
-        if len(args) < 2:
-            raise ValueError("At least two Z3 variables are required.")
-    
+            return random.choice(args) if args else z3.IntVal(random.randint(self.MIN_CONST, self.MAX_CONST))
+
         if operations is None:
-            operations = ['+', '-', '*', 'If']
-    
+            operations = ['+', '-', '*', 'If', 'Neg']
+
         def generate_expression(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or curr_complexity == 0:
-                return random.choice(args) if random.random() < 0.5 else z3.IntVal(
+                return random.choice(args) if args and random.random() < 0.5 else z3.IntVal(
                     random.randint(self.MIN_CONST, self.MAX_CONST))
-    
+
             op = random.choice(operations)
-            if op == 'If':
+            if op == 'If' and len(args) >= 2:
                 condition = random.choice(
                     [args[i] < args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
                     [args[i] <= args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
@@ -616,6 +612,9 @@ class SynthesisProblem:
                 true_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 false_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 return z3.If(condition, true_expr, false_expr)
+            elif op == 'Neg':
+                expr = generate_expression(curr_depth - 1, curr_complexity - 1)
+                return -expr
             else:
                 left_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 right_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
@@ -625,19 +624,22 @@ class SynthesisProblem:
                     return left_expr - right_expr
                 elif op == '*':
                     return left_expr * right_expr
-    
+
         expr = generate_expression(depth, complexity)
         self.print_msg(f"Generated expression: {expr}", level=1)
+        self.print_msg(f"Simplified expr: {z3.simplify(expr)}", level=1)
         self.print_msg(f"Expression type: {type(expr)}", level=1)
-    
+
         def arithmetic_function(*values):
             if len(values) != len(args):
                 raise ValueError("Incorrect number of values provided.")
-            return z3.simplify(z3.substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
-    
+            simplified_expr = z3.simplify(z3.substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
+            self.print_msg(f"Simplified expr: {simplified_expr}", level=1)
+            return simplified_expr
+
         func_str = f"def arithmetic_function({', '.join(str(arg) for arg in args)}):\n"
         func_str += f"    return {str(expr)}\n"
-    
+
         return arithmetic_function, func_str
 
     def execute_cegis(self) -> None:
