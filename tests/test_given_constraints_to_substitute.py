@@ -1,6 +1,6 @@
 import unittest
 from z3 import *
-from pysynthlab.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
 
 
 class WhenTheConstraintIsCommutativity(unittest.TestCase):

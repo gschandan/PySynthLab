@@ -3,4 +3,4 @@ hypothesis
 ply
 pyparsing
 z3-solver
-cvc5
+#cvc5

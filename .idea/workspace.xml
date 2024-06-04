@@ -5,8 +5,62 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99717533-4646-47dc-b79a-6044f4c3199d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/helpers/parser/src/v1/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/parser/src/v2/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/absolute.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/absolute.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/iterations" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/iterations" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/large.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/large.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/max2ints.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/max2ints.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/notes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/simple.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/simple.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/small.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/small.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/small.smt" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/small.smt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/small_linear_func.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/small_linear_func.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/two.sl" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/two.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/benchmarks/lia/two.smt" beforeDir="false" afterPath="$PROJECT_DIR$/src/benchmarks/lia/two.smt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/cvc5/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/cvc5/synthesis_problem_cvc5.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cegis/cvc5/synthesis_problem_cvc5.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cegis/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/cegis/z3/synthesis_problem_z3.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cegis/z3/synthesis_problem_z3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/fast_enumerative_synthesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fast_enumerative_synthesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cegis/cvc5/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cegis/z3/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/bin/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/bin/check.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/bin/check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/bin/convert.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/bin/convert.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/bin/size.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/bin/size.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/ast.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/ast.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/bin/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/base/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/base/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/base/printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/base/processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/base/sizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/base/sizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/exceptions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/resolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/resolution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/symbol_table_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/symbol_table_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v1/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v1/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v1/parsetab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v1/printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v1/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v1/processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/base/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/lexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v2/lexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v2/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/parsetab.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v2/parsetab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/printer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v2/printer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/helpers/parser/src/v2/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/parser/src/v2/processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pysynthlab/runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/runner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/given_an_LIA_problem.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_given_an_LIA_problem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/given_constraints_to_substitute.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_given_constraints_to_substitute.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,41 +141,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in given_constraints_to_substitute.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.small.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/data/Documents/Data Science/Courses/Dissertation&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;zielu.gittoolbox.prj.config.selected.tab.id&quot;: &quot;zielu.gittoolbox.config.shared.autoFetch&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity.executor": "Run",
+    "Python tests.Python tests in given_constraints_to_substitute.py.executor": "Run",
+    "Python.runner_abs.executor": "Run",
+    "Python.small.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/data/Documents/Data Science/Courses/Dissertation",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true",
+    "zielu.gittoolbox.prj.config.selected.tab.id": "zielu.gittoolbox.config.shared.autoFetch"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/pysynthlab/solvers" />
       <recent name="$PROJECT_DIR$/pysynthlab/helpers/parser" />
       <recent name="$PROJECT_DIR$/tests/helpers/test_input_files" />
-      <recent name="$PROJECT_DIR$/tests" />
-      <recent name="$PROJECT_DIR$/pysynthlab" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pysynthlab" />
       <recent name="$PROJECT_DIR$/.." />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity">
+  <component name="RunManager" selected="Python.runner_abs">
     <configuration default="true" type="BIBTEX_RUN_CONFIGURATION" factoryName="LaTeX configuration factory">
       <texify-bibtex>
         <compiler />
@@ -320,21 +375,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="Dissertation" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;given_constraints_to_substitute.WhenTheConstraintIsCommutativity&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Dissertation" />
       <option name="ENV_FILES" value="" />
@@ -367,7 +407,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in given_constraints_to_substitute.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for tests.test_given_constraints_to_substitute.WhenTheConstraintIsCommutativity" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Dissertation" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -378,7 +418,22 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/given_constraints_to_substitute.py&quot;" />
+      <option name="_new_target" value="&quot;tests.test_given_constraints_to_substitute.WhenTheConstraintIsCommutativity&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in test_given_constraints_to_substitute.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="Dissertation" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_given_constraints_to_substitute.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -390,15 +445,15 @@
       <item itemvalue="Python.runner_sygus_two" />
       <item itemvalue="Python.small" />
       <item itemvalue="Python.runner_max2ints" />
-      <item itemvalue="Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
-      <item itemvalue="Python tests.Python tests in given_constraints_to_substitute.py" />
+      <item itemvalue="Python tests.Python tests in test_given_constraints_to_substitute.py" />
+      <item itemvalue="Python tests.Python tests for tests.test_given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
       <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
-        <item itemvalue="Python tests.Python tests in given_constraints_to_substitute.py" />
+        <item itemvalue="Python tests.Python tests for tests.test_given_constraints_to_substitute.WhenTheConstraintIsCommutativity" />
+        <item itemvalue="Python tests.Python tests in test_given_constraints_to_substitute.py" />
         <item itemvalue="Python.runner_max2ints" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.TestProgramParser.testImportValidFile" />
         <item itemvalue="Python tests.Python tests for test_syugus_parser.test_opening" />
@@ -490,7 +545,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pysynthlab/synthesis_problem.py</url>
+          <url>file://$PROJECT_DIR$/src/synthesis_problem.py</url>
           <line>468</line>
           <option name="timeStamp" value="193" />
         </line-breakpoint>
