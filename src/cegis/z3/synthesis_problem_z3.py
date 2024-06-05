@@ -226,10 +226,16 @@ class SynthesisProblem:
         """
         Initialize the Z3 variables.
         """
-        for variable in self.problem.commands:
-            if variable.command_kind == CommandKind.DECLARE_VAR and variable.sort_expression.identifier.symbol == 'Int':
-                z3_var = z3.Int(variable.symbol, self.context.enumerator_solver.ctx)
-                self.context.z3_variables[variable.symbol] = z3_var
+        for command in self.problem.commands:
+            if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Int':
+                self.context.z3_variables[command.symbol] = z3.Int(command.symbol)
+            elif command.command_kind == CommandKind.DECLARE_FUN or command.command_kind == CommandKind.SYNTH_FUN:
+                if command.range_sort_expression.identifier.symbol == 'Int':
+                    for parameter in command.parameters_and_sorts:
+                        var_symbol = parameter[0]
+                        var_sort_expr = parameter[1]
+                        if var_sort_expr.identifier.symbol == 'Int':
+                            self.context.z3_variables[var_symbol] = z3.Int(var_symbol)
 
     def initialise_z3_synth_functions(self) -> None:
         """
@@ -323,7 +329,10 @@ class SynthesisProblem:
             elif symbol in self.context.z3_predefined_functions:
                 return self.context.z3_predefined_functions[symbol]
             else:
-                raise ValueError(f"Undefined symbol: {symbol}")
+                z3_var = z3.Int(symbol, self.context.enumerator_solver.ctx)
+                self.context.z3_variables[symbol] = z3_var
+                print(f"creating variable: {z3_var}")
+            return z3_var
         elif isinstance(term, ast.LiteralTerm):
             literal = term.literal
             if literal.literal_kind == ast.LiteralKind.NUMERAL:

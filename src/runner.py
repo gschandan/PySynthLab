@@ -1,13 +1,13 @@
 import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
-from .cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
 
 
 def main(args: argparse.Namespace) -> None:
     """
     Main function to run the synthesis problem.
 
-    :param args: Command-line arguments.
+    :param args: Command-line arguments. 
     """
 
     file_content = args.input_file.read()
