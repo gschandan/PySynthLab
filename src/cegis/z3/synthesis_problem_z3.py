@@ -229,13 +229,13 @@ class SynthesisProblem:
         for command in self.problem.commands:
             if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Int':
                 self.context.z3_variables[command.symbol] = z3.Int(command.symbol)
-            elif command.command_kind == CommandKind.DECLARE_FUN or command.command_kind == CommandKind.SYNTH_FUN:
-                if command.range_sort_expression.identifier.symbol == 'Int':
-                    for parameter in command.parameters_and_sorts:
-                        var_symbol = parameter[0]
-                        var_sort_expr = parameter[1]
-                        if var_sort_expr.identifier.symbol == 'Int':
-                            self.context.z3_variables[var_symbol] = z3.Int(var_symbol)
+            # elif command.command_kind == CommandKind.DECLARE_FUN or command.command_kind == CommandKind.SYNTH_FUN:
+            #     if command.range_sort_expression.identifier.symbol == 'Int':
+            #         for parameter in command.parameters_and_sorts:
+            #             var_symbol = parameter[0]
+            #             var_sort_expr = parameter[1]
+            #             if var_sort_expr.identifier.symbol == 'Int':
+            #                 self.context.z3_variables[var_symbol] = z3.Int(var_symbol)
 
     def initialise_z3_synth_functions(self) -> None:
         """
@@ -244,7 +244,8 @@ class SynthesisProblem:
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            args = [z3.Const(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
+            args = [z3.Int(name) for name in func.argument_names]
+            # args = [z3.Const(f"arg_{i}", sort) for i, sort in enumerate(z3_arg_sorts)] # if z3.Int() doesn't work
             arg_mapping = dict(zip(func.argument_names, args))
             self.context.z3_synth_function_args[func.identifier.symbol] = arg_mapping
             self.context.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
@@ -329,10 +330,7 @@ class SynthesisProblem:
             elif symbol in self.context.z3_predefined_functions:
                 return self.context.z3_predefined_functions[symbol]
             else:
-                z3_var = z3.Int(symbol, self.context.enumerator_solver.ctx)
-                self.context.z3_variables[symbol] = z3_var
-                print(f"creating variable: {z3_var}")
-            return z3_var
+                raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, ast.LiteralTerm):
             literal = term.literal
             if literal.literal_kind == ast.LiteralKind.NUMERAL:
@@ -433,24 +431,6 @@ class SynthesisProblem:
                 return expr
 
         return [reconstruct_expression(c) for c in constraints]
-
-    def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:
-        """
-        Collect input-output pairs for a function from the constraints.
-
-        :param func: The function to collect input-output pairs for.
-        :return: A list of input-output pairs.
-        """
-        io_pairs = []
-        for constraint in self.context.constraints:
-            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,
-                                                                            ast.FunctionApplicationTerm):
-                if constraint.constraint.function_identifier.symbol == func.name():
-                    example_inputs = {arg.identifier.symbol: self.parse_term(arg) for arg in
-                                      constraint.constraint.arguments[:-1]}
-                    example_output = self.parse_term(constraint.constraint.arguments[-1])
-                    io_pairs.append((example_inputs, example_output))
-        return io_pairs
 
     def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str,
                        func: z3.FuncDeclRef, args: List[z3.ExprRef],
