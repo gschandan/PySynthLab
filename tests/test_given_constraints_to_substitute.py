@@ -31,7 +31,8 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
 
     def test_substitute_constraints_commutativity_with_invalid_function(self):
         candidate_expr, _ = self.problem.generate_invalid_solution_two(self.args)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -56,7 +57,8 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
 
     def test_substitute_constraints_commutativity_with_abs_max_function(self):
         candidate_expr, _ = self.problem.generate_correct_abs_max_function(self.args)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -79,7 +81,8 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
 
     def test_substitute_constraints_commutativity_with_integer(self):
         candidate_expr = z3.IntVal(1)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -102,7 +105,8 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
 
     def test_substitute_constraints_commutativity_with_arithmetic_expression(self):
         candidate_expr, _ = self.problem.generate_arithmetic_function(self.args, depth=2, complexity=1)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -159,16 +163,19 @@ class WhenTheFunctionToSynthesiseHasDifferentVariableSymbols(unittest.TestCase):
                 return constraint
         else:
             return constraint
+
     def test_substitute_constraints_with_invalid_function(self):
         candidate_expr, _ = self.problem.generate_invalid_solution_two(self.args)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
         expected_constraints = And(
             candidate_expr(self.args[0], self.args[1]) >= self.args[0],
             candidate_expr(self.args[0], self.args[1]) >= self.args[1],
-            Or(self.args[0] == candidate_expr(self.args[0], self.args[1]), self.args[1] == candidate_expr(self.args[0], self.args[1]))
+            Or(self.args[0] == candidate_expr(self.args[0], self.args[1]),
+               self.args[1] == candidate_expr(self.args[0], self.args[1]))
         )
 
         for constraint in substituted_constraints:
@@ -189,14 +196,16 @@ class WhenTheFunctionToSynthesiseHasDifferentVariableSymbols(unittest.TestCase):
 
     def test_substitute_constraints_with_abs_max_function(self):
         candidate_expr, _ = self.problem.generate_correct_abs_max_function(self.args)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
         expected_constraints = And(
             candidate_expr(self.args[0], self.args[1]) >= self.args[0],
             candidate_expr(self.args[0], self.args[1]) >= self.args[1],
-            Or(self.args[0] == candidate_expr(self.args[0], self.args[1]), self.args[1] == candidate_expr(self.args[0], self.args[1]))
+            Or(self.args[0] == candidate_expr(self.args[0], self.args[1]),
+               self.args[1] == candidate_expr(self.args[0], self.args[1]))
         )
 
         for constraint in substituted_constraints:
@@ -215,7 +224,8 @@ class WhenTheFunctionToSynthesiseHasDifferentVariableSymbols(unittest.TestCase):
 
     def test_substitute_constraints_with_integer(self):
         candidate_expr = z3.IntVal(1)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -241,14 +251,16 @@ class WhenTheFunctionToSynthesiseHasDifferentVariableSymbols(unittest.TestCase):
 
     def test_substitute_constraints_with_arithmetic_expression(self):
         candidate_expr, _ = self.problem.generate_arithmetic_function(self.args, depth=2, complexity=1)
-        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func, candidate_expr)
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
+                                                                      candidate_expr)
 
         self.assertGreater(len(substituted_constraints), 0)
 
         expected_constraints = And(
             candidate_expr(self.args[0], self.args[1]) >= self.args[0],
             candidate_expr(self.args[0], self.args[1]) >= self.args[1],
-            Or(self.args[0] == candidate_expr(self.args[0], self.args[1]), self.args[1] == candidate_expr(self.args[0], self.args[1]))
+            Or(self.args[0] == candidate_expr(self.args[0], self.args[1]),
+               self.args[1] == candidate_expr(self.args[0], self.args[1]))
         )
 
         for constraint in substituted_constraints:
@@ -260,12 +272,10 @@ class WhenTheFunctionToSynthesiseHasDifferentVariableSymbols(unittest.TestCase):
         expected_constraints_canonical = self.convert_constraint_to_canonical_form(expected_constraints)
         constraints_canonical = [self.convert_constraint_to_canonical_form(c) for c in constraints]
         self.assertIn(expected_constraints_canonical, constraints_canonical)
-    
+
         solver = Solver()
         solver.add(substituted_constraints)
         self.assertEqual(solver.check(), sat)
-
-    
 
 
 if __name__ == "__main__":
