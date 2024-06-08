@@ -32,7 +32,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
     def test_substitute_constraints_commutativity_with_invalid_function(self):
         candidate_expr, _ = self.problem.generate_invalid_solution_two(self.args)
         substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
-                                                                      candidate_expr)
+                                                                      candidate_expr, self.args)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -58,7 +58,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
     def test_substitute_constraints_commutativity_with_abs_max_function(self):
         candidate_expr, _ = self.problem.generate_correct_abs_max_function(self.args)
         substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
-                                                                      candidate_expr)
+                                                                      candidate_expr, self.args)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -82,7 +82,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
     def test_substitute_constraints_commutativity_with_integer(self):
         candidate_expr = z3.IntVal(1)
         substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
-                                                                      candidate_expr)
+                                                                      candidate_expr, self.args)
 
         self.assertGreater(len(substituted_constraints), 0)
 
@@ -106,7 +106,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
     def test_substitute_constraints_commutativity_with_arithmetic_expression(self):
         candidate_expr, _ = self.problem.generate_arithmetic_function(self.args, depth=2, complexity=1)
         substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints, self.func,
-                                                                      candidate_expr)
+                                                                      candidate_expr,self.args)
 
         self.assertGreater(len(substituted_constraints), 0)
 

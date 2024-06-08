@@ -404,34 +404,43 @@ class SynthesisProblem:
         }.get(sort_symbol, None)
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef,
-                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[
-        ExprRef]:
+                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable],
+                               func_args: List[z3.ExprRef]) -> List[ExprRef]:
         """
         Substitute a candidate expression into a list of constraints.
-
+    
         :param constraints: The list of constraints.
         :param func: The function to substitute.
         :param candidate_expression: The candidate expression to substitute.
+        :param func_args: The list of function arguments.
         :return: The substituted constraints.
         """
-
-        def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
-            if is_app(expr) and expr.decl() == func:
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                if callable(candidate_expression):
-                    return candidate_expression(*new_args)
-                elif isinstance(candidate_expression, (FuncDeclRef, QuantifierRef)):
-                    return candidate_expression(*new_args)
-                else:
-                    return candidate_expression
-            elif is_app(expr):
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                return expr.decl()(*new_args)
-            else:
-                return expr
-
-        return [reconstruct_expression(c) for c in constraints]
-
+        
+        print(f"constraints {constraints}")
+        print(f"func {func}")
+        print(f"func_args {func_args}")
+        
+        print(f"f {func.sexpr()}")
+        
+        constraint: ExprRef = constraints[0]
+        print(f"constraint {constraint}")
+        def max_z3(x, y):
+             return If(x > y, x, y)
+        
+        max_expr = max_z3(Var(0, IntSort()), Var(1, IntSort()))
+        substituted_expr = substitute_funs(constraint, (func, max_expr))
+        print(f"substituted_expr {substituted_expr}")
+        
+        solver = Solver()
+        solver.add(substituted_expr)
+        if solver.check() == sat:
+            print("Satisfiable")
+            print("Model:", solver.model())
+        else:
+            print("Unsatisfiable")
+            
+        return []
+    
     def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str,
                        func: z3.FuncDeclRef, args: List[z3.ExprRef],
                        candidate_expression: typing.Union[
@@ -448,11 +457,11 @@ class SynthesisProblem:
         :return: True if the candidate expression satisfies the constraints, False otherwise.
         """
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
+        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression, args)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         self.context.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
+        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression, args)
         self.context.verification_solver.add(substituted_constraints)
 
         if self.context.enumerator_solver.check() == sat:
@@ -646,6 +655,7 @@ class SynthesisProblem:
             for candidate, func_str in guesses:
                 try:
                     candidate_expression = candidate(*args)
+                    print("candidate_expression", candidate_expression)
                     self.print_msg(f"Testing guess: {func_str}", level=1)
                     result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
                                                  func, args,
