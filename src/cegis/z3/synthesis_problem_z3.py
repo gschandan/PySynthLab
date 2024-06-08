@@ -404,46 +404,24 @@ class SynthesisProblem:
         }.get(sort_symbol, None)
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef,
-                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable],
-                               func_args: List[z3.ExprRef]) -> List[ExprRef]:
+                               candidate_function: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[ExprRef]:
         """
         Substitute a candidate expression into a list of constraints.
     
         :param constraints: The list of constraints.
         :param func: The function to substitute.
-        :param candidate_expression: The candidate expression to substitute.
-        :param func_args: The list of function arguments.
+        :param candidate_function: The candidate function to substitute.
         :return: The substituted constraints.
         """
-        
-        print(f"constraints {constraints}")
-        print(f"func {func}")
-        print(f"func_args {func_args}")
-        
-        print(f"f {func.sexpr()}")
-        
-        constraint: ExprRef = constraints[0]
-        print(f"constraint {constraint}")
-        def max_z3(x, y):
-             return If(x > y, x, y)
-        
-        max_expr = max_z3(Var(0, IntSort()), Var(1, IntSort()))
-        substituted_expr = substitute_funs(constraint, (func, max_expr))
-        print(f"substituted_expr {substituted_expr}")
-        
-        solver = Solver()
-        solver.add(substituted_expr)
-        if solver.check() == sat:
-            print("Satisfiable")
-            print("Model:", solver.model())
-        else:
-            print("Unsatisfiable")
-            
-        return []
+        candidate_function = candidate_function(Var(0, IntSort()), Var(1, IntSort()))
+        self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+        substituted_constraints = [substitute_funs(constraint, (func, candidate_function)) for constraint in constraints]
+        self.print_msg(f"substituted_constraints {substituted_constraints}", level=0)
+        return substituted_constraints
     
     def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str,
                        func: z3.FuncDeclRef, args: List[z3.ExprRef],
-                       candidate_expression: typing.Union[
+                       candidate_function: typing.Union[
                            z3.FuncDeclRef, z3.QuantifierRef, Callable, z3.ExprRef]) -> bool:
         """
         Test a candidate expression against the constraints and negated constraints.
@@ -453,25 +431,25 @@ class SynthesisProblem:
         :param func_str: The string representation of the function.
         :param func: The function to test.
         :param args: The arguments of the function.
-        :param candidate_expression: The candidate expression to test.
+        :param candidate_function: The candidate expression to test.
         :return: True if the candidate expression satisfies the constraints, False otherwise.
         """
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression, args)
+        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_function)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         self.context.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression, args)
+        substituted_constraints = self.substitute_constraints(constraints, func, candidate_function)
         self.context.verification_solver.add(substituted_constraints)
 
         if self.context.enumerator_solver.check() == sat:
             model = self.context.enumerator_solver.model()
             counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
             incorrect_output = None
-            if callable(candidate_expression):
-                incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
-            elif isinstance(candidate_expression, (QuantifierRef, ExprRef)):
-                incorrect_output = model.eval(candidate_expression, model_completion=True)
+            if callable(candidate_function):
+                incorrect_output = model.eval(candidate_function(*args), model_completion=True)
+            elif isinstance(candidate_function, (QuantifierRef, ExprRef)):
+                incorrect_output = model.eval(candidate_function, model_completion=True)
 
             self.context.counterexamples.append((counterexample, incorrect_output))
             self.print_msg(f"Incorrect output for {func_str}: {counterexample} == {incorrect_output}", level=0)
@@ -645,7 +623,7 @@ class SynthesisProblem:
         for func in list(self.context.z3_synth_functions.values()):
             args = [self.context.z3_variables[arg_name] for arg_name in
                     self.context.z3_synth_function_args[func.__str__()]]
-            num_functions = 10
+            num_functions = 20
             guesses = [self.generate_arithmetic_function(args, 3, 2) for i in range(num_functions)]
             guesses.append(self.generate_invalid_solution_one(args))
             guesses.append(self.generate_invalid_solution_two(args))
@@ -654,12 +632,8 @@ class SynthesisProblem:
 
             for candidate, func_str in guesses:
                 try:
-                    candidate_expression = candidate(*args)
-                    print("candidate_expression", candidate_expression)
                     self.print_msg(f"Testing guess: {func_str}", level=1)
-                    result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
-                                                 func, args,
-                                                 candidate_expression)
+                    result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str, func, args, candidate)
                     self.print_msg("\n", level=1)
                     if result:
                         self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
