@@ -4,6 +4,7 @@ from typing import List, Dict, Tuple, Set, Callable, Collection
 
 import pyparsing
 import dataclasses
+
 from z3 import *
 from z3 import ExprRef, FuncDeclRef, QuantifierRef
 
@@ -189,39 +190,6 @@ class SynthesisProblem:
         """
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]
 
-    def initialize_synth_functions(self) -> None:
-        """
-        Initialize the synthesis functions.
-        """
-        for func_name, func in self.get_synth_funcs().items():
-            func_args = [z3.Int(arg_name) for arg_name in func.argument_names]
-            func_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor)
-                              for sort_descriptor in func.argument_sorts]
-            func_return_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-
-            self.context.synth_functions.append({
-                "name": func_name,
-                "args": func_args,
-                "arg_sorts": func_arg_sorts,
-                "return_sort": func_return_sort,
-            })
-
-    def extract_synth_function(self, function_symbol: str) -> str:
-        """
-        Extract the synthesis function declaration from the problem.
-
-        :param function_symbol: The symbol of the synthesis function.
-        :return: The synthesis function declaration in SMT-LIB format.
-        """
-        synthesis_function = self.get_synth_func(function_symbol)
-        func_problem = next(filter(lambda x:
-                                   x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
-                                   self.problem.commands))
-
-        arg_sorts = [str(arg_sort.identifier) for arg_sort in synthesis_function.argument_sorts]
-
-        return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
-
     def initialise_z3_variables(self) -> None:
         """
         Initialize the Z3 variables.
@@ -229,13 +197,6 @@ class SynthesisProblem:
         for command in self.problem.commands:
             if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Int':
                 self.context.z3_variables[command.symbol] = z3.Int(command.symbol)
-            # elif command.command_kind == CommandKind.DECLARE_FUN or command.command_kind == CommandKind.SYNTH_FUN:
-            #     if command.range_sort_expression.identifier.symbol == 'Int':
-            #         for parameter in command.parameters_and_sorts:
-            #             var_symbol = parameter[0]
-            #             var_sort_expr = parameter[1]
-            #             if var_sort_expr.identifier.symbol == 'Int':
-            #                 self.context.z3_variables[var_symbol] = z3.Int(var_symbol)
 
     def initialise_z3_synth_functions(self) -> None:
         """
@@ -299,9 +260,16 @@ class SynthesisProblem:
         Parse the constraints of the synthesis problem.
         """
         all_constraints = []
+        declared_variables = set(self.get_var_symbols())
+        declared_functions = set(self.get_function_symbols())
+        declared_synth_functions = set(self.get_synth_funcs().keys())
 
         for constraint in self.context.constraints:
             if isinstance(constraint, ast.ConstraintCommand):
+                undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables,
+                                                                      declared_functions, declared_synth_functions)
+                if undeclared_variables:
+                    raise ValueError(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                 term = self.parse_term(constraint.constraint)
                 all_constraints.append(term)
                 self.context.original_assertions.append(term)
@@ -313,6 +281,36 @@ class SynthesisProblem:
             self.print_msg("Warning: No constraints found or generated.", level=1)
 
         self.context.negated_assertions = self.negate_assertions(self.context.z3_constraints)
+
+    def find_undeclared_variables(self, term, declared_variables, declared_functions, declared_synth_functions):
+        """
+        Find undeclared variables in a term.
+    
+        :param term: The term to check.
+        :param declared_variables: The set of declared variables.
+        :param declared_functions: The set of declared functions.
+        :param declared_synth_functions: The set of declared synthesis functions.
+        :return: A list of undeclared variables found in the term.
+        """
+        undeclared_variables = []
+
+        if isinstance(term, ast.IdentifierTerm):
+            symbol = term.identifier.symbol
+            if symbol not in declared_variables and symbol not in declared_functions and symbol not in declared_synth_functions:
+                undeclared_variables.append(symbol)
+        elif isinstance(term, ast.FunctionApplicationTerm):
+            for arg in term.arguments:
+                undeclared_variables.extend(self.find_undeclared_variables(arg, declared_variables, declared_functions,
+                                                                           declared_synth_functions))
+        elif isinstance(term, ast.QuantifiedTerm):
+            for var_name, _ in term.quantified_variables:
+                if var_name not in declared_variables:
+                    undeclared_variables.append(var_name)
+            undeclared_variables.extend(
+                self.find_undeclared_variables(term.term_body, declared_variables, declared_functions,
+                                               declared_synth_functions))
+
+        return undeclared_variables
 
     def parse_term(self, term: ast.Term) -> ExprRef | FuncDeclRef | bool | int:
         """
@@ -354,6 +352,7 @@ class SynthesisProblem:
                 "+": lambda *args: z3.Sum(args),
                 "*": lambda *args: z3.Product(*args),
                 "/": lambda arg1, arg2: arg1 / arg2,
+                "=>": lambda arg1, arg2: z3.Implies(arg1, arg2),
             }
             if func_symbol in operator_map:
                 op = operator_map[func_symbol]
@@ -378,12 +377,17 @@ class SynthesisProblem:
             else:
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
         elif isinstance(term, ast.QuantifiedTerm):
-            variables = [(v.symbol, z3.Int(v.symbol)) for v in term.quantified_variables]
+            quantified_variables = []
+            for var_name, _ in term.quantified_variables:
+                if var_name in self.context.z3_variables:
+                    quantified_variables.append(self.context.z3_variables[var_name])
+                else:
+                    raise ValueError(f"Undeclared variable used in quantifier: {var_name}")
             body = self.parse_term(term.term_body)
             if term.quantifier_kind == ast.QuantifierKind.FORALL:
-                return z3.ForAll(variables, body)
+                return z3.ForAll(quantified_variables, body)
             elif term.quantifier_kind == ast.QuantifierKind.EXISTS:
-                return z3.Exists(variables, body)
+                return z3.Exists(quantified_variables, body)
             else:
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
         else:
@@ -404,38 +408,24 @@ class SynthesisProblem:
         }.get(sort_symbol, None)
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef,
-                               candidate_expression: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[
+                               candidate_function: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[
         ExprRef]:
         """
         Substitute a candidate expression into a list of constraints.
 
         :param constraints: The list of constraints.
         :param func: The function to substitute.
-        :param candidate_expression: The candidate expression to substitute.
+        :param candidate_function: The candidate function to substitute.
         :return: The substituted constraints.
         """
-
-        def reconstruct_expression(expr: z3.ExprRef) -> z3.ExprRef:
-            if is_app(expr) and expr.decl() == func:
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                if callable(candidate_expression):
-                    return candidate_expression(*new_args)
-                elif isinstance(candidate_expression, (FuncDeclRef, QuantifierRef)):
-                    return candidate_expression(*new_args)
-                else:
-                    return candidate_expression
-            elif is_app(expr):
-                new_args = [reconstruct_expression(arg) for arg in expr.children()]
-                return expr.decl()(*new_args)
-            else:
-                return expr
-
-        return [reconstruct_expression(c) for c in constraints]
+        substituted_constraints = [substitute_funs(constraint, (func, candidate_function)) for constraint in
+                                   constraints]
+        self.print_msg(f"substituted_constraints {substituted_constraints}", level=0)
+        return substituted_constraints
 
     def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str,
-                       func: z3.FuncDeclRef, args: List[z3.ExprRef],
-                       candidate_expression: typing.Union[
-                           z3.FuncDeclRef, z3.QuantifierRef, Callable, z3.ExprRef]) -> bool:
+                       func: z3.FuncDeclRef, args: List[z3.ExprRef], candidate_function: typing.Union[
+                z3.FuncDeclRef, z3.QuantifierRef, Callable, z3.ExprRef]) -> bool:
         """
         Test a candidate expression against the constraints and negated constraints.
 
@@ -444,59 +434,47 @@ class SynthesisProblem:
         :param func_str: The string representation of the function.
         :param func: The function to test.
         :param args: The arguments of the function.
-        :param candidate_expression: The candidate expression to test.
+        :param candidate_function: The candidate expression to test.
         :return: True if the candidate expression satisfies the constraints, False otherwise.
         """
-        self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_expression)
-        self.context.enumerator_solver.add(substituted_neg_constraints)
 
         self.context.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints(constraints, func, candidate_expression)
+        substituted_constraints = self.substitute_constraints(constraints, func, candidate_function)
         self.context.verification_solver.add(substituted_constraints)
+
+        if self.context.verification_solver.check() == unsat:
+            self.print_msg(f"Verification failed for guess {func_str}. Candidate violates constraints.", level=0)
+            return False
+
+        self.context.enumerator_solver.reset()
+        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_function)
+        self.context.enumerator_solver.add(substituted_neg_constraints)
 
         if self.context.enumerator_solver.check() == sat:
             model = self.context.enumerator_solver.model()
-            counterexample = {str(var): model.eval(var, model_completion=True) for var in args}
+            counterexample: Dict[str, ExprRef] = {var.name(): model.get_interp(model.decls()[i]) for i, var in
+                                                  enumerate(model.decls())}
             incorrect_output = None
-            if callable(candidate_expression):
-                incorrect_output = model.eval(candidate_expression(*args), model_completion=True)
-            elif isinstance(candidate_expression, (QuantifierRef, ExprRef)):
-                incorrect_output = model.eval(candidate_expression, model_completion=True)
+            if callable(candidate_function):
+                incorrect_output = model.eval(candidate_function(*args), model_completion=True)
+            elif isinstance(candidate_function, (QuantifierRef, ExprRef)):
+                incorrect_output = model.eval(candidate_function, model_completion=True)
 
             self.context.counterexamples.append((counterexample, incorrect_output))
             self.print_msg(f"Incorrect output for {func_str}: {counterexample} == {incorrect_output}", level=0)
-
-            var_vals = [model[v] for v in args]
-            for var, val in zip(args, var_vals):
-                self.context.verification_solver.add(var == val)
-            if self.context.verification_solver.check() == sat:
-                self.print_msg(f"verification solver state {self.context.verification_solver.to_smt2()}", level=0)
-                self.print_msg(f"Verification passed unexpectedly for guess {func_str}. Possible error in logic.",
-                               level=0)
-                return False
-            else:
-                self.print_msg(f"Verification failed for guess {func_str}, counterexample confirmed.", level=0)
-                return False
+            return False
         else:
-            self.print_msg(f"No counterexample found for guess {func_str}", level=0)
-            self.print_msg(f"enumeration solver state {self.context.enumerator_solver.to_smt2()}", level=0)
-            self.print_msg(f"verification solver state {self.context.verification_solver.to_smt2()}", level=0)
+            self.print_msg(f"No counterexample found! Guess should be correct: {func_str}.", level=0)
+            return True
 
-            if self.context.verification_solver.check() == sat:
-                self.print_msg(f"No counterexample found for guess {func_str}. Guess should be correct.", level=0)
-                return True
-            else:
-                self.print_msg(f"Verification failed for guess {func_str}. Possible error in logic.", level=0)
-                return False
-
-    def generate_correct_abs_max_function(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+    def generate_correct_abs_max_function(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
         """
         Generate a correct implementation of the absolute_max function.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
         def absolute_max_function(*values):
             if len(values) != 2:
@@ -509,13 +487,14 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return absolute_max_function, func_str
 
-    def generate_max_function(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+    def generate_max_function(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
         """
         Generate a correct implementation of the max function.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
         def max_function(*values):
             if len(values) != 2:
@@ -528,13 +507,14 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return max_function, func_str
 
-    def generate_invalid_solution_one(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+    def generate_valid_other_solution_one(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
         """
         Generate a solution that breaks the commutativity constraint.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
         def invalid_function(*values):
             if len(values) != 2:
@@ -547,13 +527,14 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return invalid_function, func_str
 
-    def generate_invalid_solution_two(self, args: List[z3.ExprRef]) -> Tuple[Callable, str]:
+    def generate_invalid_solution_two(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
         """
         Generate a solution that breaks the commutativity constraint.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: A list of the sorts of the parameters for the function
         :return: A tuple containing the function implementation and its string representation.
         """
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
         def invalid_function(*values):
             if len(values) != 2:
@@ -566,12 +547,12 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return invalid_function, func_str
 
-    def generate_arithmetic_function(self, args: List[z3.ExprRef], depth: int, complexity: int,
+    def generate_arithmetic_function(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
         """
-        Generate an arithmetic function based on the given arguments, depth, complexity, and operations.
+        Generate an arithmetic function based on the given number of arguments, argument sorts, depth, complexity, and operations.
     
-        :param args: The arguments of the function.
+        :param arg_sorts: The list of sorts for each argument.
         :param depth: The maximum depth of the generated expression.
         :param complexity: The maximum complexity of the generated expression.
         :param operations: The list of allowed operations (default: ['+', '-', '*', 'If', 'Neg']).
@@ -580,20 +561,23 @@ class SynthesisProblem:
         if operations is None:
             operations = ['+', '-', '*', 'If', 'Neg']
 
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
+        num_args = len(args)
+
         def generate_expression(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or curr_complexity == 0:
                 return random.choice(args) if args and random.random() < 0.5 else z3.IntVal(
                     random.randint(self.MIN_CONST, self.MAX_CONST))
 
             op = random.choice(operations)
-            if op == 'If' and len(args) >= 2:
+            if op == 'If' and num_args >= 2:
                 condition = random.choice(
-                    [args[i] < args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
-                    [args[i] <= args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
-                    [args[i] > args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
-                    [args[i] >= args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
-                    [args[i] == args[j] for i in range(len(args)) for j in range(i + 1, len(args))] +
-                    [args[i] != args[j] for i in range(len(args)) for j in range(i + 1, len(args))]
+                    [args[i] < args[j] for i in range(num_args) for j in range(i + 1, num_args)] +
+                    [args[i] <= args[j] for i in range(num_args) for j in range(i + 1, num_args)] +
+                    [args[i] > args[j] for i in range(num_args) for j in range(i + 1, num_args)] +
+                    [args[i] >= args[j] for i in range(num_args) for j in range(i + 1, num_args)] +
+                    [args[i] == args[j] for i in range(num_args) for j in range(i + 1, num_args)] +
+                    [args[i] != args[j] for i in range(num_args) for j in range(i + 1, num_args)]
                 )
                 true_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 false_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
@@ -618,13 +602,12 @@ class SynthesisProblem:
         self.print_msg(f"Expression type: {type(expr)}", level=1)
 
         def arithmetic_function(*values):
-            if len(values) != len(args):
+            if len(values) != num_args:
                 raise ValueError("Incorrect number of values provided.")
             simplified_expr = z3.simplify(z3.substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
-            self.print_msg(f"Simplified expr: {simplified_expr}", level=1)
             return simplified_expr
 
-        func_str = f"def arithmetic_function({', '.join(str(arg) for arg in args)}):\n"
+        func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
         func_str += f"    return {str(expr)}\n"
 
         return arithmetic_function, func_str
@@ -633,32 +616,60 @@ class SynthesisProblem:
         """
         Execute the chosen counterexample-guided inductive synthesis algorithm.
         """
+        max_complexity = 3
+        max_depth = 3
+        max_candidates_to_evaluate_at_each_depth = 10
         for func in list(self.context.z3_synth_functions.values()):
-            args = [self.context.z3_variables[arg_name] for arg_name in
-                    self.context.z3_synth_function_args[func.__str__()]]
-            num_functions = 10
-            guesses = [self.generate_arithmetic_function(args, 3, 2) for i in range(num_functions)]
-            guesses.append(self.generate_invalid_solution_one(args))
-            guesses.append(self.generate_invalid_solution_two(args))
-            guesses.append(self.generate_correct_abs_max_function(args))
-            guesses.append(self.generate_max_function(args))
+            args = [func.domain(i) for i in range(func.arity())]
+            tested_candidates = set()
 
-            for candidate, func_str in guesses:
-                try:
-                    candidate_expression = candidate(*args)
-                    self.print_msg(f"Testing guess: {func_str}", level=1)
-                    result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
-                                                 func, args,
-                                                 candidate_expression)
-                    self.print_msg("\n", level=1)
-                    if result:
-                        self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
-                        self.print_msg("-" * 150, level=0)
-                        return
-                except Exception as e:
-                    self.print_msg(f"Error occurred while testing candidate: {func_str}", level=0)
-                    self.print_msg(f"Error message: {str(e)}", level=0)
-                    self.print_msg("Skipping this candidate.", level=0)
-                    self.print_msg("\n", level=1)
-                    raise
+            for depth in range(1, max_depth + 1):
+                for complexity in range(1, max_complexity + 1):
+                    guesses = []
+                    for _ in range(max_candidates_to_evaluate_at_each_depth):
+                        candidate, func_str = self.generate_arithmetic_function(args, depth, complexity)
+                        free_variables = [z3.Var(i, func.domain(i)) for i in range(func.arity())]
+                        simplified_candidate = z3.simplify(candidate(*free_variables))
+
+                        if str(simplified_candidate) not in tested_candidates:
+                            tested_candidates.add(str(simplified_candidate))
+                            guesses.append((candidate, func_str))
+
+                    for candidate, func_str in guesses:
+                        try:
+                            free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
+                            candidate_function = candidate(*free_variables)
+                            self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+                            self.print_msg(f"Testing guess (complexity: {complexity}, depth: {depth}): {func_str}",
+                                           level=1)
+                            result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions,
+                                                         func_str,
+                                                         func, args, candidate_function)
+                            self.print_msg("\n", level=1)
+                            if result:
+                                self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                                self.print_msg("-" * 150, level=0)
+                                return
+                            self.print_msg("-" * 75, level=0)
+                        except Exception as e:
+                            self.print_msg(f"Error occurred while testing candidate: {func_str}", level=0)
+                            self.print_msg(f"Error message: {str(e)}", level=0)
+                            self.print_msg("Skipping this candidate.", level=0)
+                            self.print_msg("\n", level=1)
+                            raise
+
             self.print_msg("No satisfying candidate found.", level=0)
+
+            self.print_msg("Trying known candidate.", level=0)
+            candidate, func_str = self.generate_max_function(args)
+            free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
+            candidate_function = candidate(*free_variables)
+            self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+            self.print_msg(f"Testing guess: {func_str}", level=1)
+            result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
+                                         func, args, candidate_function)
+            self.print_msg("\n", level=1)
+            if result:
+                self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                self.print_msg("-" * 150, level=0)
+                return
