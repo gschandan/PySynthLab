@@ -190,39 +190,6 @@ class SynthesisProblem:
         """
         return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]
 
-    def initialize_synth_functions(self) -> None:
-        """
-        Initialize the synthesis functions.
-        """
-        for func_name, func in self.get_synth_funcs().items():
-            func_args = [z3.Int(arg_name) for arg_name in func.argument_names]
-            func_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(sort_descriptor)
-                              for sort_descriptor in func.argument_sorts]
-            func_return_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-
-            self.context.synth_functions.append({
-                "name": func_name,
-                "args": func_args,
-                "arg_sorts": func_arg_sorts,
-                "return_sort": func_return_sort,
-            })
-
-    def extract_synth_function(self, function_symbol: str) -> str:
-        """
-        Extract the synthesis function declaration from the problem.
-
-        :param function_symbol: The symbol of the synthesis function.
-        :return: The synthesis function declaration in SMT-LIB format.
-        """
-        synthesis_function = self.get_synth_func(function_symbol)
-        func_problem = next(filter(lambda x:
-                                   x.command_kind == CommandKind.SYNTH_FUN and x.function_symbol == function_symbol,
-                                   self.problem.commands))
-
-        arg_sorts = [str(arg_sort.identifier) for arg_sort in synthesis_function.argument_sorts]
-
-        return f'(declare-fun {function_symbol} ({" ".join(arg_sorts)}) {func_problem.range_sort_expression.identifier.symbol})'
-
     def initialise_z3_variables(self) -> None:
         """
         Initialize the Z3 variables.
@@ -296,10 +263,11 @@ class SynthesisProblem:
         declared_variables = set(self.get_var_symbols())
         declared_functions = set(self.get_function_symbols())
         declared_synth_functions = set(self.get_synth_funcs().keys())
-    
+
         for constraint in self.context.constraints:
             if isinstance(constraint, ast.ConstraintCommand):
-                undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables, declared_functions, declared_synth_functions)
+                undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables,
+                                                                      declared_functions, declared_synth_functions)
                 if undeclared_variables:
                     raise ValueError(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                 term = self.parse_term(constraint.constraint)
@@ -313,7 +281,7 @@ class SynthesisProblem:
             self.print_msg("Warning: No constraints found or generated.", level=1)
 
         self.context.negated_assertions = self.negate_assertions(self.context.z3_constraints)
-        
+
     def find_undeclared_variables(self, term, declared_variables, declared_functions, declared_synth_functions):
         """
         Find undeclared variables in a term.
@@ -325,21 +293,25 @@ class SynthesisProblem:
         :return: A list of undeclared variables found in the term.
         """
         undeclared_variables = []
-    
+
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
             if symbol not in declared_variables and symbol not in declared_functions and symbol not in declared_synth_functions:
                 undeclared_variables.append(symbol)
         elif isinstance(term, ast.FunctionApplicationTerm):
             for arg in term.arguments:
-                undeclared_variables.extend(self.find_undeclared_variables(arg, declared_variables, declared_functions, declared_synth_functions))
+                undeclared_variables.extend(self.find_undeclared_variables(arg, declared_variables, declared_functions,
+                                                                           declared_synth_functions))
         elif isinstance(term, ast.QuantifiedTerm):
             for var_name, _ in term.quantified_variables:
                 if var_name not in declared_variables:
                     undeclared_variables.append(var_name)
-            undeclared_variables.extend(self.find_undeclared_variables(term.term_body, declared_variables, declared_functions, declared_synth_functions))
-    
+            undeclared_variables.extend(
+                self.find_undeclared_variables(term.term_body, declared_variables, declared_functions,
+                                               declared_synth_functions))
+
         return undeclared_variables
+
     def parse_term(self, term: ast.Term) -> ExprRef | FuncDeclRef | bool | int:
         """
         Parse a term from the AST and convert it to a Z3 expression.
@@ -440,7 +412,7 @@ class SynthesisProblem:
         ExprRef]:
         """
         Substitute a candidate expression into a list of constraints.
-    
+
         :param constraints: The list of constraints.
         :param func: The function to substitute.
         :param candidate_function: The candidate function to substitute.
@@ -499,7 +471,7 @@ class SynthesisProblem:
         """
         Generate a correct implementation of the absolute_max function.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
@@ -519,7 +491,7 @@ class SynthesisProblem:
         """
         Generate a correct implementation of the max function.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
@@ -535,11 +507,11 @@ class SynthesisProblem:
         func_str += f"    return {str(expr)}\n"
         return max_function, func_str
 
-    def generate_invalid_solution_one(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
+    def generate_valid_other_solution_one(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
         """
         Generate a solution that breaks the commutativity constraint.
 
-        :param args: The arguments of the function.
+        :param arg_sorts: The arguments of the function.
         :return: A tuple containing the function implementation and its string representation.
         """
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
@@ -580,7 +552,6 @@ class SynthesisProblem:
         """
         Generate an arithmetic function based on the given number of arguments, argument sorts, depth, complexity, and operations.
     
-        :param num_args: The number of arguments of the function.
         :param arg_sorts: The list of sorts for each argument.
         :param depth: The maximum depth of the generated expression.
         :param complexity: The maximum complexity of the generated expression.
