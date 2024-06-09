@@ -616,33 +616,52 @@ class SynthesisProblem:
         """
         Execute the chosen counterexample-guided inductive synthesis algorithm.
         """
+        max_complexity = 3
+        max_depth = 3
+        max_candidates_to_evaluate_at_each_depth = 10
         for func in list(self.context.z3_synth_functions.values()):
-            num_functions = 50
             args = [func.domain(i) for i in range(func.arity())]
-            guesses = [self.generate_arithmetic_function(args, 2, 2) for i in range(num_functions)]
-            #guesses.append(self.generate_invalid_solution_one(args))
-            guesses.append(self.generate_invalid_solution_two(args))
-            guesses.append(self.generate_correct_abs_max_function(args))
-            guesses.append(self.generate_max_function(args))
 
-            for candidate, func_str in guesses:
-                try:
-                    free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
-                    candidate_function = candidate(*free_variables)
-                    self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
-                    self.print_msg(f"Testing guess: {func_str}", level=1)
-                    result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
-                                                 func, args, candidate_function)
-                    self.print_msg("\n", level=1)
-                    if result:
-                        self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
-                        self.print_msg("-" * 150, level=0)
-                        return
-                    self.print_msg("-" * 75, level=0)
-                except Exception as e:
-                    self.print_msg(f"Error occurred while testing candidate: {func_str}", level=0)
-                    self.print_msg(f"Error message: {str(e)}", level=0)
-                    self.print_msg("Skipping this candidate.", level=0)
-                    self.print_msg("\n", level=1)
-                    raise
+            for depth in range(1, max_depth + 1):
+                for complexity in range(1, max_complexity + 1):
+                    guesses = [self.generate_arithmetic_function(args, depth, complexity) for _ in range(max_candidates_to_evaluate_at_each_depth)]
+                    # guesses.append(self.generate_invalid_solution_two(args))
+                    # guesses.append(self.generate_correct_abs_max_function(args))
+                    # guesses.append(self.generate_max_function(args))
+    
+                    for candidate, func_str in guesses:
+                        try:
+                            free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
+                            candidate_function = candidate(*free_variables)
+                            self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+                            self.print_msg(f"Testing guess (complexity: {complexity}, depth: {depth}): {func_str}", level=1)
+                            result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
+                                                         func, args, candidate_function)
+                            self.print_msg("\n", level=1)
+                            if result:
+                                self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                                self.print_msg("-" * 150, level=0)
+                                return
+                            self.print_msg("-" * 75, level=0)
+                        except Exception as e:
+                            self.print_msg(f"Error occurred while testing candidate: {func_str}", level=0)
+                            self.print_msg(f"Error message: {str(e)}", level=0)
+                            self.print_msg("Skipping this candidate.", level=0)
+                            self.print_msg("\n", level=1)
+                            raise
+    
             self.print_msg("No satisfying candidate found.", level=0)
+            
+            self.print_msg("Trying known candidate.", level=0)
+            candidate, func_str = self.generate_max_function(args)
+            free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
+            candidate_function = candidate(*free_variables)
+            self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+            self.print_msg(f"Testing guess: {func_str}", level=1)
+            result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
+                                         func, args, candidate_function)
+            self.print_msg("\n", level=1)
+            if result:
+                self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                self.print_msg("-" * 150, level=0)
+                return
