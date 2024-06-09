@@ -5,7 +5,6 @@ from typing import List, Dict, Tuple, Set, Callable, Collection
 import pyparsing
 import dataclasses
 
-import z3
 from z3 import *
 from z3 import ExprRef, FuncDeclRef, QuantifierRef
 
@@ -294,9 +293,15 @@ class SynthesisProblem:
         Parse the constraints of the synthesis problem.
         """
         all_constraints = []
-
+        declared_variables = set(self.get_var_symbols())
+        declared_functions = set(self.get_function_symbols())
+        declared_synth_functions = set(self.get_synth_funcs().keys())
+    
         for constraint in self.context.constraints:
             if isinstance(constraint, ast.ConstraintCommand):
+                undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables, declared_functions, declared_synth_functions)
+                if undeclared_variables:
+                    raise ValueError(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                 term = self.parse_term(constraint.constraint)
                 all_constraints.append(term)
                 self.context.original_assertions.append(term)
@@ -308,7 +313,33 @@ class SynthesisProblem:
             self.print_msg("Warning: No constraints found or generated.", level=1)
 
         self.context.negated_assertions = self.negate_assertions(self.context.z3_constraints)
-
+        
+    def find_undeclared_variables(self, term, declared_variables, declared_functions, declared_synth_functions):
+        """
+        Find undeclared variables in a term.
+    
+        :param term: The term to check.
+        :param declared_variables: The set of declared variables.
+        :param declared_functions: The set of declared functions.
+        :param declared_synth_functions: The set of declared synthesis functions.
+        :return: A list of undeclared variables found in the term.
+        """
+        undeclared_variables = []
+    
+        if isinstance(term, ast.IdentifierTerm):
+            symbol = term.identifier.symbol
+            if symbol not in declared_variables and symbol not in declared_functions and symbol not in declared_synth_functions:
+                undeclared_variables.append(symbol)
+        elif isinstance(term, ast.FunctionApplicationTerm):
+            for arg in term.arguments:
+                undeclared_variables.extend(self.find_undeclared_variables(arg, declared_variables, declared_functions, declared_synth_functions))
+        elif isinstance(term, ast.QuantifiedTerm):
+            for var_name, _ in term.quantified_variables:
+                if var_name not in declared_variables:
+                    undeclared_variables.append(var_name)
+            undeclared_variables.extend(self.find_undeclared_variables(term.term_body, declared_variables, declared_functions, declared_synth_functions))
+    
+        return undeclared_variables
     def parse_term(self, term: ast.Term) -> ExprRef | FuncDeclRef | bool | int:
         """
         Parse a term from the AST and convert it to a Z3 expression.
@@ -374,12 +405,17 @@ class SynthesisProblem:
             else:
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
         elif isinstance(term, ast.QuantifiedTerm):
-            variables = [(v.symbol, z3.Int(v.symbol)) for v in term.quantified_variables]
+            quantified_variables = []
+            for var_name, _ in term.quantified_variables:
+                if var_name in self.context.z3_variables:
+                    quantified_variables.append(self.context.z3_variables[var_name])
+                else:
+                    raise ValueError(f"Undeclared variable used in quantifier: {var_name}")
             body = self.parse_term(term.term_body)
             if term.quantifier_kind == ast.QuantifierKind.FORALL:
-                return z3.ForAll(variables, body)
+                return z3.ForAll(quantified_variables, body)
             elif term.quantifier_kind == ast.QuantifierKind.EXISTS:
-                return z3.Exists(variables, body)
+                return z3.Exists(quantified_variables, body)
             else:
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
         else:
@@ -610,10 +646,10 @@ class SynthesisProblem:
         Execute the chosen counterexample-guided inductive synthesis algorithm.
         """
         for func in list(self.context.z3_synth_functions.values()):
-            num_functions = 20
+            num_functions = 50
             args = [func.domain(i) for i in range(func.arity())]
             guesses = [self.generate_arithmetic_function(args, 2, 2) for i in range(num_functions)]
-            guesses.append(self.generate_invalid_solution_one(args))
+            #guesses.append(self.generate_invalid_solution_one(args))
             guesses.append(self.generate_invalid_solution_two(args))
             guesses.append(self.generate_correct_abs_max_function(args))
             guesses.append(self.generate_max_function(args))
