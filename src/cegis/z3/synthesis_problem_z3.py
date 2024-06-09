@@ -621,21 +621,29 @@ class SynthesisProblem:
         max_candidates_to_evaluate_at_each_depth = 10
         for func in list(self.context.z3_synth_functions.values()):
             args = [func.domain(i) for i in range(func.arity())]
+            tested_candidates = set()
 
             for depth in range(1, max_depth + 1):
                 for complexity in range(1, max_complexity + 1):
-                    guesses = [self.generate_arithmetic_function(args, depth, complexity) for _ in range(max_candidates_to_evaluate_at_each_depth)]
-                    # guesses.append(self.generate_invalid_solution_two(args))
-                    # guesses.append(self.generate_correct_abs_max_function(args))
-                    # guesses.append(self.generate_max_function(args))
-    
+                    guesses = []
+                    for _ in range(max_candidates_to_evaluate_at_each_depth):
+                        candidate, func_str = self.generate_arithmetic_function(args, depth, complexity)
+                        free_variables = [z3.Var(i, func.domain(i)) for i in range(func.arity())]
+                        simplified_candidate = z3.simplify(candidate(*free_variables))
+
+                        if str(simplified_candidate) not in tested_candidates:
+                            tested_candidates.add(str(simplified_candidate))
+                            guesses.append((candidate, func_str))
+
                     for candidate, func_str in guesses:
                         try:
                             free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
                             candidate_function = candidate(*free_variables)
                             self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
-                            self.print_msg(f"Testing guess (complexity: {complexity}, depth: {depth}): {func_str}", level=1)
-                            result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions, func_str,
+                            self.print_msg(f"Testing guess (complexity: {complexity}, depth: {depth}): {func_str}",
+                                           level=1)
+                            result = self.test_candidate(self.context.z3_constraints, self.context.negated_assertions,
+                                                         func_str,
                                                          func, args, candidate_function)
                             self.print_msg("\n", level=1)
                             if result:
@@ -649,9 +657,9 @@ class SynthesisProblem:
                             self.print_msg("Skipping this candidate.", level=0)
                             self.print_msg("\n", level=1)
                             raise
-    
+
             self.print_msg("No satisfying candidate found.", level=0)
-            
+
             self.print_msg("Trying known candidate.", level=0)
             candidate, func_str = self.generate_max_function(args)
             free_variables = [Var(i, func.domain(i)) for i in range(func.arity())]
