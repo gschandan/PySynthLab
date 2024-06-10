@@ -66,7 +66,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_expr, func_str = self.problem.generate_max_function(args)
         result = self.problem.test_candidate(self.problem.context.z3_constraints,
-                                             self.problem.context.negated_assertions, func_str, func, args,
+                                             self.problem.context.negated_constraints, func_str, func, args,
                                              candidate_expr)
         self.assertTrue(result)
 
@@ -151,7 +151,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegersWithDifferentGlobalVariables(unittest.T
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_expr, func_str = self.problem.generate_max_function(args)
         result = self.problem.test_candidate(self.problem.context.z3_constraints,
-                                             self.problem.context.negated_assertions, func_str, func, args,
+                                             self.problem.context.negated_constraints, func_str, func, args,
                                              candidate_expr)
         self.assertTrue(result)
 
