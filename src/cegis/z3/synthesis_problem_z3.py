@@ -759,7 +759,7 @@ class SynthesisProblem:
                         raise
 
         self.print_msg("No satisfying candidates found.", level=0)
-
+        # following is just for verifying, will convert these to unit tests
         if len(args_list) == 4:
             self.print_msg("Trying known candidate for 4.", level=0)
 
