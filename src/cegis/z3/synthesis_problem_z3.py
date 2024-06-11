@@ -760,7 +760,7 @@ class SynthesisProblem:
 
         self.print_msg("No satisfying candidates found.", level=0)
         # following is just for verifying, will convert these to unit tests
-        if len(args_list) == 4:
+        if sum(len(sublist) for sublist in args_list) == 4:
             self.print_msg("Trying known candidate for 4.", level=0)
 
             def id1_function(*values):
@@ -793,18 +793,39 @@ class SynthesisProblem:
                 self.print_msg("-" * 150, level=0)
                 return
             self.print_msg("-" * 75, level=0)
-        
-        self.print_msg("Trying known candidate for max", level=0)
-        free_variables = [Var(i, func.domain(i)) for i in range(list(self.context.z3_synth_functions.values())[0].arity())]
-        args = [func.domain(i) for i in range(list(self.context.z3_synth_functions.values())[0].arity())]
-        candidate, func_str = self.generate_max_function(args)
-        candidate_function = candidate(*free_variables)
-        self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
-        self.print_msg(f"Testing guess: {func_str}", level=1)
-        result = self.test_multiple_candidates(self.context.z3_constraints, self.context.negated_constraints, [func_str],
-                                               [candidate_function], args )
-        self.print_msg("\n", level=1)
-        if result:
-            self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
-            self.print_msg("-" * 150, level=0)
-            return
+
+        if sum(len(sublist) for sublist in args_list) == 2:
+            self.print_msg("Trying known candidate for max", level=0)
+            free_variables = [Var(i, func.domain(i)) for i in range(list(self.context.z3_synth_functions.values())[0].arity())]
+            args = [func.domain(i) for i in range(list(self.context.z3_synth_functions.values())[0].arity())]
+            candidate, func_str = self.generate_max_function(args)
+            candidate_function = candidate(*free_variables)
+            self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+            self.print_msg(f"Testing guess: {func_str}", level=1)
+            result = self.test_multiple_candidates(self.context.z3_constraints, self.context.negated_constraints, [func_str],
+                                                   [candidate_function], args )
+            self.print_msg("\n", level=1)
+            if result:
+                self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                self.print_msg("-" * 150, level=0)
+                return
+            
+        if sum(len(sublist) for sublist in args_list) == 3:
+            self.print_msg("Trying known candidate for max3", level=0)
+            free_variables = [Var(i, func.domain(i)) for i in range(list(self.context.z3_synth_functions.values())[0].arity())]
+            args = [func.domain(i) for i in range(list(self.context.z3_synth_functions.values())[0].arity())]
+            def max_function_3(*values):
+                x, y , z = values
+                return z3.If(x >= y, z3.If(x >= z, x, z), z3.If(y >= z, y, z))
+            
+            func_str = "max_3_ints"
+            candidate_function = max_function_3(*free_variables)
+            self.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
+            self.print_msg(f"Testing guess: {func_str}", level=1)
+            result = self.test_multiple_candidates(self.context.z3_constraints, self.context.negated_constraints, [func_str],
+                                                   [candidate_function], args )
+            self.print_msg("\n", level=1)
+            if result:
+                self.print_msg(f"Found a satisfying candidate! {func_str}", level=0)
+                self.print_msg("-" * 150, level=0)
+                return
