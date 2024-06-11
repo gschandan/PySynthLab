@@ -686,6 +686,7 @@ class SynthesisProblem:
                     incorrect_output = model.eval(candidate, model_completion=True)
 
                 counterexample: Dict[str, ExprRef] = {var.name(): model.get_interp(model.decls()[i]) for i, var in enumerate(model.decls())}
+                self.print_msg(f"Counterexample: {counterexample}", level=0)
                 counterexamples.append(counterexample)
                 incorrect_outputs.append(incorrect_output)
                 self.context.counterexamples.append((counterexample, incorrect_output))
