@@ -412,66 +412,6 @@ class SynthesisProblem:
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
 
-    def generate_correct_abs_max_function(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
-        """
-        Generate a correct implementation of the absolute_max function.
-
-        :param arg_sorts: The arguments of the function.
-        :return: A tuple containing the function implementation and its string representation.
-        """
-        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-
-        def absolute_max_function(*values):
-            if len(values) != 2:
-                raise ValueError("absolute_max_function expects exactly 2 arguments.")
-            x, y = values
-            return If(If(x >= 0, x, -x) > If(y >= 0, y, -y), If(x >= 0, x, -x), If(y >= 0, y, -y))
-
-        expr = absolute_max_function(*args[:2])
-        func_str = f"def absolute_max_function({', '.join(str(arg) for arg in args[:2])}):\n"
-        func_str += f"    return {str(expr)}\n"
-        return absolute_max_function, func_str
-
-    def generate_valid_other_solution_one(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
-        """
-        Generate a solution that breaks the commutativity constraint.
-
-        :param arg_sorts: The arguments of the function.
-        :return: A tuple containing the function implementation and its string representation.
-        """
-        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-
-        def invalid_function(*values):
-            if len(values) != 2:
-                raise ValueError("invalid_function expects exactly 2 arguments.")
-            x, y = values
-            return If(x > y, If(x > y, x, 1), y - 0)
-
-        expr = invalid_function(*args[:2])
-        func_str = f"def invalid_function_one({', '.join(str(arg) for arg in args[:2])}):\n"
-        func_str += f"    return {str(expr)}\n"
-        return invalid_function, func_str
-
-    def generate_invalid_solution_two(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
-        """
-        Generate a solution that breaks the commutativity constraint.
-
-        :param arg_sorts: A list of the sorts of the parameters for the function
-        :return: A tuple containing the function implementation and its string representation.
-        """
-        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-
-        def invalid_function(*values):
-            if len(values) != 2:
-                raise ValueError("invalid_function expects exactly 2 arguments.")
-            x, y = values
-            return If(x > y, x, y - 1)
-
-        expr = invalid_function(*args[:2])
-        func_str = f"def invalid_function_two({', '.join(str(arg) for arg in args[:2])}):\n"
-        func_str += f"    return {str(expr)}\n"
-        return invalid_function, func_str
-
     def generate_arithmetic_function(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
         """
@@ -549,78 +489,17 @@ class SynthesisProblem:
 
         return arithmetic_function, func_str
 
-    def substitute_constraints(self, constraints: Collection[z3.ExprRef], func: z3.FuncDeclRef,
-                               candidate_function: typing.Union[z3.FuncDeclRef, z3.QuantifierRef, Callable]) -> List[
-        ExprRef]:
-        """
-        Substitute a candidate expression into a list of constraints.
-
-        :param constraints: The list of constraints.
-        :param func: The function to substitute.
-        :param candidate_function: The candidate function to substitute.
-        :return: The substituted constraints.
-        """
-        substituted_constraints = [substitute_funs(constraint, (func, candidate_function)) for constraint in
-                                   constraints]
-        self.print_msg(f"substituted_constraints {substituted_constraints}", level=0)
-        return substituted_constraints
-
-    def test_candidate(self, constraints: List[z3.ExprRef], negated_constraints: Collection[z3.ExprRef], func_str: str,
-                       func: z3.FuncDeclRef, args: List[z3.ExprRef], candidate_function: typing.Union[
-                z3.FuncDeclRef, z3.QuantifierRef, Callable, z3.ExprRef]) -> bool:
-        """
-        Test a candidate expression against the constraints and negated constraints.
-    
-        :param constraints: The list of constraints.
-        :param negated_constraints: The list of negated constraints.
-        :param func_str: The string representation of the function.
-        :param func: The function to test.
-        :param args: The arguments of the function.
-        :param candidate_function: The candidate expression to test.
-        :return: True if the candidate expression satisfies the constraints, False otherwise.
-        """
-
-        self.context.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints(constraints, func, candidate_function)
-        self.context.verification_solver.add(substituted_constraints)
-
-        if self.context.verification_solver.check() == unsat:
-            self.print_msg(f"Verification failed for guess {func_str}. Candidate violates constraints.", level=0)
-            return False
-
-        self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints(negated_constraints, func, candidate_function)
-        self.context.enumerator_solver.add(substituted_neg_constraints)
-
-        if self.context.enumerator_solver.check() == sat:
-            model = self.context.enumerator_solver.model()
-            counterexample: Dict[str, ExprRef] = {var.name(): model.get_interp(model.decls()[i]) for i, var in
-                                                  enumerate(model.decls())}
-            incorrect_output = None
-            if callable(candidate_function):
-                incorrect_output = model.eval(candidate_function(*args), model_completion=True)
-            elif isinstance(candidate_function, (QuantifierRef, ExprRef)):
-                incorrect_output = model.eval(candidate_function, model_completion=True)
-
-            self.context.counterexamples.append((counterexample, incorrect_output))
-            self.print_msg(f"Incorrect output for {func_str}: {counterexample} == {incorrect_output}", level=0)
-            return False
-        else:
-            self.print_msg(f"No counterexample found! Guess should be correct: {func_str}.", level=0)
-            return True
-        
-    def substitute_constraints_multiple(self, constraints: Collection[z3.ExprRef], funcs: List[z3.FuncDeclRef],
-                                        candidate_functions: List[typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3,ExprRef,  Callable]]) -> List[
-        z3.ExprRef]:
+    def substitute_constraints_multiple(self, constraints: Collection[z3.ExprRef], functions_to_replace: List[z3.FuncDeclRef],
+                                        candidate_functions: List[typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3,ExprRef,  Callable]]) -> List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
     
         :param constraints: The list of constraints.
-        :param funcs: The list of functions to substitute.
+        :param functions_to_replace: The list of functions to substitute.
         :param candidate_functions: The list of candidate functions to substitute.
         :return: The substituted constraints.
         """
-        substitutions = list(zip(funcs, candidate_functions))
+        substitutions = list(zip(functions_to_replace, candidate_functions))
         substituted_constraints = [substitute_funs(constraint, substitutions) for constraint in constraints]
         self.print_msg(f"substituted_constraints {substituted_constraints}", level=0)
         return substituted_constraints
