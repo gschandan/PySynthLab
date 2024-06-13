@@ -16,7 +16,7 @@ class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
         (constraint (and (>= (func x) (f x y)) (>= (func y) (f x y))))
         (check-synth)
         """
-        self.options = SynthesisProblemOptions()
+        self.options = SynthesisProblemOptions(verbose=0)
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_valid_solution_is_correctly_identified(self):
