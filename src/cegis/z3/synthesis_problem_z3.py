@@ -37,7 +37,9 @@ class SynthesisProblemContext:
     z3_predefined_functions: Dict[str, FuncDeclRef] = dataclasses.field(default_factory=dict)
     z3_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     assertions: Set[ExprRef] = dataclasses.field(default_factory=set)
-    counterexamples: List[Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]] = dataclasses.field(default_factory=list)
+    counterexamples: List[
+        Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]] = dataclasses.field(
+        default_factory=list)
     negated_constraints: Set[ExprRef] = dataclasses.field(default_factory=set)
     additional_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     synth_functions: List[Dict[str, typing.Union[str, List[ExprRef], SortRef]]] = dataclasses.field(
@@ -443,6 +445,7 @@ class SynthesisProblem:
                 return random.choice(args) if args and random.random() < 0.5 else z3.IntVal(
                     random.randint(self.MIN_CONST, self.MAX_CONST))
 
+            expr = None
             op = random.choice(operations)
             if op == 'If' and num_args >= 2:
                 condition = random.choice(
@@ -455,7 +458,7 @@ class SynthesisProblem:
                 )
                 true_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 false_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
-                return z3.If(condition, true_expr, false_expr)
+                expr = z3.If(condition, true_expr, false_expr)
             elif op == 'If' and num_args == 1:
                 condition = random.choice(
                     [args[0] < z3.IntVal(random.randint(self.MIN_CONST, self.MAX_CONST)),
@@ -467,34 +470,53 @@ class SynthesisProblem:
                 )
                 true_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 false_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
-                return z3.If(condition, true_expr, false_expr)
+                expr = z3.If(condition, true_expr, false_expr)
             elif op == 'Neg':
                 expr = generate_expression(curr_depth - 1, curr_complexity - 1)
-                return -expr
+                if z3.is_bool(expr):
+                    return z3.Not(expr)
+                else:
+                    return expr * -1
             elif op in ['+', '-', '*']:
                 left_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 right_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 if op == '+':
-                    return left_expr + right_expr
+                    expr = left_expr + right_expr
                 elif op == '-':
-                    return left_expr - right_expr
+                    expr = left_expr - right_expr
                 elif op == '*':
-                    return left_expr * right_expr
+                    expr = left_expr * right_expr
             else:
                 raise ValueError(f"Unsupported operation: {op}")
 
-        expr = generate_expression(depth, complexity)
-        self.print_msg(f"Generated expression: {expr}", level=1)
-        self.print_msg(f"Expression type: {type(expr)}", level=1)
+            # for candidate_expr, counterexample_args, incorrect_output in self.context.counterexamples:
+            #     if str(expr) == str(candidate_expr):
+            #         return generate_expression(curr_depth, curr_complexity)
+            # 
+            # for _, counterexample_args, incorrect_output in self.context.counterexamples:
+            #     if not counterexample_args:
+            #         continue
+            #     counterexample_values = [z3.IntVal(i, self.context.enumerator_solver.ctx) for i in counterexample_args.values()]
+            #     simplified_expr = z3.simplify(z3.substitute(expr, [(arg, value) for arg, value in zip(args, counterexample_values)]))
+            #     if str(simplified_expr) == str(incorrect_output):
+            #         self.print_msg(f"Generated expression {simplified_expr} evaluates to a previous known incorrect value {incorrect_output} so discarding", level=0)
+            #         return generate_expression(curr_depth, curr_complexity)
+
+            return expr
+
+        generated_expression = generate_expression(depth, complexity)
+        self.print_msg(f"Generated expression: {generated_expression}", level=1)
+        self.print_msg(f"Expression type: {type(generated_expression)}", level=1)
 
         def arithmetic_function(*values):
             if len(values) != num_args:
                 raise ValueError("Incorrect number of values provided.")
-            simplified_expr = z3.simplify(z3.substitute(expr, [(arg, value) for arg, value in zip(args, values)]))
+            simplified_expr = z3.simplify(
+                z3.substitute(generated_expression, [(arg, value) for arg, value in zip(args, values)]))
             return simplified_expr
 
         func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
-        func_str += f"    return {str(expr)}\n"
+        func_str += f"    return {str(generated_expression)}\n"
 
         return arithmetic_function, func_str
 
@@ -502,7 +524,7 @@ class SynthesisProblem:
                                         functions_to_replace: List[z3.FuncDeclRef],
                                         candidate_functions: List[
                                             typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3, ExprRef, Callable]]) -> \
-    List[z3.ExprRef]:
+            List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
     
@@ -531,7 +553,8 @@ class SynthesisProblem:
         """
 
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints_multiple(negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
+        substituted_neg_constraints = self.substitute_constraints_multiple(negated_constraints, list(
+            self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         if self.context.enumerator_solver.check() == sat:
@@ -548,7 +571,8 @@ class SynthesisProblem:
                 elif isinstance(candidate, (z3.QuantifierRef, z3.ExprRef)):
                     incorrect_output = model.eval(candidate, model_completion=True)
 
-                counterexample: Dict[str, ExprRef] = {var.name(): model.get_interp(model.decls()[i]) for i, var in enumerate(model.decls())}
+                counterexample: Dict[str, ExprRef] = {var.name(): model.get_interp(model.decls()[i]) for i, var in
+                                                      enumerate(model.decls())}
                 self.print_msg(f"Counterexample: {counterexample}", level=0)
                 counterexamples.append(counterexample)
                 incorrect_outputs.append(incorrect_output)
@@ -561,7 +585,8 @@ class SynthesisProblem:
             return False
         else:
             self.context.verification_solver.reset()
-            substituted_constraints = self.substitute_constraints_multiple(constraints,list(self.context.z3_synth_functions.values()),candidate_functions)
+            substituted_constraints = self.substitute_constraints_multiple(constraints, list(
+                self.context.z3_synth_functions.values()), candidate_functions)
             self.context.verification_solver.add(substituted_constraints)
             if self.context.verification_solver.check() == unsat:
                 self.print_msg(f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
@@ -623,6 +648,12 @@ class SynthesisProblem:
                         if result:
                             self.print_msg(f"Found satisfying candidates! {'; '.join(func_strs)}", level=0)
                             self.print_msg("-" * 150, level=0)
+                            for func, counterexample, incorrect_output in self.context.counterexamples:
+                                self.print_msg(
+                                    f"Candidate function: {func} Args:{counterexample} Output: {incorrect_output}",
+                                    level=0)
+
+                            self.print_msg(f"Tested candidates: {tested_candidates}", level=0)
                             return
                         else:
                             # need to pass the counter example back to the generate function exclude similar candidates etc
@@ -638,4 +669,6 @@ class SynthesisProblem:
                         raise
         for func, counterexample, incorrect_output in self.context.counterexamples:
             self.print_msg(f"Candidate function: {func} Args:{counterexample} Output: {incorrect_output}", level=0)
+
+        self.print_msg(f"Tested candidates: {tested_candidates}", level=0)
         self.print_msg("No satisfying candidates found.", level=0)
