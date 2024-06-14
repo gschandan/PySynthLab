@@ -1,6 +1,6 @@
 import random
 import typing
-from typing import List, Dict, Tuple, Set, Callable, Collection
+from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
 import pyparsing
 import dataclasses
@@ -37,7 +37,7 @@ class SynthesisProblemContext:
     z3_predefined_functions: Dict[str, FuncDeclRef] = dataclasses.field(default_factory=dict)
     z3_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     assertions: Set[ExprRef] = dataclasses.field(default_factory=set)
-    counterexamples: List[Tuple[Dict[str, ExprRef], ExprRef]] = dataclasses.field(default_factory=list)
+    counterexamples: List[Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]] = dataclasses.field(default_factory=list)
     negated_constraints: Set[ExprRef] = dataclasses.field(default_factory=set)
     additional_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     synth_functions: List[Dict[str, typing.Union[str, List[ExprRef], SortRef]]] = dataclasses.field(
@@ -353,6 +353,7 @@ class SynthesisProblem:
                 "*": lambda *args: z3.Product(*args),
                 "/": lambda arg1, arg2: arg1 / arg2,
                 "=>": lambda arg1, arg2: z3.Implies(arg1, arg2),
+                "ite": lambda cond, arg1, arg2: z3.If(cond, arg1, arg2),
             }
             if func_symbol in operator_map:
                 op = operator_map[func_symbol]
@@ -395,6 +396,14 @@ class SynthesisProblem:
                 return z3.Exists(quantified_variables, body)
             else:
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
+        elif isinstance(term, ast.DefineFunCommand):
+            func_name = term.function_name
+            func_args = [z3.Var(arg[0], self.convert_sort_descriptor_to_z3_sort(arg[1])) for arg in
+                         term.function_parameters]
+            func_body = self.parse_term(term.function_body)
+            func = z3.Function(func_name, *[arg.sort() for arg in func_args], func_body.sort())
+            self.context.z3_predefined_functions[func_name] = func
+            return func
         else:
             raise ValueError(f"Unsupported term type: {type(term)}")
 
@@ -489,8 +498,11 @@ class SynthesisProblem:
 
         return arithmetic_function, func_str
 
-    def substitute_constraints_multiple(self, constraints: Collection[z3.ExprRef], functions_to_replace: List[z3.FuncDeclRef],
-                                        candidate_functions: List[typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3,ExprRef,  Callable]]) -> List[z3.ExprRef]:
+    def substitute_constraints_multiple(self, constraints: Collection[z3.ExprRef],
+                                        functions_to_replace: List[z3.FuncDeclRef],
+                                        candidate_functions: List[
+                                            typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3, ExprRef, Callable]]) -> \
+    List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
     
@@ -518,23 +530,15 @@ class SynthesisProblem:
         :return: True if the candidate expressions satisfy the constraints, False otherwise.
         """
 
-        self.context.verification_solver.reset()
-        substituted_constraints = self.substitute_constraints_multiple(constraints,list(self.context.z3_synth_functions.values()),candidate_functions)
-        self.context.verification_solver.add(substituted_constraints)
-
-        if self.context.verification_solver.check() == unsat:
-            self.print_msg(f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
-                           level=0)
-            return False
-
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints_multiple(negated_constraints,list(self.context.z3_synth_functions.values()),candidate_functions)
+        substituted_neg_constraints = self.substitute_constraints_multiple(negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         if self.context.enumerator_solver.check() == sat:
             model = self.context.enumerator_solver.model()
             counterexamples = []
             incorrect_outputs = []
+            candidate_function_exprs = []
 
             for func, candidate, args in zip(func_strs, candidate_functions, args_list):
                 free_variables = [z3.Var(i, sort) for i, sort in enumerate(args)]
@@ -548,11 +552,21 @@ class SynthesisProblem:
                 self.print_msg(f"Counterexample: {counterexample}", level=0)
                 counterexamples.append(counterexample)
                 incorrect_outputs.append(incorrect_output)
-                self.context.counterexamples.append((counterexample, incorrect_output))
+                candidate_function_expr = candidate(*free_variables) if callable(candidate) else candidate
+                candidate_function_exprs.append(candidate_function_expr)
+
+                self.context.counterexamples.append((candidate_function_expr, counterexample, incorrect_output))
 
             self.print_msg(f"Incorrect outputs for {'; '.join(func_strs)}: {incorrect_outputs}", level=0)
             return False
         else:
+            self.context.verification_solver.reset()
+            substituted_constraints = self.substitute_constraints_multiple(constraints,list(self.context.z3_synth_functions.values()),candidate_functions)
+            self.context.verification_solver.add(substituted_constraints)
+            if self.context.verification_solver.check() == unsat:
+                self.print_msg(f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
+                               level=0)
+                return False
             self.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.", level=0)
             return True
 
@@ -610,6 +624,11 @@ class SynthesisProblem:
                             self.print_msg(f"Found satisfying candidates! {'; '.join(func_strs)}", level=0)
                             self.print_msg("-" * 150, level=0)
                             return
+                        else:
+                            # need to pass the counter example back to the generate function exclude similar candidates etc
+                            for func, counterexample, incorrect_output in self.context.counterexamples:
+                                pass
+                            pass
                         self.print_msg("-" * 75, level=0)
                     except Exception as e:
                         self.print_msg(f"Error occurred while testing candidates: {'; '.join(func_strs)}", level=0)
@@ -617,5 +636,6 @@ class SynthesisProblem:
                         self.print_msg("Skipping these candidates.", level=0)
                         self.print_msg("\n", level=1)
                         raise
-
+        for func, counterexample, incorrect_output in self.context.counterexamples:
+            self.print_msg(f"Candidate function: {func} Args:{counterexample} Output: {incorrect_output}", level=0)
         self.print_msg("No satisfying candidates found.", level=0)
