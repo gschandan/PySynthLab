@@ -99,7 +99,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                         self.context.verification_solver.add(self.context.z3_constraints)
 
                         func_to_synthesize = list(self.context.z3_synth_functions.values())[0]
-                        substituted_term = z3.substitute(func_to_synthesize, (func_to_synthesize.body(), term))
+                        substituted_term = z3.substitute(func_to_synthesize, (func_to_synthesize, term))
 
                         self.context.verification_solver.add(substituted_term)
 
