@@ -17,7 +17,7 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_valid_solutions_Are_correctly_identified(self):
-        def generate_invalid_solution_two( arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
+        def generate_invalid_solution_two(arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
             args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
             def invalid_function(*values):
@@ -32,18 +32,20 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
             return invalid_function, func_str
 
         self.problem.print_msg("Trying known invalid candidate for max", level=0)
-        args = [list(self.problem.context.z3_synth_functions.values())[0].domain(i) for i in
-                range(list(self.problem.context.z3_synth_functions.values())[0].arity())]
+        func_name = list(self.problem.context.z3_synth_functions.keys())[0]
+        func = self.problem.context.z3_synth_functions[func_name]
+        args = [func.domain(i) for i in range(func.arity())]
         candidate, func_str = generate_invalid_solution_two(args)
 
-        free_variables = [z3.Var(i, sort) for i, sort in enumerate(args)]
+        variable_mapping = self.problem.context.variable_mapping_dict[func_name]
+        free_variables = list(variable_mapping.keys())
         candidate_function = candidate(*free_variables)
 
         self.problem.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
         self.problem.print_msg(f"Testing guess: {func_str}", level=1)
         result = self.problem.test_multiple_candidates(self.problem.context.z3_constraints,
                                                        self.problem.context.negated_constraints, [func_str],
-                                                       [candidate_function], [args])
+                                                       [candidate_function])
         self.problem.print_msg("\n", level=1)
         self.assertFalse(result)
 

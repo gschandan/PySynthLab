@@ -20,7 +20,8 @@ def main(args: argparse.Namespace) -> None:
     problem = SynthesisProblem(file_content, options)
 
     if options.verbose < 2:
-        problem.info()
+        problem.info_sygus()
+        problem.info_smt()
 
     problem.execute_cegis()
 

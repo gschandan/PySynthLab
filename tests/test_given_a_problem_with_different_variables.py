@@ -78,13 +78,13 @@ class WhenTheProblemIsTheMaxOfTwoIntegersWithDifferentGlobalVariables(unittest.T
     def test_test_multiple_candidates(self):
         self.problem.initialise_z3_variables()
         self.problem.initialise_z3_synth_functions()
+        self.problem.map_z3_variables()
         self.problem.parse_constraints()
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_expr, func_str = self.generate_max_function([IntSort(), IntSort()])
         candidate_function = candidate_expr(*args)
         result = self.problem.test_multiple_candidates(self.problem.context.z3_constraints,
-                                                       self.problem.context.negated_constraints, [func_str], [candidate_function],
-                                                       [args])
+                                                       self.problem.context.negated_constraints, [func_str], [candidate_function])
         self.assertTrue(result)
 
     def test_get_logic(self):

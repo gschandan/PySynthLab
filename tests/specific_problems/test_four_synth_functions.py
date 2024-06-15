@@ -47,11 +47,12 @@ class FourSynthFunctions(unittest.TestCase):
         candidate_functions = [id1_function, id2_function, id3_function, id4_function]
         func_strs = ["id1_function", "id2_function", "id3_function", "id4_function"]
         args_list = [z3.Var(0, IntSort())]
-        candidate_functions = [ f(*args_list) for f in candidate_functions ]
+        candidate_functions = [f(*args_list) for f in candidate_functions]
         self.problem.print_msg(f"candidate_functions for substitution {candidate_functions}", level=0)
         self.problem.print_msg(f"Testing known candidate: {'; '.join(func_strs)}", level=1)
-        result = self.problem.test_multiple_candidates(self.problem.context.z3_constraints, self.problem.context.negated_constraints, func_strs,
-                                               candidate_functions, args_list)
+        result = self.problem.test_multiple_candidates(self.problem.context.z3_constraints,
+                                                       self.problem.context.negated_constraints, func_strs,
+                                                       candidate_functions)
         self.problem.print_msg("\n", level=1)
         self.assertTrue(result)
 

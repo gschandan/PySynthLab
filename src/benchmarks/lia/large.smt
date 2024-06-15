@@ -1,0 +1,30 @@
+(set-logic LIA)
+(declare-var x Int)
+(declare-var y Int)
+
+(define-fun f ((x Int) (y Int)) Int (+ (- x y) (* x -10) (* y 10) 1000000))
+(define-fun func ((x Int)) Int (+ (* x 100) 1000))
+
+;(assert (and (= (f x y) (f y x)) (and (>= (func x) (f x y)) (>= (func y) (f y x)))))
+;(define-fun f ((x Int) (y Int)) Int 0))
+(assert (or (not (= (f x y) (f y x))) (not (>= (func x) (f x y))) (not (>= (func y) (f y x)))))
+(check-sat)
+(get-model)
+
+;(declare-const x Int)
+;(declare-const y Int)
+;(define-fun f ((x Int) (y Int)) Int 0)
+;(define-fun func ((x Int)) Int (+ (* x 100) 1000))
+;(assert (= (f x y) (f y x)))
+;(assert (and (>= (func x) (f x y)) (>= (func y) (f x y))))
+;(check-sat)
+
+;(set-logic LIA)
+;(declare-fun f (Int Int) Int)
+;(define-fun func ((x Int)) Int (+ (* x 100) 1000))
+;(declare-var x Int)
+;(declare-var y Int)
+;(assert (and (= (f x y) (f y x)) (and (>= (func x) (f x y)) (>= (func y) (f x y)))))
+;(check-sat)
+
+;(assert (or (not (= (f x y) (f y x))) (not (and (>= (func x) (f x y)) (>= (func y) (f x y))))))
