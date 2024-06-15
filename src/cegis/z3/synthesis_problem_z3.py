@@ -554,14 +554,13 @@ class SynthesisProblem:
         :param negated_constraints: The list of negated constraints.
         :param func_strs: The string representations of the functions.
         :param candidate_functions: The candidate expressions to test.
-        :param variable_mapping_dict: The dictionary containing the mapping between free variables and declared variables for each function.
         :return: True if the candidate expressions satisfy the constraints, False otherwise.
         """
         
         self.context.enumerator_solver.reset()
         substituted_neg_constraints = self.substitute_constraints_multiple(negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
-    
+
         if self.context.enumerator_solver.check() == sat:
             model = self.context.enumerator_solver.model()
             counterexamples = []
@@ -572,8 +571,8 @@ class SynthesisProblem:
                 free_variables = list(variable_mapping.keys())
                 counterexample = {str(free_var): model.eval(declared_var, model_completion=True).as_long()
                                   for free_var, declared_var in variable_mapping.items()}
-                
-                incorrect_output = model.eval(candidate, model_completion=True)
+    
+                incorrect_output = z3.simplify(z3.substitute(candidate, [(arg, z3.IntVal(value)) for arg, value in zip(free_variables, list(counterexample.values()))]))
     
                 self.print_msg(f"Counterexample: {counterexample}", level=0)
                 counterexamples.append(counterexample)
