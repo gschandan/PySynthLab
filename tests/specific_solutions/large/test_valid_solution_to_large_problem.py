@@ -43,8 +43,7 @@ class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
 
         print(f"candidate_function for substitution {candidate_function}")
         print(f"Testing guess: {func_str}")
-        result = self.problem.test_multiple_candidates(self.problem.context.z3_constraints,
-                                                       self.problem.context.negated_constraints, [func_str],
+        result = self.problem.test_multiple_candidates( [func_str],
                                                        [candidate_function])
         print(self.problem.context.verification_solver.to_smt2())
         print(self.problem.context.enumerator_solver.to_smt2())

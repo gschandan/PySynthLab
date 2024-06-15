@@ -44,8 +44,7 @@ class MaxThreeIntegers(unittest.TestCase):
 
         self.problem.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
         self.problem.print_msg(f"Testing guess: {func_str}", level=1)
-        result = self.problem.test_multiple_candidates(self.problem.context.z3_constraints,
-                                                       self.problem.context.negated_constraints, [func_str],
+        result = self.problem.test_multiple_candidates( [func_str],
                                                        [candidate_function])
         self.problem.print_msg("\n", level=1)
         self.assertTrue(result)
