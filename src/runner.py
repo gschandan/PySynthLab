@@ -27,15 +27,15 @@ def main(args: argparse.Namespace) -> None:
 
     problem.execute_cegis()
 
-    #problem = FastEnumerativeSynthesis(file_content, options)
+    problem = FastEnumerativeSynthesis(file_content, options)
 
-    # max_depth = 3
-    # generated_terms = problem.generate(max_depth)
-    # 
-    # for sort, terms in generated_terms.items():
-    #     print(f"Generated terms for sort {sort}:")
-    #     for term in terms:
-    #         print(term)
+    max_depth = 3
+    generated_terms = problem.generate(max_depth)
+
+    for sort, terms in generated_terms.items():
+        print(f"Generated terms for sort {sort}:")
+        for term in terms:
+            print(term)
 
 
 if __name__ == '__main__':
