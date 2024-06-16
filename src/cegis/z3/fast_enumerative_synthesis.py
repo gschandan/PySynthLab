@@ -32,32 +32,62 @@ class FastEnumerativeSynthesis(SynthesisProblem):
             # need to decide if to allow recursive functions or not
             # grammar[output_sort].append((func_name, arg_sorts))
 
-            if output_sort == z3.IntSort():
-                grammar[output_sort].extend([
-                    ("Plus", [z3.IntSort(), z3.IntSort()]),
-                    ("Minus", [z3.IntSort(), z3.IntSort()]),
-                    ("Neg", [z3.IntSort()]),
-                    ("Ite", [z3.BoolSort(), z3.IntSort(), z3.IntSort()])
-                ])
-                for const in range(self.MIN_CONST, self.MAX_CONST + 1):
-                    grammar[output_sort].append((f"Times{const}", [z3.IntSort()]))
+            # if output_sort == z3.IntSort():
+            #     grammar[output_sort].extend([
+            #         ("Plus", [z3.IntSort(), z3.IntSort()]),
+            #         ("Minus", [z3.IntSort(), z3.IntSort()]),
+            #         ("Neg", [z3.IntSort()]),
+            #         ("Ite", [z3.BoolSort(), z3.IntSort(), z3.IntSort()])
+            #     ])
+            #     for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+            #         grammar[output_sort].append((f"Times{const}", [z3.IntSort()]))
+            # 
+            #     for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+            #         grammar[output_sort].append((f"Const_{const}", []))
+            # 
+            # elif output_sort == z3.BoolSort():
+            #     grammar[output_sort].extend([
+            #         ("LE", [z3.IntSort(), z3.IntSort()]),
+            #         ("GE", [z3.IntSort(), z3.IntSort()]),
+            #         ("LT", [z3.IntSort(), z3.IntSort()]),
+            #         ("GT", [z3.IntSort(), z3.IntSort()]),
+            #         ("Eq", [z3.IntSort(), z3.IntSort()]),
+            #         ("And", [z3.BoolSort(), z3.BoolSort()]),
+            #         ("Or", [z3.BoolSort(), z3.BoolSort()]),
+            #         ("Not", [z3.BoolSort()]),
+            #         ("Implies", [z3.BoolSort(), z3.BoolSort()]),
+            #         ("Xor", [z3.BoolSort(), z3.BoolSort()])
+            #    ])
 
-                for const in range(self.MIN_CONST, self.MAX_CONST + 1):
-                    grammar[output_sort].append((f"Const_{const}", []))
+        if z3.IntSort() not in grammar:
+            grammar[z3.IntSort()] = []
 
-            elif output_sort == z3.BoolSort():
-                grammar[output_sort].extend([
-                    ("LE", [z3.IntSort(), z3.IntSort()]),
-                    ("GE", [z3.IntSort(), z3.IntSort()]),
-                    ("LT", [z3.IntSort(), z3.IntSort()]),
-                    ("GT", [z3.IntSort(), z3.IntSort()]),
-                    ("Eq", [z3.IntSort(), z3.IntSort()]),
-                    ("And", [z3.BoolSort(), z3.BoolSort()]),
-                    ("Or", [z3.BoolSort(), z3.BoolSort()]),
-                    ("Not", [z3.BoolSort()]),
-                    ("Implies", [z3.BoolSort(), z3.BoolSort()]),
-                    ("Xor", [z3.BoolSort(), z3.BoolSort()])
-                ])
+        grammar[z3.IntSort()].extend([
+            ("Plus", [z3.IntSort(), z3.IntSort()]),
+            ("Minus", [z3.IntSort(), z3.IntSort()]),
+            ("Neg", [z3.IntSort()]),
+            ("Ite", [z3.BoolSort(), z3.IntSort(), z3.IntSort()])
+        ])
+        for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+            grammar[z3.IntSort()].append((f"Times{const}", [z3.IntSort()]))
+
+        for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+            grammar[z3.IntSort()].append((f"Const_{const}", []))
+
+        if z3.BoolSort() not in grammar:
+            grammar[z3.BoolSort()] = []
+        grammar[z3.BoolSort()].extend([
+            ("LE", [z3.IntSort(), z3.IntSort()]),
+            ("GE", [z3.IntSort(), z3.IntSort()]),
+            ("LT", [z3.IntSort(), z3.IntSort()]),
+            ("GT", [z3.IntSort(), z3.IntSort()]),
+            ("Eq", [z3.IntSort(), z3.IntSort()]),
+            ("And", [z3.BoolSort(), z3.BoolSort()]),
+            ("Or", [z3.BoolSort(), z3.BoolSort()]),
+            ("Not", [z3.BoolSort()]),
+            ("Implies", [z3.BoolSort(), z3.BoolSort()]),
+            ("Xor", [z3.BoolSort(), z3.BoolSort()])
+        ])
         print(f"grammar: {grammar}")
         return grammar
 
@@ -84,7 +114,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
     def fast_enum(self, sort: z3.SortRef, size: int) -> List[z3.ExprRef]:
         """
         Enumerates terms of the given sort and size.
-
+    
         :param sort: The Z3 sort of the terms to enumerate.
         :param size: The maximum size of the terms.
         :return: A list of Z3 expressions representing the enumerated terms.
@@ -96,8 +126,12 @@ class FastEnumerativeSynthesis(SynthesisProblem):
             return self.term_cache[(sort, size)]
 
         terms = []
+        unique_terms = set()
+
         if size == 0:
-            terms.extend(self.get_base_terms(sort))
+            base_terms = self.get_base_terms(sort)
+            terms.extend(base_terms)
+            unique_terms.update(base_terms)
 
         queue = [(sort, size)]
         while queue:
@@ -114,11 +148,23 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                                 queue.append((arg_sort, sub_size))
                             arg_terms.append(self.term_cache.get((arg_sort, sub_size), []))
 
-                        for term_combination in product(*arg_terms):
-                            term = self.construct_term(constructor, term_combination)
-                            simplified_term = z3.simplify(term)
-                            if self.is_unique_up_to_rewriting(simplified_term):
-                                terms.append(simplified_term)
+                        if constructor == 'Ite':
+                            bool_terms = self.term_cache.get((z3.BoolSort(), size_combination[0]), [])
+                            int_terms_1 = self.term_cache.get((z3.IntSort(), size_combination[1]), [])
+                            int_terms_2 = self.term_cache.get((z3.IntSort(), size_combination[2]), [])
+                            for bool_term, int_term_1, int_term_2 in product(bool_terms, int_terms_1, int_terms_2):
+                                term = self.construct_term(constructor, (bool_term if bool_term not in (0,1) else True, int_term_1, int_term_2))
+                                simplified_term = z3.simplify(term)
+                                if simplified_term not in unique_terms:
+                                    terms.append(simplified_term)
+                                    unique_terms.add(simplified_term)
+                        else:
+                            for term_combination in product(*arg_terms):
+                                term = self.construct_term(constructor, term_combination)
+                                simplified_term = z3.simplify(term)
+                                if simplified_term not in unique_terms:
+                                    terms.append(simplified_term)
+                                    unique_terms.add(simplified_term)
 
         self.term_cache[(sort, size)] = terms
         return terms
@@ -199,21 +245,6 @@ class FastEnumerativeSynthesis(SynthesisProblem):
             combinations = new_combinations
         return combinations
 
-    def is_unique_up_to_rewriting(self, term: z3.ExprRef) -> bool:
-        """
-        Checks if the term is unique up to rewriting compared to the existing terms.
-
-        :param term: The Z3 term to check.
-        :param depth: The current depth.
-        :return: True if the term is unique, False otherwise.
-        """
-        simplified_term = z3.simplify(term)
-        for depth in range(term.num_args()):
-            for cached_term in self.term_cache.get((term.sort(), depth), []):
-                if z3.eq(simplified_term, cached_term):
-                    return False
-        return True
-
     def generate(self, max_depth: int) -> Dict[z3.SortRef, List[z3.ExprRef]]:
         """
         Generates candidate terms up to the given maximum depth.
@@ -225,5 +256,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
         for depth in range(max_depth + 1):
             for sort in self.grammar.keys():
                 terms = self.fast_enum(sort, depth)
-                generated_terms[sort] = terms
+                if sort not in generated_terms:
+                    generated_terms[sort] = []
+                generated_terms[sort].append(terms)
         return generated_terms
