@@ -1,5 +1,7 @@
 import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
+
+from src.cegis.z3.fast_enumerative_synthesis import FastEnumerativeSynthesis
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
 
 
@@ -24,6 +26,16 @@ def main(args: argparse.Namespace) -> None:
         problem.info_smt()
 
     problem.execute_cegis()
+
+    #problem = FastEnumerativeSynthesis(file_content, options)
+
+    # max_depth = 3
+    # generated_terms = problem.generate(max_depth)
+    # 
+    # for sort, terms in generated_terms.items():
+    #     print(f"Generated terms for sort {sort}:")
+    #     for term in terms:
+    #         print(term)
 
 
 if __name__ == '__main__':
