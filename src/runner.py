@@ -19,21 +19,23 @@ def main(args: argparse.Namespace) -> None:
         verbose=args.verbose
     )
 
-    #problem = SynthesisProblem(file_content, options)
-    problem = FastEnumerativeSynthesis(file_content, options)
+    problem = SynthesisProblem(file_content, options)
 
     if options.verbose < 2:
         problem.info_sygus()
         problem.info_smt()
 
-    max_depth = 3
-    generated_terms = problem.generate(max_depth)
+    problem.execute_cegis()
 
-    for sort, terms in generated_terms.items():
-        print(f"Generated terms for sort {sort}:")
-        for term in terms:
-            print(term)
-    #problem.execute_cegis()
+    #problem = FastEnumerativeSynthesis(file_content, options)
+
+    # max_depth = 3
+    # generated_terms = problem.generate(max_depth)
+    # 
+    # for sort, terms in generated_terms.items():
+    #     print(f"Generated terms for sort {sort}:")
+    #     for term in terms:
+    #         print(term)
 
 
 if __name__ == '__main__':
