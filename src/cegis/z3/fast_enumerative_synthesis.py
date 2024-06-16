@@ -14,9 +14,10 @@ class FastEnumerativeSynthesis(SynthesisProblem):
 
     def extract_grammar(self):
         grammar = {}
-        for func_name, func_descriptor in self.get_synth_funcs().items():
-            output_sort = func_descriptor.range_sort.identifier.symbol
-            arg_sorts = [arg_sort.identifier.symbol for arg_sort in func_descriptor.argument_sorts]
+        func_descriptor: z3.FuncDeclRef
+        for func_name, func_descriptor in self.context.z3_synth_functions.items():
+            output_sort = func_descriptor.range()
+            arg_sorts = [func_descriptor.domain(i) for i in range(func_descriptor.arity())]
             if output_sort not in grammar:
                 grammar[output_sort] = []
             grammar[output_sort].append((func_name, arg_sorts))
@@ -52,8 +53,9 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                 for term_combination in product(*arg_terms):
                     for constructor in constructors:
                         term = self.construct_term(constructor, term_combination)
-                        if self.is_unique_up_to_rewriting(term, depth):
-                            terms.append(term)
+                        simplified_term = z3.simplify(term)
+                        if self.is_unique_up_to_rewriting(simplified_term, depth):
+                            terms.append(simplified_term)
 
         self.term_cache[(sort, depth)] = terms
         return terms
@@ -61,12 +63,15 @@ class FastEnumerativeSynthesis(SynthesisProblem):
     def get_base_terms(self, sort):
         base_terms = []
         for var_name, var in self.context.z3_variables.items():
-            if str(var.sort()) == sort:
+            if var.sort() == sort:
                 base_terms.append(var)
         return base_terms
 
     def construct_term(self, constructor, term_combination):
-        func = self.context.z3_synth_functions[constructor.symbol]
+        # need to add other operations
+        func = self.context.z3_synth_functions.get(constructor)
+        if func is None:
+            raise ValueError(f"Unsupported constructor: {constructor}")
         return func(*term_combination)
 
     def generate_size_combinations(self, n, k):
@@ -81,8 +86,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
     def is_unique_up_to_rewriting(self, term, depth):
         simplified_term = z3.simplify(term)
         for cached_term in self.term_cache.get((term.sort(), depth), []):
-            simplified_cached_term = z3.simplify(cached_term)
-            if simplified_cached_term == simplified_term:
+            if z3.eq(simplified_term, cached_term):
                 return False
         return True
 
@@ -93,17 +97,8 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                 terms = self.fast_enum(sort, depth)
                 for term in terms:
                     if self.is_unique_up_to_rewriting(term, depth):
-                        print(f"Testing term: {term}")
-
-                        self.context.verification_solver.reset()
-                        self.context.verification_solver.add(self.context.z3_constraints)
-
-                        func_to_synthesize = list(self.context.z3_synth_functions.values())[0]
-                        substituted_term = z3.substitute(func_to_synthesize, (func_to_synthesize, term))
-
-                        self.context.verification_solver.add(substituted_term)
-
-                        if self.context.verification_solver.check() == z3.sat:
+                        result = self.test_multiple_candidates([term.sexpr()],[term])
+                        if result:
                             print(f"Found satisfying term: {term}")
                             return term
                         else:
@@ -111,4 +106,6 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                         if sort not in generated_terms:
                             generated_terms[sort] = []
                         generated_terms[sort].append(term)
+                    else:
+                        print(f"Non unique term {term} depth {depth} term_cache {self.term_cache}")
         return generated_terms

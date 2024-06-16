@@ -40,12 +40,13 @@ class SynthesisProblemContext:
     counterexamples: List[
         Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]] = dataclasses.field(
         default_factory=list)
-    negated_constraints: Set[ExprRef] = dataclasses.field(default_factory=set)
+    z3_negated_constraints: Set[ExprRef] = dataclasses.field(default_factory=set)
     additional_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     synth_functions: List[Dict[str, typing.Union[str, List[ExprRef], SortRef]]] = dataclasses.field(
         default_factory=list)
     smt_problem: str = ""
     variable_mapping_dict: Dict[str, Dict[z3.ExprRef, z3.ExprRef]] = dataclasses.field(default_factory=dict)
+    all_z3_functions: Dict[str, z3.FuncDeclRef] = dataclasses.field(default=dict)
 
 
 class SynthesisProblem:
@@ -84,6 +85,7 @@ class SynthesisProblem:
         self.initialise_z3_synth_functions()
         self.initialise_z3_predefined_functions()
         self.map_z3_variables()
+        self.populate_all_z3_functions()
         self.parse_constraints()
 
     def print_msg(self, msg: str, level: int = 0) -> None:
@@ -233,8 +235,14 @@ class SynthesisProblem:
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
             self.context.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol,
                                                                                        *z3_arg_sorts,
-                                                                                       z3_range_sort)
-
+                                                                                       z3_range_sort) 
+    def populate_all_z3_functions(self) -> None:
+        """
+        Add all parsed z3 functions to a dictionary.
+        """
+        self.context.all_z3_functions = dict(self.context.z3_synth_functions.items())
+        self.context.all_z3_functions.update(self.context.z3_predefined_functions.items())
+    
     def map_z3_variables(self) -> None:
         """
         Map z3 variables.
@@ -303,8 +311,8 @@ class SynthesisProblem:
         else:
             self.print_msg("Warning: No constraints found or generated.", level=1)
 
-        self.context.negated_constraints = self.negate_assertions(self.context.z3_constraints)
-        self.print_msg(f"Negated constraints: {self.context.negated_constraints}.", level=1)
+        self.context.z3_negated_constraints = self.negate_assertions(self.context.z3_constraints)
+        self.print_msg(f"Negated constraints: {self.context.z3_negated_constraints}.", level=1)
 
     def find_undeclared_variables(self, term, declared_variables, declared_functions, declared_synth_functions):
         """
@@ -556,7 +564,7 @@ class SynthesisProblem:
         """
 
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints_multiple(self.context.negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
+        substituted_neg_constraints = self.substitute_constraints_multiple(self.context.z3_negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         if self.context.enumerator_solver.check() == sat:
