@@ -213,11 +213,11 @@ class SynthesisProblem:
         for command in self.problem.commands:
             if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Int':
                 self.context.z3_variables[command.symbol] = z3.Int(command.symbol)
+            if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Bool':
+                self.context.z3_variables[command.symbol] = z3.Bool(command.symbol)
 
     def initialise_z3_synth_functions(self) -> None:
-        """
-        Initialize Z3 synthesis functions.
-        """
+        """Initialize Z3 synthesis functions."""
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
@@ -231,37 +231,29 @@ class SynthesisProblem:
             )
 
     def initialise_z3_predefined_functions(self) -> None:
-        """
-        Initialize Z3 predefined functions.
-        """
+        """Initialize Z3 predefined functions."""
         for func in self.get_predefined_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
 
             args = [self.create_z3_variable(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
-            predefined_function_body = self.parse_term(func.function_body)
-            arg_mapping = dict(zip(func.argument_names, args))
-            self.context.z3_predefined_function_args[func.identifier.symbol] = arg_mapping
+            local_variables = dict(zip(func.argument_names, args))
+
+            parsed_body = self.parse_term(func.function_body, local_variables)  # Use local_variables here
+
+            self.context.z3_predefined_function_args[func.identifier.symbol] = local_variables
+
             self.context.z3_predefined_functions[func.identifier.symbol] = (
                 z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort),
-                predefined_function_body,
+                parsed_body,
             )
 
-    def create_z3_variable(self, name: str, sort: z3.SortRef) -> z3.ExprRef:
-        """Create a Z3 variable of the given sort."""
-        if sort == z3.IntSort():
-            return z3.Int(name)
-        elif sort == z3.BoolSort():
-            return z3.Bool(name)
-        else:
-            raise ValueError(f"Unsupported sort: {sort}")
-
     def populate_all_z3_functions(self) -> None:
-        """
-        Add all parsed z3 functions to a dictionary.
-        """
+        """Add all parsed Z3 functions to a dictionary."""
         self.context.all_z3_functions = dict(self.context.z3_synth_functions.items())
-        self.context.all_z3_functions.update(self.context.z3_predefined_functions.items())
+        predefined_function_dict = {name: func_tuple[0] for name, func_tuple in
+                                    self.context.z3_predefined_functions.items()}
+        self.context.all_z3_functions.update(predefined_function_dict)
 
     def map_z3_variables(self) -> None:
         """
@@ -364,21 +356,29 @@ class SynthesisProblem:
 
         return undeclared_variables
 
-    def parse_term(self, term: ast.Term) -> ExprRef | FuncDeclRef | bool | int:
-        """
-        Parse a term from the AST and convert it to a Z3 expression.
+    def parse_term(self, term: ast.Term,
+                   local_variables: Dict[str, ExprRef] = None) -> ExprRef | FuncDeclRef | bool | int:
+        """Parse a term with optional local variable context.
 
+        :param local_variables: any local function variables
         :param term: The term to parse.
         :return: The Z3 expression representing the term.
         """
+
+        local_variables = local_variables if local_variables else {}
+
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
-            if symbol in self.context.z3_variables:
+            if symbol in local_variables:
+                return local_variables[symbol]
+            elif symbol in self.context.z3_variables:
+                return self.context.z3_variables[symbol]
+            elif symbol in self.context.z3_predefined_function_args:
                 return self.context.z3_variables[symbol]
             elif symbol in self.context.z3_synth_functions:
                 return self.context.z3_synth_functions[symbol]
             elif symbol in self.context.z3_predefined_functions:
-                return self.context.z3_predefined_functions[symbol]
+                return self.context.z3_predefined_functions[symbol][0]
             else:
                 raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, ast.LiteralTerm):
@@ -391,7 +391,13 @@ class SynthesisProblem:
                 raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
         elif isinstance(term, ast.FunctionApplicationTerm):
             func_symbol = term.function_identifier.symbol
-            args = [self.parse_term(arg) for arg in term.arguments]
+            nested_local_variables = local_variables.copy()
+            if func_symbol in self.context.z3_predefined_function_args:
+                for arg_name, z3_var in self.context.z3_predefined_function_args[func_symbol].items():
+                    nested_local_variables[arg_name] = z3_var
+
+            args = [self.parse_term(arg, nested_local_variables) for arg in term.arguments]
+
             operator_map = {
                 "and": lambda *args: z3.And(*args),
                 "or": lambda *args: z3.Or(*args),
@@ -429,8 +435,11 @@ class SynthesisProblem:
                 func_term = self.context.z3_synth_functions[func_symbol]
                 return func_term(*args)
             elif func_symbol in self.context.z3_predefined_functions:
-                func = self.context.z3_predefined_functions[func_symbol]
-                return func(*args)
+                func, body = self.context.z3_predefined_functions[func_symbol]
+                function_args = self.context.z3_predefined_function_args[func_symbol]
+                substituted_body = z3.substitute(body,
+                                                 [(arg, value) for arg, value in zip(function_args.values(), args)])
+                return substituted_body
             else:
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
         elif isinstance(term, ast.QuantifiedTerm):
@@ -471,6 +480,16 @@ class SynthesisProblem:
             'Int': z3.IntSort(),
             'Bool': z3.BoolSort(),
         }.get(sort_symbol, None)
+
+    @staticmethod
+    def create_z3_variable(name: str, sort: z3.SortRef) -> z3.ExprRef:
+        """Create a Z3 variable of the given sort."""
+        if sort == z3.IntSort():
+            return z3.Int(name)
+        elif sort == z3.BoolSort():
+            return z3.Bool(name)
+        else:
+            raise ValueError(f"Unsupported sort: {sort}")
 
     def generate_arithmetic_function(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                                      operations: List[str] = None) -> Tuple[Callable, str]:
@@ -569,8 +588,14 @@ class SynthesisProblem:
         :param candidate_functions: The list of candidate functions to substitute.
         :return: The substituted constraints.
         """
-        substitutions = list(zip(functions_to_replace, candidate_functions))
-        substituted_constraints = [substitute_funs(constraint, substitutions) for constraint in constraints]
+        synth_substitutions = list(zip(functions_to_replace, candidate_functions))
+        predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
+        
+        substituted_constraints = []
+        for constraint in constraints:
+            synth_substituted = substitute_funs(constraint, synth_substitutions)
+            predefined_substituted = substitute_funs(synth_substituted,predefined_substitutions )
+            substituted_constraints.append(predefined_substituted)
         return substituted_constraints
 
     def test_multiple_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
