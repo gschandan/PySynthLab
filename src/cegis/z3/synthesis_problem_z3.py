@@ -34,7 +34,9 @@ class SynthesisProblemContext:
     z3_variables: Dict[str, ExprRef] = dataclasses.field(default_factory=dict)
     z3_synth_functions: Dict[str, FuncDeclRef] = dataclasses.field(default_factory=dict)
     z3_synth_function_args: Dict[str, Dict[str, ExprRef]] = dataclasses.field(default_factory=dict)
-    z3_predefined_functions: Dict[str, FuncDeclRef] = dataclasses.field(default_factory=dict)
+    z3_predefined_functions: Dict[str, Tuple[FuncDeclRef, ExprRef | FuncDeclRef | bool | int]] = dataclasses.field(
+        default_factory=dict)
+    z3_predefined_function_args: Dict[str, Dict[str, ExprRef]] = dataclasses.field(default_factory=dict)
     z3_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     assertions: Set[ExprRef] = dataclasses.field(default_factory=set)
     counterexamples: List[
@@ -202,11 +204,11 @@ class SynthesisProblem:
 
         :return: A list of function symbols.
         """
-        return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_FUN]
+        return [x.function_name for x in self.problem.commands if x.command_kind == CommandKind.DEFINE_FUN]
 
     def initialise_z3_variables(self) -> None:
         """
-        Initialize the Z3 variables.
+        Initialize Z3 variables.
         """
         for command in self.problem.commands:
             if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Int':
@@ -214,35 +216,53 @@ class SynthesisProblem:
 
     def initialise_z3_synth_functions(self) -> None:
         """
-        Initialize the Z3 synthesis functions.
+        Initialize Z3 synthesis functions.
         """
         for func in self.get_synth_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            args = [z3.Int(name) for name in func.argument_names]
-            # args = [z3.Const(f"arg_{i}", sort) for i, sort in enumerate(z3_arg_sorts)] # if z3.Int() doesn't work
+
+            args = [self.create_z3_variable(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
+
             arg_mapping = dict(zip(func.argument_names, args))
             self.context.z3_synth_function_args[func.identifier.symbol] = arg_mapping
-            self.context.z3_synth_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol, *z3_arg_sorts,
-                                                                                  z3_range_sort)
+            self.context.z3_synth_functions[func.identifier.symbol] = z3.Function(
+                func.identifier.symbol, *z3_arg_sorts, z3_range_sort
+            )
 
     def initialise_z3_predefined_functions(self) -> None:
         """
-        Initialize the Z3 predefined functions.
+        Initialize Z3 predefined functions.
         """
         for func in self.get_predefined_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
-            self.context.z3_predefined_functions[func.identifier.symbol] = z3.Function(func.identifier.symbol,
-                                                                                       *z3_arg_sorts,
-                                                                                       z3_range_sort) 
+
+            args = [self.create_z3_variable(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
+            predefined_function_body = self.parse_term(func.function_body)
+            arg_mapping = dict(zip(func.argument_names, args))
+            self.context.z3_predefined_function_args[func.identifier.symbol] = arg_mapping
+            self.context.z3_predefined_functions[func.identifier.symbol] = (
+                z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort),
+                predefined_function_body,
+            )
+
+    def create_z3_variable(self, name: str, sort: z3.SortRef) -> z3.ExprRef:
+        """Create a Z3 variable of the given sort."""
+        if sort == z3.IntSort():
+            return z3.Int(name)
+        elif sort == z3.BoolSort():
+            return z3.Bool(name)
+        else:
+            raise ValueError(f"Unsupported sort: {sort}")
+
     def populate_all_z3_functions(self) -> None:
         """
         Add all parsed z3 functions to a dictionary.
         """
         self.context.all_z3_functions = dict(self.context.z3_synth_functions.items())
         self.context.all_z3_functions.update(self.context.z3_predefined_functions.items())
-    
+
     def map_z3_variables(self) -> None:
         """
         Map z3 variables.
@@ -551,7 +571,6 @@ class SynthesisProblem:
         """
         substitutions = list(zip(functions_to_replace, candidate_functions))
         substituted_constraints = [substitute_funs(constraint, substitutions) for constraint in constraints]
-        self.print_msg(f"substituted_constraints {substituted_constraints}", level=0)
         return substituted_constraints
 
     def test_multiple_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
@@ -564,7 +583,8 @@ class SynthesisProblem:
         """
 
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints_multiple(self.context.z3_negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
+        substituted_neg_constraints = self.substitute_constraints_multiple(self.context.z3_negated_constraints, list(
+            self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         if self.context.enumerator_solver.check() == sat:
@@ -646,7 +666,7 @@ class SynthesisProblem:
                         self.print_msg(
                             f"Testing guess (complexity: {complexity}, depth: {depth}): {'; '.join(func_strs)}",
                             level=1)
-                        result = self.test_multiple_candidates(func_strs,candidate_expressions)
+                        result = self.test_multiple_candidates(func_strs, candidate_expressions)
                         self.print_msg("\n", level=1)
                         if result:
                             self.print_msg(f"Found satisfying candidates! {'; '.join(func_strs)}", level=0)

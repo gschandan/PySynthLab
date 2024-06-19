@@ -4,7 +4,7 @@ from z3 import *
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
 
 
-@unittest.skip("Need to figure out why I can't get this to work...")
+#@unittest.skip("Need to figure out why I can't get this to work...")
 class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
@@ -25,7 +25,7 @@ class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
             args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
             def valid_function(*values):
                 x, y = values
-                return If(x <= y, 10 * y + 100, 10 * x + 100)
+                return If(x <= y, (100 * x) + 1000, (100 * y) + 1000)
 
             expr = valid_function(*args)
             func_str = f"def valid_function({', '.join(str(arg) for arg in args)}):\n"
