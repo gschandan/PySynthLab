@@ -31,6 +31,5 @@
  (or (not (= ?x34 (ite (<= y x) ?x33 ?x31))) (not (and (>= (func x) ?x34) (>= ?x14 ?x34)))))))))))
 (check-sat)
 
-need to also substitute defined functions
-seed solver differently
+seed solver differently or expose bias
 or add asserts that x and y can't equal incorrect inputs

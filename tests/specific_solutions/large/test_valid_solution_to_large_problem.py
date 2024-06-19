@@ -43,16 +43,16 @@ class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
 
         print(f"candidate_function for substitution {candidate_function}")
         print(f"Testing guess: {func_str}")
-        result = self.problem.test_multiple_candidates( [func_str],
-                                                       [candidate_function])
+        result = self.problem.test_candidates([func_str],
+                                              [candidate_function])
         print(self.problem.context.verification_solver.to_smt2())
         print(self.problem.context.enumerator_solver.to_smt2())
         
         self.assertTrue(result)
 
-        substituted_constraints = self.problem.substitute_constraints_multiple(self.problem.context.z3_constraints,
-                                                                               [func], 
-                                                                               [candidate_function])
+        substituted_constraints = self.problem.substitute_constraints(self.problem.context.z3_constraints,
+                                                                      [func],
+                                                                      [candidate_function])
         self.assertGreater(len(substituted_constraints), 0)
 
         # expected_commutativity = And(

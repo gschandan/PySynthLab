@@ -57,7 +57,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         candidate_expr, _ = self.generate_max_function([IntSort(), IntSort()])
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_func = candidate_expr(*args)
-        substituted_constraints = self.problem.substitute_constraints_multiple(constraints, [func], [candidate_func])
+        substituted_constraints = self.problem.substitute_constraints(constraints, [func], [candidate_func])
         self.assertGreater(len(substituted_constraints), 0)
         self.assertIsInstance(substituted_constraints[0], BoolRef)
 
@@ -70,7 +70,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_expr, func_str = self.generate_max_function([IntSort(), IntSort()])
         candidate_func = candidate_expr(*args)
-        result = self.problem.test_multiple_candidates( [func_str], [candidate_func])
+        result = self.problem.test_candidates([func_str], [candidate_func])
         self.assertTrue(result)
 
     def test_get_logic(self):

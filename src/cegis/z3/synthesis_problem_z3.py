@@ -575,9 +575,9 @@ class SynthesisProblem:
 
         return arithmetic_function, func_str
 
-    def substitute_constraints_multiple(self, constraints: Collection[z3.ExprRef],
-                                        functions_to_replace: List[z3.FuncDeclRef],
-                                        candidate_functions: List[
+    def substitute_constraints(self, constraints: Collection[z3.ExprRef],
+                               functions_to_replace: List[z3.FuncDeclRef],
+                               candidate_functions: List[
                                             typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3, ExprRef, Callable]]) -> \
             List[z3.ExprRef]:
         """
@@ -598,9 +598,9 @@ class SynthesisProblem:
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
 
-    def test_multiple_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
+    def test_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
         """
-        Test multiple candidate functions.
+        Test candidate functions.
 
         :param func_strs: The string representations of the functions.
         :param candidate_functions: The candidate expressions to test.
@@ -608,7 +608,7 @@ class SynthesisProblem:
         """
 
         self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints_multiple(self.context.z3_negated_constraints, list(
+        substituted_neg_constraints = self.substitute_constraints(self.context.z3_negated_constraints, list(
             self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
@@ -640,7 +640,7 @@ class SynthesisProblem:
             return False
         else:
             self.context.verification_solver.reset()
-            substituted_constraints = self.substitute_constraints_multiple(self.context.z3_constraints, list(
+            substituted_constraints = self.substitute_constraints(self.context.z3_constraints, list(
                 self.context.z3_synth_functions.values()), candidate_functions)
             self.context.verification_solver.add(substituted_constraints)
             if self.context.verification_solver.check() == unsat:
@@ -691,7 +691,7 @@ class SynthesisProblem:
                         self.print_msg(
                             f"Testing guess (complexity: {complexity}, depth: {depth}): {'; '.join(func_strs)}",
                             level=1)
-                        result = self.test_multiple_candidates(func_strs, candidate_expressions)
+                        result = self.test_candidates(func_strs, candidate_expressions)
                         self.print_msg("\n", level=1)
                         if result:
                             self.print_msg(f"Found satisfying candidates! {'; '.join(func_strs)}", level=0)
