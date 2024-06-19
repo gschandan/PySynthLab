@@ -495,7 +495,7 @@ class SynthesisProblem:
                                      operations: List[str] = None) -> Tuple[Callable, str]:
         """
         Generate an arithmetic function based on the given number of arguments, argument sorts, depth, complexity, and operations.
-    
+
         :param arg_sorts: The list of sorts for each argument.
         :param depth: The maximum depth of the generated expression.
         :param complexity: The maximum complexity of the generated expression.
@@ -582,7 +582,7 @@ class SynthesisProblem:
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
-    
+
         :param constraints: The list of constraints.
         :param functions_to_replace: The list of functions to substitute.
         :param candidate_functions: The list of candidate functions to substitute.
@@ -590,11 +590,11 @@ class SynthesisProblem:
         """
         synth_substitutions = list(zip(functions_to_replace, candidate_functions))
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
-        
+
         substituted_constraints = []
         for constraint in constraints:
             synth_substituted = substitute_funs(constraint, synth_substitutions)
-            predefined_substituted = substitute_funs(synth_substituted,predefined_substitutions )
+            predefined_substituted = substitute_funs(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
 
@@ -715,3 +715,4 @@ class SynthesisProblem:
 
         self.print_msg(f"Tested candidates: {tested_candidates}", level=0)
         self.print_msg("No satisfying candidates found.", level=0)
+        self.print_msg("-" * 150, level=0)
