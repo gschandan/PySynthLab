@@ -1,10 +1,10 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-from src.cegis.z3.random_search import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import  SynthesisProblem
+from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
-#@unittest.skip("Need to figure out why I can't get this to work...")
 class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
@@ -54,27 +54,6 @@ class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
                                                                       [func],
                                                                       [candidate_function])
         self.assertGreater(len(substituted_constraints), 0)
-
-        # expected_commutativity = And(
-        #     If(self.args[0] <= self.args[1], 10 * self.args[1] + 100, 10 * self.args[0] + 100) ==
-        #     If(self.args[1] <= self.args[0], 10 * self.args[0] + 100, 10 * self.args[1] + 100)
-        # )
-        # 
-        # expected_func_constraints = And(
-        #     self.problem.context.z3_predefined_functions["func"](self.args[0]) >=
-        #     If(self.args[0] <= self.args[1], 10 * self.args[1] + 100, 10 * self.args[0] + 100),
-        #     self.problem.context.z3_predefined_functions["func"](self.args[1]) >=
-        #     If(self.args[0] <= self.args[1], 10 * self.args[1] + 100, 10 * self.args[0] + 100)
-        # )
-        # 
-        # commutativity_constraints = [c for c in substituted_constraints if "==" in str(c)]
-        # self.assertGreater(len(commutativity_constraints), 0)
-        # self.assertIn(str(expected_commutativity), [str(c) for c in commutativity_constraints])
-        # 
-        # func_constraints = [c for c in substituted_constraints if ">=" in str(c)]
-        # self.assertGreater(len(func_constraints), 0)
-        # for constraint in func_constraints:
-        #     self.assertIn(str(constraint), str(expected_func_constraints))
 
 
 

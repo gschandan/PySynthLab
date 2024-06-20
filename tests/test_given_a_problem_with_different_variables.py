@@ -1,7 +1,8 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-from src.cegis.z3.random_search import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import SynthesisProblem
+from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 from src.helpers.parser.src.resolution import FunctionKind
 
 
@@ -19,6 +20,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegersWithDifferentGlobalVariables(unittest.T
         """
         self.options = SynthesisProblemOptions()
         self.problem = SynthesisProblem(self.problem_str, self.options)
+
     def generate_max_function(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
@@ -32,6 +34,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegersWithDifferentGlobalVariables(unittest.T
         func_str = f"def max_function({', '.join(str(arg) for arg in args[:2])}):\n"
         func_str += f"    return {str(expr)}\n"
         return max_function, func_str
+
     def test_initialization(self):
         self.assertEqual(self.problem.input_problem, self.problem_str)
         self.assertIsNotNone(self.problem.symbol_table)
