@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Callable
 import z3
 from itertools import product
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblem
@@ -83,7 +83,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                 if not found:
                     constructor_classes[sort].append([(func_name, arg_sorts)])
         return constructor_classes
-    
+
     def get_arity(self, sort: z3.SortRef) -> int:
         """Gets the number of arguments used in synthesis functions for the given sort."""
         return max((
@@ -91,7 +91,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
             for func in self.context.z3_synth_functions.values()
             if func.range() == sort
         ), default=0)
-    
+
     def fast_enum(self, sort: z3.SortRef, size: int) -> List[z3.ExprRef | bool]:
         """
         Enumerates terms of the given sort and size.
@@ -154,7 +154,6 @@ class FastEnumerativeSynthesis(SynthesisProblem):
         self.term_cache[(sort, size)] = terms
         return terms
 
-
     def construct_term(self, constructor: str, term_combination: Tuple[z3.ExprRef | z3.ArithRef, ...]) -> z3.ExprRef:
         """
         Constructs a Z3 term using the given LIA constructor and arguments.
@@ -175,7 +174,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
         elif constructor.startswith('Const_'):
             const = int(constructor[6:])
             return z3.IntVal(const)
-        elif constructor in ["LE", "GE", "LT", "GT", "Eq"]: 
+        elif constructor in ["LE", "GE", "LT", "GT", "Eq"]:
             arg1, arg2 = term_combination
             return z3.If(
                 arg1 <= arg2 if constructor == "LE" else
@@ -203,7 +202,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                     f"Invalid condition type in 'Ite' constructor: {type(cond)}. "
                     f"Value: {cond}. Expected a Z3 BoolRef."
                 )
-            return z3.If(cond, true_branch, false_branch) 
+            return z3.If(cond, true_branch, false_branch)
         else:
             func = self.context.z3_synth_functions.get(constructor)
             if func is None:
@@ -244,3 +243,39 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                     generated_terms[sort] = []
                 generated_terms[sort].append(terms)
         return generated_terms
+
+    def create_candidate_function(self, candidate_expr: z3.ExprRef, arg_sorts: List[z3.SortRef]) -> Callable:
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
+
+        def candidate_function(*values):
+            if len(values) != len(args):
+                raise ValueError("Incorrect number of arguments.")
+
+            simplified_expr = z3.simplify(
+                z3.substitute(candidate_expr, [(arg, value) for arg, value in zip(args, values)]))
+            return simplified_expr
+
+        candidate_function.__name__ = candidate_expr.sexpr()
+        return candidate_function
+
+    def execute_cegis(self) -> None:
+        starting_depth = 0
+        max_depth = 3
+
+        generated_terms = self.generate(max_depth)
+        for depth in range(max_depth + 1):
+            for func_name, func in self.context.z3_synth_functions.items():
+                func_str = f"{func_name}({', '.join(self.context.z3_synth_function_args[func_name].keys())})"
+                candidate_functions = generated_terms[func.range()][depth - starting_depth]
+                for candidate_function in candidate_functions:
+                    candidate_functions_callable = self.create_candidate_function(candidate_function, [x.sort() for x in
+                                                                                                       list(
+                                                                                                           self.context.variable_mapping_dict[
+                                                                                                               func_name].keys())])
+                    candidate = candidate_functions_callable(
+                        *list(self.context.variable_mapping_dict[func_name].keys()))
+                    result = self.test_candidates([func_str], [candidate])
+                    if result:
+                        self.print_msg(f"Found solution for function {func_name}: {candidate.__str__()}", level=0)
+                        return
+        self.print_msg(f"No solution found up to depth {max_depth}", level=0)
