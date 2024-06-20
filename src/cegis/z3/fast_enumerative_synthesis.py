@@ -154,14 +154,6 @@ class FastEnumerativeSynthesis(SynthesisProblem):
         self.term_cache[(sort, size)] = terms
         return terms
 
-    def get_base_terms(self, sort: z3.SortRef) -> List[z3.ExprRef]:
-        """
-        Gets the base terms (variables) of the given sort.
-
-        :param sort: The Z3 sort of the base terms.
-        :return: A list of Z3 variables of the given sort.
-        """
-        return [var for var in self.context.z3_variables.values() if var.sort() == sort]
 
     def construct_term(self, constructor: str, term_combination: Tuple[z3.ExprRef | z3.ArithRef, ...]) -> z3.ExprRef:
         """
@@ -237,16 +229,15 @@ class FastEnumerativeSynthesis(SynthesisProblem):
             combinations = new_combinations
         return combinations
 
-    def generate(self,starting_depth, max_depth: int) -> Dict[z3.SortRef, List[List[z3.ExprRef]]]:
+    def generate(self, max_depth: int) -> Dict[z3.SortRef, List[List[z3.ExprRef]]]:
         """
         Generates candidate terms up to the given maximum depth.
 
-        :param starting_depth: The starting depth of the terms
         :param max_depth: The maximum depth of the terms.
         :return: A dictionary mapping each sort to a list of generated terms.
         """
         generated_terms = {}
-        for depth in range(starting_depth, max_depth + 1):
+        for depth in range(max_depth + 1):
             for sort in self.grammar.keys():
                 terms = self.fast_enum(sort, depth)
                 if sort not in generated_terms:

@@ -22,14 +22,14 @@ def main(args: argparse.Namespace) -> None:
         verbose=args.verbose
     )
 
-    # problem = SynthesisProblem(file_content, options)
-    # 
-    # if options.verbose < 2:
-    #     problem.info_sygus()
-    #     problem.info_smt()
-    # 
-    # problem.execute_cegis()
-    
+    problem = SynthesisProblem(file_content, options)
+
+    if options.verbose < 2:
+        problem.info_sygus()
+        problem.info_smt()
+
+    problem.execute_cegis()
+
     def create_candidate_function(candidate_expr: z3.ExprRef, arg_sorts: List[z3.SortRef]) -> Callable:
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
 
@@ -40,29 +40,30 @@ def main(args: argparse.Namespace) -> None:
             simplified_expr = z3.simplify(
                 z3.substitute(candidate_expr, [(arg, value) for arg, value in zip(args, values)]))
             return simplified_expr
-        
+
         candidate_function.__name__ = candidate_expr.sexpr()
         return candidate_function
-    
+
     problem = FastEnumerativeSynthesis(file_content, options)
 
     starting_depth = 0
     max_depth = 3
-    for depth in range(starting_depth, max_depth + 1):
-        generated_terms = problem.generate(starting_depth, depth)
+
+    generated_terms = problem.generate(max_depth)
+    for depth in range(max_depth + 1):
         for func_name, func in problem.context.z3_synth_functions.items():
             func_str = f"{func_name}({', '.join(problem.context.z3_synth_function_args[func_name].keys())})"
-            candidate_functions = generated_terms[func.range()][depth-starting_depth]
+            candidate_functions = generated_terms[func.range()][depth - starting_depth]
             for candidate_function in candidate_functions:
-                candidate_functions_callable = create_candidate_function(candidate_function, [x.sort() for x in list(problem.context.variable_mapping_dict[func_name].keys())] )   
-                candidate = candidate_functions_callable(*list(problem.context.z3_synth_function_args[func_name].values()))
+                candidate_functions_callable = create_candidate_function(candidate_function, [x.sort() for x in list(
+                    problem.context.variable_mapping_dict[func_name].keys())])
+                candidate = candidate_functions_callable(*list(problem.context.variable_mapping_dict[func_name].keys()))
                 result = problem.test_candidates([func_str], [candidate])
                 if result:
-                    problem.print_msg(f"Found solution for function {func_name}: {candidate_functions[0]}", level=0)
+                    problem.print_msg(f"Found solution for function {func_name}: {candidate.__str__()}", level=0)
                     return
-        starting_depth += 1
     problem.print_msg(f"No solution found up to depth {max_depth}", level=0)
-    
+
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
