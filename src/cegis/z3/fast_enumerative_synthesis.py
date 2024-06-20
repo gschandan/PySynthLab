@@ -10,11 +10,11 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
 
     def __init__(self, problem: SynthesisProblem):
         self.problem = problem
+        self.min_const = self.problem.options.min_const
+        self.max_const = self.problem.options.max_const
         self.grammar = self.extract_grammar()
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache = {}
-        self.min_const = problem.options.min_const
-        self.max_const = problem.options.max_const
 
     def extract_grammar(self) -> Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]:
         """
@@ -266,15 +266,15 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         generated_terms = self.generate(max_depth)
         for depth in range(max_depth + 1):
             for func_name, func in self.problem.context.z3_synth_functions.items():
-                func_str = f"{func_name}({', '.join(self.problem.context.z3_synth_function_args[func_name].keys())})"
+                free_variables = list(self.problem.context.variable_mapping_dict[func_name].keys())
+                func_str = f"{func_name}({', '.join([var.__str__() for var in free_variables])})"
                 candidate_functions = generated_terms[func.range()][depth - starting_depth]
                 for candidate_function in candidate_functions:
                     candidate_functions_callable = self.create_candidate_function(
                         candidate_function,
-                        [x.sort() for x in list(self.problem.context.variable_mapping_dict[func_name].keys())]
+                        [x.sort() for x in free_variables]
                     )
-                    candidate = candidate_functions_callable(
-                        *list(self.problem.context.variable_mapping_dict[func_name].keys()))
+                    candidate = candidate_functions_callable(*free_variables)
                     result = self.problem.test_candidates([func_str], [candidate])
                     if result:
                         self.problem.print_msg(f"Found solution for function {func_name}: {candidate.__str__()}",

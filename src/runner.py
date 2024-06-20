@@ -16,9 +16,9 @@ def main(args: argparse.Namespace) -> None:
     file_content = args.input_file.read()
     random_seed = SynthesisProblemOptions.random_seed
 
-    if args.random_seed_behavior == 'fixed':
+    if args.random_seed_behaviour == 'fixed':
         random_seed = args.random_seed
-    elif args.random_seed_behavior == 'random':
+    elif args.random_seed_behaviour == 'random':
         random_seed = None
 
     options = SynthesisProblemOptions(
@@ -29,8 +29,8 @@ def main(args: argparse.Namespace) -> None:
         max_depth=args.max_depth,
         max_complexity=args.max_complexity,
         random_seed=random_seed,
-        randomize_each_iteration=args.randomize_each_iteration,
-        max_candidates_at_each_depth=args.max_candidates_at_depth
+        randomise_each_iteration=args.randomise_each_iteration,
+        max_candidates_at_each_depth=args.max_candidates_at_each_depth
     )
     problem = SynthesisProblem(file_content, options)
 
@@ -63,11 +63,11 @@ if __name__ == '__main__':
         help='Path to an input file (or stdin if "-")')
 
     parser.add_argument(
-        '--strategy', type=str, default='random_search', choices=['fast_enumerative', 'random_search'],
+        '--strategy', type=str, default='fast_enumerative', choices=['fast_enumerative', 'random_search'],
         help='The synthesis strategy to use')
 
     parser.add_argument(
-        '--min-const', type=int, default=-SynthesisProblemOptions.min_const,
+        '--min-const', type=int, default=SynthesisProblemOptions.min_const,
         help='Minimum constant value to include in expressions for candidate synthesis')
 
     parser.add_argument(
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         help='Random seed for the random search strategy (used when random-seed-behavior is set to "fixed")')
 
     parser.add_argument(
-        '--randomise-each-iteration', type=bool, default=SynthesisProblemOptions.randomize_each_iteration,
+        '--randomise-each-iteration', action='store_true',
         help='Randomise the random seed for each iteration in the random search strategy')
 
     main(parser.parse_args())

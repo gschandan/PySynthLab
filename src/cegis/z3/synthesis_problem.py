@@ -28,8 +28,10 @@ class SynthesisProblemOptions:
     max_depth: int = 3,
     max_complexity: int = 4
     random_seed: int = 1234
-    randomize_each_iteration: bool = False
+    randomise_each_iteration: bool = False
     max_candidates_at_each_depth: int = 15
+
+
 @dataclasses.dataclass
 class SynthesisProblemContext:
     enumerator_solver: Solver = dataclasses.field(default_factory=Solver)
@@ -83,10 +85,10 @@ class SynthesisProblem:
         self.context = SynthesisProblemContext()
         self.context.enumerator_solver.set('smt.macro_finder', True)
         self.context.verification_solver.set('smt.macro_finder', True)
-        if self.options.random_seed is not None and not self.options.randomize_each_iteration:
+        if self.options.random_seed is not None and not self.options.randomise_each_iteration:
             self.context.enumerator_solver.set('random_seed', self.options.random_seed)
             self.context.verification_solver.set('random_seed', self.options.random_seed)
-            
+
         self.context.smt_problem = self.convert_sygus_to_smt()
         self.context.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
 
@@ -501,7 +503,7 @@ class SynthesisProblem:
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
                                functions_to_replace: List[z3.FuncDeclRef],
                                candidate_functions: List[
-                                            typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3, ExprRef, Callable]]) -> \
+                                   typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3, ExprRef, Callable]]) -> \
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
@@ -532,8 +534,8 @@ class SynthesisProblem:
 
         self.context.enumerator_solver.reset()
 
-        if self.options.randomize_each_iteration:
-            self.context.enumerator_solver.set('random_seed', random.choice(range(1, 5000)))
+        if self.options.randomise_each_iteration:
+            self.context.enumerator_solver.set('random_seed', random.randint(0, 4294967295))
 
         substituted_neg_constraints = self.substitute_constraints(self.context.z3_negated_constraints, list(
             self.context.z3_synth_functions.values()), candidate_functions)
@@ -567,8 +569,8 @@ class SynthesisProblem:
             return False
         else:
             self.context.verification_solver.reset()
-            if self.options.randomize_each_iteration:
-                self.context.verification_solver.set('random_seed', random.choice(range(1, 5000)))
+            if self.options.randomise_each_iteration:
+                self.context.verification_solver.set('random_seed', random.choice(range(1, 4294967295)))
             substituted_constraints = self.substitute_constraints(self.context.z3_constraints, list(
                 self.context.z3_synth_functions.values()), candidate_functions)
             self.context.verification_solver.add(substituted_constraints)
@@ -578,4 +580,3 @@ class SynthesisProblem:
                 return False
             self.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.", level=0)
             return True
-
