@@ -1,7 +1,8 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import SynthesisProblem
+from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
 class WhenTheConstraintIsCommutativity(unittest.TestCase):
@@ -37,7 +38,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
         candidate_expr, _ = generate_correct_abs_max_function([IntSort(), IntSort()])
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_func = candidate_expr(*args)
-        substituted_constraints = self.problem.substitute_constraints_multiple(constraints, [func], [candidate_func])
+        substituted_constraints = self.problem.substitute_constraints(constraints, [func], [candidate_func])
         self.assertGreater(len(substituted_constraints), 0)
 
         expected_commutativity = And(

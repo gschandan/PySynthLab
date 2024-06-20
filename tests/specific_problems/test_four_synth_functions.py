@@ -1,7 +1,8 @@
 import unittest
 from z3 import *
 
-from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import  SynthesisProblem
+from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
 class FourSynthFunctions(unittest.TestCase):
@@ -50,8 +51,8 @@ class FourSynthFunctions(unittest.TestCase):
         candidate_functions = [f(*args_list) for f in candidate_functions]
         self.problem.print_msg(f"candidate_functions for substitution {candidate_functions}", level=0)
         self.problem.print_msg(f"Testing known candidate: {'; '.join(func_strs)}", level=1)
-        result = self.problem.test_multiple_candidates( func_strs,
-                                                       candidate_functions)
+        result = self.problem.test_candidates(func_strs,
+                                              candidate_functions)
         self.problem.print_msg("\n", level=1)
         self.assertTrue(result)
 

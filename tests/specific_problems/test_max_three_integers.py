@@ -1,8 +1,8 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-
-from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import  SynthesisProblem
+from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 class MaxThreeIntegers(unittest.TestCase):
     def setUp(self):
@@ -44,8 +44,8 @@ class MaxThreeIntegers(unittest.TestCase):
 
         self.problem.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
         self.problem.print_msg(f"Testing guess: {func_str}", level=1)
-        result = self.problem.test_multiple_candidates( [func_str],
-                                                       [candidate_function])
+        result = self.problem.test_candidates([func_str],
+                                              [candidate_function])
         self.problem.print_msg("\n", level=1)
         self.assertTrue(result)
 

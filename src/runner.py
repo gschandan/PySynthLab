@@ -2,7 +2,8 @@ import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 
 from src.cegis.z3.fast_enumerative_synthesis import FastEnumerativeSynthesis
-from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import SynthesisProblem, RandomSearchStrategy
+from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
 def main(args: argparse.Namespace) -> None:
@@ -13,29 +14,34 @@ def main(args: argparse.Namespace) -> None:
     """
 
     file_content = args.input_file.read()
+    random_seed = SynthesisProblemOptions.random_seed
+
+    if args.random_seed_behaviour == 'fixed':
+        random_seed = args.random_seed
+    elif args.random_seed_behaviour == 'random':
+        random_seed = None
 
     options = SynthesisProblemOptions(
         sygus_standard=int(args.sygus_standard),
-        verbose=args.verbose
+        verbose=args.verbose,
+        min_const=args.min_const,
+        max_const=args.max_const,
+        max_depth=args.max_depth,
+        max_complexity=args.max_complexity,
+        random_seed=random_seed,
+        randomise_each_iteration=args.randomise_each_iteration,
+        max_candidates_at_each_depth=args.max_candidates_at_each_depth
     )
-
     problem = SynthesisProblem(file_content, options)
 
-    if options.verbose < 2:
-        problem.info_sygus()
-        problem.info_smt()
+    if args.strategy == 'fast_enumerative':
+        strategy = FastEnumerativeSynthesis(problem, )
+    elif args.strategy == 'random_search':
+        strategy = RandomSearchStrategy(problem)
+    else:
+        raise ValueError(f"Unknown synthesis strategy: {args.strategy}")
 
-    problem.execute_cegis()
-
-    problem = FastEnumerativeSynthesis(file_content, options)
-
-    max_depth = 3
-    generated_terms = problem.generate(max_depth)
-
-    for sort, terms in generated_terms.items():
-        print(f"Generated terms for sort {sort}:")
-        for term in terms:
-            print(term)
+    strategy.execute_cegis()
 
 
 if __name__ == '__main__':
@@ -43,7 +49,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '-v', '--verbose', type=int, default=0, choices=[0, 1, 2],
-        help='Verbosity level:\n'
+        help='Debugging message suppression:\n'
              '\t 0 = no suppression; all output printed to console\n'
              '\t 1 = suppress warnings\n'
              '\t 2 = suppress all output except success/failure')
@@ -55,5 +61,43 @@ if __name__ == '__main__':
     parser.add_argument(
         'input_file', type=FileType('r'),
         help='Path to an input file (or stdin if "-")')
+
+    parser.add_argument(
+        '--strategy', type=str, default='fast_enumerative', choices=['fast_enumerative', 'random_search'],
+        help='The synthesis strategy to use')
+
+    parser.add_argument(
+        '--min-const', type=int, default=SynthesisProblemOptions.min_const,
+        help='Minimum constant value to include in expressions for candidate synthesis')
+
+    parser.add_argument(
+        '--max-const', type=int, default=SynthesisProblemOptions.max_const,
+        help='Maximum constant value to include in expressions for candidate synthesis')
+
+    parser.add_argument(
+        '--max-depth', type=int, default=SynthesisProblemOptions.max_depth,
+        help='Maximum depth for candidate generation')
+
+    parser.add_argument(
+        '--max-candidates-at-each-depth', type=int, default=SynthesisProblemOptions.max_candidates_at_each_depth,
+        help='Maximum number of candidates to evaluate at each depth for random search strategy')
+
+    parser.add_argument(
+        '--max-complexity', type=int, default=SynthesisProblemOptions.max_complexity,
+        help='Maximum complexity for the random search strategy')
+
+    parser.add_argument(
+        '--random-seed-behaviour', type=str, default='fixed', choices=['fixed', 'random'],
+        help='Behaviour for the random seed in the random search strategy:\n'
+             '\t fixed = use the provided random seed on every iteration\n'
+             '\t random = generate a new random seed for each iteration')
+
+    parser.add_argument(
+        '--random-seed', type=int, default=SynthesisProblemOptions.random_seed,
+        help='Random seed for the random search strategy (used when random-seed-behavior is set to "fixed")')
+
+    parser.add_argument(
+        '--randomise-each-iteration', action='store_true',
+        help='Randomise the random seed for each iteration in the random search strategy')
 
     main(parser.parse_args())
