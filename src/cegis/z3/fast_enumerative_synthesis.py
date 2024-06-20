@@ -1,19 +1,20 @@
 from typing import Dict, List, Tuple, Callable
 import z3
 from itertools import product
-from src.cegis.z3.synthesis_problem_z3 import SynthesisProblem
+from src.cegis.z3.synthesis_strategy import SynthesisStrategy
+from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
 # http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf
-class FastEnumerativeSynthesis(SynthesisProblem):
-    MIN_CONST = -2
-    MAX_CONST = 2
+class FastEnumerativeSynthesis(SynthesisStrategy):
 
-    def __init__(self, problem: str, options: object = None):
-        super().__init__(problem, options)
+    def __init__(self, problem: SynthesisProblem):
+        self.problem = problem
         self.grammar = self.extract_grammar()
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache = {}
+        self.min_const = problem.options.min_const
+        self.max_const = problem.options.max_const
 
     def extract_grammar(self) -> Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]:
         """
@@ -22,7 +23,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
         :return: A dictionary mapping each sort to a list of its constructors and their argument sorts.
         """
         grammar = {}
-        for func_name, func_descriptor in self.context.z3_synth_functions.items():
+        for func_name, func_descriptor in self.problem.context.z3_synth_functions.items():
             output_sort = func_descriptor.range()
 
             if output_sort not in grammar:
@@ -41,10 +42,10 @@ class FastEnumerativeSynthesis(SynthesisProblem):
             ("Neg", [z3.IntSort()]),
             ("Ite", [z3.BoolSort(), z3.IntSort(), z3.IntSort()])
         ])
-        for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+        for const in range(self.min_const, self.max_const + 1):
             grammar[z3.IntSort()].append((f"Times{const}", [z3.IntSort()]))
 
-        for const in range(self.MIN_CONST, self.MAX_CONST + 1):
+        for const in range(self.min_const, self.max_const + 1):
             grammar[z3.IntSort()].append((f"Const_{const}", []))
 
         if z3.BoolSort() not in grammar:
@@ -88,7 +89,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
         """Gets the number of arguments used in synthesis functions for the given sort."""
         return max((
             func.arity()
-            for func in self.context.z3_synth_functions.values()
+            for func in self.problem.context.z3_synth_functions.values()
             if func.range() == sort
         ), default=0)
 
@@ -204,7 +205,7 @@ class FastEnumerativeSynthesis(SynthesisProblem):
                 )
             return z3.If(cond, true_branch, false_branch)
         else:
-            func = self.context.z3_synth_functions.get(constructor)
+            func = self.problem.context.z3_synth_functions.get(constructor)
             if func is None:
                 raise ValueError(f"Unsupported constructor: {constructor}")
             return func(*term_combination)
@@ -264,18 +265,19 @@ class FastEnumerativeSynthesis(SynthesisProblem):
 
         generated_terms = self.generate(max_depth)
         for depth in range(max_depth + 1):
-            for func_name, func in self.context.z3_synth_functions.items():
-                func_str = f"{func_name}({', '.join(self.context.z3_synth_function_args[func_name].keys())})"
+            for func_name, func in self.problem.context.z3_synth_functions.items():
+                func_str = f"{func_name}({', '.join(self.problem.context.z3_synth_function_args[func_name].keys())})"
                 candidate_functions = generated_terms[func.range()][depth - starting_depth]
                 for candidate_function in candidate_functions:
-                    candidate_functions_callable = self.create_candidate_function(candidate_function, [x.sort() for x in
-                                                                                                       list(
-                                                                                                           self.context.variable_mapping_dict[
-                                                                                                               func_name].keys())])
+                    candidate_functions_callable = self.create_candidate_function(
+                        candidate_function,
+                        [x.sort() for x in list(self.problem.context.variable_mapping_dict[func_name].keys())]
+                    )
                     candidate = candidate_functions_callable(
-                        *list(self.context.variable_mapping_dict[func_name].keys()))
-                    result = self.test_candidates([func_str], [candidate])
+                        *list(self.problem.context.variable_mapping_dict[func_name].keys()))
+                    result = self.problem.test_candidates([func_str], [candidate])
                     if result:
-                        self.print_msg(f"Found solution for function {func_name}: {candidate.__str__()}", level=0)
+                        self.problem.print_msg(f"Found solution for function {func_name}: {candidate.__str__()}",
+                                               level=2)
                         return
-        self.print_msg(f"No solution found up to depth {max_depth}", level=0)
+        self.problem.print_msg(f"No solution found up to depth {max_depth}", level=2)

@@ -1,7 +1,7 @@
 import unittest
 from z3 import *
 
-from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemOptions, SynthesisProblem
+from src.cegis.z3.random_search import SynthesisProblemOptions, SynthesisProblem
 
 
 class FourSynthFunctions(unittest.TestCase):
