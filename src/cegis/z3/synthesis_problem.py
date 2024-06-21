@@ -1,13 +1,10 @@
 import random
 import typing
-from typing import List, Dict, Tuple, Set, Callable, Collection, Any
-
 import pyparsing
 import dataclasses
 
 from z3 import *
-from z3 import ExprRef, FuncDeclRef, QuantifierRef
-
+from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 from src.helpers.parser.src import ast
 from src.helpers.parser.src.ast import Program, CommandKind
 from src.helpers.parser.src.resolution import FunctionKind, SortDescriptor, FunctionDescriptor
@@ -25,7 +22,7 @@ class SynthesisProblemOptions:
     verbose: int = 1
     min_const: int = -2
     max_const: int = 2
-    max_depth: int = 3,
+    max_depth: int = 3
     max_complexity: int = 4
     random_seed: int = 1234
     randomise_each_iteration: bool = False
@@ -537,8 +534,14 @@ class SynthesisProblem:
         if self.options.randomise_each_iteration:
             self.context.enumerator_solver.set('random_seed', random.randint(0, 4294967295))
 
-        substituted_neg_constraints = self.substitute_constraints(self.context.z3_negated_constraints, list(
-            self.context.z3_synth_functions.values()), candidate_functions)
+        for func_name, counterexample, _ in self.context.counterexamples:
+            for func_symbol, variables in self.context.variable_mapping_dict.items():
+                func = self.context.z3_synth_functions[func_symbol]
+                args = variables.keys()
+                #assertion = func(*args) != self.parse_term(self.context.z3_constraints[0].arg(0))
+                #self.context.enumerator_solver.add(assertion)
+
+        substituted_neg_constraints = self.substitute_constraints(self.context.z3_negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
         if self.context.enumerator_solver.check() == sat:
@@ -547,15 +550,13 @@ class SynthesisProblem:
             incorrect_outputs = []
             candidate_function_exprs = []
 
-            for func, candidate, variable_mapping in zip(func_strs, candidate_functions,
-                                                         self.context.variable_mapping_dict.values()):
+            for func, candidate, variable_mapping in zip(func_strs, candidate_functions,self.context.variable_mapping_dict.values()):
                 free_variables = list(variable_mapping.keys())
                 counterexample = {str(free_var): model.eval(declared_var, model_completion=True).as_long()
                                   for free_var, declared_var in variable_mapping.items()}
 
                 incorrect_output = z3.simplify(z3.substitute(candidate, [(arg, z3.IntVal(value)) for arg, value in
-                                                                         zip(free_variables,
-                                                                             list(counterexample.values()))]))
+                                                                         zip(free_variables,list(counterexample.values()))]))
 
                 self.print_msg(f"Counterexample: {counterexample}", level=0)
                 counterexamples.append(counterexample)
@@ -567,16 +568,17 @@ class SynthesisProblem:
 
             self.print_msg(f"Incorrect outputs for {'; '.join(func_strs)}: {incorrect_outputs}", level=0)
             return False
-        else:
-            self.context.verification_solver.reset()
-            if self.options.randomise_each_iteration:
-                self.context.verification_solver.set('random_seed', random.choice(range(1, 4294967295)))
-            substituted_constraints = self.substitute_constraints(self.context.z3_constraints, list(
-                self.context.z3_synth_functions.values()), candidate_functions)
-            self.context.verification_solver.add(substituted_constraints)
-            if self.context.verification_solver.check() == unsat:
-                self.print_msg(f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
-                               level=0)
-                return False
+
+        self.context.verification_solver.reset()
+        if self.options.randomise_each_iteration:
+            self.context.verification_solver.set('random_seed', random.choice(range(1, 4294967295)))
+
+        substituted_constraints = self.substitute_constraints(self.context.z3_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
+        self.context.verification_solver.add(substituted_constraints)
+        if self.context.verification_solver.check() == sat:
             self.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.", level=0)
             return True
+        else:
+            self.print_msg(f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",level=0)
+            return False
+

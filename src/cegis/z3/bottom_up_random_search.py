@@ -7,7 +7,7 @@ from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
 class RandomSearchStrategy(SynthesisStrategy):
     """
-    A class representing a synthesis problem in the SyGuS format.
+    A bottom-up enumerative strategy - starting with base terms and building up to more complex expressions
     """
     def __init__(self, problem: SynthesisProblem):
         self.problem = problem

@@ -2,7 +2,7 @@ import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 
 from src.cegis.z3.fast_enumerative_synthesis import FastEnumerativeSynthesis
-from src.cegis.z3.random_search import SynthesisProblem, RandomSearchStrategy
+from src.cegis.z3.bottom_up_random_search import SynthesisProblem, RandomSearchStrategy
 from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
