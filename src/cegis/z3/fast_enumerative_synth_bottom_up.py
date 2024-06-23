@@ -6,7 +6,7 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
 # http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf
-class FastEnumerativeSynthesis(SynthesisStrategy):
+class FastEnumerativeSynthesisBottomUp(SynthesisStrategy):
 
     def __init__(self, problem: SynthesisProblem):
         self.problem = problem
@@ -261,7 +261,7 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
 
     def execute_cegis(self) -> None:
         starting_depth = 0
-        max_depth = 3
+        max_depth = self.problem.options.max_depth
 
         generated_terms = self.generate(max_depth)
         for depth in range(max_depth + 1):

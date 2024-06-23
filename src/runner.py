@@ -1,8 +1,10 @@
 import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 
-from src.cegis.z3.fast_enumerative_synthesis import FastEnumerativeSynthesis
-from src.cegis.z3.bottom_up_random_search import SynthesisProblem, RandomSearchStrategy
+from src.cegis.z3.fast_enumerative_synth_bottom_up import FastEnumerativeSynthesisBottomUp
+from src.cegis.z3.fast_enumerative_synth_top_down import FastEnumerativeSynthesisTopDown
+from src.cegis.z3.random_search_bottom_up import SynthesisProblem, RandomSearchStrategyBottomUp
+from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
@@ -34,13 +36,18 @@ def main(args: argparse.Namespace) -> None:
     )
     problem = SynthesisProblem(file_content, options)
 
-    if args.strategy == 'fast_enumerative':
-        strategy = FastEnumerativeSynthesis(problem, )
-    elif args.strategy == 'random_search':
-        strategy = RandomSearchStrategy(problem)
+    if args.strategy == 'fast_enumerative_bottom_up':
+        strategy = FastEnumerativeSynthesisBottomUp(problem)
+    elif args.strategy == 'fast_enumerative_top_down':
+        strategy = FastEnumerativeSynthesisTopDown(problem)
+    elif args.strategy == 'random_search_bottom_up':
+        strategy = RandomSearchStrategyBottomUp(problem)
+    elif args.strategy == 'random_search_top_down':
+        strategy = RandomSearchStrategyTopDown(problem)
     else:
         raise ValueError(f"Unknown synthesis strategy: {args.strategy}")
-
+    
+    print(strategy.problem.info_smt())
     strategy.execute_cegis()
 
 
@@ -63,8 +70,8 @@ if __name__ == '__main__':
         help='Path to an input file (or stdin if "-")')
 
     parser.add_argument(
-        '--strategy', type=str, default='fast_enumerative', choices=['fast_enumerative', 'random_search'],
-        help='The synthesis strategy to use')
+        '--strategy', type=str, default='fast_enumerative_bottom_up', choices=['fast_enumerative_bottom_up', 'fast_enumerative_top_down', 'random_search_bottom_up','random_search_top_down'],
+        help='The synthesis strategy to use') 
 
     parser.add_argument(
         '--min-const', type=int, default=SynthesisProblemOptions.min_const,

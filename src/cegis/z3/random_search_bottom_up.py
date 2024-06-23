@@ -5,7 +5,7 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
 
-class RandomSearchStrategy(SynthesisStrategy):
+class RandomSearchStrategyBottomUp(SynthesisStrategy):
     """
     A bottom-up enumerative strategy - starting with base terms and building up to more complex expressions
     """
@@ -68,15 +68,17 @@ class RandomSearchStrategy(SynthesisStrategy):
                     return z3.Not(expr)
                 else:
                     return expr * -1
-            elif op in ['+', '-', '*']:
+            elif op in ['+', '-']:
                 left_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 right_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
                 if op == '+':
                     expr = left_expr + right_expr
                 elif op == '-':
                     expr = left_expr - right_expr
-                elif op == '*':
-                    expr = left_expr * right_expr
+            elif op == '*': 
+                left_expr = random.choice(args) if args else z3.IntVal(random.randint(self.min_const, self.max_const))
+                right_expr = z3.IntVal(random.randint(self.min_const, self.max_const)) 
+                expr = left_expr * right_expr
             else:
                 raise ValueError(f"Unsupported operation: {op}")
 
