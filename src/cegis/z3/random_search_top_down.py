@@ -1,7 +1,6 @@
 import random
-from typing import List, Tuple, Dict, Any, Callable
+from typing import List, Tuple, Dict
 import z3
-from z3 import If
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy import SynthesisStrategy
@@ -9,34 +8,35 @@ from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
 class RandomSearchStrategyTopDown(SynthesisStrategy):
     def __init__(self, problem: SynthesisProblem):
+        super().__init__()
         self.problem = problem
         self.min_const = problem.options.min_const
         self.max_const = problem.options.max_const
 
-    def generate_arithmetic_function(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
-                                     operations: List[str] = None) -> Tuple[z3.ExprRef, str]:
+    def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
+                             operations: List[str] = None) -> Tuple[z3.ExprRef, str]:
         if operations is None:
             operations = ['+', '-', '*', 'If', 'Neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         num_args = len(args)
 
-        def generate_expression(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
+        def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or curr_complexity == 0:
                 return random.choice(args) if args else z3.IntVal(random.randint(self.min_const, self.max_const))
 
             op = random.choice(operations)
             if op == 'If':
                 condition = self.generate_condition(args)
-                true_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
-                false_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
+                true_expr = build_term(curr_depth - 1, curr_complexity - 1)
+                false_expr = build_term(curr_depth - 1, curr_complexity - 1)
                 return z3.If(condition, true_expr, false_expr)
             elif op == 'Neg':
-                expr = generate_expression(curr_depth - 1, curr_complexity - 1)
+                expr = build_term(curr_depth - 1, curr_complexity - 1)
                 return -expr
             elif op in ['+', '-']:
-                left_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
-                right_expr = generate_expression(curr_depth - 1, curr_complexity - 1)
+                left_expr = build_term(curr_depth - 1, curr_complexity - 1)
+                right_expr = build_term(curr_depth - 1, curr_complexity - 1)
                 if op == '+':
                     return left_expr + right_expr
                 elif op == '-':
@@ -46,7 +46,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
                 right_expr = z3.IntVal(random.randint(self.min_const, self.max_const))
                 return left_expr * right_expr
 
-        generated_expression = generate_expression(depth, complexity)
+        generated_expression = build_term(depth, complexity)
         self.problem.print_msg(f"Generated expression: {generated_expression}", level=1)
 
         func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
@@ -88,7 +88,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
                 depth = random.randint(1, max_depth)
                 complexity = random.randint(1, max_complexity)
-                candidate, func_str = self.generate_arithmetic_function(
+                candidate, func_str = self.generate_random_term(
                     [x.sort() for x in list(variable_mapping.keys())], depth, complexity)
                 candidates.append((candidate, func_name))
                 func_strs.append(func_str)

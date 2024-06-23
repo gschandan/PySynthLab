@@ -37,7 +37,7 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
             (z3.If(x < y, x, y), "def f4(x, y):\n    return x if x < y else y\n")
         ]
 
-    @patch.object(RandomSearchStrategyTopDown, 'generate_arithmetic_function')
+    @patch.object(RandomSearchStrategyTopDown, 'generate_random_term')
     def test_strategy_handles_counterexamples_and_finds_correct_function(self, mock_generate):
         incorrect_functions = self.generate_incorrect_functions()
         correct_func, correct_func_str = self.generate_correct_abs_max_function()

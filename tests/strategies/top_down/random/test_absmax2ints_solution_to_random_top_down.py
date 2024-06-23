@@ -32,7 +32,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
 
         return expr, func_str
 
-    @patch.object(RandomSearchStrategyTopDown, 'generate_arithmetic_function')
+    @patch.object(RandomSearchStrategyTopDown, 'generate_random_term')
     def test_strategy_finds_correct_function(self, mock_generate):
         correct_func, correct_func_str = self.generate_correct_abs_max_function()
         mock_generate.return_value = (correct_func, correct_func_str)
