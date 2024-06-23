@@ -1,0 +1,48 @@
+import unittest
+from typing import List, Tuple
+from unittest.mock import patch
+import z3
+from src.cegis.z3.synthesis_problem import SynthesisProblem, SynthesisProblemOptions
+from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
+
+
+class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
+    def setUp(self):
+        self.problem_str = """
+        (set-logic LIA)
+        (synth-fun f ((x Int) (y Int)) Int)
+        (declare-var x Int)
+        (declare-var y Int)
+        (constraint (= (f x y) (f y x)))
+        (constraint (and (<= x (f x y)) (<= y (f x y))))
+        """
+        self.options = SynthesisProblemOptions()
+        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.strategy = RandomSearchStrategyTopDown(self.problem)
+
+    def generate_correct_abs_max_function(self) -> Tuple[z3.ExprRef, str]:
+        x, y = z3.Ints('x y')
+
+        expr = z3.If(z3.If(x >= 0, x, -x) > z3.If(y >= 0, y, -y),
+                     z3.If(x >= 0, x, -x),
+                     z3.If(y >= 0, y, -y))
+
+        func_str = f"def absolute_max_function(x, y):\n"
+        func_str += f"    return {expr}\n"
+
+        return expr, func_str
+
+    @patch.object(RandomSearchStrategyTopDown, 'generate_arithmetic_function')
+    def test_strategy_finds_correct_function(self, mock_generate):
+        correct_func, correct_func_str = self.generate_correct_abs_max_function()
+        mock_generate.return_value = (correct_func, correct_func_str)
+
+        self.strategy.execute_cegis()
+
+        self.assertIsNotNone(self.problem.context.z3_synth_functions['f'],"Should find a satisfying function")
+
+        self.assertTrue(self.strategy.get_solution_found(), "The strategy should have found a solution")
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -330,7 +330,6 @@ class SynthesisProblem:
             self.print_msg("Warning: No constraints found or generated.", level=1)
 
         self.context.z3_negated_constraints = self.negate_assertions(self.context.z3_constraints)
-        self.print_msg(f"Negated constraints: {self.context.z3_negated_constraints}.", level=1)
 
     def find_undeclared_variables(self, term, declared_variables, declared_functions, declared_synth_functions):
         """
@@ -533,13 +532,6 @@ class SynthesisProblem:
 
         if self.options.randomise_each_iteration:
             self.context.enumerator_solver.set('random_seed', random.randint(0, 4294967295))
-
-        for func_name, counterexample, _ in self.context.counterexamples:
-            for func_symbol, variables in self.context.variable_mapping_dict.items():
-                func = self.context.z3_synth_functions[func_symbol]
-                args = variables.keys()
-                #assertion = func(*args) != self.parse_term(self.context.z3_constraints[0].arg(0))
-                #self.context.enumerator_solver.add(assertion)
 
         substituted_neg_constraints = self.substitute_constraints(self.context.z3_negated_constraints, list(self.context.z3_synth_functions.values()), candidate_functions)
         self.context.enumerator_solver.add(substituted_neg_constraints)

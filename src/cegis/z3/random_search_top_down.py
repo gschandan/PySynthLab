@@ -81,8 +81,6 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
 
         counterexamples = {}
 
-        
-
         for iteration in range(max_iterations):
             candidates = []
             func_strs = []
@@ -108,6 +106,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
                         self.problem.print_msg(
                             f"{func_name}: {self.problem.context.z3_synth_functions[func_name]}", level=2
                         )
+                    self.set_solution_found()
                     return
                 else:
                     counterexamples.update(new_counterexamples)
