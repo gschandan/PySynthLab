@@ -74,7 +74,6 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             return left != right
 
     def execute_cegis(self) -> None:
-        """Execute counterexample-guided inductive synthesis."""
         max_depth = self.problem.options.max_depth
         max_complexity = self.problem.options.max_complexity
         max_iterations = self.problem.options.max_candidates_at_each_depth
@@ -101,6 +100,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             if self.verify_candidates([c for c, _ in candidates]):
                 new_counterexamples = self.generate_counterexample(candidates)
                 if new_counterexamples is None:
+                    self.problem.print_msg("-"*100, level=2)
                     self.problem.print_msg(f"Found satisfying candidates!", level=2)
                     for _, func_name in candidates:
                         self.problem.print_msg(

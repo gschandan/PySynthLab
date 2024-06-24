@@ -87,25 +87,36 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         max_candidates_per_depth = self.problem.options.max_candidates_at_each_depth
         counterexamples = {}
 
-        arg_sorts = [x.sort() for x in list(self.problem.context.variable_mapping_dict.values())[0].keys()]
+        func_name_to_args = {
+            func_name: [x.sort() for x in list(var_map.keys())]
+            for func_name, var_map in self.problem.context.variable_mapping_dict.items()
+        }
 
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
                 for iteration in range(max_candidates_per_depth):
-                    candidate, func_str = self.generate_random_term(arg_sorts, depth, complexity)
+                    candidates = []
+                    func_strs = []
+
+                    for func_name, arg_sorts in func_name_to_args.items():
+                        candidate, func_str = self.generate_random_term(arg_sorts, depth, complexity)
+                        candidates.append((candidate, func_name))
+                        func_strs.append(func_str)
 
                     self.problem.print_msg(
-                        f"Testing candidate (depth: {depth}, complexity: {complexity}, iteration: {iteration + 1}):\n{func_str}",
-                        level=1)
+                        f"Testing candidates (depth: {depth}, complexity: {complexity}, iteration: {iteration + 1}):\n{'; '.join(func_strs)}",
+                        level=1
+                    )
 
-                    if not self.check_counterexamples([(candidate, 'f')], counterexamples):
+                    if not self.check_counterexamples(candidates, counterexamples):
                         continue
 
-                    if self.verify_candidates([candidate]):
-                        new_counterexamples = self.generate_counterexample([(candidate, 'f')])
+                    if self.verify_candidates([c for c, _ in candidates]):
+                        new_counterexamples = self.generate_counterexample(candidates)
                         if new_counterexamples is None:
-                            self.problem.print_msg(f"Found satisfying candidate!", level=2)
-                            self.problem.print_msg(f"f: {candidate}", level=2)
+                            self.problem.print_msg(f"Found satisfying candidates!", level=2)
+                            for candidate, func_name in candidates:
+                                self.problem.print_msg(f"{func_name}: {candidate}", level=2)
                             self.set_solution_found()
                             return
                         else:
@@ -115,7 +126,7 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                                     f"New counterexample found: {func_name}({', '.join([str(val) for val in ce.values()])})",
                                     level=1)
                     else:
-                        self.problem.print_msg("Candidate failed verification.", level=1)
+                        self.problem.print_msg("Candidates failed verification.", level=1)
 
         self.problem.print_msg("No satisfying candidates found.", level=2)
 

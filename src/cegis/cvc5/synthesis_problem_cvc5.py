@@ -171,11 +171,11 @@ class SynthesisProblemCvc5:
                 term = self.parse_term(constraint.constraint)
                 constraint_terms.append(term)
                 self.cvc5_constraints.append(term)
-        print("parsed individual constraints", constraint_terms)
+        print("parsed individual constraint_substitution", constraint_terms)
         # if constraint_terms:
         #     combined_constraint = self.enumerator_solver.mkTerm(Kind.AND, *constraint_terms)
         #     self.cvc5_constraints.append(combined_constraint)
-        # print("Combined constraints", self.cvc5_constraints)
+        # print("Combined constraint_substitution", self.cvc5_constraints)
 
     def parse_term(self, term: ast.Term) -> cvc5.Term:
         if isinstance(term, ast.IdentifierTerm):

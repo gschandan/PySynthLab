@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="runner_bottom_up_random" type="PythonConfigurationType" factoryName="Python" folderName="New Folder">
+  <configuration default="false" name="runner_bottom_up_small" type="PythonConfigurationType" factoryName="Python" folderName="random">
     <module name="Dissertation" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
