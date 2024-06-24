@@ -1,10 +1,11 @@
+import dataclasses
 import random
 import typing
-import pyparsing
-import dataclasses
-
-from z3 import *
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
+
+import pyparsing
+from z3 import *
+
 from src.helpers.parser.src import ast
 from src.helpers.parser.src.ast import Program, CommandKind
 from src.helpers.parser.src.resolution import FunctionKind, SortDescriptor, FunctionDescriptor
@@ -630,4 +631,3 @@ class SynthesisProblem:
             self.context.enumerator_solver.pop()
 
         return counterexamples if counterexamples else None
-

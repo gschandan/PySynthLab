@@ -40,9 +40,11 @@ class SygusV1Processor(SygusProcessorBase):
 
     def visit_grammar(self, grammar: ast.Grammar):
         if grammar.nonterminals[0][0] != 'Start':
-            grammar_term = ast.GrammarTerm.create_binder_free_grammar_term( ast.IdentifierTerm(grammar.nonterminals[0][0], None, None), None, None)
-            grammar.grouped_rule_lists['Start'] = ast.GroupedRuleList('Start', grammar.nonterminals[0][1], [ grammar_term ], None, None)
-            grammar.nonterminals = [ ('Start', grammar.nonterminals[0][1]) ] + grammar.nonterminals
+            grammar_term = ast.GrammarTerm.create_binder_free_grammar_term(
+                ast.IdentifierTerm(grammar.nonterminals[0][0], None, None), None, None)
+            grammar.grouped_rule_lists['Start'] = ast.GroupedRuleList('Start', grammar.nonterminals[0][1],
+                                                                      [grammar_term], None, None)
+            grammar.nonterminals = [('Start', grammar.nonterminals[0][1])] + grammar.nonterminals
         SygusProcessorBase.visit_grammar(self, grammar)
 
     def visit_inv_constraint_command(self, inv_constraint_command: ast.InvConstraintCommand):
@@ -53,7 +55,7 @@ class SygusV1Processor(SygusProcessorBase):
                 base_argument_name = argument_name[:-1]
                 sort_expression = ast.SortExpression(argument_sort.identifier, argument_sort.sort_arguments, None, None)
                 if self.symbol_table.lookup_symbol(base_argument_name) is None \
-                    and self.symbol_table.lookup_symbol(base_argument_name) is None:
+                        and self.symbol_table.lookup_symbol(base_argument_name) is None:
                     self.new_decls.extend([
                         ast.DeclarePrimedVarCommand(base_argument_name, sort_expression, None, None)
                     ])
@@ -70,7 +72,7 @@ class SygusV1Processor(SygusProcessorBase):
         SygusProcessorBase.visit_program(self, program)
         for decl in self.new_decls:
             decl.accept(self)
-        program.commands = [ program.commands[0] ] + self.new_decls + program.commands[1:]
+        program.commands = [program.commands[0]] + self.new_decls + program.commands[1:]
 
     def __init__(self, symbol_table: SymbolTable):
         super().__init__('SygusV1Processor')

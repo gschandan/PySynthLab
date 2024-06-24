@@ -26,7 +26,7 @@ class SymbolTableEntry(ABC):
 class SortKind(Enum):
     ALIAS = auto()
     DATATYPE = auto()
-    ENUMERATED = auto()         # Used in V1 grammars and ASTs ONLY!
+    ENUMERATED = auto()  # Used in V1 grammars and ASTs ONLY!
     FUNCTION = auto()
     PLACEHOLDER = auto()
     PRIMITIVE = auto()
@@ -223,8 +223,8 @@ class FunctionDescriptor(SymbolTableEntry):
     def create_datatype_constructor_and_helpers(identifier: str,
                                                 parameters: List[Tuple[str, SortDescriptor]],
                                                 datatype_sort: SortDescriptor) -> Tuple['FunctionDescriptor',
-                                                                                        'FunctionDescriptor',
-                                                                                        List['FunctionDescriptor']]:
+    'FunctionDescriptor',
+    List['FunctionDescriptor']]:
         constructor = FunctionDescriptor(identifier)
         constructor.function_kind = FunctionKind.DATATYPE_CONSTRUCTOR
         constructor.argument_names = [x[0] for x in parameters]

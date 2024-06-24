@@ -1,8 +1,10 @@
-from typing import Dict, List, Tuple, Callable
-import z3
 from itertools import product
-from src.cegis.z3.synthesis_strategy import SynthesisStrategy
+from typing import Dict, List, Tuple, Callable
+
+import z3
+
 from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
 
 # http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf

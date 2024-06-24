@@ -195,7 +195,7 @@ class LiteralKind(Enum):
     BINARY = auto()
     BOOLEAN = auto()
     DECIMAL = auto()
-    ENUMERATED = auto()     # Used only by V1 grammars/ASTs
+    ENUMERATED = auto()  # Used only by V1 grammars/ASTs
     HEXADECIMAL = auto()
     NUMERAL = auto()
     STRING = auto()

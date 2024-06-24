@@ -46,7 +46,7 @@ def main(args: argparse.Namespace) -> None:
         strategy = RandomSearchStrategyTopDown(problem)
     else:
         raise ValueError(f"Unknown synthesis strategy: {args.strategy}")
-    
+
     print(strategy.problem.info_smt())
     strategy.execute_cegis()
 
@@ -70,8 +70,10 @@ if __name__ == '__main__':
         help='Path to an input file (or stdin if "-")')
 
     parser.add_argument(
-        '--strategy', type=str, default='fast_enumerative_bottom_up', choices=['fast_enumerative_bottom_up', 'fast_enumerative_top_down', 'random_search_bottom_up','random_search_top_down'],
-        help='The synthesis strategy to use') 
+        '--strategy', type=str, default='fast_enumerative_bottom_up',
+        choices=['fast_enumerative_bottom_up', 'fast_enumerative_top_down', 'random_search_bottom_up',
+                 'random_search_top_down'],
+        help='The synthesis strategy to use')
 
     parser.add_argument(
         '--min-const', type=int, default=SynthesisProblemOptions.min_const,

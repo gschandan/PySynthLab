@@ -1,6 +1,8 @@
 import random
 from typing import List, Tuple, Dict
+
 from z3 import *
+
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 

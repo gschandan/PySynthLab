@@ -30,7 +30,7 @@ class FourSynthFunctions(unittest.TestCase):
 
     def test_invalid_and_valid_solutions(self):
         x = z3.Var(0, IntSort())
-        
+
         def incorrect_id1(*values):
             x = values[0] + 1
             return x
@@ -58,7 +58,8 @@ class FourSynthFunctions(unittest.TestCase):
         partially_correct_candidates = [correct_id1(x), incorrect_id2(x), incorrect_id3(x), incorrect_id4(x)]
         partially_correct_func_strs = ["correct_id1", "incorrect_id2", "incorrect_id3", "incorrect_id4"]
 
-        self.problem.print_msg(f"Testing partially correct candidates: {'; '.join(partially_correct_func_strs)}", level=1)
+        self.problem.print_msg(f"Testing partially correct candidates: {'; '.join(partially_correct_func_strs)}",
+                               level=1)
         result = self.problem.test_candidates(partially_correct_func_strs, partially_correct_candidates)
         self.problem.print_msg("\n", level=1)
         self.assertFalse(result)

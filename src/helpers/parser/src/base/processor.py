@@ -1,5 +1,6 @@
 from .. import ast
 
+
 class SygusProcessorBase(ast.ASTVisitor):
     def visit_sort_expression(self, sort_expression: ast.SortExpression):
         pass

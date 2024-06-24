@@ -63,7 +63,7 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
         super().__init__('SygusV2ASTPrinter', symbol_table, convert_chains_to_binary)
 
     @staticmethod
-    def run(program: ast.Program, symbol_table: SymbolTable, options = {}) -> str:
+    def run(program: ast.Program, symbol_table: SymbolTable, options={}) -> str:
         writer = SygusV2ASTPrinter(symbol_table, options)
         program.accept(writer)
         return writer.stream.get_value()

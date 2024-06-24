@@ -27,7 +27,7 @@ if __name__ == '__main__':
         '-q', '--quiet', action='store_true',
         help='Suppress all output for valid input files')
     parser.add_argument(
-        '-s', '--sygus-standard', default='2', choices=['1','2'],
+        '-s', '--sygus-standard', default='2', choices=['1', '2'],
         help='The SyGuS language standard used in the input file')
 
     parser.add_argument(

@@ -54,10 +54,10 @@ if __name__ == '__main__':
         help='Convert all (- x) terms to (- 0 x)')
 
     parser.add_argument(
-        '-s', '--source-sygus-standard', default='1', choices=['1','2'],
+        '-s', '--source-sygus-standard', default='1', choices=['1', '2'],
         help='The SyGuS language standard used in the input file')
     parser.add_argument(
-        '-t', '--target-sygus-standard', default='2', choices=['1','2'],
+        '-t', '--target-sygus-standard', default='2', choices=['1', '2'],
         help='The SyGuS language standard for the output file')
 
     parser.add_argument(

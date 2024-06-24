@@ -1,5 +1,6 @@
 import random
 from typing import List, Tuple, Dict
+
 import z3
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
@@ -100,7 +101,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             if self.verify_candidates([c for c, _ in candidates]):
                 new_counterexamples = self.generate_counterexample(candidates)
                 if new_counterexamples is None:
-                    self.problem.print_msg("-"*100, level=2)
+                    self.problem.print_msg("-" * 100, level=2)
                     self.problem.print_msg(f"Found satisfying candidates!", level=2)
                     for _, func_name in candidates:
                         self.problem.print_msg(

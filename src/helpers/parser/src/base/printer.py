@@ -107,7 +107,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
     def _break_bool_chained_function_application(self, identifier, arguments):
         chained_calls = []
         for i in range(len(arguments) - 1):
-            subcall = ast.FunctionApplicationTerm(identifier, arguments[i:i+2], None, None)
+            subcall = ast.FunctionApplicationTerm(identifier, arguments[i:i + 2], None, None)
             subcall.sort_descriptor = CoreResolver.get_boolean_sort()
             chained_calls.append(subcall)
         final_term = ast.FunctionApplicationTerm('and', chained_calls, None, None)
@@ -246,7 +246,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             command.accept(self)
             self.stream.write('\n')
 
-    def __init__(self, name: str, symbol_table: SymbolTable, options = {}):
+    def __init__(self, name: str, symbol_table: SymbolTable, options={}):
         super().__init__(name)
         self.options = options
         self.stream = IndentedStream()
