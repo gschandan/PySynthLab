@@ -26,10 +26,10 @@ class SynthesisProblemOptions:
     min_const: int = -2
     max_const: int = 2
     max_depth: int = 3
-    max_complexity: int = 4
+    max_complexity: int = 6
     random_seed: int = 1234
     randomise_each_iteration: bool = False
-    max_candidates_at_each_depth: int = 15
+    max_candidates_at_each_depth: int = 20
 
 
 @dataclasses.dataclass

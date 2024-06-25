@@ -85,14 +85,11 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         candidates = []
-        func_strs = []
-
-        for func_name, arg_sorts in self.problem.context.variable_mapping_dict.items():
-            candidate, func_str = self.generate_random_term(list(arg_sorts.values()),
+        for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
+            candidate, func_str = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())],
                                                             self.problem.options.max_depth,
                                                             self.problem.options.max_complexity)
             candidates.append((candidate, func_name))
-            func_strs.append(func_str)
 
         return candidates
 
@@ -115,8 +112,9 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                         f"Testing candidates (depth: {depth}, complexity: {complexity}, iteration: {iteration + 1}):\n{'; '.join([func_str for _, func_str in candidates])}",
                         level=1
                     )
-
-                    if self.test_candidates(pruned_candidates):
+                    func_strs = [f"{func_name}: {candidate}" for candidate, func_name in candidates]
+                    candidate_functions = [candidate for candidate, _ in candidates]
+                    if self.test_candidates_old(func_strs, candidate_functions):
                         self.problem.print_msg(f"Found satisfying candidates!", level=2)
                         for candidate, func_name in pruned_candidates:
                             self.problem.print_msg(f"{func_name}: {candidate}", level=2)
