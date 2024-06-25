@@ -21,11 +21,11 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 
     def generate_correct_abs_max_function(self) -> Tuple[z3.ExprRef, str]:
-        x, y = z3.Ints('x y')
-
-        expr = z3.If(z3.If(x >= 0, x, -x) > z3.If(y >= 0, y, -y),
-                     z3.If(x >= 0, x, -x),
-                     z3.If(y >= 0, y, -y))
+        vars = [z3.Var(i, z3.IntSort()) for i in range(2)]
+        
+        expr = z3.If(z3.If(vars[0] >= 0, vars[0], -vars[0]) > z3.If(vars[1] >= 0, vars[1], -vars[1]),
+                     z3.If(vars[0] >= 0, vars[0], -vars[0]),
+                     z3.If(vars[1] >= 0, vars[1], -vars[1]))
 
         func_str = f"def absolute_max_function(x, y):\n"
         func_str += f"    return {expr}\n"
@@ -41,7 +41,9 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
 
         self.assertIsNotNone(self.problem.context.z3_synth_functions['f'],"Should find a satisfying function")
 
-        self.assertTrue(self.strategy.get_solution_found, "The strategy should have found a solution")
+        self.assertTrue(self.strategy.solution_found, "Should have found a solution")
+
+
 
 
 if __name__ == '__main__':

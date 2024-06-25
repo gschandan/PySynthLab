@@ -24,11 +24,11 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 
     def generate_correct_max_function(self) -> Tuple[z3.ExprRef, str]:
-        vars = [z3.Int(f'var_{i}') for i in range(2)]
+        vars = [z3.Var(i, z3.IntSort()) for i in range(2)]
         return z3.If(vars[0] >= vars[1], vars[0], vars[1]), 'f'
 
     def generate_incorrect_functions(self) -> List[Tuple[z3.ExprRef, str]]:
-        vars = [z3.Int(f'var_{i}') for i in range(2)]
+        vars = [z3.Var(i, z3.IntSort()) for i in range(2)]
         return [
             (vars[0] + vars[1], 'f'),
             (vars[0] - vars[1], 'f'),

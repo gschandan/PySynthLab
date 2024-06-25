@@ -5,6 +5,7 @@ import typing
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
 import pyparsing
+import z3
 from z3 import *
 
 from src.helpers.parser.src import ast
@@ -507,11 +508,6 @@ class SynthesisProblem:
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
-
-        :param constraints: The list of constraints.
-        :param functions_to_replace: The list of functions to substitute.
-        :param candidate_functions: The list of candidate functions to substitute.
-        :return: The substituted constraints.
         """
         synth_substitutions = list(zip(functions_to_replace, candidate_functions))
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]

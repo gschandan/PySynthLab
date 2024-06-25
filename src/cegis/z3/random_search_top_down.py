@@ -79,8 +79,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             depth = random.randint(1, self.problem.options.max_depth)
             complexity = random.randint(1, self.problem.options.max_complexity)
-            vars = [z3.Int(f'var_{i}') for i in range(len(variable_mapping))]
-            candidate, _ = self.generate_random_term(vars, depth, complexity)
+            candidate, _ = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())], depth, complexity)
             candidates.append((candidate, func_name))
         return candidates
 
@@ -92,17 +91,16 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         max_iterations = self.problem.options.max_candidates_at_each_depth
 
         for iteration in range(max_iterations):
-            candidates = self.generate_candidates()
-            pruned_candidates = self.prune_candidates(candidates)
+            candidates = self.prune_candidates(self.generate_candidates())
 
             self.problem.print_msg(f"Testing candidates (iteration {iteration + 1}):", level=1)
-            for candidate, func_name in pruned_candidates:
-                self.problem.print_msg(f"{func_name}: {candidate}", level=1)
+            func_strs = [f"{func_name}: {candidate}" for candidate, func_name in candidates]
+            candidate_functions = [candidate for candidate, _ in candidates]
 
-            if self.test_candidates(pruned_candidates):
+            if self.test_candidates_old(func_strs, candidate_functions):
                 self.problem.print_msg("-" * 100, level=2)
                 self.problem.print_msg(f"Found satisfying candidates!", level=2)
-                for candidate, func_name in pruned_candidates:
+                for candidate, func_name in candidates:
                     self.problem.print_msg(f"{func_name}: {candidate}", level=2)
                 self.set_solution_found()
                 return
