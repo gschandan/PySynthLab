@@ -41,7 +41,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
 
         self.assertIsNotNone(self.problem.context.z3_synth_functions['f'],"Should find a satisfying function")
 
-        self.assertTrue(self.strategy.get_solution_found(), "The strategy should have found a solution")
+        self.assertTrue(self.strategy.get_solution_found, "The strategy should have found a solution")
 
 
 if __name__ == '__main__':

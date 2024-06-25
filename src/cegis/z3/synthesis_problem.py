@@ -1,4 +1,5 @@
 import dataclasses
+import itertools
 import random
 import typing
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
@@ -497,6 +498,8 @@ class SynthesisProblem:
         else:
             raise ValueError(f"Unsupported sort: {sort}")
 
+    import itertools
+
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
                                functions_to_replace: List[z3.FuncDeclRef],
                                candidate_functions: List[
@@ -519,6 +522,15 @@ class SynthesisProblem:
             predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
+
+    def find_func_applications(self, expr: z3.ExprRef, func: z3.FuncDeclRef) -> Set[z3.ExprRef]:
+        if z3.is_app(expr) and expr.decl() == func:
+            return set(expr)
+        elif z3.is_app(expr):
+            return set(
+                itertools.chain.from_iterable(self.find_func_applications(child, func) for child in expr.children()))
+        else:
+            return set()
 
     def test_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
         synth_func_names = list(self.context.z3_synth_functions.keys())
@@ -603,12 +615,12 @@ class SynthesisProblem:
         for (candidate, synth_func_name) in candidates:
             variable_mapping = self.context.variable_mapping_dict[synth_func_name]
 
-            correct_func = self.context.z3_synth_functions[synth_func_name]
+            func = self.context.z3_synth_functions[synth_func_name]
             args = list(variable_mapping.values())
 
             candidate_expr = z3.substitute_vars(candidate, *args)
 
-            difference_constraint = candidate_expr != correct_func(*args)
+            difference_constraint = candidate_expr != func(*args)
 
             self.context.enumerator_solver.push()
             self.context.enumerator_solver.add(difference_constraint)
