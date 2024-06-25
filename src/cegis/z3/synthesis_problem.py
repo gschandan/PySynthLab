@@ -26,7 +26,7 @@ class SynthesisProblemOptions:
     min_const: int = -2
     max_const: int = 2
     max_depth: int = 3
-    max_complexity: int = 4
+    max_complexity: int = 5
     random_seed: int = 1234
     randomise_each_iteration: bool = False
     max_candidates_at_each_depth: int = 15
@@ -502,16 +502,14 @@ class SynthesisProblem:
     import itertools
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
-                               functions_to_replace: List[z3.FuncDeclRef],
-                               candidate_functions: List[
-                                   typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable]]) -> \
+                               candidates: Dict[
+                                   typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable], str]) -> \
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
         """
-        synth_substitutions = list(zip(functions_to_replace, candidate_functions))
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
-
+        synth_substitutions = [(func, body) for body, func in candidates.items()]
         substituted_constraints = []
         for constraint in constraints:
             synth_substituted = z3.substitute_funs(constraint, synth_substitutions)

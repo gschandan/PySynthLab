@@ -1,5 +1,5 @@
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from z3 import *
 
@@ -16,7 +16,7 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         self.term_bank = {}
 
     def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
-                             operations: List[str] = None) -> Tuple[z3.ExprRef, str]:
+                             operations: List[str] = None) -> z3.ExprRef:
         if operations is None:
             operations = ['+', '-', '*', 'If', 'Neg']
 
@@ -57,7 +57,7 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
         func_str += f"    return {str(generated_expression)}\n"
 
-        return generated_expression, func_str
+        return generated_expression
 
     def generate_condition(self, args: List[z3.ExprRef]) -> z3.BoolRef | bool:
         comparisons = ['<', '<=', '>', '>=', '==', '!=']
@@ -83,20 +83,18 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         # experimenting with cost of operation for biasing random choice
         return {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.get(op, 0)
 
-    def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
-        candidates = []
-        func_strs = []
+    def generate_candidates(self) -> Dict[z3.ExprRef, str]:
+        candidates = {}
 
-        for func_name, arg_sorts in self.problem.context.variable_mapping_dict.items():
-            candidate, func_str = self.generate_random_term(list(arg_sorts.values()),
-                                                            self.problem.options.max_depth,
-                                                            self.problem.options.max_complexity)
-            candidates.append((candidate, func_name))
-            func_strs.append(func_str)
+        for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
+            candidate = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())],
+                                                  self.problem.options.max_depth,
+                                                  self.problem.options.max_complexity)
+            candidates[candidate] = func_name
 
         return candidates
 
-    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
+    def prune_candidates(self, candidates: Dict[z3.ExprRef, str]) -> Dict[z3.ExprRef, str]:
         # no pruning to see here
         return candidates
 
@@ -108,17 +106,15 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
                 for iteration in range(max_candidates_per_depth):
-                    candidates = self.generate_candidates()
-                    pruned_candidates = self.prune_candidates(candidates)
+                    candidates = self.prune_candidates(self.generate_candidates())
 
                     self.problem.print_msg(
                         f"Testing candidates (depth: {depth}, complexity: {complexity}, iteration: {iteration + 1}):\n{'; '.join([func_str for _, func_str in candidates])}",
                         level=1
                     )
-
-                    if self.test_candidates(pruned_candidates):
+                    if self.test_candidates_old(candidates):
                         self.problem.print_msg(f"Found satisfying candidates!", level=2)
-                        for candidate, func_name in pruned_candidates:
+                        for candidate, func_name in candidates:
                             self.problem.print_msg(f"{func_name}: {candidate}", level=2)
                         self.set_solution_found()
                         return

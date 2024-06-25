@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from z3 import *
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
@@ -20,12 +20,12 @@ class SynthesisStrategy(ABC):
         """Prune candidates based on strategy-specific criteria."""
         pass
 
-    def test_candidates_old(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
+    def test_candidates_old(self, candidates: Dict[z3.ExprRef, str]) -> bool:
+
         self.problem.context.enumerator_solver.reset()
         substituted_neg_constraints = self.problem.substitute_constraints(
             self.problem.context.z3_negated_constraints,
-            list(self.problem.context.z3_synth_functions.values()),
-            candidate_functions
+            candidates
         )
         self.problem.context.enumerator_solver.add(substituted_neg_constraints)
 
@@ -35,8 +35,7 @@ class SynthesisStrategy(ABC):
             incorrect_outputs = []
             candidate_function_exprs = []
 
-            for func, candidate, variable_mapping in zip(func_strs, candidate_functions,
-                                                         self.problem.context.variable_mapping_dict.values()):
+            for func, candidate, variable_mapping in zip(candidates.items(), self.problem.context.variable_mapping_dict.values()):
                 free_variables = list(variable_mapping.keys())
                 counterexample = {str(free_var): model.eval(declared_var, model_completion=True).as_long()
                                   for free_var, declared_var in variable_mapping.items()}
@@ -53,23 +52,20 @@ class SynthesisStrategy(ABC):
 
                 self.problem.context.counterexamples.append((func, counterexample, incorrect_output))
 
-            self.problem.print_msg(f"Incorrect outputs for {'; '.join(func_strs)}: {incorrect_outputs}", level=0)
+            self.problem.print_msg(f"Incorrect output: {incorrect_outputs}", level=0)
             return False
         else:
             self.problem.context.verification_solver.reset()
             substituted_constraints = self.problem.substitute_constraints(
                 self.problem.context.z3_constraints,
-                list(self.problem.context.z3_synth_functions.values()),
-                candidate_functions
+                candidates
             )
             self.problem.context.verification_solver.add(substituted_constraints)
             if self.problem.context.verification_solver.check() == z3.unsat:
                 self.problem.print_msg(
-                    f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
-                    level=0)
+                    f"Verification failed for guess. Candidates violate constraints.",level=0)
                 return False
-            self.problem.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.",
-                                   level=0)
+            self.problem.print_msg(f"No counterexample found! Guesses should be correct.",level=0)
             return True
 
     def test_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> bool:

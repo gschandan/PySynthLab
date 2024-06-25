@@ -23,29 +23,30 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         self.problem = SynthesisProblem(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 
-    def generate_correct_max_function(self) -> Tuple[z3.ExprRef, str]:
+    def generate_correct_max_function(self) -> z3.ExprRef:
         vars = [z3.Var(i, z3.IntSort()) for i in range(2)]
-        return z3.If(vars[0] >= vars[1], vars[0], vars[1]), 'f'
+        return z3.If(vars[0] >= vars[1], vars[0], vars[1])
 
-    def generate_incorrect_functions(self) -> List[Tuple[z3.ExprRef, str]]:
+    def generate_incorrect_functions(self) -> List[z3.ExprRef]:
         vars = [z3.Var(i, z3.IntSort()) for i in range(2)]
         return [
-            (vars[0] + vars[1], 'f'),
-            (vars[0] - vars[1], 'f'),
-            (vars[0] * 2, 'f'),
-            (z3.If(vars[0] < vars[1], vars[0], vars[1]), 'f')
+            vars[0] + vars[1],
+            vars[0] - vars[1],
+            vars[0] * 2,
+            z3.If(vars[0] < vars[1], vars[0], vars[1]),
         ]
 
     @patch.object(RandomSearchStrategyTopDown, 'generate_candidates')
     def test_strategy_handles_counterexamples_and_finds_correct_function(self, mock_generate):
         incorrect_functions = self.generate_incorrect_functions()
-        correct_func, correct_func_name = self.generate_correct_max_function()
-    
-        mock_data = [incorrect_functions[i % len(incorrect_functions)] for i in range(self.options.max_candidates_at_each_depth - 1)]
-        mock_data.append((correct_func, correct_func_name))
-    
+        correct_func = self.generate_correct_max_function()
+
+        mock_data = [incorrect_functions[i % len(incorrect_functions)] for i in
+                     range(self.options.max_candidates_at_each_depth - 1)]
+        mock_data.append(correct_func)
+
         mock_generate.side_effect = [[func] for func in mock_data]
-    
+
         self.strategy.execute_cegis()
         self.assertEqual(mock_generate.call_count, self.options.max_candidates_at_each_depth,
                          f"Should try {self.options.max_candidates_at_each_depth} times before finding the correct one")

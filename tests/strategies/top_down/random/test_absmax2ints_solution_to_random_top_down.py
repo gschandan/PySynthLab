@@ -27,10 +27,8 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
                      z3.If(vars[0] >= 0, vars[0], -vars[0]),
                      z3.If(vars[1] >= 0, vars[1], -vars[1]))
 
-        func_str = f"def absolute_max_function(x, y):\n"
-        func_str += f"    return {expr}\n"
 
-        return expr, func_str
+        return expr, 'f'
 
     @patch.object(RandomSearchStrategyTopDown, 'generate_random_term')
     def test_strategy_finds_correct_function(self, mock_generate):
