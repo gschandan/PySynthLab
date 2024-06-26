@@ -201,11 +201,14 @@ class FastEnumerativeSynthesisTopDown(SynthesisStrategy):
             free_variables = list(self.problem.context.variable_mapping_dict[func_name].keys())
             func_str = f"{func_name}({', '.join([var.__str__() for var in free_variables])}) return {candidate.sexpr()}"
             self.problem.print_msg(f"Testing candidate {func_str}")
-            result = self.problem.test_candidates([func_str], [candidate])
+            result = self.test_candidates([func_str], [candidate])
             if result:
                 return True
         return False
-
+    
+    def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
+        pass
+    
     def execute_cegis(self) -> None:
         for func_name, func in self.problem.context.z3_synth_functions.items():
             expected_sort = func.range()

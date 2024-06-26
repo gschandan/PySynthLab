@@ -1,3 +1,4 @@
+import itertools
 from itertools import product
 from typing import Dict, List, Tuple, Callable
 
@@ -11,9 +12,10 @@ from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 class FastEnumerativeSynthesisBottomUp(SynthesisStrategy):
 
     def __init__(self, problem: SynthesisProblem):
+        super().__init__(problem)
         self.problem = problem
-        self.min_const = self.problem.options.min_const
-        self.max_const = self.problem.options.max_const
+        self.min_const = problem.options.min_const
+        self.max_const = problem.options.max_const
         self.grammar = self.extract_grammar()
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache = {}
@@ -247,39 +249,58 @@ class FastEnumerativeSynthesisBottomUp(SynthesisStrategy):
                 generated_terms[sort].append(terms)
         return generated_terms
 
-    def create_candidate_function(self, candidate_expr: z3.ExprRef, arg_sorts: List[z3.SortRef]) -> Callable:
+    def create_candidate_function(self, candidate_expr: z3.ExprRef, arg_sorts: List[z3.SortRef]) -> z3.ExprRef:
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
+        return z3.substitute(candidate_expr, [(arg, z3.Var(i, arg.sort())) for i, arg in enumerate(args)])
 
-        def candidate_function(*values):
-            if len(values) != len(args):
-                raise ValueError("Incorrect number of arguments.")
+    def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
+        candidates = []
+        generated_terms = self.generate(self.problem.options.max_depth)
 
-            simplified_expr = z3.simplify(
-                z3.substitute(candidate_expr, [(arg, value) for arg, value in zip(args, values)]))
-            return simplified_expr
+        for func_name, func in self.problem.context.z3_synth_functions.items():
+            arg_sorts = [func.domain(i) for i in range(func.arity())]
+            for depth in range(self.problem.options.max_depth + 1):
+                for term in generated_terms[func.range()][depth]:
+                    candidate = self.create_candidate_function(term, arg_sorts)
+                    candidates.append((candidate, func_name))
 
-        candidate_function.__name__ = candidate_expr.sexpr()
-        return candidate_function
+        return candidates
+
+    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
+        # No pruning yet
+        return candidates
 
     def execute_cegis(self) -> None:
-        starting_depth = 0
         max_depth = self.problem.options.max_depth
-
         generated_terms = self.generate(max_depth)
+        synth_functions = list(self.problem.context.z3_synth_functions.items())
+
         for depth in range(max_depth + 1):
-            for func_name, func in self.problem.context.z3_synth_functions.items():
-                free_variables = list(self.problem.context.variable_mapping_dict[func_name].keys())
-                func_str = f"{func_name}({', '.join([var.__str__() for var in free_variables])})"
-                candidate_functions = generated_terms[func.range()][depth - starting_depth]
-                for candidate_function in candidate_functions:
-                    candidate_functions_callable = self.create_candidate_function(
-                        candidate_function,
-                        [x.sort() for x in free_variables]
-                    )
-                    candidate = candidate_functions_callable(*free_variables)
-                    result = self.problem.test_candidates([func_str], [candidate])
-                    if result:
-                        self.problem.print_msg(f"Found solution for function {func_name}: {candidate.__str__()}",
-                                               level=2)
-                        return
+            candidates_per_function = []
+            for func_name, func in synth_functions:
+                arg_sorts = [func.domain(i) for i in range(func.arity())]
+                candidates = [
+                    (self.create_candidate_function(term, arg_sorts), func_name)
+                    for term in generated_terms[func.range()][depth]
+                ]
+                candidates_per_function.append(candidates)
+
+            for combination in itertools.product(*candidates_per_function):
+                pruned_combination = self.prune_candidates(list(combination))
+
+                self.problem.print_msg(
+                    f"Testing candidates (depth: {depth}):\n{'; '.join([f'{func_name}: {candidate}' for candidate, func_name in pruned_combination])}",
+                    level=1
+                )
+
+                func_strs = [func_name for _, func_name in pruned_combination]
+                candidate_functions = [candidate for candidate, _ in pruned_combination]
+
+                if self.test_candidates(func_strs, candidate_functions):
+                    self.problem.print_msg(f"Found satisfying candidates!", level=2)
+                    for candidate, func_name in pruned_combination:
+                        self.problem.print_msg(f"{func_name}: {candidate}", level=2)
+                    self.set_solution_found()
+                    return
+
         self.problem.print_msg(f"No solution found up to depth {max_depth}", level=2)
