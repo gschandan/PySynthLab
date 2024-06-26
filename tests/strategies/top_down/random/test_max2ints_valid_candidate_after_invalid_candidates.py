@@ -40,12 +40,13 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
     def test_strategy_handles_counterexamples_and_finds_correct_function(self, mock_generate):
         incorrect_functions = self.generate_incorrect_functions()
         correct_func, correct_func_name = self.generate_correct_max_function()
-    
-        mock_data = [incorrect_functions[i % len(incorrect_functions)] for i in range(self.options.max_candidates_at_each_depth - 1)]
+
+        mock_data = [incorrect_functions[i % len(incorrect_functions)] for i in
+                     range(self.options.max_candidates_at_each_depth - 1)]
         mock_data.append((correct_func, correct_func_name))
-    
+
         mock_generate.side_effect = [[func] for func in mock_data]
-    
+
         self.strategy.execute_cegis()
         self.assertEqual(mock_generate.call_count, self.options.max_candidates_at_each_depth,
                          f"Should try {self.options.max_candidates_at_each_depth} times before finding the correct one")

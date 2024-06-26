@@ -10,7 +10,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
         (set-logic LIA)
-        (synth-fun f ((x Int) (y Int)) Int)
+        (synth-fun f ((a Int) (b Int)) Int)
         (declare-var x Int)
         (declare-var y Int)
         (constraint (= (f x y) (f y x)))

@@ -97,7 +97,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             func_strs = [f"{func_name}: {candidate}" for candidate, func_name in candidates]
             candidate_functions = [candidate for candidate, _ in candidates]
 
-            if self.test_candidates_old(func_strs, candidate_functions):
+            if self.test_candidates(func_strs, candidate_functions):
                 self.problem.print_msg("-" * 100, level=2)
                 self.problem.print_msg(f"Found satisfying candidates!", level=2)
                 for candidate, func_name in candidates:

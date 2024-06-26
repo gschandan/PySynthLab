@@ -44,7 +44,7 @@ class LoopProblem(unittest.TestCase):
 
         self.problem.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
         self.problem.print_msg(f"Testing guess: {func_str}", level=1)
-        result = self.problem.test_candidates([func_str],
+        result = self.problem.test_candidates_alternative([func_str],
                                               [candidate_function])
         self.problem.print_msg("\n", level=1)
         self.assertTrue(result)

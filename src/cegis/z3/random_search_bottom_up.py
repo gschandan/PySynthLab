@@ -114,7 +114,7 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                     )
                     func_strs = [f"{func_name}: {candidate}" for candidate, func_name in candidates]
                     candidate_functions = [candidate for candidate, _ in candidates]
-                    if self.test_candidates_old(func_strs, candidate_functions):
+                    if self.test_candidates(func_strs, candidate_functions):
                         self.problem.print_msg(f"Found satisfying candidates!", level=2)
                         for candidate, func_name in pruned_candidates:
                             self.problem.print_msg(f"{func_name}: {candidate}", level=2)

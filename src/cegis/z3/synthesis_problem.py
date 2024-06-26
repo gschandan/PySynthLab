@@ -29,7 +29,7 @@ class SynthesisProblemOptions:
     max_complexity: int = 6
     random_seed: int = 1234
     randomise_each_iteration: bool = False
-    max_candidates_at_each_depth: int = 20
+    max_candidates_at_each_depth: int = 15
 
 
 @dataclasses.dataclass
@@ -528,114 +528,54 @@ class SynthesisProblem:
         else:
             return set()
 
-    def test_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
-        synth_func_names = list(self.context.z3_synth_functions.keys())
-
-        if len(func_strs) != len(synth_func_names):
-            raise ValueError("Number of candidate functions doesn't match number of synthesis functions")
-
-        for func, candidate, synth_func_name in zip(func_strs, candidate_functions, synth_func_names):
-            if not self.check_counterexample(synth_func_name, candidate):
-                return False
-
-        new_counterexamples = self.generate_counterexample(list(zip(candidate_functions, synth_func_names)))
-        if new_counterexamples is not None:
-            for func_name, ce in new_counterexamples.items():
-                self.print_msg(f"New counterexample found for {func_name}: {ce}", level=0)
-            return False
-
-        if not self.verify_candidates(candidate_functions):
-            self.print_msg(f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
-                           level=0)
-            return False
-
-        self.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.", level=0)
-        return True
-
-    def check_counterexample(self, func_name: str, candidate: z3.ExprRef) -> bool:
-        if not any(ce[0] == func_name for ce in self.context.counterexamples):
-            return True
-
-        variable_mapping = self.context.variable_mapping_dict[func_name]
-        args = list(variable_mapping.values())
-        candidate_expr = z3.substitute_vars(candidate, *args)
-
-        for stored_func_name, ce, _ in self.context.counterexamples:
-            if stored_func_name == func_name:
-                substituted_expr = z3.substitute(candidate_expr, [
-                    (arg, z3.IntVal(ce[str(arg)])) for arg in args
-                ])
-                result = z3.simplify(substituted_expr)
-                if not self.satisfies_constraints(func_name, candidate_expr, result):
-                    return False
-
-        return True
-
-    def satisfies_constraints(self, func_name: str, candidate: z3.ExprRef, result: z3.ExprRef) -> bool:
-        solver = z3.Solver()
-        substituted_constraints = self.substitute_constraints(
-            self.context.z3_constraints,
-            [self.context.z3_synth_functions[func_name]],
-            [candidate])
-        solver.add(substituted_constraints)
-        solver.add(self.context.z3_synth_functions[func_name](
-            *self.context.variable_mapping_dict[func_name].values()) == result)
-        return solver.check() == z3.sat
-
-    def verify_candidates(self, candidates: List[z3.ExprRef]) -> bool:
-        self.context.verification_solver.reset()
-        if self.options.randomise_each_iteration:
-            self.context.verification_solver.set('random_seed', random.randint(1, 4294967295))
-
-        substituted_constraints = self.substitute_constraints(
-            self.context.z3_constraints,
-            list(self.context.z3_synth_functions.values()),
-            candidates)
-        self.context.verification_solver.add(substituted_constraints)
-
-        return self.context.verification_solver.check() == z3.sat
-
-    def generate_counterexample(self, candidates: List[Tuple[z3.ExprRef, str]]) -> Dict[str, Dict[str, int]] | None:
+    def test_candidates_alternative(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
         self.context.enumerator_solver.reset()
-        if self.options.randomise_each_iteration:
-            self.context.enumerator_solver.set('random_seed', random.randint(1, 4294967295))
-
         substituted_neg_constraints = self.substitute_constraints(
             self.context.z3_negated_constraints,
             list(self.context.z3_synth_functions.values()),
-            [candidate for candidate, _ in candidates])
+            candidate_functions
+        )
         self.context.enumerator_solver.add(substituted_neg_constraints)
 
-        counterexamples = {}
+        if self.context.enumerator_solver.check() == z3.sat:
+            model = self.context.enumerator_solver.model()
+            counterexamples = []
+            incorrect_outputs = []
+            candidate_function_exprs = []
 
-        for (candidate, synth_func_name) in candidates:
-            variable_mapping = self.context.variable_mapping_dict[synth_func_name]
+            for func, candidate, variable_mapping in zip(func_strs, candidate_functions,
+                                                         self.context.variable_mapping_dict.values()):
+                free_variables = list(variable_mapping.keys())
+                counterexample = {str(free_var): model.eval(declared_var, model_completion=True).as_long()
+                                  for free_var, declared_var in variable_mapping.items()}
 
-            func = self.context.z3_synth_functions[synth_func_name]
-            args = list(variable_mapping.values())
+                incorrect_output = z3.simplify(z3.substitute(candidate, [(arg, z3.IntVal(value)) for arg, value in
+                                                                         zip(free_variables,
+                                                                             list(counterexample.values()))]))
 
-            candidate_expr = z3.substitute_vars(candidate, *args)
+                self.print_msg(f"Counterexample: {counterexample}", level=0)
+                counterexamples.append(counterexample)
+                incorrect_outputs.append(incorrect_output)
+                candidate_function_expr = candidate(*free_variables) if callable(candidate) else candidate
+                candidate_function_exprs.append(candidate_function_expr)
 
-            difference_constraint = candidate_expr != func(*args)
+                self.context.counterexamples.append((func, counterexample, incorrect_output))
 
-            self.context.enumerator_solver.push()
-            self.context.enumerator_solver.add(difference_constraint)
-
-            if self.context.enumerator_solver.check() == z3.sat:
-                model = self.context.enumerator_solver.model()
-
-                counterexample = {str(arg): model.eval(arg, model_completion=True).as_long()
-                                  for arg in args}
-
-                incorrect_output = z3.simplify(z3.substitute(candidate_expr, [
-                    (arg, z3.IntVal(counterexample[str(arg)])) for arg in args
-                ]))
-
-                self.print_msg(f"Counterexample for {synth_func_name}: {counterexample}", level=0)
-                counterexamples[synth_func_name] = counterexample
-                self.print_msg(f"Incorrect output for {synth_func_name}: {incorrect_output}", level=0)
-                self.context.counterexamples.append((synth_func_name, counterexample, incorrect_output))
-
-            self.context.enumerator_solver.pop()
-
-        return counterexamples if counterexamples else None
+            self.print_msg(f"Incorrect outputs for {'; '.join(func_strs)}: {incorrect_outputs}", level=0)
+            return False
+        else:
+            self.context.verification_solver.reset()
+            substituted_constraints = self.substitute_constraints(
+                self.context.z3_constraints,
+                list(self.context.z3_synth_functions.values()),
+                candidate_functions
+            )
+            self.context.verification_solver.add(substituted_constraints)
+            if self.context.verification_solver.check() == z3.unsat:
+                self.print_msg(
+                    f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
+                    level=0)
+                return False
+            self.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.",
+                                   level=0)
+            return True
