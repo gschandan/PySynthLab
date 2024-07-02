@@ -4,6 +4,7 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 from src.cegis.z3.fast_enumerative_synth_bottom_up import FastEnumerativeSynthesisBottomUp
 from src.cegis.z3.fast_enumerative_synth_top_down import FastEnumerativeSynthesisTopDown
 from src.cegis.z3.random_search_bottom_up import SynthesisProblem, RandomSearchStrategyBottomUp
+from src.cegis.z3.random_search_bottom_up_cegis_t import RandomSearchStrategyBottomUpCegisT
 from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
 
@@ -43,7 +44,9 @@ def main(args: argparse.Namespace) -> None:
     elif args.strategy == 'random_search_bottom_up':
         strategy = RandomSearchStrategyBottomUp(problem)
     elif args.strategy == 'random_search_top_down':
-        strategy = RandomSearchStrategyTopDown(problem)
+        strategy = RandomSearchStrategyTopDown(problem) 
+    elif args.strategy == 'cegis_t_bottom_up':
+        strategy = RandomSearchStrategyBottomUpCegisT(problem)
     else:
         raise ValueError(f"Unknown synthesis strategy: {args.strategy}")
 
@@ -72,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--strategy', type=str, default='fast_enumerative_bottom_up',
         choices=['fast_enumerative_bottom_up', 'fast_enumerative_top_down', 'random_search_bottom_up',
-                 'random_search_top_down'],
+                 'random_search_top_down', 'cegis_t_bottom_up'],
         help='The synthesis strategy to use')
 
     parser.add_argument(
