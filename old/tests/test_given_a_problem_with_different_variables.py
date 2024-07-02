@@ -1,24 +1,39 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-from src.cegis.z3.random_search_bottom_up import  SynthesisProblem
+from src.cegis.z3.random_search_bottom_up import SynthesisProblem
 from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
-from src.helpers.parser.src.resolution import FunctionKind
+from old.src.helpers import FunctionKind
 
 
-class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
+class WhenTheProblemIsTheMaxOfTwoIntegersWithDifferentGlobalVariables(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
-            (set-logic LIA)
-            (synth-fun f ((x Int) (y Int)) Int)
-            (declare-var x Int)
-            (declare-var y Int)
-            (constraint (= (f x y) (f y x)))
-            (constraint (and (<= x (f x y)) (<= y (f x y))))
-            (check-synth)
-            """
+        (set-logic LIA)
+        (synth-fun max2 ((a Int) (b Int)) Int)
+        (declare-var x Int)
+        (declare-var y Int)
+        (constraint (>= (max2 x y) x))
+        (constraint (>= (max2 x y) y))
+        (constraint (or (= x (max2 x y)) (= y (max2 x y))))
+        (check-synth)
+        """
         self.options = SynthesisProblemOptions()
         self.problem = SynthesisProblem(self.problem_str, self.options)
+
+    def generate_max_function(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
+
+        def max_function(*values):
+            if len(values) != 2:
+                raise ValueError("max_function expects exactly 2 arguments.")
+            x, y = values
+            return If(x <= y, y, x)
+
+        expr = max_function(*args[:2])
+        func_str = f"def max_function({', '.join(str(arg) for arg in args[:2])}):\n"
+        func_str += f"    return {str(expr)}\n"
+        return max_function, func_str
 
     def test_initialization(self):
         self.assertEqual(self.problem.input_problem, self.problem_str)
@@ -40,10 +55,12 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
 
     def test_initialise_z3_synth_functions(self):
         self.problem.initialise_z3_synth_functions()
-        self.assertIn("f", self.problem.context.z3_synth_functions)
-        self.assertIsInstance(self.problem.context.z3_synth_functions["f"], FuncDeclRef)
+        self.assertIn("max2", self.problem.context.z3_synth_functions)
+        self.assertIsInstance(self.problem.context.z3_synth_functions["max2"], FuncDeclRef)
 
     def test_parse_constraints(self):
+        self.problem.initialise_z3_variables()
+        self.problem.initialise_z3_synth_functions()
         self.problem.parse_constraints()
         self.assertGreater(len(self.problem.context.z3_constraints), 0)
         self.assertIsInstance(self.problem.context.z3_constraints[0], BoolRef)
@@ -51,10 +68,11 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
     def test_substitute_constraints_multiple(self):
         self.problem.initialise_z3_variables()
         self.problem.initialise_z3_synth_functions()
+        self.problem.parse_constraints()
         constraints = self.problem.context.z3_constraints
-        func = self.problem.context.z3_synth_functions["f"]
-        candidate_expr, _ = self.generate_max_function([IntSort(), IntSort()])
+        func = self.problem.context.z3_synth_functions["max2"]
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
+        candidate_expr, _ = self.generate_max_function([IntSort(), IntSort()])
         candidate_func = candidate_expr(*args)
         substituted_constraints = self.problem.substitute_constraints(constraints, [func], [candidate_func])
         self.assertGreater(len(substituted_constraints), 0)
@@ -65,11 +83,10 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         self.problem.initialise_z3_synth_functions()
         self.problem.map_z3_variables()
         self.problem.parse_constraints()
-        func = self.problem.context.z3_synth_functions["f"]
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_expr, func_str = self.generate_max_function([IntSort(), IntSort()])
-        candidate_func = candidate_expr(*args)
-        result = self.problem.test_candidates_alternative([func_str], [candidate_func])
+        candidate_function = candidate_expr(*args)
+        result = self.problem.test_candidates_alternative([func_str], [candidate_function])
         self.assertTrue(result)
 
     def test_get_logic(self):
@@ -78,29 +95,11 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
 
     def test_get_synth_funcs(self):
         synth_funcs = self.problem.get_synth_funcs()
-        self.assertEqual("f", list(synth_funcs.values())[0].identifier.symbol)
-        self.assertListEqual(['x', 'y'], list(synth_funcs.values())[0].argument_names)
+        self.assertEqual(list(synth_funcs.values())[0].identifier.symbol, "max2")
+        self.assertListEqual(list(synth_funcs.values())[0].argument_names, ["a", "b"])
         self.assertEqual(list(synth_funcs.values())[0].function_kind, FunctionKind.SYNTH_FUN)
 
     def test_get_var_symbols(self):
         var_symbols = self.problem.get_var_symbols()
         self.assertIn("x", var_symbols)
         self.assertIn("y", var_symbols)
-
-    def generate_max_function(self, arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
-        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-
-        def max_function(*values):
-            if len(values) != 2:
-                raise ValueError("max_function expects exactly 2 arguments.")
-            x, y = values
-            return If(x <= y, y, x)
-
-        expr = max_function(*args[:2])
-        func_str = f"def max_function({', '.join(str(arg) for arg in args[:2])}):\n"
-        func_str += f"    return {str(expr)}\n"
-        return max_function, func_str
-
-
-if __name__ == "__main__":
-    unittest.main()

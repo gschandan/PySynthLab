@@ -4,13 +4,13 @@ import cvc5
 import pyparsing
 from cvc5 import Kind
 
-from src.helpers.parser.src import symbol_table_builder, ast
-from src.helpers.parser.src.ast import Program, CommandKind
-from src.helpers.parser.src.resolution import SymbolTable, FunctionKind, SortDescriptor
-from src.helpers.parser.src.v1.parser import SygusV1Parser
-from src.helpers.parser.src.v1.printer import SygusV1ASTPrinter
-from src.helpers.parser.src.v2.parser import SygusV2Parser
-from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from old.src.helpers import symbol_table_builder, ast
+from old.src.helpers import Program, CommandKind
+from old.src.helpers import SymbolTable, FunctionKind, SortDescriptor
+from old.src.helpers import SygusV1Parser
+from old.src.helpers import SygusV1ASTPrinter
+from old.src.helpers import SygusV2Parser
+from old.src.helpers import SygusV2ASTPrinter
 
 
 class SynthesisProblemCvc5:

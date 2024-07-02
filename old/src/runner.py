@@ -1,12 +1,12 @@
 import argparse
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, FileType
 
-from src.cegis.z3.fast_enumerative_synth_bottom_up import FastEnumerativeSynthesisBottomUp
-from src.cegis.z3.fast_enumerative_synth_top_down import FastEnumerativeSynthesisTopDown
-from src.cegis.z3.random_search_bottom_up import SynthesisProblem, RandomSearchStrategyBottomUp
-from src.cegis.z3.random_search_bottom_up_cegis_t import RandomSearchStrategyBottomUpCegisT
-from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from cegis.z3.fast_enumerative_synth_bottom_up import FastEnumerativeSynthesisBottomUp
+from cegis.z3.fast_enumerative_synth_top_down import FastEnumerativeSynthesisTopDown
+from cegis.z3.random_search_bottom_up import RandomSearchStrategyBottomUp
+from cegis.z3.random_search_bottom_up_cegis_t import RandomSearchStrategyBottomUpCegisT
+from cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
+from cegis.z3.synthesis_problem import SynthesisProblemOptions
 
 
 def main(args: argparse.Namespace) -> None:

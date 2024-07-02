@@ -1,21 +1,19 @@
 import dataclasses
 import itertools
-import random
 import typing
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
 import pyparsing
-import z3
 from z3 import *
 
-from src.helpers.parser.src import ast
-from src.helpers.parser.src.ast import Program, CommandKind
-from src.helpers.parser.src.resolution import FunctionKind, SortDescriptor, FunctionDescriptor
-from src.helpers.parser.src.symbol_table_builder import SymbolTableBuilder
-from src.helpers.parser.src.v1.parser import SygusV1Parser
-from src.helpers.parser.src.v1.printer import SygusV1ASTPrinter
-from src.helpers.parser.src.v2.parser import SygusV2Parser
-from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from old.src.helpers import ast
+from old.src.helpers import Program, CommandKind
+from old.src.helpers import FunctionKind, SortDescriptor, FunctionDescriptor
+from old.src.helpers import SymbolTableBuilder
+from old.src.helpers import SygusV1Parser
+from old.src.helpers import SygusV1ASTPrinter
+from old.src.helpers import SygusV2Parser
+from old.src.helpers import SygusV2ASTPrinter
 
 
 @dataclasses.dataclass
@@ -498,8 +496,6 @@ class SynthesisProblem:
             return z3.Bool(name)
         else:
             raise ValueError(f"Unsupported sort: {sort}")
-
-    import itertools
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
                                functions_to_replace: List[z3.FuncDeclRef],

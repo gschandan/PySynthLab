@@ -3,3 +3,5 @@ hypothesis
 ply
 pyparsing
 z3-solver
+sphinx
+pyyaml
