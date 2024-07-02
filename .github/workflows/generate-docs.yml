@@ -28,8 +28,15 @@ jobs:
         run: |
           sphinx-build -b html docs/source docs/build/html
 
+      - name: Create .nojekyll file
+        run: |
+          touch docs/build/html/.nojekyll
+
+      - name: List build files for debugging
+        run: |
+          ls -R docs/build/html
+
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
