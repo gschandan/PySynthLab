@@ -6,13 +6,14 @@ from z3 import *
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
+
 # https://www.cs.ox.ac.uk/people/alessandro.abate/publications/bcADKKP18.pdf
-class RandomSearchStrategyBottomUpCegisT(SynthesisStrategy):
+class CegisT(SynthesisStrategy):
     def __init__(self, problem: SynthesisProblem):
         super().__init__(problem)
         self.problem = problem
-        self.min_const = problem.options.min_const
-        self.max_const = problem.options.max_const
+        self.min_const = problem.options.synthesis_parameters_min_const
+        self.max_const = problem.options.synthesis_parameters_max_const
         self.term_bank = {}
         self.theory_solver = Solver()
         self.theory_solver.set('smt.macro_finder', True)
@@ -88,8 +89,8 @@ class RandomSearchStrategyBottomUpCegisT(SynthesisStrategy):
         candidates = []
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate, func_str = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())],
-                                                            self.problem.options.max_depth,
-                                                            self.problem.options.max_complexity)
+                                                            self.problem.options.synthesis_parameters_max_depth,
+                                                            self.problem.options.synthesis_parameters_max_complexity)
             candidates.append((candidate, func_name))
 
         return candidates

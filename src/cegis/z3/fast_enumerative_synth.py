@@ -9,13 +9,13 @@ from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
 
 # http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf
-class FastEnumerativeSynthesisBottomUp(SynthesisStrategy):
+class FastEnumerativeSynthesis(SynthesisStrategy):
 
     def __init__(self, problem: SynthesisProblem):
         super().__init__(problem)
         self.problem = problem
-        self.min_const = problem.options.min_const
-        self.max_const = problem.options.max_const
+        self.min_const = problem.options.synthesis_parameters_min_const
+        self.max_const = problem.options.synthesis_parameters_max_const
         self.grammar = self.extract_grammar()
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache = {}
@@ -255,11 +255,11 @@ class FastEnumerativeSynthesisBottomUp(SynthesisStrategy):
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         candidates = []
-        generated_terms = self.generate(self.problem.options.max_depth)
+        generated_terms = self.generate(self.problem.options.synthesis_parameters_max_depth)
 
         for func_name, func in self.problem.context.z3_synth_functions.items():
             arg_sorts = [func.domain(i) for i in range(func.arity())]
-            for depth in range(self.problem.options.max_depth + 1):
+            for depth in range(self.problem.options.synthesis_parameters_max_depth + 1):
                 for term in generated_terms[func.range()][depth]:
                     candidate = self.create_candidate_function(term, arg_sorts)
                     candidates.append((candidate, func_name))
@@ -271,7 +271,7 @@ class FastEnumerativeSynthesisBottomUp(SynthesisStrategy):
         return candidates
 
     def execute_cegis(self) -> None:
-        max_depth = self.problem.options.max_depth
+        max_depth = self.problem.options.synthesis_parameters_max_depth
         generated_terms = self.generate(max_depth)
         synth_functions = list(self.problem.context.z3_synth_functions.items())
 

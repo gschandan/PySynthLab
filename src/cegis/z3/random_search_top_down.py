@@ -11,8 +11,8 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
     def __init__(self, problem: SynthesisProblem):
         super().__init__(problem)
         self.problem = problem
-        self.min_const = problem.options.min_const
-        self.max_const = problem.options.max_const
+        self.min_const = problem.options.synthesis_parameters_min_const
+        self.max_const = problem.options.synthesis_parameters_max_const
 
     def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                              operations: List[str] = None) -> Tuple[z3.ExprRef, str]:
@@ -77,8 +77,8 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         candidates = []
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
-            depth = random.randint(1, self.problem.options.max_depth)
-            complexity = random.randint(1, self.problem.options.max_complexity)
+            depth = random.randint(1, self.problem.options.synthesis_parameters_max_depth)
+            complexity = random.randint(1, self.problem.options.synthesis_parameters_max_complexity)
             candidate, _ = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())], depth, complexity)
             candidates.append((candidate, func_name))
         return candidates
@@ -88,7 +88,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         return candidates
 
     def execute_cegis(self) -> None:
-        max_iterations = self.problem.options.max_candidates_at_each_depth
+        max_iterations = self.problem.options.synthesis_parameters_max_candidates_at_each_depth
 
         for iteration in range(max_iterations):
             candidates = self.prune_candidates(self.generate_candidates())
