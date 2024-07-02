@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConfigManager &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to PySynthLab’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ConfigManager</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options"><code class="docutils literal notranslate"><span class="pre">ConfigManager.generate_argparse_from_options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.get_config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.load_yaml"><code class="docutils literal notranslate"><span class="pre">ConfigManager.load_yaml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.merge_config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.merge_config()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#options-class">Options Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.logging_level"><code class="docutils literal notranslate"><span class="pre">Options.logging_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.logging_file"><code class="docutils literal notranslate"><span class="pre">Options.logging_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_strategy"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_strategy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_max_iterations"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_max_iterations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_max_depth"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_max_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_max_complexity"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_max_complexity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_random_seed"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_random_seed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_randomise_each_iteration"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_randomise_each_iteration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_max_candidates_at_each_depth"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_max_candidates_at_each_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_min_const"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_min_const</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.synthesis_parameters_max_const"><code class="docutils literal notranslate"><span class="pre">Options.synthesis_parameters_max_const</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.solver_name"><code class="docutils literal notranslate"><span class="pre">Options.solver_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.solver_timeout"><code class="docutils literal notranslate"><span class="pre">Options.solver_timeout</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ConfigManager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/config_manager.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configmanager">
+<h1>ConfigManager<a class="headerlink" href="#configmanager" title="Link to this heading"></a></h1>
+<section id="configmanager-class">
+<h2>ConfigManager Class<a class="headerlink" href="#configmanager-class" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.config_manager.</span></span><span class="sig-name descname"><span class="pre">ConfigManager</span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.generate_argparse_from_options">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_argparse_from_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options" title="Link to this definition"></a></dt>
+<dd><p>Generate an ArgumentParser based on the Options dataclass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>argparse.ArgumentParser</em> – Argument parser object.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="o">.</span><span class="n">generate_argparse_from_options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;--synthesis_parameters_max_depth&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">synthesis_parameters_max_depth</span><span class="p">)</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.get_config">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.get_config" title="Link to this definition"></a></dt>
+<dd><p>Get the final configuration by merging defaults, YAML config, and CLI args.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Options</em> – Final merged configuration as Options dataclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.load_yaml">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.load_yaml" title="Link to this definition"></a></dt>
+<dd><p>Load configuration from a YAML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Path to the YAML configuration file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict[str, Any]</em> – Configuration as a dictionary.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the config file doesn’t exist.</p></li>
+<li><p><strong>yaml.YAMLError</strong> – If there’s an error parsing the YAML file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.merge_config">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cli_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.merge_config" title="Link to this definition"></a></dt>
+<dd><p>Merge default options with any user defined YAML config and CLI arguments.
+CLI arguments will take priority over any user defined config in the user_config.yaml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>default_options</strong> (<a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><em>Options</em></a>) – Default options from the Options dataclass.</p></li>
+<li><p><strong>yaml_config</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – Configuration loaded from YAML file.</p></li>
+<li><p><strong>cli_args</strong> (<em>argparse.Namespace</em>) – Parsed command-line arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Options</em> – Merged configuration as Options dataclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="options-class">
+<h2>Options Class<a class="headerlink" href="#options-class" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utilities.options.Options">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logging_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/default.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'random_enumerative'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_max_depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_max_complexity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1234</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_randomise_each_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_max_candidates_at_each_depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_min_const</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters_max_const</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'z3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.Options" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Options for configuring the Synthesis process.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.logging_level">
+<span class="sig-name descname"><span class="pre">logging_level</span></span><a class="headerlink" href="#src.utilities.options.Options.logging_level" title="Link to this definition"></a></dt>
+<dd><p>Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.logging_file">
+<span class="sig-name descname"><span class="pre">logging_file</span></span><a class="headerlink" href="#src.utilities.options.Options.logging_file" title="Link to this definition"></a></dt>
+<dd><p>Log file path. Default is logs/default.log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_strategy">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_strategy</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_strategy" title="Link to this definition"></a></dt>
+<dd><p>Synthesis strategy. Choices are random_enumerative, fast_enumerative. Default is random_enumerative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_max_iterations">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_max_iterations</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_max_iterations" title="Link to this definition"></a></dt>
+<dd><p>Maximum number of iterations. Default is 500.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_max_depth">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_max_depth</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_max_depth" title="Link to this definition"></a></dt>
+<dd><p>Maximum depth of generated expressions. Default is 5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_max_complexity">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_max_complexity</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_max_complexity" title="Link to this definition"></a></dt>
+<dd><p>Maximum complexity of generated expressions. Default is 5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_random_seed">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_random_seed</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_random_seed" title="Link to this definition"></a></dt>
+<dd><p>Random seed for all solvers. Default is 1234.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_randomise_each_iteration">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_randomise_each_iteration</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_randomise_each_iteration" title="Link to this definition"></a></dt>
+<dd><p>Randomise seed between each synthesis iteration. Default is False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_max_candidates_at_each_depth">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_max_candidates_at_each_depth</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_max_candidates_at_each_depth" title="Link to this definition"></a></dt>
+<dd><p>Maximum number of candidate programs to consider at each depth. Default is 10.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_min_const">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_min_const</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_min_const" title="Link to this definition"></a></dt>
+<dd><p>Minimum constant to introduce into the candidate programs. Default is -2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.synthesis_parameters_max_const">
+<span class="sig-name descname"><span class="pre">synthesis_parameters_max_const</span></span><a class="headerlink" href="#src.utilities.options.Options.synthesis_parameters_max_const" title="Link to this definition"></a></dt>
+<dd><p>Maximum constant to introduce into the candidate programs. Default is 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.solver_name">
+<span class="sig-name descname"><span class="pre">solver_name</span></span><a class="headerlink" href="#src.utilities.options.Options.solver_name" title="Link to this definition"></a></dt>
+<dd><p>SMT Solver to use. Choices are z3, cvc5. Default is z3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.solver_timeout">
+<span class="sig-name descname"><span class="pre">solver_timeout</span></span><a class="headerlink" href="#src.utilities.options.Options.solver_timeout" title="Link to this definition"></a></dt>
+<dd><p>SMT Solver Configuration - Timeout. Default is 30000.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to PySynthLab’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
