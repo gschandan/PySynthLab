@@ -1,4 +1,4 @@
-mouse# PySynthLab
+# PySynthLab
 
 This project is a synthesis engine for solving LIA synthesis problems using CEGIS. 
 
