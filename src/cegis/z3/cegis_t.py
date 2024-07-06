@@ -20,6 +20,7 @@ class CegisT(SynthesisStrategy):
         self.problem = problem
         self.enumerator_solver = self.problem.context.enumerator_solver
         self.verifier_solver = self.problem.context.verification_solver
+        self.encountered_counterexamples = set()
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         pass
@@ -42,19 +43,20 @@ class CegisT(SynthesisStrategy):
                 print("Solution found:", candidate)
                 return
 
-            self.add_counterexample(candidate, counterexample)
+            self.add_counterexample(counterexample)
 
     def synthesize(self) -> Optional[CandidateType]:
         self.enumerator_solver.push()
         for constraint in self.problem.context.z3_constraints:
             self.enumerator_solver.add(constraint)
 
-        for ce in self.problem.context.counterexamples:
-            self.enumerator_solver.add(self.formulate_counterexample_constraint(ce))
+        for ce_constraint in self.problem.context.counterexamples:
+            self.enumerator_solver.add(ce_constraint)
 
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             candidate = self.extract_candidate(model)
+            print(f"Candidate: {candidate}")
             self.enumerator_solver.pop()
             return candidate
         else:
@@ -63,7 +65,9 @@ class CegisT(SynthesisStrategy):
 
     def verify(self, candidate: CandidateType) -> Optional[CounterexampleType]:
         self.verifier_solver.push()
-        substituted_neg_constraints = self.substitute_candidate(self.problem.context.z3_negated_constraints, candidate)
+        substituted_neg_constraints = self.problem.substitute_candidates(
+            self.problem.context.z3_negated_constraints,
+            [(self.problem.context.z3_synth_functions[func], values[1]) for func, values in candidate.items()])
         self.verifier_solver.add(substituted_neg_constraints)
 
         if self.verifier_solver.check() == sat:
@@ -85,7 +89,8 @@ class CegisT(SynthesisStrategy):
             candidate[func_name] = self.interpret_function(func_interp)
         return candidate
 
-    def interpret_function(self, func_interp: FuncInterpObj) -> Tuple[List[Tuple[Tuple[ExprRef, ...], ExprRef]], ExprRef]:
+    def interpret_function(self, func_interp: FuncInterpObj) -> Tuple[
+        List[Tuple[Tuple[ExprRef, ...], ExprRef]], ExprRef]:
         entries: List[Tuple[Tuple[ExprRef, ...], ExprRef]] = []
         for i in range(func_interp.num_entries()):
             entry: FuncEntry = func_interp.entry(i)
@@ -99,51 +104,33 @@ class CegisT(SynthesisStrategy):
 
         return entries, else_value
 
-    def substitute_candidate(self, constraints: ExprRef, candidate: CandidateType) -> ExprRef:
-        substitutions = []
-        for func_name, (entries, else_value) in candidate.items():
-            func = self.problem.context.z3_synth_functions[func_name]
-            args = [arg for arg in self.problem.context.variable_mapping_dict[func_name].keys()]
-            body = else_value
-            for entry_args, entry_value in entries:
-                condition = And(*[arg == entry_arg for arg, entry_arg in zip(args, entry_args)])
-                body = If(condition, entry_value, body)
-            substitutions.append((func, Lambda(args, body)))
-
-        return substitute_debug(constraints, *substitutions)
-
     def extract_counterexample(self, model: ModelObj) -> CounterexampleType:
         counterexample = {}
         for var_name, var in self.problem.context.z3_variables.items():
             counterexample[var_name] = model.eval(var, model_completion=True)
         return counterexample
 
-    def add_counterexample(self, candidate: CandidateType, counterexample: CounterexampleType) -> None:
-        ce_constraint = self.formulate_counterexample_constraint(candidate, counterexample)
-        self.problem.context.counterexamples.append(ce_constraint)
+    def add_counterexample(self, counterexample: CounterexampleType) -> None:
+        ce_tuple = tuple(sorted((str(k), str(v)) for k, v in counterexample.items()))
 
-    def formulate_counterexample_constraint(self, candidate: CandidateType,
-                                            counterexample: CounterexampleType) -> ExprRef:
+        if ce_tuple not in self.encountered_counterexamples:
+            ce_constraint = self.formulate_counterexample_constraint(counterexample)
+            print(f"adding ce constraint: {ce_constraint}")
+            self.problem.context.counterexamples.append(ce_constraint)
+            self.encountered_counterexamples.add(ce_tuple)
+        else:
+            print(f"Skipping duplicate counterexample: {counterexample}")
+
+    def formulate_counterexample_constraint(self, counterexample: CounterexampleType) -> ExprRef:
         constraints = []
-        for func_name, (entries, else_value) in candidate.items():
-            func = self.problem.context.z3_synth_functions[func_name]
-            args = [self.problem.context.z3_variables[arg_name] for arg_name in
-                    self.problem.context.z3_synth_function_args[func_name]]
-            ce_args = [counterexample[arg_name] for arg_name in self.problem.context.z3_synth_function_args[func_name]]
-
-            body = else_value
-            for entry_args, entry_value in entries:
-                condition = And(*[arg == entry_arg for arg, entry_arg in zip(args, entry_args)])
-                body = If(condition, entry_value, body)
+        for func_name, func in self.problem.context.z3_synth_functions.items():
+            args = [Const(f'{func_name}_arg_{i}', func.domain(i)) for i in range(func.arity())]
+            ce_args = [counterexample[arg.__str__()]
+                       for arg in self.problem.context.variable_mapping_dict[func_name].values()]
 
             expected_output = func(*ce_args)
             constraint = func(*args) == expected_output
-            constraints.append(
-                ForAll(args, Implies(And(*[arg == ce_arg for arg, ce_arg in zip(args, ce_args)]), constraint)))
+            ce_condition = And(*[arg == ce_arg for arg, ce_arg in zip(args, ce_args)])
+            constraints.append(Implies(ce_condition, constraint))
 
         return And(*constraints)
-
-    def print_counterexample(self, counterexample: CounterexampleType) -> None:
-        print("Counterexample found:")
-        for var_name, value in counterexample.items():
-            print(f"  {var_name} = {value}")

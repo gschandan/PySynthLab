@@ -525,6 +525,22 @@ class SynthesisProblem:
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
 
+    def substitute_candidates(self, constraints: Collection[z3.ExprRef],
+                               candidate_functions: List[tuple[z3.FuncDeclRef,
+                               typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable]]]) -> \
+            List[z3.ExprRef]:
+        """
+        Substitute candidate expressions into a list of constraints.
+        """
+        predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
+
+        substituted_constraints = []
+        for constraint in constraints:
+            synth_substituted = z3.substitute_funs(constraint, candidate_functions)
+            predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
+            substituted_constraints.append(predefined_substituted)
+        return substituted_constraints
+
     def find_func_applications(self, expr: z3.ExprRef, func: z3.FuncDeclRef) -> Set[z3.ExprRef]:
         if z3.is_app(expr) and expr.decl() == func:
             return set(expr)
