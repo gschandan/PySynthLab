@@ -65,7 +65,7 @@ class SynthesisProblem:
         self.context = SynthesisProblemContext()
         self.context.enumerator_solver.set('smt.macro_finder', True)
         self.context.verification_solver.set('smt.macro_finder', True)
-        if (self.options.synthesis_parameters_random_seed is not None and 
+        if (self.options.synthesis_parameters_random_seed is not None and
                 not self.options.synthesis_parameters_randomise_each_iteration):
             self.context.enumerator_solver.set('random_seed', self.options.synthesis_parameters_random_seed)
             self.context.verification_solver.set('random_seed', self.options.synthesis_parameters_random_seed)
@@ -462,14 +462,6 @@ class SynthesisProblem:
                 return z3.Exists(quantified_variables, body)
             else:
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
-        elif isinstance(term, ast.DefineFunCommand):
-            func_name = term.function_name
-            func_args = [z3.Var(arg[0], self.convert_sort_descriptor_to_z3_sort(arg[1])) for arg in
-                         term.function_parameters]
-            func_body = self.parse_term(term.function_body)
-            func = z3.Function(func_name, *[arg.sort() for arg in func_args], func_body.sort())
-            self.context.z3_predefined_functions[func_name] = func
-            return func
         else:
             raise ValueError(f"Unsupported term type: {type(term)}")
 
@@ -496,6 +488,24 @@ class SynthesisProblem:
             return z3.Bool(name)
         else:
             raise ValueError(f"Unsupported sort: {sort}")
+
+    def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:
+        """
+        Collect input-output pairs for a function from the constraints.
+
+        :param func: The function to collect input-output pairs for.
+        :return: A list of input-output pairs.
+        """
+        io_pairs = []
+        for constraint in self.context.constraints:
+            if isinstance(constraint, ast.ConstraintCommand) and isinstance(constraint.constraint,
+                                                                            ast.FunctionApplicationTerm):
+                if constraint.constraint.function_identifier.symbol == func.name():
+                    example_inputs = {arg.identifier.symbol: self.parse_term(arg) for arg in
+                                      constraint.constraint.arguments[:-1]}
+                    example_output = self.parse_term(constraint.constraint.arguments[-1])
+                    io_pairs.append((example_inputs, example_output))
+        return io_pairs
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
                                functions_to_replace: List[z3.FuncDeclRef],
