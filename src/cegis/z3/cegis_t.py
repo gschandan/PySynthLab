@@ -1,196 +1,149 @@
 import random
-from typing import List, Tuple, Dict
-
+from typing import Any, Dict, List, Optional, Tuple, Union
 from z3 import *
+from z3 import ExprRef
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
+ModelObj = ModelRef
+FuncInterpObj = FuncInterp
+CandidateType = Dict[str, Tuple[List[Tuple[Tuple[ExprRef, ...], ExprRef]], ExprRef]]
+CounterexampleType = Dict[str, ExprRef]
+
 
 # https://www.cs.ox.ac.uk/people/alessandro.abate/publications/bcADKKP18.pdf
 class CegisT(SynthesisStrategy):
+
     def __init__(self, problem: SynthesisProblem):
         super().__init__(problem)
         self.problem = problem
-        self.min_const = problem.options.synthesis_parameters_min_const
-        self.max_const = problem.options.synthesis_parameters_max_const
-        self.term_bank = {}
-        self.theory_solver = Solver()
-        self.theory_solver.set('smt.macro_finder', True)
-
-    def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
-                             operations: List[str] = None) -> Tuple[z3.ExprRef, str]:
-        if operations is None:
-            operations = ['+', '-', '*', 'If', 'Neg']
-
-        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-        num_args = len(args)
-        constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
-
-        def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
-            if curr_depth == 0 or curr_complexity == 0:
-                return random.choice(args + constants)
-
-            available_ops = [op for op in operations if curr_complexity >= self.op_complexity(op)]
-            if not available_ops:
-                return random.choice(args + constants)
-
-            op = random.choice(available_ops)
-            remaining_complexity = curr_complexity - self.op_complexity(op)
-
-            if op in ['+', '-']:
-                left = build_term(curr_depth - 1, remaining_complexity // 2)
-                right = build_term(curr_depth - 1, remaining_complexity - (remaining_complexity // 2))
-                return left + right if op == '+' else left - right
-            elif op == '*':
-                left = random.choice(args) if args else random.choice(constants)
-                right = random.choice(constants)
-                return left * right
-            elif op == 'If':
-                condition = self.generate_condition(args)
-                true_expr = build_term(curr_depth - 1, remaining_complexity // 2)
-                false_expr = build_term(curr_depth - 1, remaining_complexity - (remaining_complexity // 2))
-                return z3.If(condition, true_expr, false_expr)
-            elif op == 'Neg':
-                return -build_term(curr_depth - 1, remaining_complexity)
-
-        generated_expression = build_term(depth, complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}", level=1)
-
-        func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
-        func_str += f"    return {str(generated_expression)}\n"
-
-        return generated_expression, func_str
-
-    def generate_condition(self, args: List[z3.ExprRef]) -> z3.BoolRef | bool:
-        comparisons = ['<', '<=', '>', '>=', '==', '!=']
-        left = random.choice(args)
-        right = random.choice(args + [z3.IntVal(random.randint(self.min_const, self.max_const))])
-        op = random.choice(comparisons)
-
-        if op == '<':
-            return left < right
-        elif op == '<=':
-            return left <= right
-        elif op == '>':
-            return left > right
-        elif op == '>=':
-            return left >= right
-        elif op == '==':
-            return left == right
-        else:
-            return left != right
-
-    @staticmethod
-    def op_complexity(op: str) -> int:
-        return {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.get(op, 0)
+        self.enumerator_solver = self.problem.context.enumerator_solver
+        self.verifier_solver = self.problem.context.verification_solver
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
-        candidates = []
-        for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
-            candidate, func_str = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())],
-                                                            self.problem.options.synthesis_parameters_max_depth,
-                                                            self.problem.options.synthesis_parameters_max_complexity)
-            candidates.append((candidate, func_name))
+        pass
 
-        return candidates
+    def test_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
+        pass
 
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
-        return candidates
+        pass
 
     def execute_cegis(self) -> None:
-        while not self.solution_found:
-            candidates = self.generate_candidates()
-
-            if self.test_candidates([c[1] for c in candidates], [c[0] for c in candidates]):
-                self.set_solution_found()
+        while True:
+            candidate = self.synthesize()
+            if candidate is None:
+                print("No solution found")
                 return
 
-            self.theory_solver_phase(candidates)
+            counterexample = self.verify(candidate)
+            if counterexample is None:
+                print("Solution found:", candidate)
+                return
 
-    def theory_solver_phase(self, candidates: List[Tuple[ExprRef, str]]) -> None:
-        for candidate, func_name in candidates:
-            skeleton = self.get_skeleton(candidate)
-            generalized = self.generalize_skeleton(skeleton)
+            self.add_counterexample(candidate, counterexample)
 
-            func = self.problem.context.z3_synth_functions[func_name]
-            domain = [func.domain(i) for i in range(func.arity())]
-            symbolic_func = Function(func_name, *domain, func.range())
+    def synthesize(self) -> Optional[CandidateType]:
+        self.enumerator_solver.push()
+        for constraint in self.problem.context.z3_constraints:
+            self.enumerator_solver.add(constraint)
 
-            self.theory_solver.push()
+        for ce in self.problem.context.counterexamples:
+            self.enumerator_solver.add(self.formulate_counterexample_constraint(ce))
 
-            variables = list(self.problem.context.z3_variables.values())
-
-            if self.problem.context.z3_constraints:
-                substituted_constraints = self.problem.substitute_constraints(
-                    self.problem.context.z3_constraints,
-                    [func],
-                    [symbolic_func(*[FreshInt() for _ in range(func.arity())])]
-                )
-                for constraint in substituted_constraints:
-                    self.theory_solver.add(ForAll(variables, constraint))
-            else:
-                self.problem.print_msg("Warning: No constraints found.", level=1)
-
-            self.theory_solver.add(symbolic_func == generalized)
-
-            if self.theory_solver.check() == sat:
-                model = self.theory_solver.model()
-                constants = self.get_constants_from_model(model, generalized)
-                final_candidate = self.instantiate_skeleton(skeleton, constants)
-                if self.test_candidates([func_name], [final_candidate]):
-                    self.set_solution_found()
-                    self.problem.print_msg(f"Found solution for {func_name}: {final_candidate}", level=0)
-                    return
-            else:
-                blocking_constraint = symbolic_func != skeleton
-                self.problem.context.additional_constraints.append(blocking_constraint)
-
-            self.theory_solver.pop()
-
-    def get_skeleton(self, term: ExprRef) -> ExprRef:
-        if is_int_value(term):
-            return FreshInt()
-        elif is_bool(term):
-            return FreshBool()
-        elif is_app(term):
-            new_args = [self.get_skeleton(arg) for arg in term.children()]
-            return term.decl()(*new_args)
+        if self.enumerator_solver.check() == sat:
+            model = self.enumerator_solver.model()
+            candidate = self.extract_candidate(model)
+            self.enumerator_solver.pop()
+            return candidate
         else:
-            return term
+            self.enumerator_solver.pop()
+            return None
 
-    def generalize_skeleton(self, skeleton: ExprRef) -> ExprRef:
-        holes = {}
-        def replace_holes(expr):
-            if is_var(expr) and expr.get_id() not in self.problem.context.z3_variables:
-                if expr.get_id() not in holes:
-                    holes[expr.get_id()] = FreshInt() if expr.sort() == IntSort() else FreshBool()
-                return holes[expr.get_id()]
-            elif is_app(expr):
-                new_args = [replace_holes(arg) for arg in expr.children()]
-                return expr.decl()(*new_args)
-            else:
-                return expr
-        return replace_holes(skeleton)
+    def verify(self, candidate: CandidateType) -> Optional[CounterexampleType]:
+        self.verifier_solver.push()
+        substituted_neg_constraints = self.substitute_candidate(self.problem.context.z3_negated_constraints, candidate)
+        self.verifier_solver.add(substituted_neg_constraints)
 
-    def get_constants_from_model(self, model: ModelRef, generalized: ExprRef) -> Dict[int, int]:
-        constants = {}
-        def collect_constants(expr):
-            if is_var(expr) and expr.get_id() not in self.problem.context.z3_variables:
-                constants[expr.get_id()] = model.eval(expr).as_long()
-            elif is_app(expr):
-                for arg in expr.children():
-                    collect_constants(arg)
-        collect_constants(generalized)
-        return constants
+        if self.verifier_solver.check() == sat:
+            model = self.verifier_solver.model()
+            counterexample = self.extract_counterexample(model)
+            self.verifier_solver.pop()
+            return counterexample
+        else:
+            self.verifier_solver.pop()
+            return None
 
-    def instantiate_skeleton(self, skeleton: ExprRef, constants: Dict[int, int]) -> ExprRef:
-        def replace_constants(expr):
-            if is_var(expr) and expr.get_id() not in self.problem.context.z3_variables:
-                return IntVal(constants[expr.get_id()])
-            elif is_app(expr):
-                new_args = [replace_constants(arg) for arg in expr.children()]
-                return expr.decl()(*new_args)
-            else:
-                return expr
-        return replace_constants(skeleton)
+    def extract_candidate(self, model: ModelObj) -> CandidateType:
+        candidate: CandidateType = {}
+        for func_name, func in self.problem.context.z3_synth_functions.items():
+            func_interp: FuncInterpObj = model[func]
+            if func_interp is None:
+                raise ValueError(f"No interpretation found for function {func_name}")
+
+            candidate[func_name] = self.interpret_function(func_interp)
+        return candidate
+
+    def interpret_function(self, func_interp: FuncInterpObj) -> Tuple[List[Tuple[Tuple[ExprRef, ...], ExprRef]], ExprRef]:
+        entries: List[Tuple[Tuple[ExprRef, ...], ExprRef]] = []
+        for i in range(func_interp.num_entries()):
+            entry: FuncEntry = func_interp.entry(i)
+            args: Tuple[ExprRef, ...] = tuple(entry.arg_value(j) for j in range(entry.num_args()))
+            value: ExprRef = entry.value()
+            entries.append((args, value))
+
+        else_value: ExprRef = func_interp.else_value()
+        if else_value is None:
+            raise ValueError("Function interpretation has no else value")
+
+        return entries, else_value
+
+    def substitute_candidate(self, constraints: ExprRef, candidate: CandidateType) -> ExprRef:
+        substitutions = []
+        for func_name, (entries, else_value) in candidate.items():
+            func = self.problem.context.z3_synth_functions[func_name]
+            args = [arg for arg in self.problem.context.variable_mapping_dict[func_name].keys()]
+            body = else_value
+            for entry_args, entry_value in entries:
+                condition = And(*[arg == entry_arg for arg, entry_arg in zip(args, entry_args)])
+                body = If(condition, entry_value, body)
+            substitutions.append((func, Lambda(args, body)))
+
+        return substitute_debug(constraints, *substitutions)
+
+    def extract_counterexample(self, model: ModelObj) -> CounterexampleType:
+        counterexample = {}
+        for var_name, var in self.problem.context.z3_variables.items():
+            counterexample[var_name] = model.eval(var, model_completion=True)
+        return counterexample
+
+    def add_counterexample(self, candidate: CandidateType, counterexample: CounterexampleType) -> None:
+        ce_constraint = self.formulate_counterexample_constraint(candidate, counterexample)
+        self.problem.context.counterexamples.append(ce_constraint)
+
+    def formulate_counterexample_constraint(self, candidate: CandidateType,
+                                            counterexample: CounterexampleType) -> ExprRef:
+        constraints = []
+        for func_name, (entries, else_value) in candidate.items():
+            func = self.problem.context.z3_synth_functions[func_name]
+            args = [self.problem.context.z3_variables[arg_name] for arg_name in
+                    self.problem.context.z3_synth_function_args[func_name]]
+            ce_args = [counterexample[arg_name] for arg_name in self.problem.context.z3_synth_function_args[func_name]]
+
+            body = else_value
+            for entry_args, entry_value in entries:
+                condition = And(*[arg == entry_arg for arg, entry_arg in zip(args, entry_args)])
+                body = If(condition, entry_value, body)
+
+            expected_output = func(*ce_args)
+            constraint = func(*args) == expected_output
+            constraints.append(
+                ForAll(args, Implies(And(*[arg == ce_arg for arg, ce_arg in zip(args, ce_args)]), constraint)))
+
+        return And(*constraints)
+
+    def print_counterexample(self, counterexample: CounterexampleType) -> None:
+        print("Counterexample found:")
+        for var_name, value in counterexample.items():
+            print(f"  {var_name} = {value}")
