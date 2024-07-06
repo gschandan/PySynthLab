@@ -56,8 +56,8 @@ class CegisT(SynthesisStrategy):
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             candidate = self.extract_candidate(model)
-            print(f"Candidate: {candidate}")
             self.enumerator_solver.pop()
+            print(f"Candidate: {candidate}")
             return candidate
         else:
             self.enumerator_solver.pop()
@@ -65,9 +65,30 @@ class CegisT(SynthesisStrategy):
 
     def verify(self, candidate: CandidateType) -> Optional[CounterexampleType]:
         self.verifier_solver.push()
-        substituted_neg_constraints = self.problem.substitute_candidates(
-            self.problem.context.z3_negated_constraints,
-            [(self.problem.context.z3_synth_functions[func], values[1]) for func, values in candidate.items()])
+
+        substitutions = []
+        substituted_neg_constraints = []
+        for func_name, (entries, else_value) in candidate.items():
+            func = self.problem.context.z3_synth_functions[func_name]
+            args = [Var(i, func.domain(i)) for i in range(func.arity())]
+            body = else_value
+            for entry_args, entry_value in reversed(entries):
+                condition = And(*[arg == entry_arg for arg, entry_arg in zip(args, entry_args)])
+                body = If(condition, entry_value, body)
+
+            def func_appl(*values):
+                return body
+
+            func_app = func_appl(*args)
+            substitutions.append((func, func_app))
+
+            substituted_neg_constraints.append(self.problem.substitute_constraints(
+                self.problem.context.z3_negated_constraints,
+                [self.problem.context.z3_synth_functions[func_name]],
+                [func_appl(*args)]
+
+            ))
+
         self.verifier_solver.add(substituted_neg_constraints)
 
         if self.verifier_solver.check() == sat:

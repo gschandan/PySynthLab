@@ -509,19 +509,19 @@ class SynthesisProblem:
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
                                functions_to_replace: List[z3.FuncDeclRef],
-                               candidate_functions: List[
+                               replacement_expressions: List[
                                    typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable]]) -> \
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
         """
-        synth_substitutions = list(zip(functions_to_replace, candidate_functions))
+        synth_substitutions = list(zip(functions_to_replace, replacement_expressions))
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
 
         substituted_constraints = []
         for constraint in constraints:
-            synth_substituted = z3.substitute_funs(constraint, synth_substitutions)
-            predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
+            synth_substituted = z3.substitute_debug(constraint, synth_substitutions)
+            predefined_substituted = z3.substitute_debug(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
 
