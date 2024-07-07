@@ -105,10 +105,8 @@ class CegisT(SynthesisStrategy):
                 incorrect_output = model.eval(substitute(body,
                                                          [(Var(i, arg.sort()), arg) for i, arg in enumerate(func_args)]),
                                               model_completion=True)
-                correct_output = model.eval(func(*func_args), model_completion=True)
                 counterexample[f'{func.name()}_incorrect_output'] = incorrect_output
-                counterexample[f'{func.name()}_correct_output'] = correct_output
-    
+
             self.verifier_solver.pop()
             return counterexample
         else:
@@ -160,15 +158,11 @@ class CegisT(SynthesisStrategy):
     def formulate_counterexample_constraint(self, counterexample: CounterexampleType) -> ExprRef:
         constraints = []
         for func_name, func in self.problem.context.z3_synth_functions.items():
-            args = [Const(f'{func_name}_arg_{i}', func.domain(i)) for i in range(func.arity())]
             ce_args = [counterexample[arg.__str__()] for arg in
                        self.problem.context.variable_mapping_dict[func_name].values()]
-            expected_output = counterexample[f'{func_name}_output']
-            constraint = func(*args) == expected_output
-            ce_condition = And(*[arg == ce_arg for arg, ce_arg in zip(args, ce_args)])
-            constraints.append(Implies(ce_condition, constraint))
+            ce_condition = And(*[arg == ce_arg for arg, ce_arg in zip(self.problem.context.variable_mapping_dict[func_name].values(), ce_args)])
 
             incorrect_output = counterexample[f'{func_name}_incorrect_output']
-            constraints.append(Implies(ce_condition, func(*args) != incorrect_output))
+            constraints.append(Implies(ce_condition, func(*self.problem.context.variable_mapping_dict[func_name].values()) != incorrect_output))
 
         return And(*constraints)
