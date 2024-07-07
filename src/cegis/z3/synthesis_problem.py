@@ -520,8 +520,8 @@ class SynthesisProblem:
 
         substituted_constraints = []
         for constraint in constraints:
-            synth_substituted = z3.substitute_debug(constraint, synth_substitutions)
-            predefined_substituted = z3.substitute_debug(synth_substituted, predefined_substitutions)
+            synth_substituted = z3.substitute_funs(constraint, synth_substitutions)
+            predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
 

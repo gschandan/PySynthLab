@@ -3,7 +3,7 @@ import unittest
 from typing import List, Tuple, Callable, Collection
 from z3 import *
 from src.cegis.z3.random_search_bottom_up import SynthesisProblem
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import Options
 
 
 class WhenTheConstraintIsCommutativity(unittest.TestCase):
@@ -16,7 +16,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
             (constraint (= (f x y) (f y x)))
             (check-synth)
             """
-        self.options = SynthesisProblemOptions()
+        self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],

@@ -1,8 +1,8 @@
 import unittest
 from z3 import *
 
-from src.cegis.z3.random_search_bottom_up import  SynthesisProblem
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from src.cegis.z3.random_search_bottom_up import SynthesisProblem
+from src.cegis.z3.synthesis_problem import Options
 
 
 class FourSynthFunctions(unittest.TestCase):
@@ -25,7 +25,7 @@ class FourSynthFunctions(unittest.TestCase):
             (constraint (= (id1 x) (id2 x) (id3 x) (id4 x) x))
             (check-synth)
         """
-        self.options = SynthesisProblemOptions()
+        self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_valid_solutions_are_correctly_identified(self):

@@ -1,4 +1,3 @@
-import random
 from typing import Any, Dict, List, Optional, Tuple, Union
 from z3 import *
 from z3 import ExprRef
@@ -56,8 +55,9 @@ class CegisT(SynthesisStrategy):
         if self.enumerator_solver.check() == sat:
             model = self.enumerator_solver.model()
             candidate = self.extract_candidate(model)
-            self.enumerator_solver.pop()
             print(f"Candidate: {candidate}")
+            print(f"enumerator solver state: {self.enumerator_solver.assertions()}")
+            self.enumerator_solver.pop()
             return candidate
         else:
             self.enumerator_solver.pop()
@@ -67,7 +67,6 @@ class CegisT(SynthesisStrategy):
         self.verifier_solver.push()
 
         substitutions = []
-        substituted_neg_constraints = []
         for func_name, (entries, else_value) in candidate.items():
             func = self.problem.context.z3_synth_functions[func_name]
             args = [Var(i, func.domain(i)) for i in range(func.arity())]
@@ -79,16 +78,9 @@ class CegisT(SynthesisStrategy):
             def func_appl(*values):
                 return body
 
-            func_app = func_appl(*args)
-            substitutions.append((func, func_app))
+            substitutions.append((func, func_appl(*args)))
 
-            substituted_neg_constraints.append(self.problem.substitute_constraints(
-                self.problem.context.z3_negated_constraints,
-                [self.problem.context.z3_synth_functions[func_name]],
-                [func_appl(*args)]
-
-            ))
-
+        substituted_neg_constraints = self.problem.substitute_candidates( self.problem.context.z3_negated_constraints, substitutions)
         self.verifier_solver.add(substituted_neg_constraints)
 
         if self.verifier_solver.check() == sat:

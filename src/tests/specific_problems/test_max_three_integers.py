@@ -2,7 +2,7 @@ import unittest
 from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.random_search_bottom_up import  SynthesisProblem
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import Options
 
 class MaxThreeIntegers(unittest.TestCase):
     def setUp(self):
@@ -18,7 +18,7 @@ class MaxThreeIntegers(unittest.TestCase):
             (constraint (or (= vr0 (fn vr0 vr1 vr2 ) ) ( or (= vr1 ( fn vr0 vr1 vr2 ) ) (= vr2 ( fn vr0 vr1 vr2 )) ) ) )
             (check-synth)
         """
-        self.options = SynthesisProblemOptions()
+        self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_valid_solutions_are_correctly_identified(self):
