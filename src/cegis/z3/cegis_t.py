@@ -1,3 +1,4 @@
+import random
 from typing import Any, Dict, List, Optional, Tuple, Union
 from z3 import *
 from z3 import ExprRef
@@ -31,21 +32,32 @@ class CegisT(SynthesisStrategy):
         pass
 
     def execute_cegis(self) -> None:
-        while True:
+        print(f"max iterations {self.problem.options.synthesis_parameters_max_iterations}")
+        for i in range(self.problem.options.synthesis_parameters_max_iterations):
+            print(f"\nIteration {i + 1}")
             candidate = self.synthesize()
             if candidate is None:
                 print("No solution found")
                 return
 
+            print("Verifying candidate...")
             counterexample = self.verify(candidate)
             if counterexample is None:
-                print("Solution found:", candidate)
+                print("Solution found:")
+                for func_name, (_, body) in candidate.items():
+                    print(f"{func_name} = {body}")
                 return
 
+            print(f"Counterexample found: {counterexample}")
             self.add_counterexample(counterexample)
+
+        print(
+            f"Maximum iterations ({self.problem.options.synthesis_parameters_max_iterations}) reached without finding a solution")
 
     def synthesize(self) -> Optional[CandidateType]:
         self.enumerator_solver.push()
+        self.enumerator_solver.set("random_seed", random.randint(0, 2 ** 16 - 1))
+
         for constraint in self.problem.context.z3_constraints:
             self.enumerator_solver.add(constraint)
 
@@ -80,12 +92,23 @@ class CegisT(SynthesisStrategy):
 
             substitutions.append((func, func_appl(*args)))
 
-        substituted_neg_constraints = self.problem.substitute_candidates( self.problem.context.z3_negated_constraints, substitutions)
+        substituted_neg_constraints = self.problem.substitute_candidates(self.problem.context.z3_negated_constraints,
+                                                                         substitutions)
         self.verifier_solver.add(substituted_neg_constraints)
 
         if self.verifier_solver.check() == sat:
             model = self.verifier_solver.model()
             counterexample = self.extract_counterexample(model)
+            for func, body in substitutions:
+                func_args = [model.eval(arg, model_completion=True)
+                             for arg in self.problem.context.variable_mapping_dict[func.name()].values()]
+                incorrect_output = model.eval(substitute(body,
+                                                         [(Var(i, arg.sort()), arg) for i, arg in enumerate(func_args)]),
+                                              model_completion=True)
+                correct_output = model.eval(func(*func_args), model_completion=True)
+                counterexample[f'{func.name()}_incorrect_output'] = incorrect_output
+                counterexample[f'{func.name()}_correct_output'] = correct_output
+    
             self.verifier_solver.pop()
             return counterexample
         else:
@@ -138,12 +161,14 @@ class CegisT(SynthesisStrategy):
         constraints = []
         for func_name, func in self.problem.context.z3_synth_functions.items():
             args = [Const(f'{func_name}_arg_{i}', func.domain(i)) for i in range(func.arity())]
-            ce_args = [counterexample[arg.__str__()]
-                       for arg in self.problem.context.variable_mapping_dict[func_name].values()]
-
-            expected_output = func(*ce_args)
+            ce_args = [counterexample[arg.__str__()] for arg in
+                       self.problem.context.variable_mapping_dict[func_name].values()]
+            expected_output = counterexample[f'{func_name}_output']
             constraint = func(*args) == expected_output
             ce_condition = And(*[arg == ce_arg for arg, ce_arg in zip(args, ce_args)])
             constraints.append(Implies(ce_condition, constraint))
+
+            incorrect_output = counterexample[f'{func_name}_incorrect_output']
+            constraints.append(Implies(ce_condition, func(*args) != incorrect_output))
 
         return And(*constraints)

@@ -1,4 +1,4 @@
 synthesis_parameters:
-  max_iterations: 600
+  max_iterations: 10
 logging:
   level: "DEBUG"
