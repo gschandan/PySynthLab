@@ -4,6 +4,8 @@ from z3 import Int, Function, IntSort, Solver, ForAll, Implies, sat
 
 from src.cegis.z3.cegis_t import CegisT
 from src.cegis.z3.config_manager import ConfigManager
+from src.cegis.z3.fast_enumerative_synth import FastEnumerativeSynthesis
+from src.cegis.z3.random_search_bottom_up import RandomSearchStrategyBottomUp
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
@@ -86,7 +88,9 @@ def main() -> None:
     #             counterexamples.append(counterexample)
     #solution = cegis()
 
-    strategy = CegisT(problem)
+    # strategy = CegisT(problem)
+    # strategy.execute_cegis()
+    strategy = FastEnumerativeSynthesis(problem)
     strategy.execute_cegis()
 
     # if config.synthesis_parameters_strategy == 'fast_enumerative':

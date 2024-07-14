@@ -1,25 +1,24 @@
 from abc import ABC, abstractmethod
-from random import randrange
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Any
 from z3 import *
+from z3 import ExprRef
 
+from src.cegis.z3.candidate_generators.candidate_generator_base import CandidateGenerator
+from src.cegis.z3.candidate_generators.random_candidate_generator import RandomCandidateGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
 class SynthesisStrategy(ABC):
-    def __init__(self, problem: 'SynthesisProblem'):
+    def __init__(self, problem: 'SynthesisProblem', candidate_generator: CandidateGenerator = None):
         self.problem = problem
         self.solution_found = False
+        if candidate_generator is None:
+            self.candidate_generator = RandomCandidateGenerator(problem, problem.options)
+        else:
+            self.candidate_generator = candidate_generator
 
-    @abstractmethod
-    def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
-        """Generate candidate functions."""
-        pass
-
-    @abstractmethod
-    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
-        """Prune candidates based on strategy-specific criteria."""
-        pass
+    def generate_candidates(self) -> list[tuple[ExprRef, str]]:
+        return self.candidate_generator.generate_candidates()
 
     @abstractmethod
     def execute_cegis(self) -> None:
@@ -28,6 +27,9 @@ class SynthesisStrategy(ABC):
 
     def set_solution_found(self) -> None:
         self.solution_found = True
+
+    def set_candidate_generator(self, generator: CandidateGenerator):
+        self.candidate_generator = generator
 
     def test_candidates(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
         synth_func_names = list(self.problem.context.z3_synth_functions.keys())
@@ -53,41 +55,60 @@ class SynthesisStrategy(ABC):
         self.problem.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.", level=0)
         return True
 
+    @staticmethod
+    def create_args_mapping(ce: Dict[str, Any], variable_mapping: Dict[z3.ExprRef, z3.ExprRef]) -> Dict[
+        z3.ExprRef, Any]:
+        reverse_mapping = {str(v): k for k, v in variable_mapping.items()}
+        return {reverse_mapping[var_name]: value for var_name, value in ce.items()}
+
     def check_counterexample(self, func_name: str, candidate: z3.ExprRef) -> bool:
-        if not any(ce[0] == func_name for ce in self.problem.context.counterexamples):
-            return True
-
-        variable_mapping = self.problem.context.variable_mapping_dict[func_name]
-        args = list(variable_mapping.values())
-        candidate_expr = z3.substitute_vars(candidate, *args)
-
-        for stored_func_name, ce, _ in self.problem.context.counterexamples:
+        for stored_func_name, ce in self.problem.context.counterexamples:
             if stored_func_name == func_name:
-                substituted_expr = z3.substitute(candidate_expr, [
-                    (arg, z3.IntVal(ce[str(arg)])) for arg in args
-                ])
-                result = z3.simplify(substituted_expr)
-                if not self.satisfies_constraints(func_name, candidate_expr, result):
-                    return False
+                synth_func = self.problem.context.z3_synth_functions[func_name]
 
+                substituted_constraints = self.problem.substitute_constraints(
+                    self.problem.context.z3_constraints,
+                    [synth_func],
+                    [candidate]
+                )
+
+                solver = z3.Solver()
+
+                for var, value in ce.items():
+                    solver.add(var == value)
+
+                solver.add(substituted_constraints)
+
+                if solver.check() == z3.unsat:
+                    return False
         return True
 
-    def satisfies_constraints(self, func_name: str, candidate: z3.ExprRef, result: z3.ExprRef) -> bool:
-        solver = z3.Solver()
-        substituted_constraints = self.problem.substitute_constraints(
-            self.problem.context.z3_constraints,
-            [self.problem.context.z3_synth_functions[func_name]],
-            [candidate])
-        solver.add(substituted_constraints)
-        solver.add(self.problem.context.z3_synth_functions[func_name](
-            *self.problem.context.variable_mapping_dict[func_name].values()) == result)
-        return solver.check() == z3.sat
+    def generate_counterexample(self, candidates: List[Tuple[z3.ExprRef, str]]) -> Dict[str, Dict[str, Any]] | None:
+        self.problem.context.enumerator_solver.reset()
+        substituted_neg_constraints = self.problem.substitute_constraints(
+            self.problem.context.z3_negated_constraints,
+            list(self.problem.context.z3_synth_functions.values()),
+            [candidate for candidate, _ in candidates])
+        self.problem.context.enumerator_solver.add(substituted_neg_constraints)
+
+        if self.problem.context.enumerator_solver.check() == z3.sat:
+            model = self.problem.context.enumerator_solver.model()
+            counterexamples = {}
+
+            for (candidate, synth_func_name) in candidates:
+                variable_mapping = self.problem.context.variable_mapping_dict[synth_func_name]
+                args = list(variable_mapping.values())
+                ce = {arg: model.eval(arg, model_completion=True) for arg in args}
+                self.problem.print_msg(f"Counterexample for {synth_func_name}: {ce}", level=0)
+                counterexamples[synth_func_name] = ce
+                self.problem.context.counterexamples.append((synth_func_name, ce))
+
+            return counterexamples
+        else:
+            return None
 
     def verify_candidates(self, candidates: List[z3.ExprRef]) -> bool:
         self.problem.context.verification_solver.reset()
-        if self.problem.options.synthesis_parameters_randomise_each_iteration:
-            self.problem.context.verification_solver.set('random_seed', randrange(1, 4294967295))
-
         substituted_constraints = self.problem.substitute_constraints(
             self.problem.context.z3_constraints,
             list(self.problem.context.z3_synth_functions.values()),
@@ -95,40 +116,3 @@ class SynthesisStrategy(ABC):
         self.problem.context.verification_solver.add(substituted_constraints)
 
         return self.problem.context.verification_solver.check() == z3.sat
-
-    def generate_counterexample(self, candidates: List[Tuple[z3.ExprRef, str]]) -> Dict[str, Dict[str, int]] | None:
-        self.problem.context.enumerator_solver.reset()
-        if self.problem.options.synthesis_parameters_randomise_each_iteration:
-            self.problem.context.enumerator_solver.set('random_seed', randrange(1, 4294967295))
-
-        substituted_neg_constraints = self.problem.substitute_constraints(
-            self.problem.context.z3_negated_constraints,
-            list(self.problem.context.z3_synth_functions.values()),
-            [candidate for candidate, _ in candidates])
-        self.problem.context.enumerator_solver.add(substituted_neg_constraints)
-
-        counterexamples = {}
-
-        for (candidate, synth_func_name) in candidates:
-            variable_mapping = self.problem.context.variable_mapping_dict[synth_func_name]
-            func = self.problem.context.z3_synth_functions[synth_func_name]
-            args = list(variable_mapping.values())
-            candidate_expr = z3.substitute_vars(candidate, *args)
-            difference_constraint = candidate_expr != func(*args)
-
-            self.problem.context.enumerator_solver.push()
-            self.problem.context.enumerator_solver.add(difference_constraint)
-
-            if self.problem.context.enumerator_solver.check() == z3.sat:
-                model = self.problem.context.enumerator_solver.model()
-                counterexample = {str(arg): model.eval(arg, model_completion=True).as_long() for arg in args}
-                incorrect_output = z3.simplify(
-                    z3.substitute(candidate_expr, [(arg, z3.IntVal(counterexample[str(arg)])) for arg in args]))
-                self.problem.print_msg(f"Counterexample for {synth_func_name}: {counterexample}", level=0)
-                counterexamples[synth_func_name] = counterexample
-                self.problem.print_msg(f"Incorrect output for {synth_func_name}: {incorrect_output}", level=0)
-                self.problem.context.counterexamples.append((synth_func_name, counterexample, incorrect_output))
-
-            self.problem.context.enumerator_solver.pop()
-
-        return counterexamples if counterexamples else None

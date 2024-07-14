@@ -20,55 +20,7 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache = {}
 
-    def extract_grammar(self) -> Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]:
-        """
-        Extracts the grammar from the synthesis problem.
-
-        :return: A dictionary mapping each sort to a list of its constructors and their argument sorts.
-        """
-        grammar = {}
-        for func_name, func_descriptor in self.problem.context.z3_synth_functions.items():
-            output_sort = func_descriptor.range()
-
-            if output_sort not in grammar:
-                grammar[output_sort] = []
-
-            # need to decide if to allow recursive functions or not
-            # arg_sorts = [func_descriptor.domain(i) for i in range(func_descriptor.arity())]
-            # grammar[output_sort].append((func_name, arg_sorts))
-
-        if z3.IntSort() not in grammar:
-            grammar[z3.IntSort()] = []
-
-        grammar[z3.IntSort()].extend([
-            ("Plus", [z3.IntSort(), z3.IntSort()]),
-            ("Minus", [z3.IntSort(), z3.IntSort()]),
-            ("Neg", [z3.IntSort()]),
-            ("Ite", [z3.BoolSort(), z3.IntSort(), z3.IntSort()])
-        ])
-        for const in range(self.min_const, self.max_const + 1):
-            grammar[z3.IntSort()].append((f"Times{const}", [z3.IntSort()]))
-
-        for const in range(self.min_const, self.max_const + 1):
-            grammar[z3.IntSort()].append((f"Const_{const}", []))
-
-        if z3.BoolSort() not in grammar:
-            grammar[z3.BoolSort()] = []
-        grammar[z3.BoolSort()].extend([
-            ("LE", [z3.IntSort(), z3.IntSort()]),
-            ("GE", [z3.IntSort(), z3.IntSort()]),
-            ("LT", [z3.IntSort(), z3.IntSort()]),
-            ("GT", [z3.IntSort(), z3.IntSort()]),
-            ("Eq", [z3.IntSort(), z3.IntSort()]),
-            ("And", [z3.BoolSort(), z3.BoolSort()]),
-            ("Or", [z3.BoolSort(), z3.BoolSort()]),
-            ("Not", [z3.BoolSort()]),
-            ("Implies", [z3.BoolSort(), z3.BoolSort()]),
-            ("Xor", [z3.BoolSort(), z3.BoolSort()])
-        ])
-        print(f"grammar: {grammar}")
-        return grammar
-
+    
     def compute_constructor_classes(self) -> Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]:
         """
         Computes constructor classes for each sort in the grammar.
@@ -271,36 +223,15 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         return candidates
 
     def execute_cegis(self) -> None:
-        max_depth = self.problem.options.synthesis_parameters_max_depth
-        generated_terms = self.generate(max_depth)
-        synth_functions = list(self.problem.context.z3_synth_functions.items())
+        for candidates in self.candidate_generator.generate_candidates():
+            func_strs = [str(c) for c, _ in candidates]
+            candidate_functions = [c for c, _ in candidates]
 
-        for depth in range(max_depth + 1):
-            candidates_per_function = []
-            for func_name, func in synth_functions:
-                arg_sorts = [func.domain(i) for i in range(func.arity())]
-                candidates = [
-                    (self.create_candidate_function(term, arg_sorts), func_name)
-                    for term in generated_terms[func.range()][depth]
-                ]
-                candidates_per_function.append(candidates)
+            if self.test_candidates(func_strs, candidate_functions):
+                self.problem.print_msg(f"Found satisfying candidates!", level=2)
+                for candidate, func_name in candidates:
+                    self.problem.print_msg(f"{func_name}: {candidate}", level=2)
+                self.set_solution_found()
+                return
 
-            for combination in itertools.product(*candidates_per_function):
-                pruned_combination = self.prune_candidates(list(combination))
-
-                self.problem.print_msg(
-                    f"Testing candidates (depth: {depth}):\n{'; '.join([f'{func_name}: {candidate}' for candidate, func_name in pruned_combination])}",
-                    level=1
-                )
-
-                func_strs = [func_name for _, func_name in pruned_combination]
-                candidate_functions = [candidate for candidate, _ in pruned_combination]
-
-                if self.test_candidates(func_strs, candidate_functions):
-                    self.problem.print_msg(f"Found satisfying candidates!", level=2)
-                    for candidate, func_name in pruned_combination:
-                        self.problem.print_msg(f"{func_name}: {candidate}", level=2)
-                    self.set_solution_found()
-                    return
-
-        self.problem.print_msg(f"No solution found up to depth {max_depth}", level=2)
+        self.problem.print_msg(f"No solution found up to depth {self.problem.options.synthesis_parameters_max_depth}", level=2)
