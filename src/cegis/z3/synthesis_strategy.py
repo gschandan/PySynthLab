@@ -13,7 +13,7 @@ class SynthesisStrategy(ABC):
         self.problem = problem
         self.solution_found = False
         if candidate_generator is None:
-            self.candidate_generator = RandomCandidateGenerator(problem, problem.options)
+            self.candidate_generator = RandomCandidateGenerator(problem)
         else:
             self.candidate_generator = candidate_generator
 

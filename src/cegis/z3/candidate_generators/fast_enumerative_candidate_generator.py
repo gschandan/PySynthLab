@@ -10,8 +10,8 @@ from src.cegis.z3.options import Options
 
 class FastEnumerativeSynthesisGenerator(CandidateGenerator):
 
-    def __init__(self, problem: SynthesisProblem, config: Options):
-        super().__init__(problem, config)
+    def __init__(self, problem: SynthesisProblem):
+        super().__init__(problem)
         self.grammar = self.extract_grammar()
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache: Dict[Tuple[z3.SortRef, int], List[z3.ExprRef]] = {}
@@ -58,6 +58,11 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
         return grammar
 
     def compute_constructor_classes(self) -> Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]:
+        """
+        Computes constructor classes for each sort in the grammar.
+
+        :return: A dictionary mapping each sort to a list of its constructor classes.
+        """
         constructor_classes = {sort: [] for sort in self.grammar}
         for sort, constructors in self.grammar.items():
             for func_name, arg_sorts in constructors:
@@ -72,6 +77,13 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
         return constructor_classes
 
     def fast_enum(self, sort: z3.SortRef, size: int) -> List[z3.ExprRef]:
+        """
+        Enumerates terms of the given sort and size.
+
+        :param sort: The Z3 sort of the terms to enumerate.
+        :param size: The maximum size of the terms.
+        :return: A list of Z3 expressions representing the enumerated terms.
+        """
         if size < 0:
             return []
 
@@ -106,6 +118,13 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
         return terms
 
     def construct_term(self, constructor: str, term_combination: Tuple[z3.ExprRef, ...]) -> z3.ExprRef:
+        """
+        Constructs a Z3 term using the given LIA constructor and arguments.
+
+        :param constructor: The name of the LIA constructor.
+        :param term_combination: A tuple of Z3 expressions representing the arguments.
+        :return: The constructed Z3 term.
+        """
         if constructor == 'Plus':
             return term_combination[0] + term_combination[1]
         elif constructor == 'Minus':
@@ -139,13 +158,27 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
             raise ValueError(f"Unsupported constructor: {constructor}")
 
     def generate_size_combinations(self, num_args: int, total_size: int) -> List[Tuple[int, ...]]:
+        """
+          Generates all possible combinations of argument sizes that sum up to the total size.
+
+          :param num_args: The number of arguments.
+          :param total_size: The total size of the arguments.
+          :return: A list of tuples representing the size combinations.
+        """
         if num_args == 1:
             return [(total_size,)]
-        if num_args == 2:
-            return [(i, total_size - i) for i in range(total_size + 1)]
+
+        stack = [([], num_args, total_size)]
         result = []
-        for i in range(total_size + 1):
-            result.extend((i,) + combo for combo in self.generate_size_combinations(num_args - 1, total_size - i))
+
+        while stack:
+            current, remaining_args, remaining_size = stack.pop()
+            if remaining_args == 1:
+                result.append(tuple(current + [remaining_size]))
+            else:
+                for i in range(remaining_size + 1):
+                    stack.append((current + [i], remaining_args - 1, remaining_size - i))
+
         return result
 
     def get_arity(self, sort: z3.SortRef) -> int:
