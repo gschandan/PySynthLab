@@ -23,6 +23,8 @@ class ConfigManager:
         """
         parser = argparse.ArgumentParser(description="PySynthLab Synthesiser")
         parser.add_argument('--config', type=str, help="Path to custom config file")
+        parser.add_argument('input_source', nargs='?', default='stdin',
+                    help="Source of the input problem (stdin or file path)")
 
         for field_obj in fields(Options):
             arg_name = f"--{field_obj.name}"

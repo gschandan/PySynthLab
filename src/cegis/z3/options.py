@@ -20,7 +20,7 @@ class Options:
         synthesis_parameters_max_const (int): Maximum constant to introduce into the candidate programs. Default is 2.
         solver_name (str): SMT Solver to use. Choices are z3, cvc5. Default is z3.
         solver_timeout (int): SMT Solver Configuration - Timeout. Default is 30000.
-
+        input_source (str): Input source. Choices are STDIN or a path to a problem file.
     """
 
     logging_level: str = field(
@@ -102,4 +102,11 @@ class Options:
         metadata=dict(
             description="SMT Solver Configuration - Timeout",
             type="int"
+        ))
+
+    input_source: str = field(
+        default="stdin",
+        metadata=dict(
+            description="Source of the input problem (stdin or file path)",
+            type="str"
         ))
