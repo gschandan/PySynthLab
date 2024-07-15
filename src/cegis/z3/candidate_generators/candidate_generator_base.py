@@ -24,3 +24,8 @@ class CandidateGenerator(ABC):
     def get_arg_sorts(self, func_name: str) -> List[z3.SortRef]:
         func = self.problem.context.z3_synth_functions[func_name]
         return [func.domain(i) for i in range(func.arity())]
+
+    @staticmethod
+    def create_candidate_function(candidate_expr: z3.ExprRef, arg_sorts: List[z3.SortRef]) -> z3.ExprRef:
+        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
+        return z3.substitute(candidate_expr, [(arg, z3.Var(i, arg.sort())) for i, arg in enumerate(args)])

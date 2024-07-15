@@ -12,14 +12,16 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         self.candidate_generator = FastEnumerativeSynthesisGenerator(problem)
 
     def execute_cegis(self) -> None:
-        for candidates in self.candidate_generator.generate_candidates():
-            for candidate in candidates:
-                if self.test_candidates([candidate[1]], [candidate[0]]):
-                    self.problem.print_msg(f"Found satisfying candidates!", level=2)
-                    for candidate, func_name in candidates:
-                        self.problem.print_msg(f"{func_name}: {candidate}", level=2)
-                    self.set_solution_found()
-                    return
+        for candidate, func_name in self.candidate_generator.generate_candidates():
+            self.problem.print_msg(
+                f"Testing candidate: {func_name}: {str(candidate)}\n",
+                level=1
+            )
+            if self.test_candidates([func_name], [candidate]):
+                self.problem.print_msg(f"Found satisfying candidate!", level=2)
+                self.problem.print_msg(f"{func_name}: {candidate}", level=2)
+                self.set_solution_found()
+                return
 
         self.problem.print_msg(f"No solution found up to depth {self.problem.options.synthesis_parameters_max_depth}",
                                level=2)
