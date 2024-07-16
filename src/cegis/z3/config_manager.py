@@ -4,51 +4,42 @@ from dataclasses import asdict, fields
 from typing import Dict, Any, Optional
 import yaml
 
-from src.cegis.z3.options import Options
+from src.cegis.z3.options import Options, LoggingOptions, SynthesisParameters, SolverOptions
 
 
 class ConfigManager:
     @staticmethod
     def generate_argparse_from_options() -> argparse.ArgumentParser:
-        """
-        Generate an ArgumentParser based on the Options dataclass.
-
-        Returns:
-            argparse.ArgumentParser: Argument parser object.
-
-        Example:
-            >>> parser = ConfigManager.generate_argparse_from_options()
-            >>> args = parser.parse_args(['--synthesis_parameters_max_depth', '6'])
-            >>> print(args.synthesis_parameters_max_depth)
-            6
-        """
         parser = argparse.ArgumentParser(description="PySynthLab Synthesiser")
         parser.add_argument('--config', type=str, help="Path to custom config file")
         parser.add_argument('input_source', nargs='?', default='stdin',
                             help="Source of the input problem (stdin or file path)")
 
-        for field_obj in fields(Options):
-            arg_name = f"--{field_obj.name}"
-            kwargs = {
-                "dest": field_obj.name,
-                "help": field_obj.metadata.get('description', ''),
-                "default": argparse.SUPPRESS,
-            }
+        for class_name in ['LoggingOptions', 'SynthesisParameters', 'SolverOptions']:
+            class_obj = globals()[class_name]
+            prefix = class_name.lower().replace('options', '')
+            for field_obj in fields(class_obj):
+                arg_name = f"--{prefix}_{field_obj.name}"
+                kwargs = {
+                    "dest": f"{prefix}_{field_obj.name}",
+                    "help": field_obj.metadata.get('description', ''),
+                    "default": argparse.SUPPRESS,
+                }
 
-            if field_obj.metadata.get('type') == 'bool':
-                kwargs['action'] = 'store_true' if not field_obj.default else 'store_false'
-                if field_obj.default:
-                    arg_name = f"--no-{field_obj.name}"
-            elif field_obj.name == 'synthesis_parameters_operation_costs':
-                kwargs['type'] = lambda x: json.loads(x.replace("'", '"'))
-            else:
-                kwargs['type'] = eval(field_obj.metadata.get('type', 'str'))
-                if 'choices' in field_obj.metadata:
-                    kwargs['choices'] = field_obj.metadata['choices']
-                    kwargs['help'] += f" Choices: {', '.join(map(str, field_obj.metadata['choices']))}"
+                if field_obj.metadata.get('type') == 'bool':
+                    kwargs['action'] = 'store_true' if not field_obj.default else 'store_false'
+                    if field_obj.default:
+                        arg_name = f"--no-{prefix}-{field_obj.name}"
+                elif field_obj.name == 'operation_costs':
+                    kwargs['type'] = lambda x: json.loads(x.replace("'", '"'))
+                else:
+                    kwargs['type'] = eval(field_obj.metadata.get('type', 'str'))
+                    if 'choices' in field_obj.metadata:
+                        kwargs['choices'] = field_obj.metadata['choices']
+                        kwargs['help'] += f" Choices: {', '.join(map(str, field_obj.metadata['choices']))}"
 
-            kwargs['help'] += f" (default: {field_obj.default})"
-            parser.add_argument(arg_name, **kwargs)
+                kwargs['help'] += f" (default: {field_obj.default})"
+                parser.add_argument(arg_name, **kwargs)
 
         return parser
 
@@ -92,41 +83,28 @@ class ConfigManager:
         """
         merged_dict = asdict(default_options)
 
-        def update_nested_dict(d, u):
-            for k, v in u.items():
-                if isinstance(v, dict):
-                    d[k] = update_nested_dict(d.get(k, {}), v)
-                else:
-                    d[k] = v
-            return d
-
         if yaml_config:
-            merged_dict = update_nested_dict(merged_dict, yaml_config)
+            for key, value in yaml_config.items():
+                if key in merged_dict and isinstance(merged_dict[key], dict):
+                    merged_dict[key].update(value)
+                else:
+                    merged_dict[key] = value
 
-        cli_dict = {}
-        for field_obj in fields(Options):
-            if hasattr(cli_args, field_obj.name):
-                value = getattr(cli_args, field_obj.name)
-                if value is not None:
-                    keys = field_obj.name.split('_')
-                    d = cli_dict
-                    for key in keys[:-1]:
-                        if key not in d:
-                            d[key] = {}
-                        d = d[key]
-                    d[keys[-1]] = value
+        # Handle CLI args
+        for arg_name, arg_value in vars(cli_args).items():
+            if arg_value is not None:
+                parts = arg_name.split('_', 1)
+                if len(parts) > 1 and parts[0] in merged_dict:
+                    merged_dict[parts[0]][parts[1]] = arg_value
+                else:
+                    merged_dict[arg_name] = arg_value
 
-        merged_dict = update_nested_dict(merged_dict, cli_dict)
-
-        flat_dict = {}
-        for section, values in merged_dict.items():
-            if isinstance(values, dict):
-                for key, value in values.items():
-                    flat_dict[f"{section}_{key}"] = value
-            else:
-                flat_dict[section] = values
-
-        return Options(**flat_dict)
+        return Options(
+            logging=LoggingOptions(**merged_dict['logging']),
+            synthesis_parameters=SynthesisParameters(**merged_dict['synthesis_parameters']),
+            solver=SolverOptions(**merged_dict['solver']),
+            input_source=merged_dict['input_source']
+        )
 
     @staticmethod
     def get_config() -> Options:
