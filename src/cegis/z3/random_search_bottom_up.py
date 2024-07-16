@@ -1,7 +1,3 @@
-from typing import List
-
-from z3 import SortRef, Var, If
-
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy import SynthesisStrategy
 
@@ -12,7 +8,6 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         self.problem = problem
         self.min_const = problem.options.synthesis_parameters_min_const
         self.max_const = problem.options.synthesis_parameters_max_const
-        self.term_bank = {}
 
     def execute_cegis(self) -> None:
         max_depth = self.problem.options.synthesis_parameters_max_depth
@@ -38,33 +33,4 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                         self.set_solution_found()
                         return
 
-        def generate_correct_function(arg_sorts: list[SortRef]) -> tuple[callable, str]:
-            args = [Var(i, sort) for i, sort in enumerate(arg_sorts)]
-
-            def max_function(*values):
-                x, y = values
-                #return If(If(x >= 0, x, -x) > If(y >= 0, y, -y), If(x >= 0, x, -x), If(y >= 0, y, -y))
-                return If(x >=y, x, y)
-
-            expr = max_function(*args[:2])
-            func_str = f"def max_function({', '.join(str(arg) for arg in args[:2])}):\n"
-            func_str += f"    return {str(expr)}\n"
-            return max_function, func_str
-
-        args = [list(self.problem.context.z3_synth_functions.values())[0].domain(i) for i in
-                range(list(self.problem.context.z3_synth_functions.values())[0].arity())]
-        candidate, func_str = generate_correct_function(args)
-
-        free_variables = [Var(i, sort) for i, sort in enumerate(args)]
-        candidate_function = candidate(*free_variables)
-        self.problem.print_msg(
-            f"Testing known correct candidate {func_str} \n",
-            level=1
-        )
-        test_candidates = self.test_candidates([func_str], [candidate_function])
-        if test_candidates:
-            self.problem.print_msg(f"Found satisfying candidates!", level=2)
-            self.problem.print_msg(f"{func_str}: {candidate_function.sexpr()}", level=2)
-            self.set_solution_found()
-            return
         self.problem.print_msg("No satisfying candidates found.", level=2)

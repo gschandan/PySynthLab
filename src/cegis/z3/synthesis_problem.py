@@ -1,5 +1,4 @@
 import dataclasses
-import itertools
 import typing
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
@@ -540,64 +539,3 @@ class SynthesisProblem:
             predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
-
-    def find_func_applications(self, expr: z3.ExprRef, func: z3.FuncDeclRef) -> Set[z3.ExprRef]:
-        if z3.is_app(expr) and expr.decl() == func:
-            return set(expr)
-        elif z3.is_app(expr):
-            return set(
-                itertools.chain.from_iterable(self.find_func_applications(child, func) for child in expr.children()))
-        else:
-            return set()
-
-    def test_candidates_alternative(self, func_strs: List[str], candidate_functions: List[z3.ExprRef]) -> bool:
-        self.context.enumerator_solver.reset()
-        substituted_neg_constraints = self.substitute_constraints(
-            self.context.z3_negated_constraints,
-            list(self.context.z3_synth_functions.values()),
-            candidate_functions
-        )
-        self.context.enumerator_solver.add(substituted_neg_constraints)
-
-        if self.context.enumerator_solver.check() == z3.sat:
-            model = self.context.enumerator_solver.model()
-            counterexamples = []
-            incorrect_outputs = []
-            candidate_function_exprs = []
-
-            for func, candidate, variable_mapping in zip(func_strs, candidate_functions,
-                                                         self.context.variable_mapping_dict.values()):
-                free_variables = list(variable_mapping.keys())
-                counterexample = {str(free_var): model.eval(declared_var, model_completion=True).as_long()
-                                  for free_var, declared_var in variable_mapping.items()}
-
-                incorrect_output = z3.simplify(z3.substitute(candidate, [(arg, z3.IntVal(value)) for arg, value in
-                                                                         zip(free_variables,
-                                                                             list(counterexample.values()))]))
-
-                self.print_msg(f"Counterexample: {counterexample}", level=0)
-                counterexamples.append(counterexample)
-                incorrect_outputs.append(incorrect_output)
-                candidate_function_expr = candidate(*free_variables) if callable(candidate) else candidate
-                candidate_function_exprs.append(candidate_function_expr)
-
-                self.context.counterexamples.append((func, counterexample, incorrect_output))
-
-            self.print_msg(f"Incorrect outputs for {'; '.join(func_strs)}: {incorrect_outputs}", level=0)
-            return False
-        else:
-            self.context.verification_solver.reset()
-            substituted_constraints = self.substitute_constraints(
-                self.context.z3_constraints,
-                list(self.context.z3_synth_functions.values()),
-                candidate_functions
-            )
-            self.context.verification_solver.add(substituted_constraints)
-            if self.context.verification_solver.check() == z3.unsat:
-                self.print_msg(
-                    f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.",
-                    level=0)
-                return False
-            self.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.",
-                           level=0)
-            return True

@@ -10,6 +10,7 @@ class CandidateGenerator(ABC):
         self.config = problem.options
         self.min_const = self.config.synthesis_parameters_min_const
         self.max_const = self.config.synthesis_parameters_max_const
+        self.operation_costs = self.config.synthesis_parameters_operation_costs
 
     @abstractmethod
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
@@ -20,6 +21,9 @@ class CandidateGenerator(ABC):
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
         """Prune candidate functions."""
         pass
+
+    def op_complexity(self, op: str) -> int:
+        return self.operation_costs.get(op, 0)
 
     def get_arg_sorts(self, func_name: str) -> List[z3.SortRef]:
         func = self.problem.context.z3_synth_functions[func_name]

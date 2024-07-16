@@ -27,8 +27,9 @@ class RandomCandidateGenerator(CandidateGenerator):
             operations = ['+', '-', '*', 'If', 'Neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-        num_args = len(args)
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
+
+        op_weights = {op: 1 for op in operations}
 
         def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or curr_complexity == 0:
@@ -80,8 +81,3 @@ class RandomCandidateGenerator(CandidateGenerator):
             return left == right
         else:
             return left != right
-
-    @staticmethod
-    def op_complexity(op: str) -> int:
-        # experimenting with cost of operation for biasing random choice
-        return {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.get(op, 0)

@@ -27,7 +27,6 @@ class GuidedCandidateGenerator(CandidateGenerator):
             operations = ['+', '-', '*', 'If', 'Neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-        num_args = len(args)
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
 
         def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:

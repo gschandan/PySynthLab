@@ -1,9 +1,11 @@
+import json
 import sys
 from dataclasses import asdict
 
 from src.cegis.z3.config_manager import ConfigManager
 from src.cegis.z3.fast_enumerative_synth import FastEnumerativeSynthesis
 from src.cegis.z3.random_search_bottom_up import RandomSearchStrategyBottomUp
+from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
@@ -19,16 +21,19 @@ def main() -> None:
 
     problem = SynthesisProblem(problem_input, config)
     print(problem.info_smt())
+
     if config.synthesis_parameters_strategy == 'fast_enumerative':
         strategy = FastEnumerativeSynthesis(problem)
     elif config.synthesis_parameters_strategy == 'random_enumerative':
-        strategy = RandomSearchStrategyBottomUp(problem)
+        if config.synthesis_parameters_candidate_generation == 'top_down':
+            strategy = RandomSearchStrategyTopDown(problem)
+        else:
+            strategy = RandomSearchStrategyBottomUp(problem)
     else:
         raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters_strategy}")
 
     print(strategy.problem.info_smt())
     strategy.execute_cegis()
-
 
 if __name__ == '__main__':
     main()
