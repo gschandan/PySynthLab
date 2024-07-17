@@ -46,8 +46,23 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ConfigManager</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#configmanager-class">ConfigManager Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#options-class">Options Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.camel_to_snake"><code class="docutils literal notranslate"><span class="pre">ConfigManager.camel_to_snake()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options"><code class="docutils literal notranslate"><span class="pre">ConfigManager.generate_argparse_from_options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.get_config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.load_yaml"><code class="docutils literal notranslate"><span class="pre">ConfigManager.load_yaml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.logger"><code class="docutils literal notranslate"><span class="pre">ConfigManager.logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.merge_config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.merge_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.setup_logger"><code class="docutils literal notranslate"><span class="pre">ConfigManager.setup_logger()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#options-class">Options Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -80,9 +95,118 @@
 <h1>ConfigManager<a class="headerlink" href="#configmanager" title="Link to this heading"></a></h1>
 <section id="configmanager-class">
 <h2>ConfigManager Class<a class="headerlink" href="#configmanager-class" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.config_manager.</span></span><span class="sig-name descname"><span class="pre">ConfigManager</span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.camel_to_snake">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camel_to_snake</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.camel_to_snake" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.generate_argparse_from_options">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_argparse_from_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.get_config">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.get_config" title="Link to this definition"></a></dt>
+<dd><p>Get the final configuration by merging defaults, YAML config, and CLI args.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Options</em> – Final merged configuration as Options dataclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.load_yaml">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.load_yaml" title="Link to this definition"></a></dt>
+<dd><p>Load configuration from a YAML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Path to the YAML configuration file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict[str, Any]</em> – Configuration as a dictionary.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the config file doesn’t exist.</p></li>
+<li><p><strong>yaml.YAMLError</strong> – If there’s an error parsing the YAML file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.merge_config">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cli_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.merge_config" title="Link to this definition"></a></dt>
+<dd><p>Merge default options with any user defined YAML config and CLI arguments.
+CLI arguments will take priority over any user defined config in the user_config.yaml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>default_options</strong> (<a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><em>Options</em></a>) – Default options from the Options dataclass.</p></li>
+<li><p><strong>yaml_config</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – Configuration loaded from YAML file.</p></li>
+<li><p><strong>cli_args</strong> (<em>argparse.Namespace</em>) – Parsed command-line arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Options</em> – Merged configuration as Options dataclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.setup_logger">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.setup_logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="options-class">
 <h2>Options Class<a class="headerlink" href="#options-class" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utilities.options.Options">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logging:</span> <span class="pre">~src.utilities.options.LoggingOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters:</span> <span class="pre">~src.utilities.options.SynthesisParameters</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver:</span> <span class="pre">~src.utilities.options.SolverOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_source:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'stdin'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.Options" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Options for configuring the Synthesis process.</p>
+<dl class="simple">
+<dt>Other:</dt><dd><p>input_source (str): Input source. Choices are STDIN or a path to a problem file.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using a YAML configuration file, these options can be grouped under ‘logging’, ‘synthesis_parameters’, and ‘solver’ sections.
+For example:</p>
+<dl>
+<dt>logging:</dt><dd><p>level: “DEBUG”</p>
+</dd>
+<dt>synthesis_parameters:</dt><dd><p>max_iterations: 20
+operation_costs:</p>
+<blockquote>
+<div><p>‘+’: 1
+‘-’: 1
+‘*’: 3
+‘If’: 4
+‘Neg’: 2</p>
+</div></blockquote>
+</dd>
+<dt>solver:</dt><dd><p>name: “z3”
+timeout: 30000</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
 </section>
 </section>
 
