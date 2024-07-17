@@ -36,7 +36,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
             predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
-    
+
     def test_substitute_constraints_multiple_commutativity(self):
         def generate_correct_abs_max_function(arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
             args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]

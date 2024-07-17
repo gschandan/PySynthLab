@@ -3,6 +3,8 @@ from src.cegis.z3.candidate_generators.candidate_generator_base import Candidate
 from typing import Dict, Any, List, Tuple
 from z3 import *
 
+from src.cegis.z3.synthesis_problem import SynthesisProblem
+
 
 class RandomCandidateGenerator(CandidateGenerator):
 
@@ -59,7 +61,7 @@ class RandomCandidateGenerator(CandidateGenerator):
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}")
+        SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
 
         return generated_expression
 

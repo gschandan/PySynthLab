@@ -40,15 +40,15 @@ class CegisT(SynthesisStrategy):
             # Synthesis phase
             candidate = self.synthesize()
             if candidate is None:
-                self.problem.print_msg("No candidate found")
+                SynthesisProblem.logger.info("No candidate found")
                 continue
 
             # Verification phase
             counterexample = self.verify(candidate)
             if counterexample is None:
-                self.problem.print_msg("Solution found!")
+                SynthesisProblem.logger.info("Solution found!")
                 for func_name, expr in candidate.items():
-                    self.problem.print_msg(f"{func_name}: {expr}")
+                    SynthesisProblem.logger.info(f"{func_name}: {expr}")
                 self.set_solution_found()
                 return
 
@@ -60,7 +60,7 @@ class CegisT(SynthesisStrategy):
             if theory_constraint is not None:
                 self.add_theory_constraint(theory_constraint)
 
-        self.problem.print_msg("Maximum iterations reached without finding a solution.")
+        SynthesisProblem.logger.info("Maximum iterations reached without finding a solution.")
 
     def synthesize(self) -> Optional[Dict[str, ExprRef]]:
         candidates = {}
@@ -115,7 +115,7 @@ class CegisT(SynthesisStrategy):
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}")
+        SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
 
         func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
         func_str += f"    return {str(generated_expression)}\n"
@@ -212,17 +212,14 @@ class CegisT(SynthesisStrategy):
 
         generalized_candidate = self.generalize_candidate(candidate)
 
-        # Add constraints from the specification
         for constraint in self.problem.context.z3_constraints:
             self.theory_solver.add(constraint)
 
-        # Add the generalized candidate
         substitutions = [(func, generalized_candidate[func_name]) for func_name, func in
                          self.problem.context.z3_synth_functions.items()]
         substituted_constraints = self.problem.substitute_candidates(self.problem.context.z3_constraints, substitutions)
         self.theory_solver.add(substituted_constraints)
 
-        # Check if there's a valuation that satisfies the constraints
         if self.theory_solver.check() == sat:
             model = self.theory_solver.model()
             theory_constraint = self.extract_theory_constraint(model, generalized_candidate)
@@ -238,7 +235,7 @@ class CegisT(SynthesisStrategy):
             if isinstance(expr, ExprRef):
                 generalized[func_name] = self.replace_constants_with_variables(expr)
             else:
-                generalized[func_name] = expr  # Keep non-ExprRef values as they are
+                generalized[func_name] = expr 
         return generalized
 
     def replace_constants_with_variables(self, expr: ExprRef) -> ExprRef:
@@ -280,14 +277,14 @@ class CegisT(SynthesisStrategy):
 
         if ce_tuple not in self.encountered_counterexamples:
             ce_constraint = self.formulate_counterexample_constraint(counterexample)
-            print(f"adding ce constraint: {ce_constraint}")
+            SynthesisProblem.logger.info(f"adding ce constraint: {ce_constraint}")
             self.problem.context.counterexamples.append(ce_constraint)
             self.encountered_counterexamples.add(ce_tuple)
         else:
-            print(f"Skipping duplicate counterexample: {counterexample}")
+            SynthesisProblem.logger.info(f"Skipping duplicate counterexample: {counterexample}")
 
     def add_theory_constraint(self, constraint: ExprRef) -> None:
-        print(f"Adding theory constraint: {constraint}")
+        SynthesisProblem.logger.info(f"Adding theory constraint: {constraint}")
         self.problem.context.z3_constraints.append(constraint)
 
     def formulate_counterexample_constraint(self, counterexample: Dict[str, ExprRef]) -> ExprRef:

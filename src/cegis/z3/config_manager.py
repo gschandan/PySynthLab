@@ -160,17 +160,19 @@ class ConfigManager:
         Returns:
             Options: Final merged configuration as Options dataclass.
         """
+        ConfigManager.setup_logger()
         default_options = Options()
         parser = ConfigManager.generate_argparse_from_options()
         args = parser.parse_args()
 
         yaml_config = None
         if args.config:
-            yaml_config = ConfigManager.load_yaml()
+            yaml_config = ConfigManager.load_yaml(args.config)
         else:
             try:
-                yaml_config = ConfigManager.load_yaml()
+                yaml_config = ConfigManager.load_yaml("../config/user_config.yaml")
             except FileNotFoundError:
-                ConfigManager.logger.error(f"Config file not found: {args.config}")
+                ConfigManager.logger.warning("Default config file '../config/user_config.yaml' not found. "
+                                             "Using default options.")
 
         return ConfigManager.merge_config(default_options, yaml_config, args)

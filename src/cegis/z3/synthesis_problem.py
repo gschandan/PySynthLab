@@ -46,6 +46,8 @@ class SynthesisProblem:
     A class representing a synthesis problem in the SyGuS format.
     """
     pyparsing.ParserElement.enablePackrat()
+    logger: logging.Logger = None
+    options: Options = None
 
     def __init__(self, problem: str, options: Options = None):
         """
@@ -54,9 +56,11 @@ class SynthesisProblem:
         :param problem: The input problem in the SyGuS format.
         :param options: Additional options (default: None).
         """
-        self.logger = self.setup_logger()
+        if SynthesisProblem.logger is None:
+            SynthesisProblem.setup_logger(options)
+
         self.input_problem: str = problem
-        self.options = options
+        self.options = options or Options()
         self.parser = SygusV2Parser()
         self.problem: Program = self.parser.parse(problem)
         self.symbol_table = SymbolTableBuilder.run(self.problem)
@@ -80,20 +84,31 @@ class SynthesisProblem:
         self.populate_all_z3_functions()
         self.parse_constraints()
 
-    def setup_logger(self):
-        logger = logging.getLogger(__name__)
-        logger.setLevel(self.options.logging.level)
+    @staticmethod
+    def setup_logger(options: Options = None):
+        """
+        Setup the logger for the SynthesisProblem class.
+        :param options: The options object containing logging configurations.
+        """
+        if SynthesisProblem.logger is not None:
+            return
 
+        logger = logging.getLogger(__name__)
         log_dir = "logs"
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        if len(self.options.logging.file) <= 0:
-            self.options.logging.file = os.path.join(log_dir, "default.log")
-        file_handler = logging.FileHandler(self.options.logging.file)
-        file_handler.setLevel(self.options.logging.level)
 
+        if options and options.logging.file:
+            log_file = options.logging.file
+        else:
+            log_file = os.path.join(log_dir, "default.log")
+
+        file_handler = logging.FileHandler(log_file)
         console_handler = logging.StreamHandler()
-        console_handler.setLevel(self.options.logging.level)
+
+        log_level = options.logging.level if options else logging.DEBUG
+        file_handler.setLevel(log_level)
+        console_handler.setLevel(log_level)
 
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         file_handler.setFormatter(formatter)
@@ -101,12 +116,17 @@ class SynthesisProblem:
 
         logger.addHandler(file_handler)
         logger.addHandler(console_handler)
+        logger.setLevel(log_level)
 
-        return logger
+        SynthesisProblem.logger = logger
+        SynthesisProblem.options = options
 
     def __str__(self, as_smt=False) -> str:
         """
         Return the string representation of the synthesis problem.
+
+        :param as_smt: If True, return the problem in SMT-LIB format.
+        :return: The string representation of the problem.
         """
         if as_smt:
             return self.context.smt_problem
@@ -116,37 +136,36 @@ class SynthesisProblem:
         """
         Print the string representation of the synthesis problem.
         """
-        self.logger.info(str(self))
+        SynthesisProblem.logger.info(str(self))
 
     def info_smt(self) -> None:
         """
-        Print the string representation of the synthesis problem.
+        Print the string representation of the synthesis problem in SMT-LIB format.
         """
-        self.logger.info(self.__str__(as_smt=True))
+        SynthesisProblem.logger.info(self.__str__(as_smt=True))
 
     def convert_sygus_to_smt(self) -> str:
         """
-         Convert the synthesis problem from SyGuS format to SMT-LIB format.
+        Convert the synthesis problem from SyGuS format to SMT-LIB format.
 
-         This method parses the input SyGuS problem, transforms it into SMT-LIB format,
-         and returns the result as a string.
+        This method parses the input SyGuS problem, transforms it into SMT-LIB format,
+        and returns the result as a string.
 
-         Returns:
-             str: The synthesis problem in SMT-LIB format.
+        :return: The synthesis problem in SMT-LIB format.
 
-         Example:
-             parser = SynthesisProblemParser(sygus_problem)
-             smt_problem = parser.convert_sygus_to_smt()
-             print(smt_problem)
+        Example:
+            parser = SynthesisProblemParser(sygus_problem)
+            smt_problem = parser.convert_sygus_to_smt()
+            print(smt_problem)
 
-             # Output:
-             # (set-logic LIA)
-             # (declare-fun max2 (Int Int) Int)
-             # (declare-var x Int)
-             # (declare-var y Int)
-             # (assert (and (>= (max2 x y) x) (>= (max2 x y) y) (or (= x (max2 x y)) (= y (max2 x y)))))
-             # (check-sat)
-         """
+            # Output:
+            # (set-logic LIA)
+            # (declare-fun max2 (Int Int) Int)
+            # (declare-var x Int)
+            # (declare-var y Int)
+            # (assert (and (>= (max2 x y) x) (>= (max2 x y) y) (or (= x (max2 x y)) (= y (max2 x y)))))
+            # (check-sat)
+        """
         i_expr = pyparsing.QuotedString(quoteChar='"') | pyparsing.QuotedString(quoteChar='|', unquoteResults=False)
         s_expr = pyparsing.nestedExpr(opener='(', closer=')', ignoreExpr=i_expr)
         s_expr.ignore(';' + pyparsing.restOfLine)
@@ -342,7 +361,7 @@ class SynthesisProblem:
             combined_constraint = z3.And(*all_constraints)
             self.context.z3_constraints.append(combined_constraint)
         else:
-            self.logger.info("Warning: No constraint_substitution found or generated.")
+            SynthesisProblem.logger.info("Warning: No constraints found or generated.")
 
         self.context.z3_negated_constraints = self.negate_assertions(self.context.z3_constraints)
 
@@ -379,13 +398,13 @@ class SynthesisProblem:
 
     def parse_term(self, term: ast.Term,
                    local_variables: Dict[str, ExprRef] = None) -> ExprRef | FuncDeclRef | bool | int:
-        """Parse a term with optional local variable context.
+        """
+        Parse a term with optional local variable context.
 
-        :param local_variables: any local function variables
         :param term: The term to parse.
+        :param local_variables: A dictionary of local variables to consider during parsing.
         :return: The Z3 expression representing the term.
         """
-
         local_variables = local_variables if local_variables else {}
 
         if isinstance(term, ast.IdentifierTerm):
@@ -496,7 +515,13 @@ class SynthesisProblem:
 
     @staticmethod
     def create_z3_variable(name: str, sort: z3.SortRef) -> z3.ExprRef:
-        """Create a Z3 variable of the given sort."""
+        """
+        Create a Z3 variable of the given sort.
+
+        :param name: The name of the variable.
+        :param sort: The sort of the variable.
+        :return: The Z3 expression representing the variable.
+        """
         if sort == z3.IntSort():
             return z3.Int(name)
         elif sort == z3.BoolSort():
@@ -529,6 +554,11 @@ class SynthesisProblem:
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
+
+        :param constraints: The list of constraints to substitute.
+        :param functions_to_replace: The list of functions to replace.
+        :param replacement_expressions: The replacement expressions.
+        :return: The list of substituted constraints.
         """
         synth_substitutions = list(zip(functions_to_replace, replacement_expressions))
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
@@ -545,6 +575,10 @@ class SynthesisProblem:
                               typing.Union[z3.FuncDeclRef, z3.ExprRef, Callable]]]) -> List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
+
+        :param constraints: The list of constraints to substitute.
+        :param candidate_functions: The candidate functions and their replacements.
+        :return: The list of substituted constraints.
         """
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
 

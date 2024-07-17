@@ -44,15 +44,15 @@ class SynthesisStrategy(ABC):
         new_counterexamples = self.generate_counterexample(list(zip(candidate_functions, synth_func_names)))
         if new_counterexamples is not None:
             for func_name, ce in new_counterexamples.items():
-                self.problem.print_msg(f"New counterexample found for {func_name}: {ce}")
+                SynthesisProblem.logger.info(f"New counterexample found for {func_name}: {ce}")
             return False
 
         if not self.verify_candidates(candidate_functions):
-            self.problem.print_msg(
+            SynthesisProblem.logger.info(
                 f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.")
             return False
 
-        self.problem.print_msg(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.")
+        SynthesisProblem.logger.info(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.")
         return True
 
     @staticmethod
@@ -99,7 +99,7 @@ class SynthesisStrategy(ABC):
                 variable_mapping = self.problem.context.variable_mapping_dict[synth_func_name]
                 args = list(variable_mapping.values())
                 ce = {arg: model.eval(arg, model_completion=True) for arg in args}
-                self.problem.print_msg(f"Counterexample for {synth_func_name}: {ce}")
+                SynthesisProblem.logger.info(f"Counterexample for {synth_func_name}: {ce}")
                 counterexamples[synth_func_name] = ce
                 self.problem.context.counterexamples.append((synth_func_name, ce))
 

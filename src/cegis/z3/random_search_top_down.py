@@ -17,18 +17,15 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             candidates = self.candidate_generator.generate_candidates()
             pruned_candidates = self.candidate_generator.prune_candidates(candidates)
 
-            self.problem.print_msg(
-                f"Testing candidates (iteration: {iteration + 1}):\n",
-                level=1
-            )
+            SynthesisProblem.logger.info(f"Testing candidates (iteration: {iteration + 1}):\n")
             func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
             candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
             if self.test_candidates(func_strs, candidate_functions):
-                self.problem.print_msg(f"Found satisfying candidates!")
+                SynthesisProblem.logger.info(f"Found satisfying candidates!")
                 for candidate, func_name in pruned_candidates:
-                    self.problem.print_msg(f"{func_name}: {candidate}")
+                    SynthesisProblem.logger.info(f"{func_name}: {candidate}")
                 self.set_solution_found()
                 return
 
-        self.problem.print_msg("No satisfying candidates found.")
+        SynthesisProblem.logger.info("No satisfying candidates found.")

@@ -3,6 +3,8 @@ from src.cegis.z3.candidate_generators.candidate_generator_base import Candidate
 from typing import List, Tuple
 from z3 import *
 
+from src.cegis.z3.synthesis_problem import SynthesisProblem
+
 
 class TopDownCandidateGenerator(CandidateGenerator):
 
@@ -60,7 +62,7 @@ class TopDownCandidateGenerator(CandidateGenerator):
                 return -build_term(curr_depth - 1, new_complexity)
 
         generated_expression = build_term(max_depth, max_complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}")
+        SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
         return generated_expression
 
     def generate_condition(self, arg_sorts: List[z3.SortRef]) -> z3.BoolRef:
