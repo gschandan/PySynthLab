@@ -1,13 +1,46 @@
 import argparse
 import json
+import logging
+import os
 from dataclasses import asdict, fields
 from typing import Dict, Any, Optional
 import yaml
-
 from src.cegis.z3.options import Options, LoggingOptions, SynthesisParameters, SolverOptions
 
 
 class ConfigManager:
+    logger = None
+
+    def __init__(self):
+        if ConfigManager.logger is None:
+            ConfigManager.setup_logger()
+
+    @staticmethod
+    def setup_logger():
+        if ConfigManager.logger is not None:
+            return
+
+        logger = logging.getLogger(__name__)
+
+        log_dir = "logs"
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        file_handler = logging.FileHandler(os.path.join(log_dir, "default.log"))
+        file_handler.setLevel(logging.DEBUG)
+
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.DEBUG)
+
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
+
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+
+        ConfigManager.logger = logger
+
     @staticmethod
     def generate_argparse_from_options() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser(description="PySynthLab Synthesiser")
@@ -62,8 +95,10 @@ class ConfigManager:
             with open(file_path, 'r') as file:
                 return yaml.safe_load(file)
         except FileNotFoundError:
+            ConfigManager.logger.error(f"Config file {file_path} not found")
             raise FileNotFoundError(f"Configuration file not found: {file_path}")
         except yaml.YAMLError as e:
+            ConfigManager.logger.error(f"Error parsing YAML file: {e}")
             raise yaml.YAMLError(f"Error parsing YAML file: {e}")
 
     @staticmethod
@@ -85,18 +120,30 @@ class ConfigManager:
 
         if yaml_config:
             for key, value in yaml_config.items():
-                if key in merged_dict and isinstance(merged_dict[key], dict):
-                    merged_dict[key].update(value)
-                else:
-                    merged_dict[key] = value
+                if value is not None:
+                    if isinstance(value, dict) and key in merged_dict:
+                        for sub_key, sub_value in value.items():
+                            if sub_value is not None:
+                                merged_dict[key][sub_key] = sub_value
+                    else:
+                        merged_dict[key] = value
 
         for arg_name, arg_value in vars(cli_args).items():
             if arg_value is not None:
-                parts = arg_name.split('__', 1) 
+                parts = arg_name.split('__', 1)
                 if len(parts) > 1 and parts[0] in merged_dict:
                     merged_dict[parts[0]][parts[1]] = arg_value
                 else:
                     merged_dict[arg_name] = arg_value
+
+        for field in fields(default_options):
+            if isinstance(getattr(default_options, field.name), dict):
+                for subfield in fields(getattr(default_options, field.name)):
+                    if merged_dict[field.name].get(subfield.name) is None:
+                        merged_dict[field.name][subfield.name] = getattr(getattr(default_options, field.name),
+                                                                         subfield.name)
+            elif merged_dict.get(field.name) is None:
+                merged_dict[field.name] = getattr(default_options, field.name)
 
         return Options(
             logging=LoggingOptions(**merged_dict['logging']),
@@ -119,11 +166,11 @@ class ConfigManager:
 
         yaml_config = None
         if args.config:
-            yaml_config = ConfigManager.load_yaml(args.config)
+            yaml_config = ConfigManager.load_yaml()
         else:
             try:
-                yaml_config = ConfigManager.load_yaml("../config/user_config.yaml")
+                yaml_config = ConfigManager.load_yaml()
             except FileNotFoundError:
-                pass
+                ConfigManager.logger.error(f"Config file not found: {args.config}")
 
         return ConfigManager.merge_config(default_options, yaml_config, args)

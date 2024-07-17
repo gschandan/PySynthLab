@@ -160,7 +160,8 @@ class SynthesisParameters:
     weight_multiplier: float = field(
         default=1.0,
         metadata=dict(
-            description="Weight multiplier for operations in candidate generation. 1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away",
+            description="Weight multiplier for operations in candidate generation. "
+                        "1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away",
             type="float"
         ))
 

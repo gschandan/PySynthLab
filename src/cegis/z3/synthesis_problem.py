@@ -84,6 +84,11 @@ class SynthesisProblem:
         logger = logging.getLogger(__name__)
         logger.setLevel(self.options.logging.level)
 
+        log_dir = "logs"
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        if len(self.options.logging.file) <= 0:
+            self.options.logging.file = os.path.join(log_dir, "default.log")
         file_handler = logging.FileHandler(self.options.logging.file)
         file_handler.setLevel(self.options.logging.level)
 
