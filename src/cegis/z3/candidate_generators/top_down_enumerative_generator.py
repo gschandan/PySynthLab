@@ -16,8 +16,8 @@ class TopDownCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_random_term(
                 self.get_arg_sorts(func_name),
-                self.config.synthesis_parameters.max_depth,
-                self.config.synthesis_parameters.max_complexity
+                SynthesisProblem.options.synthesis_parameters.max_depth,
+                SynthesisProblem.options.synthesis_parameters.max_complexity
             )
             candidates.append((candidate, func_name))
         return candidates
@@ -30,7 +30,7 @@ class TopDownCandidateGenerator(CandidateGenerator):
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
 
-        op_weights = {op: 1 for op in operations}
+        op_weights = {op: self.op_complexity(op) for op in operations}
 
         def build_term(curr_depth: int, remaining_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or remaining_complexity <= 0:
@@ -43,7 +43,7 @@ class TopDownCandidateGenerator(CandidateGenerator):
             op = random.choices(available_ops, weights=[op_weights[op] for op in available_ops])[0]
             new_complexity = remaining_complexity - self.op_complexity(op)
 
-            op_weights[op] *= 0.9
+            op_weights[op] *= SynthesisProblem.options.synthesis_parameters.weight_multiplier
 
             if op in ['+', '-']:
                 left = build_term(curr_depth - 1, new_complexity)
@@ -60,6 +60,8 @@ class TopDownCandidateGenerator(CandidateGenerator):
                 return z3.If(condition, true_expr, false_expr)
             elif op == 'Neg':
                 return -build_term(curr_depth - 1, new_complexity)
+            SynthesisProblem.logger.error(f"Unexpected operation: {op}")
+            raise ValueError(f"Unexpected operation: {op}")
 
         generated_expression = build_term(max_depth, max_complexity)
         SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
@@ -79,8 +81,3 @@ class TopDownCandidateGenerator(CandidateGenerator):
             '==': left == right,
             '!=': left != right
         }[op]
-
-    @staticmethod
-    def op_complexity(op: str) -> int:
-        # experimenting with cost of operation for biasing random choice
-        return {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.get(op, 0)

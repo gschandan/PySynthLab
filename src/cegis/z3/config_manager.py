@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import os
+import re
 from dataclasses import asdict, fields
 from typing import Dict, Any, Optional
 import yaml
@@ -50,7 +51,7 @@ class ConfigManager:
 
         for class_name in ['LoggingOptions', 'SynthesisParameters', 'SolverOptions']:
             class_obj = globals()[class_name]
-            prefix = class_name.lower().replace('options', '')
+            prefix = ConfigManager.camel_to_snake(class_name).replace('_options', '')
             for field_obj in fields(class_obj):
                 arg_name = f"--{prefix}__{field_obj.name}"
                 kwargs = {
@@ -170,9 +171,14 @@ class ConfigManager:
             yaml_config = ConfigManager.load_yaml(args.config)
         else:
             try:
-                yaml_config = ConfigManager.load_yaml("../config/user_config.yaml")
+                yaml_config = ConfigManager.load_yaml("config/user_config.yaml")
             except FileNotFoundError:
                 ConfigManager.logger.warning("Default config file '../config/user_config.yaml' not found. "
                                              "Using default options.")
 
         return ConfigManager.merge_config(default_options, yaml_config, args)
+
+    @staticmethod
+    def camel_to_snake(name):
+        pattern = re.compile(r'(?<!^)(?=[A-Z])')
+        return pattern.sub('_', name).lower()

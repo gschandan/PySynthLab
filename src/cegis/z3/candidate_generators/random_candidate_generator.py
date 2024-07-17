@@ -16,33 +16,34 @@ class RandomCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_random_term(
                 self.get_arg_sorts(func_name),
-                self.config.synthesis_parameters.max_depth,
-                self.config.synthesis_parameters.max_complexity,
+                SynthesisProblem.options.synthesis_parameters.max_depth,
+                SynthesisProblem.options.synthesis_parameters.max_complexity,
             )
             candidates.append((candidate, func_name))
         return candidates
 
     def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                              operations: List[str] = None) -> z3.ExprRef:
-
         if operations is None:
             operations = ['+', '-', '*', 'If', 'Neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
 
-        op_weights = {op: 1 for op in operations}
+        op_weights = {op: self.op_complexity(op) for op in operations}
 
         def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
-            if curr_depth == 0 or curr_complexity == 0:
+            if curr_depth == 0 or curr_complexity <= 0:
                 return random.choice(args + constants)
 
             available_ops = [op for op in operations if curr_complexity >= self.op_complexity(op)]
             if not available_ops:
                 return random.choice(args + constants)
 
-            op = random.choice(available_ops)
+            op = random.choices(available_ops, weights=[op_weights[op] for op in available_ops])[0]
             remaining_complexity = curr_complexity - self.op_complexity(op)
+
+            op_weights[op] *= SynthesisProblem.options.synthesis_parameters.weight_multiplier
 
             if op in ['+', '-']:
                 left = build_term(curr_depth - 1, remaining_complexity // 2)
@@ -59,6 +60,8 @@ class RandomCandidateGenerator(CandidateGenerator):
                 return z3.If(condition, true_expr, false_expr)
             elif op == 'Neg':
                 return -build_term(curr_depth - 1, remaining_complexity)
+            SynthesisProblem.logger.error(f"Unexpected operation: {op}")
+            raise ValueError(f"Unexpected operation: {op}")
 
         generated_expression = build_term(depth, complexity)
         SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")

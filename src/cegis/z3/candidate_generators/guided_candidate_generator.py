@@ -16,8 +16,8 @@ class GuidedCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_guided_term(
                 self.get_arg_sorts(func_name),
-                self.config.synthesis_parameters.max_depth,
-                self.config.synthesis_parameters.max_complexity,
+                SynthesisProblem.options.synthesis_parameters.max_depth,
+                SynthesisProblem.options.synthesis_parameters.max_complexity,
                 #self.config.candidate_generator_cost_function
             )
             candidates.append((candidate, func_name))
