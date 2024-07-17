@@ -3,8 +3,8 @@ import unittest
 from unittest.mock import patch, mock_open
 import argparse
 import yaml
-from src.cegis.z3.options import Options
-from src.cegis.z3.config_manager import ConfigManager
+from src.utilities.options import Options
+from src.utilities.config_manager import ConfigManager
 
 
 class TestConfigManager(unittest.TestCase):

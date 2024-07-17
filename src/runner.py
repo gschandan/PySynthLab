@@ -1,8 +1,7 @@
-import json
 import sys
 from dataclasses import asdict
 
-from src.cegis.z3.config_manager import ConfigManager
+from src.utilities.config_manager import ConfigManager
 from src.cegis.z3.fast_enumerative_synth import FastEnumerativeSynthesis
 from src.cegis.z3.random_search_bottom_up import RandomSearchStrategyBottomUp
 from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
