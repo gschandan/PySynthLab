@@ -2,10 +2,9 @@ import unittest
 from unittest.mock import patch
 from typing import List, Tuple
 import z3
-from z3 import ExprRef
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem, SynthesisProblemOptions
-from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
+from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
 
 class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest.TestCase):

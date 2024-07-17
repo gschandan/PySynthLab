@@ -1,9 +1,9 @@
 import unittest
-from typing import List, Tuple
+from typing import Tuple
 from unittest.mock import patch
 import z3
 from src.cegis.z3.synthesis_problem import SynthesisProblem, SynthesisProblemOptions
-from src.cegis.z3.random_search_top_down import RandomSearchStrategyTopDown
+from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
 
 class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):

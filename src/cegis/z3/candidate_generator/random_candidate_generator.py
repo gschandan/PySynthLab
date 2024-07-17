@@ -1,6 +1,6 @@
 import random
-from src.cegis.z3.candidate_generators.candidate_generator_base import CandidateGenerator
-from typing import Dict, Any, List, Tuple
+from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
+from typing import List, Tuple
 from z3 import *
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem

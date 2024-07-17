@@ -3,8 +3,8 @@ from typing import List, Tuple, Dict, Any
 from z3 import *
 from z3 import ExprRef
 
-from src.cegis.z3.candidate_generators.candidate_generator_base import CandidateGenerator
-from src.cegis.z3.candidate_generators.random_candidate_generator import RandomCandidateGenerator
+from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
+from src.cegis.z3.candidate_generator.random_candidate_generator import RandomCandidateGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 

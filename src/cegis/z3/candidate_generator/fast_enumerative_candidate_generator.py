@@ -4,7 +4,7 @@ import z3
 from itertools import product, combinations_with_replacement
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
-from src.cegis.z3.candidate_generators.candidate_generator_base import CandidateGenerator
+from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
 
 
 class FastEnumerativeSynthesisGenerator(CandidateGenerator):

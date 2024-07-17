@@ -1,6 +1,6 @@
-from src.cegis.z3.candidate_generators.fast_enumerative_candidate_generator import FastEnumerativeSynthesisGenerator
+from src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator import FastEnumerativeSynthesisGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem
-from src.cegis.z3.synthesis_strategy import SynthesisStrategy
+from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
 
 # http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf

@@ -1,10 +1,10 @@
 import random
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 from z3 import *
 from z3 import ExprRef
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
-from src.cegis.z3.synthesis_strategy import SynthesisStrategy
+from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
 ModelObj = ModelRef
 FuncInterpObj = FuncInterp

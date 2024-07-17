@@ -1,6 +1,6 @@
-from src.cegis.z3.candidate_generators.top_down_enumerative_generator import TopDownCandidateGenerator
+from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem
-from src.cegis.z3.synthesis_strategy import SynthesisStrategy
+from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
 
 class RandomSearchStrategyTopDown(SynthesisStrategy):
