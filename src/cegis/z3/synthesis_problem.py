@@ -1,4 +1,5 @@
 import dataclasses
+import logging
 import typing
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
@@ -53,7 +54,7 @@ class SynthesisProblem:
         :param problem: The input problem in the SyGuS format.
         :param options: Additional options (default: None).
         """
-
+        self.logger = self.setup_logger()
         self.input_problem: str = problem
         self.options = options
         self.parser = SygusV2Parser()
@@ -64,10 +65,10 @@ class SynthesisProblem:
         self.context = SynthesisProblemContext()
         self.context.enumerator_solver.set('smt.macro_finder', True)
         self.context.verification_solver.set('smt.macro_finder', True)
-        if (self.options.synthesis_parameters_random_seed is not None and
-                not self.options.synthesis_parameters_randomise_each_iteration):
-            self.context.enumerator_solver.set('random_seed', self.options.synthesis_parameters_random_seed)
-            self.context.verification_solver.set('random_seed', self.options.synthesis_parameters_random_seed)
+        if (self.options.synthesis_parameters.random_seed is not None and
+                not self.options.synthesis_parameters.randomise_each_iteration):
+            self.context.enumerator_solver.set('random_seed', self.options.synthesis_parameters.random_seed)
+            self.context.verification_solver.set('random_seed', self.options.synthesis_parameters.random_seed)
 
         self.context.smt_problem = self.convert_sygus_to_smt()
         self.context.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
@@ -79,15 +80,24 @@ class SynthesisProblem:
         self.populate_all_z3_functions()
         self.parse_constraints()
 
-    def print_msg(self, msg: str, level: int = 0) -> None:
-        """
-        Print a message based on the specified verbosity level.
+    def setup_logger(self):
+        logger = logging.getLogger(__name__)
+        logger.setLevel(self.options.logging.level)
 
-        :param msg: The message to print.
-        :param level: The verbosity level required to print the message (default: 0).
-        """
-        if self.options.logging_level == "DEBUG":
-            print(msg)
+        file_handler = logging.FileHandler(self.options.logging.file)
+        file_handler.setLevel(self.options.logging.level)
+
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(self.options.logging.level)
+
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
+
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+
+        return logger
 
     def __str__(self, as_smt=False) -> str:
         """
@@ -101,29 +111,29 @@ class SynthesisProblem:
         """
         Print the string representation of the synthesis problem.
         """
-        self.print_msg(str(self), level=1)
+        self.logger.info(str(self))
 
     def info_smt(self) -> None:
         """
         Print the string representation of the synthesis problem.
         """
-        self.print_msg(self.__str__(as_smt=True), level=1)
+        self.logger.info(self.__str__(as_smt=True))
 
     def convert_sygus_to_smt(self) -> str:
         """
          Convert the synthesis problem from SyGuS format to SMT-LIB format.
- 
+
          This method parses the input SyGuS problem, transforms it into SMT-LIB format,
          and returns the result as a string.
- 
+
          Returns:
              str: The synthesis problem in SMT-LIB format.
- 
+
          Example:
              parser = SynthesisProblemParser(sygus_problem)
              smt_problem = parser.convert_sygus_to_smt()
              print(smt_problem)
- 
+
              # Output:
              # (set-logic LIA)
              # (declare-fun max2 (Int Int) Int)
@@ -327,7 +337,7 @@ class SynthesisProblem:
             combined_constraint = z3.And(*all_constraints)
             self.context.z3_constraints.append(combined_constraint)
         else:
-            self.print_msg("Warning: No constraint_substitution found or generated.", level=1)
+            self.logger.info("Warning: No constraint_substitution found or generated.")
 
         self.context.z3_negated_constraints = self.negate_assertions(self.context.z3_constraints)
 
@@ -345,7 +355,8 @@ class SynthesisProblem:
 
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
-            if symbol not in declared_variables and symbol not in declared_functions and symbol not in declared_synth_functions:
+            if (symbol not in declared_variables and symbol not in declared_functions
+                    and symbol not in declared_synth_functions):
                 undeclared_variables.append(symbol)
         elif isinstance(term, ast.FunctionApplicationTerm):
             for arg in term.arguments:
@@ -404,15 +415,15 @@ class SynthesisProblem:
             args = [self.parse_term(arg, nested_local_variables) for arg in term.arguments]
 
             operator_map = {
-                "and": lambda *args: z3.And(*args),
-                "or": lambda *args: z3.Or(*args),
+                "and": lambda *_args: z3.And(*_args),
+                "or": lambda *_args: z3.Or(*_args),
                 "not": lambda arg: z3.Not(arg),
                 ">": lambda arg1, arg2: arg1 > arg2,
                 "<": lambda arg1, arg2: arg1 < arg2,
                 ">=": lambda arg1, arg2: arg1 >= arg2,
                 "<=": lambda arg1, arg2: arg1 <= arg2,
-                "+": lambda *args: z3.Sum(args),
-                "*": lambda *args: z3.Product(*args),
+                "+": lambda *_args: z3.Sum(_args),
+                "*": lambda *_args: z3.Product(*_args),
                 "/": lambda arg1, arg2: arg1 / arg2,
                 "=>": lambda arg1, arg2: z3.Implies(arg1, arg2),
                 "ite": lambda cond, arg1, arg2: z3.If(cond, arg1, arg2),
@@ -509,7 +520,7 @@ class SynthesisProblem:
     def substitute_constraints(self, constraints: Collection[z3.ExprRef],
                                functions_to_replace: List[z3.FuncDeclRef],
                                replacement_expressions: List[
-                                   typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable]]) -> \
+                                   typing.Union[z3.FuncDeclRef, z3.ExprRef, Callable]]) -> \
             List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
@@ -525,9 +536,8 @@ class SynthesisProblem:
         return substituted_constraints
 
     def substitute_candidates(self, constraints: Collection[z3.ExprRef],
-                               candidate_functions: List[tuple[z3.FuncDeclRef,
-                               typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable]]]) -> \
-            List[z3.ExprRef]:
+                              candidate_functions: List[tuple[z3.FuncDeclRef,
+                              typing.Union[z3.FuncDeclRef, z3.ExprRef, Callable]]]) -> List[z3.ExprRef]:
         """
         Substitute candidate expressions into a list of constraints.
         """

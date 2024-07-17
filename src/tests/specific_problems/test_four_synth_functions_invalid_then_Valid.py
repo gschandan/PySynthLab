@@ -47,9 +47,9 @@ class FourSynthFunctions(unittest.TestCase):
         incorrect_candidates = [incorrect_id1(x), incorrect_id2(x), incorrect_id3(x), incorrect_id4(x)]
         incorrect_func_strs = ["incorrect_id1", "incorrect_id2", "incorrect_id3", "incorrect_id4"]
 
-        self.problem.print_msg(f"Testing incorrect candidates: {'; '.join(incorrect_func_strs)}", level=1)
+        self.problem.print_msg(f"Testing incorrect candidates: {'; '.join(incorrect_func_strs)}")
         result = self.problem.test_candidates_alternative(incorrect_func_strs, incorrect_candidates)
-        self.problem.print_msg("\n", level=1)
+        self.problem.print_msg("\n")
         self.assertFalse(result)
 
         def correct_id1(*values):
@@ -61,7 +61,7 @@ class FourSynthFunctions(unittest.TestCase):
         self.problem.print_msg(f"Testing partially correct candidates: {'; '.join(partially_correct_func_strs)}",
                                level=1)
         result = self.problem.test_candidates_alternative(partially_correct_func_strs, partially_correct_candidates)
-        self.problem.print_msg("\n", level=1)
+        self.problem.print_msg("\n")
         self.assertFalse(result)
 
         def correct_id2(*values):
@@ -76,9 +76,9 @@ class FourSynthFunctions(unittest.TestCase):
         correct_candidates = [correct_id1(x), correct_id2(x), correct_id3(x), correct_id4(x)]
         correct_func_strs = ["correct_id1", "correct_id2", "correct_id3", "correct_id4"]
 
-        self.problem.print_msg(f"Testing correct candidates: {'; '.join(correct_func_strs)}", level=1)
+        self.problem.print_msg(f"Testing correct candidates: {'; '.join(correct_func_strs)}")
         result = self.problem.test_candidates_alternative(correct_func_strs, correct_candidates)
-        self.problem.print_msg("\n", level=1)
+        self.problem.print_msg("\n")
         self.assertTrue(result)
 
 

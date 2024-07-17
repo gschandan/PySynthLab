@@ -34,7 +34,7 @@ class MaxThreeIntegers(unittest.TestCase):
             func_str += f"    return {str(expr)}\n"
             return max_function_3, func_str
 
-        self.problem.print_msg("Trying known candidate for max 3", level=0)
+        self.problem.print_msg("Trying known candidate for max 3")
         args = [list(self.problem.context.z3_synth_functions.values())[0].domain(i) for i in
                 range(list(self.problem.context.z3_synth_functions.values())[0].arity())]
         candidate, func_str = generate_max_function(args)
@@ -42,11 +42,11 @@ class MaxThreeIntegers(unittest.TestCase):
         free_variables = [z3.Var(i, sort) for i, sort in enumerate(args)]
         candidate_function = candidate(*free_variables)
 
-        self.problem.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
-        self.problem.print_msg(f"Testing guess: {func_str}", level=1)
+        self.problem.print_msg(f"candidate_function for substitution {candidate_function}")
+        self.problem.print_msg(f"Testing guess: {func_str}")
         result = self.problem.test_candidates_alternative([func_str],
                                               [candidate_function])
-        self.problem.print_msg("\n", level=1)
+        self.problem.print_msg("\n")
         self.assertTrue(result)
 
 

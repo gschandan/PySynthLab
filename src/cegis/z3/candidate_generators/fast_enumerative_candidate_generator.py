@@ -172,7 +172,7 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
                    default=0)
 
     def generate_candidates(self) -> Generator[List[Tuple[z3.ExprRef, str]], None, None]:
-        max_depth = self.config.synthesis_parameters_max_depth
+        max_depth = self.config.synthesis_parameters.max_depth
 
         for depth in range(max_depth + 1):
             for func_name, func in self.problem.context.z3_synth_functions.items():

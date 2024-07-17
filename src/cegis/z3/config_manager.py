@@ -19,9 +19,9 @@ class ConfigManager:
             class_obj = globals()[class_name]
             prefix = class_name.lower().replace('options', '')
             for field_obj in fields(class_obj):
-                arg_name = f"--{prefix}_{field_obj.name}"
+                arg_name = f"--{prefix}__{field_obj.name}"
                 kwargs = {
-                    "dest": f"{prefix}_{field_obj.name}",
+                    "dest": f"{prefix}__{field_obj.name}",
                     "help": field_obj.metadata.get('description', ''),
                     "default": argparse.SUPPRESS,
                 }
@@ -90,10 +90,9 @@ class ConfigManager:
                 else:
                     merged_dict[key] = value
 
-        # Handle CLI args
         for arg_name, arg_value in vars(cli_args).items():
             if arg_value is not None:
-                parts = arg_name.split('_', 1)
+                parts = arg_name.split('__', 1) 
                 if len(parts) > 1 and parts[0] in merged_dict:
                     merged_dict[parts[0]][parts[1]] = arg_value
                 else:

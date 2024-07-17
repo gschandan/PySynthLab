@@ -26,11 +26,11 @@ class CegisT(SynthesisStrategy):
         self.term_bank = {}
 
     def execute_cegis(self) -> None:
-        max_depth = self.problem.options.synthesis_parameters_max_depth
-        max_complexity = self.problem.options.synthesis_parameters_max_complexity
-        max_candidates_per_depth = self.problem.options.synthesis_parameters_max_candidates_at_each_depth
+        max_depth = self.problem.options.synthesis_parameters.max_depth
+        max_complexity = self.problem.options.synthesis_parameters.max_complexity
+        max_candidates_per_depth = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
 
-        max_iterations = self.problem.options.synthesis_parameters_max_iterations
+        max_iterations = self.problem.options.synthesis_parameters.max_iterations
         for iteration in range(max_iterations):
 
             candidate = self.synthesize()
@@ -40,15 +40,15 @@ class CegisT(SynthesisStrategy):
             # Synthesis phase
             candidate = self.synthesize()
             if candidate is None:
-                self.problem.print_msg("No candidate found", level=1)
+                self.problem.print_msg("No candidate found")
                 continue
 
             # Verification phase
             counterexample = self.verify(candidate)
             if counterexample is None:
-                self.problem.print_msg("Solution found!", level=1)
+                self.problem.print_msg("Solution found!")
                 for func_name, expr in candidate.items():
-                    self.problem.print_msg(f"{func_name}: {expr}", level=1)
+                    self.problem.print_msg(f"{func_name}: {expr}")
                 self.set_solution_found()
                 return
 
@@ -60,15 +60,15 @@ class CegisT(SynthesisStrategy):
             if theory_constraint is not None:
                 self.add_theory_constraint(theory_constraint)
 
-        self.problem.print_msg("Maximum iterations reached without finding a solution.", level=1)
+        self.problem.print_msg("Maximum iterations reached without finding a solution.")
 
     def synthesize(self) -> Optional[Dict[str, ExprRef]]:
         candidates = {}
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             arg_sorts = [var.sort() for var in variable_mapping.values()]
             candidate, func_str = self.generate_random_term(arg_sorts,
-                                                            self.problem.options.synthesis_parameters_max_depth,
-                                                            self.problem.options.synthesis_parameters_max_complexity)
+                                                            self.problem.options.synthesis_parameters.max_depth,
+                                                            self.problem.options.synthesis_parameters.max_complexity)
             candidates[func_name] = candidate
 
         if self.test_candidate(candidates):
@@ -84,8 +84,8 @@ class CegisT(SynthesisStrategy):
 
         args = [z3.Const(f'arg{i}', sort) for i, sort in enumerate(arg_sorts)]
         num_args = len(args)
-        constants = [z3.IntVal(i) for i in range(self.problem.options.synthesis_parameters_min_const,
-                                                 self.problem.options.synthesis_parameters_max_const + 1)]
+        constants = [z3.IntVal(i) for i in range(self.problem.options.synthesis_parameters.min_const,
+                                                 self.problem.options.synthesis_parameters.max_const + 1)]
 
         def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             if curr_depth == 0 or curr_complexity == 0:
@@ -115,7 +115,7 @@ class CegisT(SynthesisStrategy):
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}", level=1)
+        self.problem.print_msg(f"Generated expression: {generated_expression}")
 
         func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
         func_str += f"    return {str(generated_expression)}\n"
@@ -125,8 +125,8 @@ class CegisT(SynthesisStrategy):
     def generate_condition(self, args: List[z3.ExprRef]) -> z3.BoolRef | bool:
         comparisons = ['<', '<=', '>', '>=', '==', '!=']
         left = random.choice(args)
-        right = random.choice(args + [z3.IntVal(random.randint(self.problem.options.synthesis_parameters_min_const,
-                                                               self.problem.options.synthesis_parameters_max_const))])
+        right = random.choice(args + [z3.IntVal(random.randint(self.problem.options.synthesis_parameters.min_const,
+                                                               self.problem.options.synthesis_parameters.max_const))])
         op = random.choice(comparisons)
 
         if op == '<':
@@ -151,8 +151,8 @@ class CegisT(SynthesisStrategy):
         candidates = {}
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate, func_str = self.generate_random_term([x.sort() for x in list(variable_mapping.keys())],
-                                                            self.problem.options.synthesis_parameters_max_depth,
-                                                            self.problem.options.synthesis_parameters_max_complexity)
+                                                            self.problem.options.synthesis_parameters.max_depth,
+                                                            self.problem.options.synthesis_parameters.max_complexity)
             candidates[func_name] = candidate
 
         return candidates

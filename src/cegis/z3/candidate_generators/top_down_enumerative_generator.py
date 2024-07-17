@@ -14,8 +14,8 @@ class TopDownCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_random_term(
                 self.get_arg_sorts(func_name),
-                self.config.synthesis_parameters_max_depth,
-                self.config.synthesis_parameters_max_complexity
+                self.config.synthesis_parameters.max_depth,
+                self.config.synthesis_parameters.max_complexity
             )
             candidates.append((candidate, func_name))
         return candidates
@@ -60,7 +60,7 @@ class TopDownCandidateGenerator(CandidateGenerator):
                 return -build_term(curr_depth - 1, new_complexity)
 
         generated_expression = build_term(max_depth, max_complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}", level=1)
+        self.problem.print_msg(f"Generated expression: {generated_expression}")
         return generated_expression
 
     def generate_condition(self, arg_sorts: List[z3.SortRef]) -> z3.BoolRef:

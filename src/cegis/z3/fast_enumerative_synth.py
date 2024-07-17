@@ -18,10 +18,10 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
                 level=1
             )
             if self.test_candidates([func_name], [candidate]):
-                self.problem.print_msg(f"Found satisfying candidate!", level=2)
-                self.problem.print_msg(f"{func_name}: {candidate}", level=2)
+                self.problem.print_msg(f"Found satisfying candidate!")
+                self.problem.print_msg(f"{func_name}: {candidate}")
                 self.set_solution_found()
                 return
 
-        self.problem.print_msg(f"No solution found up to depth {self.problem.options.synthesis_parameters_max_depth}",
+        self.problem.print_msg(f"No solution found up to depth {self.problem.options.synthesis_parameters.max_depth}",
                                level=2)

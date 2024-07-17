@@ -8,9 +8,9 @@ class CandidateGenerator(ABC):
     def __init__(self, problem: 'SynthesisProblem'):
         self.problem = problem
         self.config = problem.options
-        self.min_const = self.config.synthesis_parameters_min_const
-        self.max_const = self.config.synthesis_parameters_max_const
-        self.operation_costs = self.config.synthesis_parameters_operation_costs
+        self.min_const = self.config.synthesis_parameters.min_const
+        self.max_const = self.config.synthesis_parameters.max_const
+        self.operation_costs = self.config.synthesis_parameters.operation_costs
 
     @abstractmethod
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:

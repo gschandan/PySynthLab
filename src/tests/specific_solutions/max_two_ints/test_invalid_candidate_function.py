@@ -31,7 +31,7 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
             func_str += f"    return {str(expr)}\n"
             return invalid_function, func_str
 
-        self.problem.print_msg("Trying known invalid candidate for max", level=0)
+        self.problem.print_msg("Trying known invalid candidate for max")
         func_name = list(self.problem.context.z3_synth_functions.keys())[0]
         func = self.problem.context.z3_synth_functions[func_name]
         args = [func.domain(i) for i in range(func.arity())]
@@ -41,11 +41,11 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
         free_variables = list(variable_mapping.keys())
         candidate_function = candidate(*free_variables)
 
-        self.problem.print_msg(f"candidate_function for substitution {candidate_function}", level=0)
-        self.problem.print_msg(f"Testing guess: {func_str}", level=1)
+        self.problem.print_msg(f"candidate_function for substitution {candidate_function}")
+        self.problem.print_msg(f"Testing guess: {func_str}")
         result = self.problem.test_candidates_alternative([func_str],
                                               [candidate_function])
-        self.problem.print_msg("\n", level=1)
+        self.problem.print_msg("\n")
         self.assertFalse(result)
 
 

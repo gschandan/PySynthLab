@@ -14,8 +14,8 @@ class GuidedCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_guided_term(
                 self.get_arg_sorts(func_name),
-                self.config.synthesis_parameters_max_depth,
-                self.config.synthesis_parameters_max_complexity,
+                self.config.synthesis_parameters.max_depth,
+                self.config.synthesis_parameters.max_complexity,
                 #self.config.candidate_generator_cost_function
             )
             candidates.append((candidate, func_name))
@@ -57,7 +57,7 @@ class GuidedCandidateGenerator(CandidateGenerator):
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
-        self.problem.print_msg(f"Generated expression: {generated_expression}", level=1)
+        self.problem.print_msg(f"Generated expression: {generated_expression}")
 
         return generated_expression
 

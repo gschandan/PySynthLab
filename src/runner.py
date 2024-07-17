@@ -22,15 +22,15 @@ def main() -> None:
     problem = SynthesisProblem(problem_input, config)
     print(problem.info_smt())
 
-    if config.synthesis_parameters_strategy == 'fast_enumerative':
+    if config.synthesis_parameters.strategy == 'fast_enumerative':
         strategy = FastEnumerativeSynthesis(problem)
-    elif config.synthesis_parameters_strategy == 'random_enumerative':
-        if config.synthesis_parameters_candidate_generation == 'top_down':
+    elif config.synthesis_parameters.strategy == 'random_enumerative':
+        if config.synthesis_parameters.candidate_generation == 'top_down':
             strategy = RandomSearchStrategyTopDown(problem)
         else:
             strategy = RandomSearchStrategyBottomUp(problem)
     else:
-        raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters_strategy}")
+        raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
 
     print(strategy.problem.info_smt())
     strategy.execute_cegis()

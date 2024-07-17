@@ -11,7 +11,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         self.candidate_generator = TopDownCandidateGenerator(problem)
 
     def execute_cegis(self) -> None:
-        max_iterations = self.problem.options.synthesis_parameters_max_iterations
+        max_iterations = self.problem.options.synthesis_parameters.max_iterations
 
         for iteration in range(max_iterations):
             candidates = self.candidate_generator.generate_candidates()
@@ -25,10 +25,10 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
             if self.test_candidates(func_strs, candidate_functions):
-                self.problem.print_msg(f"Found satisfying candidates!", level=2)
+                self.problem.print_msg(f"Found satisfying candidates!")
                 for candidate, func_name in pruned_candidates:
-                    self.problem.print_msg(f"{func_name}: {candidate}", level=2)
+                    self.problem.print_msg(f"{func_name}: {candidate}")
                 self.set_solution_found()
                 return
 
-        self.problem.print_msg("No satisfying candidates found.", level=2)
+        self.problem.print_msg("No satisfying candidates found.")
