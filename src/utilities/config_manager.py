@@ -6,7 +6,7 @@ import re
 from dataclasses import asdict, fields
 from typing import Dict, Any, Optional
 import yaml
-from src.cegis.z3.options import Options, LoggingOptions, SynthesisParameters, SolverOptions
+from src.utilities.options import Options, LoggingOptions, SynthesisParameters, SolverOptions
 
 
 class ConfigManager:

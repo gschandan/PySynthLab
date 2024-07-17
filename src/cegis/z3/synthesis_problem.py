@@ -6,7 +6,7 @@ from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 import pyparsing
 from z3 import *
 
-from src.cegis.z3.options import Options
+from src.utilities.options import Options
 from src.helpers.parser.src import ast
 from src.helpers.parser.src.ast import Program, CommandKind
 from src.helpers.parser.src.resolution import FunctionDescriptor, FunctionKind, SortDescriptor

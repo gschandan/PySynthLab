@@ -4,7 +4,7 @@ import unittest
 from z3 import *
 
 from src.cegis.z3.cegis_t import CegisT, CandidateType
-from src.cegis.z3.options import Options
+from src.utilities.options import Options
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
