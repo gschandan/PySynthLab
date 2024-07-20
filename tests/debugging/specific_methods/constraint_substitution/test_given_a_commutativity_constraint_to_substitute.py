@@ -19,24 +19,6 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
         self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
-    def substitute_constraints(self, constraints: Collection[z3.ExprRef],
-                               functions_to_replace: List[z3.FuncDeclRef],
-                               candidate_functions: List[
-                                   typing.Union[z3.FuncDeclRef, z3.QuantifierRef, z3.ExprRef, Callable]]) -> \
-            List[z3.ExprRef]:
-        """
-        Substitute candidate expressions into a list of constraints.
-        """
-        synth_substitutions = list(zip(functions_to_replace, candidate_functions))
-        predefined_substitutions = [(func, body) for func, body in self.problem.context.z3_predefined_functions.values()]
-
-        substituted_constraints = []
-        for constraint in constraints:
-            synth_substituted = z3.substitute_funs(constraint, synth_substitutions)
-            predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
-            substituted_constraints.append(predefined_substituted)
-        return substituted_constraints
-
     def test_substitute_constraints_multiple_commutativity(self):
         def generate_correct_abs_max_function(arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
             args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]

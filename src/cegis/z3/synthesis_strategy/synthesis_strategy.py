@@ -40,19 +40,22 @@ class SynthesisStrategy(ABC):
         for func, candidate, synth_func_name in zip(func_strs, candidate_functions, synth_func_names):
             if not self.check_counterexample(synth_func_name, candidate):
                 return False
+        SynthesisProblem.logger.debug("All individual counterexample checks passed")
 
-        new_counterexamples = self.generate_counterexample(list(zip(candidate_functions, synth_func_names)))
+        candidates = list(zip(candidate_functions, synth_func_names))
+        new_counterexamples = self.generate_counterexample(candidates)
         if new_counterexamples is not None:
             for func_name, ce in new_counterexamples.items():
-                SynthesisProblem.logger.info(f"New counterexample found for {func_name}: {ce}")
+                SynthesisProblem.logger.info(f"New counterexample found for {func_name}: {ce} Candidates: {candidates}")
             return False
+        SynthesisProblem.logger.debug("No new counterexamples generated")
 
         if not self.verify_candidates(candidate_functions):
             SynthesisProblem.logger.info(
                 f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.")
             return False
 
-        SynthesisProblem.logger.info(f"No counterexample found! Guesses should be correct: {'; '.join(func_strs)}.")
+        SynthesisProblem.logger.info(f"No counterexample found! Guess(es) should be correct: {'; '.join(func_strs)}.")
         return True
 
     @staticmethod
@@ -90,8 +93,12 @@ class SynthesisStrategy(ABC):
             list(self.problem.context.z3_synth_functions.values()),
             [candidate for candidate, _ in candidates])
         self.problem.context.enumerator_solver.add(substituted_neg_constraints)
+        SynthesisProblem.logger.debug(f"Negated constraints: {self.problem.context.z3_negated_constraints}")
+        SynthesisProblem.logger.debug(f"Substituted negated constraints: {substituted_neg_constraints}")
+        result = self.problem.context.enumerator_solver.check()
+        SynthesisProblem.logger.debug(f"generate_counterexample solver check result: {result}")
 
-        if self.problem.context.enumerator_solver.check() == z3.sat:
+        if result == z3.sat:
             model = self.problem.context.enumerator_solver.model()
             counterexamples = {}
 
@@ -105,6 +112,7 @@ class SynthesisStrategy(ABC):
 
             return counterexamples
         else:
+            SynthesisProblem.logger.info(f"No counterexample found for candidates {candidates}")
             return None
 
     def verify_candidates(self, candidates: List[z3.ExprRef]) -> bool:

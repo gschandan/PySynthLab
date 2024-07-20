@@ -594,9 +594,10 @@ class SynthesisProblem:
 
         substituted_constraints = []
         for constraint in constraints:
-            synth_substituted = z3.substitute_funs(constraint, synth_substitutions)
-            predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
-            substituted_constraints.append(predefined_substituted)
+            substituted_constraint = z3.substitute_funs(constraint, [*synth_substitutions])
+            substituted_constraint = z3.substitute_funs(substituted_constraint, [*predefined_substitutions])
+            substituted_constraints.append(substituted_constraint)
+
         return substituted_constraints
 
     def substitute_candidates(self, constraints: Collection[z3.ExprRef],

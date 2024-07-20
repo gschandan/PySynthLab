@@ -1,5 +1,5 @@
 synthesis_parameters:
-  max_iterations: 20
+  max_iterations: 300
   operation_costs:
     '+': 1
     '-': 1

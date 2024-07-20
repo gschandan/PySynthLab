@@ -1,6 +1,5 @@
 import logging
 import unittest
-from contextlib import redirect_stdout
 
 from z3 import *
 from src.cegis.z3.synthesis_problem import SynthesisProblem
@@ -9,6 +8,11 @@ from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
 from src.cegis.z3.synthesis_strategy.fast_enumerative_synth import FastEnumerativeSynthesis
+
+
+class TestSynthesisStrategy(SynthesisStrategy):
+    def execute_cegis(self) -> None:
+        pass
 
 
 class FourSynthFunctions(unittest.TestCase):
@@ -45,7 +49,7 @@ class FourSynthFunctions(unittest.TestCase):
             return x - 1
 
         def incorrect_id3(x):
-            return 0
+            return IntVal(0)
 
         def incorrect_id4(x):
             return -x
@@ -53,7 +57,7 @@ class FourSynthFunctions(unittest.TestCase):
         incorrect_candidates = [incorrect_id1(x), incorrect_id2(x), incorrect_id3(x), incorrect_id4(x)]
         incorrect_func_strs = ["incorrect_id1", "incorrect_id2", "incorrect_id3", "incorrect_id4"]
 
-        strategy = SynthesisStrategy(self.problem)
+        strategy = TestSynthesisStrategy(self.problem)
         result = strategy.test_candidates(incorrect_func_strs, incorrect_candidates)
         self.assertFalse(result)
 
@@ -119,9 +123,7 @@ class FourSynthFunctions(unittest.TestCase):
 
         self.assertTrue(any(record.levelno == logging.INFO for record in log_context.records))
         log_messages = [log.message for log in log_context.records]
-        self.assertTrue(any('Iteration 1/5' in log for log in log_messages))
-        self.assertTrue(any("Generated expression:" in log for log in log_messages))
-        self.assertTrue(not all("Iteration 6/5" in log for log in log_messages))
+        self.assertTrue(any('Depth 0/5' in log for log in log_messages))
 
 
 if __name__ == '__main__':
