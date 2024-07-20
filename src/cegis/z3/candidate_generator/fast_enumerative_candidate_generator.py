@@ -85,20 +85,25 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
         :param size: The maximum size of the terms.
         :return: A list of Z3 expressions representing the enumerated terms.
         """
+        SynthesisProblem.logger.debug(f"Entering fast_enum with sort {sort} and size {size}")
         if size < 0:
             return
 
         cache_key = (sort, size)
         if cache_key in self.term_cache:
+            SynthesisProblem.logger.debug(f"Returning {len(self.term_cache[cache_key])} cached terms for {cache_key}")
             yield from self.term_cache[cache_key]
             return
 
         terms = []
         if size == 0:
+            SynthesisProblem.logger.debug(f"Generating terms for size 0 and sort {sort}")
             if sort == z3.BoolSort():
                 terms = [z3.BoolVal(b) for b in [True, False]]
             else:
                 terms = [z3.Var(i, sort) for i in range(self.get_arity(sort))]
+            for term in terms:
+                yield term
         else:
             for constructor_class in self.constructor_classes.get(sort, []):
                 for constructor, arg_sorts in constructor_class:
@@ -111,7 +116,9 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
                             if simplified_term not in terms:
                                 terms.append(simplified_term)
                                 yield simplified_term
-
+        SynthesisProblem.logger.debug(f"Generated {len(terms)} terms for {cache_key}")
+        if not terms:
+            SynthesisProblem.logger.warning(f"No terms generated for {cache_key}")
         self.term_cache[cache_key] = terms
 
     @lru_cache(maxsize=None)
@@ -186,6 +193,25 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
                         yield candidate, func_name
                 else:
                     yield from ((candidate, func_name) for candidate in self.candidate_cache[cache_key])
+
+    def generate_candidates_at_depth(self, depth: int) -> Generator[Tuple[z3.ExprRef, str], None, None]:
+        for func_name, func in self.problem.context.z3_synth_functions.items():
+            cache_key = (func_name, depth)
+            if cache_key not in self.candidate_cache:
+                arg_sorts = [func.domain(i) for i in range(func.arity())]
+                self.candidate_cache[cache_key] = []
+                terms = list(self.fast_enum(func.range(), depth))
+                SynthesisProblem.logger.debug(f"Generated {len(terms)} terms for {func_name} at depth {depth}")
+                for term in terms:
+                    candidate = self.create_candidate_function(term, arg_sorts)
+                    self.candidate_cache[cache_key].append(candidate)
+
+            for candidate in self.candidate_cache[cache_key]:
+                yield candidate, func_name
+
+        for func_name, candidates in self.candidate_cache.items():
+            if not candidates:
+                SynthesisProblem.logger.warning(f"No candidates generated for {func_name} at depth {depth}")
 
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
         pass

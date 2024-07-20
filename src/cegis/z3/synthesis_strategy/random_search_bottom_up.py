@@ -31,6 +31,6 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                         return
                     iteration += 1
                     if iteration >= max_iterations:
-                        SynthesisProblem.logger.info("No satisfying candidates found within {max_iterations} iterations.")
+                        SynthesisProblem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
                         return
         SynthesisProblem.logger.info("No satisfying candidates found.")
