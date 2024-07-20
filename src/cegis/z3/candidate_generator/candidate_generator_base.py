@@ -31,9 +31,5 @@ class CandidateGenerator(ABC):
 
     @staticmethod
     def create_candidate_function(candidate_expr: z3.ExprRef, arg_sorts: List[z3.SortRef]) -> z3.ExprRef:
-        SynthesisProblem.logger.debug(f"Creating candidate function with term: {candidate_expr} and arg_sorts: {arg_sorts}")
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-        SynthesisProblem.logger.debug(f"Created args: {args}")
-        body = z3.substitute(candidate_expr,  [(arg, z3.Var(i, arg.sort())) for i, arg in enumerate(args)])
-        SynthesisProblem.logger.debug(f"Created body: {body}")
-        return z3.Lambda(args, body)
+        return z3.substitute(candidate_expr, [(arg, z3.Var(i, arg.sort())) for i, arg in enumerate(args)])
