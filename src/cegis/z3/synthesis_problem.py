@@ -590,12 +590,10 @@ class SynthesisProblem:
         :return: The list of substituted constraints.
         """
         synth_substitutions = list(zip(functions_to_replace, replacement_expressions))
-        predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
 
         substituted_constraints = []
         for constraint in constraints:
             substituted_constraint = z3.substitute_funs(constraint, [*synth_substitutions])
-            substituted_constraint = z3.substitute_funs(substituted_constraint, [*predefined_substitutions])
             substituted_constraints.append(substituted_constraint)
 
         return substituted_constraints

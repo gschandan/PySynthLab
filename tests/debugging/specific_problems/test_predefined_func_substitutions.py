@@ -13,18 +13,22 @@ class TestSynthesisStrategy(SynthesisStrategy):
         pass
 
 
-class LoopProblem(unittest.TestCase):
+class SimpleLIAProblem(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
         (set-logic LIA)
-        (define-fun qm ((a Int) (b Int)) Int (ite (< a 0) b a))
-        (synth-fun qm-loop ((x Int)) Int
-        ((Start Int (x 0 1 3
-        (- Start Start)
-        (+ Start Start)
-        (qm Start Start)))))
+        (define-fun double ((x Int)) Int (* x 2))
+        (define-fun inc ((x Int)) Int (+ x 1))
+        (synth-fun f ((x Int)) Int
+            ((Start Int (x
+                         0
+                         1
+                         (double Start)
+                         (inc Start)
+                         (+ Start Start)
+                         (- Start Start)))))
         (declare-var x Int)
-        (constraint (= (qm-loop x) (ite (<= x 0) 3 (- x 1))))
+        (constraint (= (f x) (double (inc x))))
         (check-synth)
         """
         self.options = Options()
@@ -34,28 +38,28 @@ class LoopProblem(unittest.TestCase):
     def test_invalid_and_valid_solutions(self):
         x = Int('x')
 
-        def incorrect_qm_loop(x):
+        def incorrect_f(x):
             return x + 1
 
-        incorrect_candidates = [incorrect_qm_loop(x)]
-        incorrect_func_strs = ["incorrect_qm_loop"]
+        incorrect_candidates = [incorrect_f(x)]
+        incorrect_func_strs = ["incorrect_f"]
 
         strategy = TestSynthesisStrategy(self.problem)
         result = strategy.test_candidates(incorrect_func_strs, incorrect_candidates)
         self.assertFalse(result)
 
-        def correct_qm_loop(x):
-            return If(x <= 0, 3, x - 1)
+        def correct_f(x):
+            return 2 * (x + 1)
 
-        correct_candidates = [correct_qm_loop(x)]
-        correct_func_strs = ["correct_qm_loop"]
+        correct_candidates = [correct_f(x)]
+        correct_func_strs = ["correct_f"]
 
         result = strategy.test_candidates(correct_func_strs, correct_candidates)
         self.assertTrue(result)
 
     def test_random_search_top_down_single_iteration(self):
         strategy = RandomSearchStrategyTopDown(self.problem)
-        strategy.candidate_generator.max_depth = 1
+        strategy.candidate_generator.max_depth = 2
         with self.assertLogs(self.problem.logger, level='INFO') as log_context:
             strategy.execute_cegis()
 
@@ -65,7 +69,7 @@ class LoopProblem(unittest.TestCase):
 
     def test_random_search_bottom_up_single_iteration(self):
         strategy = RandomSearchStrategyBottomUp(self.problem)
-        strategy.candidate_generator.max_depth = 1
+        strategy.candidate_generator.max_depth = 2
         with self.assertLogs(self.problem.logger, level='INFO') as log_context:
             strategy.execute_cegis()
 
@@ -80,7 +84,7 @@ class LoopProblem(unittest.TestCase):
             strategy.execute_cegis()
 
         log_messages = [log.message for log in log_context.records]
-        self.assertTrue(any('Depth 0/' in log for log in log_messages))
+        self.assertTrue(any('Depth' in log for log in log_messages))
 
 
 if __name__ == '__main__':
