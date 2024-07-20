@@ -3,6 +3,8 @@ from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblem
 from src.cegis.z3.synthesis_problem import Options
+from tests.debugging.specific_solutions.TestSynthesisStrategyHelper import TestSynthesisStrategy
+
 
 class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
     def setUp(self):
@@ -15,6 +17,7 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
         """
         self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.strategy = TestSynthesisStrategy(self.problem)
 
     def test_valid_solutions_Are_correctly_identified(self):
         def generate_invalid_solution_two(arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
@@ -41,11 +44,14 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
         free_variables = list(variable_mapping.keys())
         candidate_function = candidate(*free_variables)
 
-        SynthesisProblem.logger.info(f"candidate_function for substitution {candidate_function}")
-        SynthesisProblem.logger.info(f"Testing guess: {func_str}")
-        result = self.problem.test_candidates_alternative([func_str],
-                                              [candidate_function])
-        SynthesisProblem.logger.info("\n")
+        with self.assertLogs(self.problem.logger, level='INFO') as log_context:
+            result = self.strategy.test_candidates([func_str],
+                                                   [candidate_function])
+
+        log_messages = [log.message for log in log_context.records]
+        self.assertTrue(any("Counterexample for f:" in log for log in log_messages))
+        self.assertTrue(any("New counterexample found for f:" in log for log in log_messages))
+        self.assertTrue(any("Candidates: [(If(Var(0) > Var(1), Var(0), Var(1) - 1), 'f'" in log for log in log_messages))
         self.assertFalse(result)
 
 

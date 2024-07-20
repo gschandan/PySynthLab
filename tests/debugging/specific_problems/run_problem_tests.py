@@ -17,4 +17,5 @@ if __name__ == '__main__':
     test_suite.addTest(test_loader.loadTestsFromTestCase(SubstitutionCheck))
 
     runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(test_suite)
+    result = runner.run(test_suite)
+    exit(not result.wasSuccessful())

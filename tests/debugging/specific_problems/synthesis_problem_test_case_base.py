@@ -4,7 +4,6 @@ from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 from src.utilities.options import Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
-from src.cegis.z3.synthesis_strategy.fast_enumerative_synth import FastEnumerativeSynthesis
 from abc import ABC, abstractmethod
 
 

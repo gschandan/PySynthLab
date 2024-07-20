@@ -23,3 +23,6 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover -s src/tests -p "test_*.py"
+      - name: Run specific tests cases
+        run: |
+          python run_problem_tests.py
