@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 import json
 import logging
 import os
@@ -27,7 +28,7 @@ class ConfigManager:
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
-        file_handler = logging.FileHandler(os.path.join(log_dir, "default.log"))
+        file_handler = logging.FileHandler(os.path.join(log_dir, f"config_{datetime.now()}.log"))
         file_handler.setLevel(logging.DEBUG)
 
         console_handler = logging.StreamHandler()

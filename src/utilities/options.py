@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass
@@ -36,7 +37,7 @@ class LoggingOptions:
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         ))
     file: str = field(
-        default="logs/default.log",
+        default=f"logs/run_{datetime.now()}.log",
         metadata=dict(
             description="Log file path",
             type="str"

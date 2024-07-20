@@ -2,7 +2,7 @@ import unittest
 from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblem
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import Options
 
 
 class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
@@ -17,7 +17,7 @@ class GivenAValidSolutionToTheLargeProblem(unittest.TestCase):
         (constraint (and (>= (func x) (f x y)) (>= (func y) (f x y))))
         (check-synth)
         """
-        self.options = SynthesisProblemOptions(verbose=0)
+        self.options = Options(verbose=0)
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_valid_solution_is_correctly_identified(self):

@@ -1,11 +1,14 @@
 import dataclasses
 import logging
 import typing
+from datetime import datetime
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
 import pyparsing
 from z3 import *
 
+from src.helpers.parser.src.exceptions import ParseException
+from src.helpers.parser.src.v1.parser import SygusV1Parser
 from src.utilities.options import Options
 from src.helpers.parser.src import ast
 from src.helpers.parser.src.ast import Program, CommandKind
@@ -61,8 +64,7 @@ class SynthesisProblem:
 
         self.input_problem: str = problem
         self.options = options or Options()
-        self.parser = SygusV2Parser()
-        self.problem: Program = self.parser.parse(problem)
+        self.parser, self.problem = self.parse_problem(problem)
         self.symbol_table = SymbolTableBuilder.run(self.problem)
         self.printer = SygusV2ASTPrinter(self.symbol_table)
 
@@ -101,7 +103,7 @@ class SynthesisProblem:
         if options and options.logging.file:
             log_file = options.logging.file
         else:
-            log_file = os.path.join(log_dir, "default.log")
+            log_file = os.path.join(log_dir, f"run_{datetime.now()}.log")
 
         file_handler = logging.FileHandler(log_file)
         console_handler = logging.StreamHandler()
@@ -120,6 +122,33 @@ class SynthesisProblem:
 
         SynthesisProblem.logger = logger
         SynthesisProblem.options = options
+
+    @staticmethod
+    def parse_problem(problem: str) -> tuple[SygusV1Parser | SygusV2Parser, Program]:
+        """
+        Attempt to parse the problem string using SygusV1Parser and SygusV2Parser.
+
+        :param problem: The input problem string.
+        :return: A tuple containing the successful parser and the parsed problem.
+        :raises ParseException: If both parsers fail to parse the problem.
+        """
+        try:
+            parser = SygusV1Parser()
+            parsed_problem = parser.parse(problem)
+            SynthesisProblem.logger.info("Successfully parsed with SygusV1Parser")
+            return parser, parsed_problem
+        except ParseException as e:
+            SynthesisProblem.logger.warning(f"Failed to parse with SygusV1Parser: {e}")
+            SynthesisProblem.logger.warning("Attempting to parse with SygusV2Parser")
+
+            try:
+                parser = SygusV2Parser()
+                parsed_problem = parser.parse(problem)
+                SynthesisProblem.logger.info("Successfully parsed with SygusV2Parser")
+                return parser, parsed_problem
+            except ParseException as e:
+                SynthesisProblem.logger.error(f"Failed to parse with both SygusV1Parser and SygusV2Parser: {e}")
+                raise ParseException(f"Failed to parse with both SygusV1Parser and SygusV2Parser: {e}")
 
     def __str__(self, as_smt=False) -> str:
         """

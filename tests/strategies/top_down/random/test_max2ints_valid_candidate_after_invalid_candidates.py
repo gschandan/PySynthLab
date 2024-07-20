@@ -3,7 +3,7 @@ from unittest.mock import patch
 from typing import List, Tuple
 import z3
 
-from src.cegis.z3.synthesis_problem import SynthesisProblem, SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
 
@@ -17,7 +17,7 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         (constraint (= (f x y) (f y x)))
         (constraint (and (<= x (f x y)) (<= y (f x y))))
         """
-        self.options = SynthesisProblemOptions()
+        self.options = Options()
         self.options.max_candidates_at_each_depth = 10
         self.problem = SynthesisProblem(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)

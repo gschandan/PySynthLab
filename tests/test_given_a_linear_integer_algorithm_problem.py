@@ -2,7 +2,7 @@ import unittest
 from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblem
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import Options
 from src.helpers import FunctionKind
 
 
@@ -17,7 +17,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
             (constraint (and (<= x (f x y)) (<= y (f x y))))
             (check-synth)
             """
-        self.options = SynthesisProblemOptions()
+        self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_initialization(self):

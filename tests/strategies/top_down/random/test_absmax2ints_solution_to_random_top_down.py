@@ -2,7 +2,7 @@ import unittest
 from typing import Tuple
 from unittest.mock import patch
 import z3
-from src.cegis.z3.synthesis_problem import SynthesisProblem, SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
 
@@ -16,7 +16,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
         (constraint (= (f x y) (f y x)))
         (constraint (and (<= x (f x y)) (<= y (f x y))))
         """
-        self.options = SynthesisProblemOptions()
+        self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 

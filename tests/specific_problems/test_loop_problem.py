@@ -2,7 +2,7 @@ import unittest
 from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblem
-from src.cegis.z3.synthesis_problem import SynthesisProblemOptions
+from src.cegis.z3.synthesis_problem import Options
 
 
 class LoopProblem(unittest.TestCase):
@@ -19,7 +19,7 @@ class LoopProblem(unittest.TestCase):
         (constraint (= (qm-loop x) (ite (<= x 0) 3 (- x 1))))
         (check-synth)
         """
-        self.options = SynthesisProblemOptions(verbose=0)
+        self.options = Options(verbose=0)
         self.problem = SynthesisProblem(self.problem_str, self.options)
 
     def test_valid_solution_is_correctly_identified(self):
