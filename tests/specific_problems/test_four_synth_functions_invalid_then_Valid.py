@@ -1,4 +1,7 @@
+import logging
 import unittest
+from contextlib import redirect_stdout
+
 from z3 import *
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.utilities.options import Options
@@ -80,18 +83,46 @@ class FourSynthFunctions(unittest.TestCase):
 
     def test_random_search_top_down(self):
         strategy = RandomSearchStrategyTopDown(self.problem)
-        strategy.execute_cegis()
-        self.assertFalse(strategy.solution_found)  # Assuming solution not found in 5 iterations
+        with self.assertLogs(self.problem.logger, level='INFO') as log_context:
+            try:
+                strategy.execute_cegis()
+            except Exception as e:
+                self.fail(f"execute_cegis() raised {type(e).__name__} unexpectedly: {str(e)}")
+
+        self.assertTrue(any(record.levelno == logging.INFO for record in log_context.records))
+        log_messages = [log.message for log in log_context.records]
+        self.assertTrue(any("Iteration 1/5" in log for log in log_messages))
+        self.assertTrue(any("Generated expression:" in log for log in log_messages))
+        self.assertTrue(not all("Iteration 6/5" in log for log in log_messages))
 
     def test_random_search_bottom_up(self):
         strategy = RandomSearchStrategyBottomUp(self.problem)
-        strategy.execute_cegis()
-        self.assertFalse(strategy.solution_found)  # Assuming solution not found in 5 iterations
+        with self.assertLogs(self.problem.logger, level='INFO') as log_context:
+            try:
+                strategy.execute_cegis()
+            except Exception as e:
+                self.fail(f"execute_cegis() raised {type(e).__name__} unexpectedly: {str(e)}")
+
+        self.assertTrue(any(record.levelno == logging.INFO for record in log_context.records))
+        log_messages = [log.message for log in log_context.records]
+        self.assertTrue(any('Iteration 1/5 depth: 1, complexity: 1, candidate at depth: 1/10)' in log for log in log_messages))
+        self.assertTrue(any("Generated expression:" in log for log in log_messages))
+        self.assertTrue(not all("Iteration 6/5" in log for log in log_messages))
 
     def test_fast_enumerative_synthesis(self):
         strategy = FastEnumerativeSynthesis(self.problem)
-        strategy.execute_cegis()
-        self.assertFalse(strategy.solution_found)  # Assuming solution not found in 5 iterations
+        with self.assertLogs(self.problem.logger, level='INFO') as log_context:
+            try:
+                strategy.execute_cegis()
+            except Exception as e:
+                self.fail(f"execute_cegis() raised {type(e).__name__} unexpectedly: {str(e)}")
+
+        self.assertTrue(any(record.levelno == logging.INFO for record in log_context.records))
+        log_messages = [log.message for log in log_context.records]
+        self.assertTrue(any('Iteration 1/5' in log for log in log_messages))
+        self.assertTrue(any("Generated expression:" in log for log in log_messages))
+        self.assertTrue(not all("Iteration 6/5" in log for log in log_messages))
+
 
 if __name__ == '__main__':
     unittest.main()

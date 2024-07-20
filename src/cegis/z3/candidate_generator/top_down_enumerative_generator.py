@@ -67,17 +67,23 @@ class TopDownCandidateGenerator(CandidateGenerator):
         SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
         return generated_expression
 
-    def generate_condition(self, arg_sorts: List[z3.SortRef]) -> z3.BoolRef:
-        operands = [random.choice(arg_sorts + [IntSort()]) for _ in range(2)]
-        op = random.choice(['<', '<=', '>', '>=', '==', '!='])
+    def generate_condition(self, args: List[z3.ExprRef]) -> z3.BoolRef:
+        if len(args) < 2:
+            return z3.BoolVal(random.choice([True, False]))
 
-        left = z3.Var(0, operands[0])
-        right = z3.Var(1, operands[1])
-        return {
-            '<': left < right,
-            '<=': left <= right,
-            '>': left > right,
-            '>=': left >= right,
-            '==': left == right,
-            '!=': left != right
-        }[op]
+        left: z3.ExprRef = random.choice(args)
+        right: z3.ExprRef = random.choice(args)
+        while right == left:
+            right = random.choice(args)
+
+        op = random.choice(['<', '<=', '>', '>=', '=='])
+        if op == '<':
+            return left < right
+        elif op == '<=':
+            return left <= right
+        elif op == '>':
+            return left > right
+        elif op == '>=':
+            return left >= right
+        else:
+            return left == right

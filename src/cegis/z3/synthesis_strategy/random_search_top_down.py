@@ -17,7 +17,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             candidates = self.candidate_generator.generate_candidates()
             pruned_candidates = self.candidate_generator.prune_candidates(candidates)
 
-            SynthesisProblem.logger.info(f"Testing candidates (iteration: {iteration + 1}):\n")
+            SynthesisProblem.logger.info(f"Iteration {iteration + 1}/{max_iterations}:\n")
             func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
             candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
