@@ -3,6 +3,7 @@ from unittest.mock import patch
 from typing import List, Tuple
 import z3
 
+from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
@@ -36,7 +37,7 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
             (z3.If(vars[0] < vars[1], vars[0], vars[1]), 'f')
         ]
 
-    @patch.object(RandomSearchStrategyTopDown, 'generate_candidates')
+    @patch.object(TopDownCandidateGenerator, 'generate_candidates')
     def test_strategy_handles_counterexamples_and_finds_correct_function(self, mock_generate):
         incorrect_functions = self.generate_incorrect_functions()
         correct_func, correct_func_name = self.generate_correct_max_function()
@@ -55,7 +56,7 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         self.assertTrue(self.strategy.solution_found, "Should have found a solution")
 
         print("\nCounterexamples generated:")
-        for i, (func_name, ce, _) in enumerate(self.problem.context.counterexamples):
+        for i, (func_name, ce) in enumerate(self.problem.context.counterexamples):
             print(f"Function {i + 1}: {func_name}")
             print(f"Counterexample: {ce}")
 
