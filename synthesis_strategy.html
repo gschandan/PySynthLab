@@ -67,6 +67,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.problem"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.problem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.candidate_generator"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.candidate_generator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.execute_cegis()</span></code></a></li>
 </ul>
 </li>
@@ -318,15 +321,90 @@ satisfy all constraints of the synthesis problem.</p>
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.fast_enumerative_synth.</span></span><span class="sig-name descname"><span class="pre">FastEnumerativeSynthesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></p>
+<p>A synthesis strategy that uses fast enumerative synthesis.</p>
+<p>This class implements a synthesis strategy based on the fast enumerative synthesis approach,
+which systematically explores the space of possible programs in a systematic manner.</p>
+<p>Reynolds et al., “CVC4SY: Smart and Fast Term Enumeration for Syntax-Guided Synthesis” (CAV 2019)
+<a class="reference external" href="http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf">http://homepage.divms.uiowa.edu/~ajreynol/cav19b.pdf</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.problem">
+<span class="sig-name descname"><span class="pre">problem</span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.problem" title="Link to this definition"></a></dt>
+<dd><p>The synthesis problem to be solved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SynthesisProblem</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.candidate_generator">
+<span class="sig-name descname"><span class="pre">candidate_generator</span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.candidate_generator" title="Link to this definition"></a></dt>
+<dd><p>The generator used to produce candidate solutions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>FastEnumerativeSynthesisGenerator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem</span> <span class="kn">import</span> <span class="n">SynthesisProblem</span>
+<span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_strategy.fast_enumerative_synth</span> <span class="kn">import</span> <span class="n">FastEnumerativeSynthesis</span>
+
+<span class="c1"># Define the synthesis problem</span>
+<span class="n">problem</span> <span class="o">=</span> <span class="n">SynthesisProblem</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Create the FastEnumerativeSynthesis strategy</span>
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">FastEnumerativeSynthesis</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+
+<span class="c1"># Execute the CEGIS loop</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">execute_cegis</span><span class="p">()</span>
+
+<span class="c1"># Check if a solution was found</span>
+<span class="k">if</span> <span class="n">strategy</span><span class="o">.</span><span class="n">solution_found</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Solution found!&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found within the given constraints.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This strategy is particularly effective for problems where the space of possible
+programs can be systematically enumerated and pruned efficiently. It can be extended to leverage
+divide-and-conquer techniques to scale to larger synthesis tasks.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the FastEnumerativeSynthesis strategy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>problem</strong> (<em>SynthesisProblem</em>) – The synthesis problem to be solved.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis">
 <span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis" title="Link to this definition"></a></dt>
-<dd><p>Execute the CEGIS loop.</p>
-<p>This method should implement the core logic of the synthesis strategy.
-It typically involves generating candidates, testing them, and refining
-the search based on counterexamples until a solution is found or
-a termination condition is met.</p>
-<p>This is an abstract method that must be implemented by subclasses.</p>
+<dd><p>Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using fast enumerative synthesis.</p>
+<p>This method implements two different approaches based on the number of synthesis functions:</p>
+<ol class="arabic simple">
+<li><p>For a single synthesis function, it generates and tests candidates up to the configurable maximum number of iterations.</p></li>
+<li><p>For multiple synthesis functions, it generates candidates at increasing depths and tests combinations of candidates.</p></li>
+</ol>
+<p>The method stops when a solution is found or when the maximum number of iterations or depth is reached.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The specific behavior and termination conditions can be customized through
+the synthesis_parameters in the configuration file or command line arguments.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the number of candidate functions doesn’t match the number of synthesis functions.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
