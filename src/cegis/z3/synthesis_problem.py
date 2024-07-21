@@ -291,18 +291,22 @@ class SynthesisProblem:
         for func in self.get_predefined_funcs().values():
             z3_arg_sorts = [self.convert_sort_descriptor_to_z3_sort(s) for s in func.argument_sorts]
             z3_range_sort = self.convert_sort_descriptor_to_z3_sort(func.range_sort)
+            if not z3_arg_sorts:
+                parsed_body = self.parse_term(func.function_body)
+                const = z3.Const(func.identifier.symbol, z3_range_sort)
+                self.context.z3_predefined_functions[func.identifier.symbol] = (const, parsed_body)
+            else:
+                args = [self.create_z3_variable(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
+                local_variables = dict(zip(func.argument_names, args))
 
-            args = [self.create_z3_variable(name, sort) for name, sort in zip(func.argument_names, z3_arg_sorts)]
-            local_variables = dict(zip(func.argument_names, args))
+                parsed_body = self.parse_term(func.function_body, local_variables)  # Use local_variables here
 
-            parsed_body = self.parse_term(func.function_body, local_variables)  # Use local_variables here
+                self.context.z3_predefined_function_args[func.identifier.symbol] = local_variables
 
-            self.context.z3_predefined_function_args[func.identifier.symbol] = local_variables
-
-            self.context.z3_predefined_functions[func.identifier.symbol] = (
-                z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort),
-                parsed_body,
-            )
+                self.context.z3_predefined_functions[func.identifier.symbol] = (
+                    z3.Function(func.identifier.symbol, *z3_arg_sorts, z3_range_sort),
+                    parsed_body
+                )
 
     def populate_all_z3_functions(self) -> None:
         """Add all parsed Z3 functions to a dictionary."""
@@ -390,19 +394,17 @@ class SynthesisProblem:
         :return: The Z3 expression representing the term.
         """
         local_variables = local_variables if local_variables else {}
-
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
             if symbol in local_variables:
                 return local_variables[symbol]
             elif symbol in self.context.z3_variables:
                 return self.context.z3_variables[symbol]
-            elif symbol in self.context.z3_predefined_function_args:
-                return self.context.z3_variables[symbol]
+            elif symbol in self.context.z3_predefined_functions:
+                func, _ = self.context.z3_predefined_functions[symbol]
+                return func
             elif symbol in self.context.z3_synth_functions:
                 return self.context.z3_synth_functions[symbol]
-            elif symbol in self.context.z3_predefined_functions:
-                return self.context.z3_predefined_functions[symbol][0]
             else:
                 raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, ast.LiteralTerm):

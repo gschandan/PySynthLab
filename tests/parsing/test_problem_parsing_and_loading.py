@@ -1,4 +1,3 @@
-import os
 import unittest
 from pathlib import Path
 
@@ -10,13 +9,10 @@ class TestSyGusParsing(unittest.TestCase):
     def setUp(self):
         self.options = Options()
         self.options.logging.level = "DEBUG"
-        project_root = Path(__file__).parent.parent.parent 
-        self.sygus_dir = project_root / "problems" / "sygus_comp_2019_clia_track"
-        print(f"Looking for files in: {self.sygus_dir.absolute()}")
+        self.sygus_dir = Path(__file__).parent.parent.parent / "problems" / "sygus_comp_2019_clia_track"
         self.options = Options()
 
     def test_parse_sygus_files(self):
-        print(f"Looking for files in: {self.sygus_dir.absolute()}")
         files = list(self.sygus_dir.glob("*.sl"))
         print(f"Found {len(files)} .sl files")
         for sygus_file in self.sygus_dir.glob("*.sl"):
