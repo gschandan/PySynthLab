@@ -4,8 +4,9 @@ from unittest.mock import patch
 import z3
 from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
+from tests.helpers.SynthesisStrategyHelper import TestSynthesisStrategy
 
-@unittest.skip("need to fix")
+
 class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
@@ -18,7 +19,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
         """
         self.options = Options()
         self.problem = SynthesisProblem(self.problem_str, self.options)
-        self.strategy = RandomSearchStrategyTopDown(self.problem)
+        self.strategy = TestSynthesisStrategy(self.problem)
 
     def generate_correct_abs_max_function(self) -> Tuple[z3.ExprRef, str]:
         vars = [z3.Var(i, z3.IntSort()) for i in range(2)]

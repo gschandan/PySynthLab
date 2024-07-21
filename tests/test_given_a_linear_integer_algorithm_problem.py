@@ -3,9 +3,10 @@ from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblem
 from src.cegis.z3.synthesis_problem import Options
-from src.helpers import FunctionKind
+from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
+from src.helpers.parser.src.resolution import FunctionKind
 
-@unittest.skip("need to fix")
+
 class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
@@ -69,7 +70,8 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         args = [self.problem.context.z3_variables["x"], self.problem.context.z3_variables["y"]]
         candidate_expr, func_str = self.generate_max_function([IntSort(), IntSort()])
         candidate_func = candidate_expr(*args)
-        result = self.problem.test_candidates_alternative([func_str], [candidate_func])
+        strategy = RandomSearchStrategyTopDown(self.problem)
+        result = strategy.test_candidates([func_str], [candidate_func])
         self.assertTrue(result)
 
     def test_get_logic(self):

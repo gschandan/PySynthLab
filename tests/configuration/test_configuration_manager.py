@@ -15,8 +15,8 @@ class TestConfigManager(unittest.TestCase):
         parser = ConfigManager.generate_argparse_from_options()
         self.assertIsInstance(parser, argparse.ArgumentParser)
 
-        args = parser.parse_args(['--synthesisparameters__max_depth', '6'])
-        self.assertEqual(args.synthesisparameters__max_depth, 6)
+        args = parser.parse_args(['--synthesis_parameters__max_depth', '6'])
+        self.assertEqual(args.synthesis_parameters__max_depth, 6)
 
         args = parser.parse_args(['--logging__level', 'INFO'])
         self.assertEqual(args.logging__level, 'INFO')
@@ -97,11 +97,11 @@ class TestConfigManager(unittest.TestCase):
 
         merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
 
-        self.assertEqual(merged_options.synthesis_parameters.max_depth, self.default_options.synthesis_parameters.max_depth)
+        self.assertEqual(merged_options.synthesis_parameters.max_depth,
+                         self.default_options.synthesis_parameters.max_depth)
         self.assertEqual(merged_options.logging.level, self.default_options.logging.level)
 
-
-    @patch('src.cegis.z3.config_manager.ConfigManager.load_yaml', return_value=None)
+    @patch('src.utilities.config_manager.ConfigManager.load_yaml', return_value=None)
     @patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(config=None))
     def test_get_config(self, mock_parse_args, mock_load_yaml):
         config = ConfigManager.get_config()
@@ -109,7 +109,7 @@ class TestConfigManager(unittest.TestCase):
         mock_parse_args.assert_called_once()
         mock_load_yaml.assert_called_once()
 
-    @patch('src.cegis.z3.config_manager.ConfigManager.load_yaml', return_value={'logging': {'level': 'DEBUG'}})
+    @patch('src.utilities.config_manager.ConfigManager.load_yaml', return_value={'logging': {'level': 'DEBUG'}})
     @patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(config=None, logging__level=None))
     def test_get_config_with_yaml(self, mock_parse_args, mock_load_yaml):
         config = ConfigManager.get_config()
@@ -117,7 +117,7 @@ class TestConfigManager(unittest.TestCase):
         mock_parse_args.assert_called_once()
         mock_load_yaml.assert_called_once()
 
-    @patch('src.cegis.z3.config_manager.ConfigManager.load_yaml', return_value={'logging': {'level': 'DEBUG'}})
+    @patch('src.utilities.config_manager.ConfigManager.load_yaml', return_value={'logging': {'level': 'DEBUG'}})
     @patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(config=None, logging__level='INFO'))
     def test_get_config_with_cli(self, mock_parse_args, mock_load_yaml):
         ConfigManager.setup_logger()
@@ -126,7 +126,7 @@ class TestConfigManager(unittest.TestCase):
         mock_parse_args.assert_called_once()
         mock_load_yaml.assert_called_once()
 
-    @patch('src.cegis.z3.config_manager.ConfigManager.load_yaml', side_effect=FileNotFoundError)
+    @patch('src.utilities.config_manager.ConfigManager.load_yaml', side_effect=FileNotFoundError)
     @patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(config=None))
     def test_get_config_file_not_found(self, mock_parse_args, mock_load_yaml):
         ConfigManager.setup_logger()
@@ -134,6 +134,7 @@ class TestConfigManager(unittest.TestCase):
         self.assertIsInstance(config, Options)
         mock_parse_args.assert_called_once()
         mock_load_yaml.assert_called_once()
+
 
 if __name__ == '__main__':
     unittest.main()

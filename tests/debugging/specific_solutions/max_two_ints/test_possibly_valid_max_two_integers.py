@@ -3,7 +3,7 @@ from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import SynthesisProblem
 from src.cegis.z3.synthesis_problem import Options
-from tests.debugging.specific_solutions.TestSynthesisStrategyHelper import TestSynthesisStrategy
+from tests.helpers.TestSynthesisStrategyHelper import TestSynthesisStrategy
 
 
 class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):

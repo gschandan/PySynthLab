@@ -1,15 +1,10 @@
 import unittest
 from src.cegis.z3.synthesis_problem import SynthesisProblem
-from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 from src.utilities.options import Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
 from abc import ABC, abstractmethod
-
-
-class TestSynthesisStrategy(SynthesisStrategy):
-    def execute_cegis(self) -> None:
-        pass
+from tests.helpers.SynthesisStrategyHelper import TestSynthesisStrategy
 
 
 class SynthesisProblemTestCase(unittest.TestCase, ABC):

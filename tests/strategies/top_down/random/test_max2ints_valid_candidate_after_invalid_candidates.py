@@ -6,7 +6,7 @@ import z3
 from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
-@unittest.skip("need to fix")
+
 class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest.TestCase):
     def setUp(self):
         self.problem_str = """
@@ -18,7 +18,8 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         (constraint (and (<= x (f x y)) (<= y (f x y))))
         """
         self.options = Options()
-        self.options.max_candidates_at_each_depth = 10
+        self.options.synthesis_parameters.max_candidates_at_each_depth = 5
+        self.options.synthesis_parameters.max_iterations = 50
         self.problem = SynthesisProblem(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 
@@ -41,14 +42,14 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         correct_func, correct_func_name = self.generate_correct_max_function()
 
         mock_data = [incorrect_functions[i % len(incorrect_functions)] for i in
-                     range(self.options.max_candidates_at_each_depth - 1)]
+                     range(self.options.synthesis_parameters.max_candidates_at_each_depth - 1)]
         mock_data.append((correct_func, correct_func_name))
 
         mock_generate.side_effect = [[func] for func in mock_data]
 
         self.strategy.execute_cegis()
-        self.assertEqual(mock_generate.call_count, self.options.max_candidates_at_each_depth,
-                         f"Should try {self.options.max_candidates_at_each_depth} times before finding the correct one")
+        self.assertEqual(mock_generate.call_count, self.options.synthesis_parameters.max_candidates_at_each_depth,
+                         f"Should try {self.options.synthesis_parameters.max_candidates_at_each_depth} times before finding the correct one")
         self.assertIsNotNone(self.problem.context.z3_synth_functions['f'],
                              "Should find a satisfying function")
         self.assertTrue(self.strategy.solution_found, "Should have found a solution")
