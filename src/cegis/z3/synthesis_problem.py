@@ -37,8 +37,6 @@ class SynthesisProblemContext:
         default_factory=list)
     z3_negated_constraints: Set[ExprRef] = dataclasses.field(default_factory=set)
     additional_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
-    synth_functions: List[Dict[str, typing.Union[str, List[ExprRef], SortRef]]] = dataclasses.field(
-        default_factory=list)
     smt_problem: str = ""
     variable_mapping_dict: Dict[str, Dict[z3.ExprRef, z3.ExprRef]] = dataclasses.field(default_factory=dict)
     all_z3_functions: Dict[str, z3.FuncDeclRef] = dataclasses.field(default=dict)
@@ -173,6 +171,46 @@ class SynthesisProblem:
         """
         SynthesisProblem.logger.info(self.__str__(as_smt=True))
 
+    def get_logic(self) -> str:
+        """
+        Get the logic of the synthesis problem.
+
+        :return: The logic name.
+        """
+        return self.symbol_table.logic_name
+
+    def get_synth_funcs(self) -> Dict[str, FunctionDescriptor]:
+        """
+        Get the synthesis functions of the problem.
+
+        :return: A dictionary mapping function names to their declaration commands.
+        """
+        return self.symbol_table.synth_functions
+
+    def get_predefined_funcs(self) -> Dict[str, FunctionDescriptor]:
+        """
+        Get the predefined functions of the problem.
+
+        :return: A dictionary mapping function names to their declaration commands.
+        """
+        return self.symbol_table.user_defined_functions
+
+    def get_var_symbols(self) -> List[str]:
+        """
+        Get the variable symbols of the problem.
+
+        :return: A list of variable symbols.
+        """
+        return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]
+
+    def get_function_symbols(self) -> List[str]:
+        """
+        Get the function symbols of the problem.
+
+        :return: A list of function symbols.
+        """
+        return [x.function_name for x in self.problem.commands if x.command_kind == CommandKind.DEFINE_FUN]
+
     def convert_sygus_to_smt(self) -> str:
         """
         Convert the synthesis problem from SyGuS format to SMT-LIB format.
@@ -223,57 +261,6 @@ class SynthesisProblem:
             return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
 
         return '\n'.join(serialise(statement) for statement in sygus_ast)
-
-    def get_logic(self) -> str:
-        """
-        Get the logic of the synthesis problem.
-
-        :return: The logic name.
-        """
-        return self.symbol_table.logic_name
-
-    def get_synth_funcs(self) -> Dict[str, FunctionDescriptor]:
-        """
-        Get the synthesis functions of the problem.
-
-        :return: A dictionary mapping function names to their declaration commands.
-        """
-        return self.symbol_table.synth_functions
-
-    def get_predefined_funcs(self) -> Dict[str, FunctionDescriptor]:
-        """
-        Get the predefined functions of the problem.
-
-        :return: A dictionary mapping function names to their declaration commands.
-        """
-        return self.symbol_table.user_defined_functions
-
-    def get_synth_func(self, symbol: str) -> FunctionDescriptor:
-        """
-        Get a specific synthesis function by its symbol.
-
-        :param symbol: The symbol of the synthesis function.
-        :return: The function declaration command.
-        """
-        return next(filter(lambda x:
-                           x.function_kind == FunctionKind.SYNTH_FUN and x.identifier.symbol == symbol,
-                           list(self.symbol_table.synth_functions.values())))
-
-    def get_var_symbols(self) -> List[str]:
-        """
-        Get the variable symbols of the problem.
-
-        :return: A list of variable symbols.
-        """
-        return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]
-
-    def get_function_symbols(self) -> List[str]:
-        """
-        Get the function symbols of the problem.
-
-        :return: A list of function symbols.
-        """
-        return [x.function_name for x in self.problem.commands if x.command_kind == CommandKind.DEFINE_FUN]
 
     def initialise_z3_variables(self) -> None:
         """
@@ -334,38 +321,6 @@ class SynthesisProblem:
             variable_mapping = {free_var: declared_var for free_var, declared_var in
                                 zip(free_variables, declared_variables)}
             self.context.variable_mapping_dict[func_name] = variable_mapping
-
-    @staticmethod
-    def negate_assertions(assertions: List[z3.ExprRef]) -> List[z3.ExprRef]:
-        """
-        Negate a list of assertions.
-
-        :param assertions: The list of assertions to negate.
-        :return: The negated assertions.
-        """
-        negated_assertions = []
-        for assertion in assertions:
-            args = assertion.num_args()
-            if z3.is_and(assertion) or z3.is_or(assertion) or z3.is_not(assertion):
-                if args > 1:
-                    negated_children = [z3.Not(assertion.arg(i)) for i in range(args)]
-                    negated_assertions.append(z3.Or(*negated_children))
-                else:
-                    negated_assertions.append(z3.Not(assertion))
-            elif z3.is_expr(assertion) and args == 2:
-                if z3.is_eq(assertion):
-                    negated_assertions.append(assertion.arg(0) != assertion.arg(1))
-                elif z3.is_ge(assertion):
-                    negated_assertions.append(assertion.arg(0) < assertion.arg(1))
-                elif z3.is_gt(assertion):
-                    negated_assertions.append(assertion.arg(0) <= assertion.arg(1))
-                elif z3.is_le(assertion):
-                    negated_assertions.append(assertion.arg(0) > assertion.arg(1))
-                elif z3.is_lt(assertion):
-                    negated_assertions.append(assertion.arg(0) >= assertion.arg(1))
-                else:
-                    raise ValueError("Unsupported assertion type: {}".format(assertion))
-        return negated_assertions
 
     def parse_constraints(self) -> None:
         """
@@ -527,6 +482,38 @@ class SynthesisProblem:
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
         else:
             raise ValueError(f"Unsupported term type: {type(term)}")
+
+    @staticmethod
+    def negate_assertions(assertions: List[z3.ExprRef]) -> List[z3.ExprRef]:
+        """
+        Negate a list of assertions.
+
+        :param assertions: The list of assertions to negate.
+        :return: The negated assertions.
+        """
+        negated_assertions = []
+        for assertion in assertions:
+            args = assertion.num_args()
+            if z3.is_and(assertion) or z3.is_or(assertion) or z3.is_not(assertion):
+                if args > 1:
+                    negated_children = [z3.Not(assertion.arg(i)) for i in range(args)]
+                    negated_assertions.append(z3.Or(*negated_children))
+                else:
+                    negated_assertions.append(z3.Not(assertion))
+            elif z3.is_expr(assertion) and args == 2:
+                if z3.is_eq(assertion):
+                    negated_assertions.append(assertion.arg(0) != assertion.arg(1))
+                elif z3.is_ge(assertion):
+                    negated_assertions.append(assertion.arg(0) < assertion.arg(1))
+                elif z3.is_gt(assertion):
+                    negated_assertions.append(assertion.arg(0) <= assertion.arg(1))
+                elif z3.is_le(assertion):
+                    negated_assertions.append(assertion.arg(0) > assertion.arg(1))
+                elif z3.is_lt(assertion):
+                    negated_assertions.append(assertion.arg(0) >= assertion.arg(1))
+                else:
+                    raise ValueError("Unsupported assertion type: {}".format(assertion))
+        return negated_assertions
 
     @staticmethod
     def convert_sort_descriptor_to_z3_sort(sort_descriptor: SortDescriptor) -> z3.SortRef | None:
