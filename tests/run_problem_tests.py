@@ -1,9 +1,9 @@
 import unittest
-from tests.debugging.specific_problems.test_max_three_integers import MaxThreeIntegers
-from tests.debugging.specific_problems.test_max_two_integers import MaxTwoIntegers
-from tests.debugging.specific_problems.test_four_synth_functions import FourSynthFunctions
-from tests.debugging.specific_problems.test_loop_problem import LoopProblem
-from tests.debugging.specific_problems.test_predefined_func_substitutions import SubstitutionCheck
+from tests.debugging.specific_problems.four_synth_functions import FourSynthFunctions
+from tests.debugging.specific_problems.loop_problem import LoopProblem
+from tests.debugging.specific_problems.max_three_integers import MaxThreeIntegers
+from tests.debugging.specific_problems.max_two_integers import MaxTwoIntegers
+from tests.debugging.specific_problems.predefined_func_substitutions import SubstitutionCheck
 
 if __name__ == '__main__':
     test_loader = unittest.TestLoader()
