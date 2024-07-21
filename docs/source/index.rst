@@ -7,11 +7,11 @@ Welcome to PySynthLab's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
    
    config_manager
-
+   synthesis_strategy
 
 Indices and tables
 ==================
