@@ -49,8 +49,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">SynthesisStrategy</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.problem"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.problem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.solution_found"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.solution_found</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.candidate_generator"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.candidate_generator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.check_counterexample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.create_args_mapping"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.create_args_mapping()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.execute_cegis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.generate_candidates()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.generate_counterexample()</span></code></a></li>
@@ -119,51 +122,192 @@
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.synthesis_strategy.</span></span><span class="sig-name descname"><span class="pre">SynthesisStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>An abstract base class for implementing various synthesis strategies.</p>
+<p>This class provides a framework for implementing different approaches to program synthesis,
+particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.problem">
+<span class="sig-name descname"><span class="pre">problem</span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.problem" title="Link to this definition"></a></dt>
+<dd><p>The synthesis problem to be solved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SynthesisProblem</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.solution_found">
+<span class="sig-name descname"><span class="pre">solution_found</span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.solution_found" title="Link to this definition"></a></dt>
+<dd><p>Flag indicating whether a solution has been found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.candidate_generator">
+<span class="sig-name descname"><span class="pre">candidate_generator</span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.candidate_generator" title="Link to this definition"></a></dt>
+<dd><p>The generator used to produce candidate solutions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CandidateGenerator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyCustomStrategy</span><span class="p">(</span><span class="n">SynthesisStrategy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">execute_cegis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_candidates</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">func_name</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_candidates</span><span class="p">([</span><span class="n">func_name</span><span class="p">],</span> <span class="p">[</span><span class="n">candidate</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_solution_found</span><span class="p">()</span>
+                    <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found within max iterations.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl>
+<dt>Usage:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span> <span class="o">=</span> <span class="n">SynthesisProblem</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">MyCustomStrategy</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">execute_cegis</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the SynthesisStrategy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problem</strong> (<em>SynthesisProblem</em>) – The synthesis problem to be solved.</p></li>
+<li><p><strong>candidate_generator</strong> (<em>CandidateGenerator</em><em>, </em><em>optional</em>) – A custom candidate generator. If None, a default RandomCandidateGenerator will be used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample">
 <span class="sig-name descname"><span class="pre">check_counterexample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.create_args_mapping">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_args_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.create_args_mapping" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Check if a candidate satisfies all stored counterexamples for a given function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_name</strong> (<em>str</em>) – Name of the function being synthesized.</p></li>
+<li><p><strong>candidate</strong> (<em>z3.ExprRef</em>) – The candidate function to check.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bool</em> – True if the candidate satisfies all counterexamples, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop.</p>
+<p>This method should implement the core logic of the synthesis strategy.
+It typically involves generating candidates, testing them, and refining
+the search based on counterexamples until a solution is found or
+a termination condition is met.</p>
+<p>This is an abstract method that must be implemented by subclasses.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates">
 <span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generate candidate solutions using the candidate generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>list[tuple[ExprRef, str]]</em> – A list of tuples, each containing a candidate solution
+(as a Z3 expression) and its string representation.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample">
 <span class="sig-name descname"><span class="pre">generate_counterexample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Find a potential counterexample for a set of candidates, if one can be found.</p>
+<p>This method attempts to find input values that violate the problem constraints
+for the given candidate functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of tuples containing candidate functions and their names.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict[str, Dict[str, Any]] | None</em> – A dictionary of counterexamples for each function,
+or None if no counterexample is found.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator">
 <span class="sig-name descname"><span class="pre">set_candidate_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Set a new candidate generator.</p>
+<p>This method allows changing the candidate generator during the synthesis process,
+which can be useful for implementing adaptive or other custom strategies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>generator</strong> (<em>CandidateGenerator</em>) – The new candidate generator to use.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found">
 <span class="sig-name descname"><span class="pre">set_solution_found</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Mark that a solution has been found.</p>
+<p>This method sets the solution_found flag to True, indicating that
+the synthesis process has successfully found a solution.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates">
 <span class="sig-name descname"><span class="pre">test_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_strs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Test a set of candidate functions against the synthesis problem.</p>
+<p>This method checks if the given candidate functions satisfy all constraints
+and pass stored counterexamples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_strs</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of function names corresponding to the candidates.</p></li>
+<li><p><strong>candidate_functions</strong> (<em>List</em><em>[</em><em>z3.ExprRef</em><em>]</em>) – List of candidate functions as Z3 expressions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bool</em> – True if the candidates satisfy all constraints, False otherwise.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the number of candidate functions doesn’t match the number of synthesis functions.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates">
 <span class="sig-name descname"><span class="pre">verify_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Verify if a set of candidates satisfies all constraints.</p>
+<p>This method performs a final verification step to ensure that the candidate functions
+satisfy all constraints of the synthesis problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>z3.ExprRef</em><em>]</em>) – List of candidate functions to verify.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bool</em> – True if the candidates satisfy all constraints, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -178,6 +322,11 @@
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis">
 <span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop.</p>
+<p>This method should implement the core logic of the synthesis strategy.
+It typically involves generating candidates, testing them, and refining
+the search based on counterexamples until a solution is found or
+a termination condition is met.</p>
+<p>This is an abstract method that must be implemented by subclasses.</p>
 </dd></dl>
 
 </dd></dl>
@@ -193,6 +342,11 @@
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis">
 <span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop.</p>
+<p>This method should implement the core logic of the synthesis strategy.
+It typically involves generating candidates, testing them, and refining
+the search based on counterexamples until a solution is found or
+a termination condition is met.</p>
+<p>This is an abstract method that must be implemented by subclasses.</p>
 </dd></dl>
 
 </dd></dl>
@@ -208,6 +362,11 @@
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis">
 <span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop.</p>
+<p>This method should implement the core logic of the synthesis strategy.
+It typically involves generating candidates, testing them, and refining
+the search based on counterexamples until a solution is found or
+a termination condition is met.</p>
+<p>This is an abstract method that must be implemented by subclasses.</p>
 </dd></dl>
 
 </dd></dl>
