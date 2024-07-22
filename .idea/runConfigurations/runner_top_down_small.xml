@@ -19,7 +19,7 @@
       <option name="useCurrentConnection" value="false" />
     </EXTENSION>
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/runner.py" />
-    <option name="PARAMETERS" value="--synthesis_parameters__strategy random_enumerative &quot;$PROJECT_DIR$/src/problems/small.sl&quot;" />
+    <option name="PARAMETERS" value="--synthesis_parameters__strategy random_enumerative --synthesis_parameters__candidate_generation top_down &quot;$PROJECT_DIR$/problems/debugging/small.sl&quot;" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

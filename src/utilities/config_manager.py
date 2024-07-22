@@ -11,7 +11,7 @@ from src.utilities.options import Options, LoggingOptions, SynthesisParameters, 
 
 
 class ConfigManager:
-    logger = None
+    logger: logging.Logger = None
 
     def __init__(self):
         if ConfigManager.logger is None:

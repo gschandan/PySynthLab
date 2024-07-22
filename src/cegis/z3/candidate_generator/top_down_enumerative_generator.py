@@ -1,89 +1,69 @@
 import random
-from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
+
+import z3
 from typing import List, Tuple
-from z3 import *
 
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
-class TopDownCandidateGenerator(CandidateGenerator):
+class TopDownCandidateGenerator:
+    def __init__(self, problem: SynthesisProblem):
+        self.problem = problem
+        self.min_const = problem.options.synthesis_parameters.min_const
+        self.max_const = problem.options.synthesis_parameters.max_const
+        self.max_depth = problem.options.synthesis_parameters.max_depth
+        self.grammar = self.define_grammar()
+        self.explored_expressions: set[str] = set()
 
-    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
-        return candidates
+    def define_grammar(self):
+        return {
+            'EXPR': ['ARITH', 'IF'],
+            'ARITH': ['ADD', 'SUB', 'MUL', 'VAR', 'CONST'],
+            'ADD': ['(ARITH + ARITH)'],
+            'SUB': ['(ARITH - ARITH)'],
+            'MUL': ['(ARITH * CONST)'],
+            'IF': ['If(COND, EXPR, EXPR)'],
+            'COND': ['(ARITH < ARITH)', '(ARITH <= ARITH)', '(ARITH > ARITH)', '(ARITH >= ARITH)', '(ARITH == ARITH)'],
+            'VAR': list(self.problem.context.variable_mapping_dict.keys()),
+            'CONST': list(range(self.min_const, self.max_const + 1))
+        }
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         candidates = []
-        for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
-            candidate = self.generate_random_term(
-                self.get_arg_sorts(func_name),
-                SynthesisProblem.options.synthesis_parameters.max_depth,
-                SynthesisProblem.options.synthesis_parameters.max_complexity
-            )
-            candidates.append((candidate, func_name))
+        for func_name in self.problem.context.variable_mapping_dict.keys():
+            candidate = self.generate_term('EXPR', func_name)
+            if candidate is not None:
+                self.problem.logger.debug(f"refined_candidate: {candidate}")
+                simplified_candidate = self.simplify_term(candidate) 
+                self.problem.logger.debug(f"simplified_candidate: {simplified_candidate}")
+                candidates.append((simplified_candidate, func_name))
         return candidates
 
-    def generate_random_term(self, arg_sorts: List[z3.SortRef], max_depth: int, max_complexity: int,
-                             operations: List[str] = None) -> z3.ExprRef:
+    def generate_term(self, symbol: str, func_name: str, depth: int = 0) -> z3.ExprRef | None:
+        if depth > self.max_depth:
+            return None
 
-        if operations is None:
-            operations = ['+', '-', '*', 'If', 'Neg']
-        args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
-        constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
+        if symbol in self.problem.context.variable_mapping_dict[func_name]:
+            return z3.Int(symbol)
+        elif symbol == 'CONST':
+            return z3.IntVal(random.choice(self.grammar['CONST']))
 
-        op_weights = {op: self.op_complexity(op) for op in operations}
+        production = random.choice(self.grammar[symbol])
+        self.problem.logger.debug(f"production: {production}")
 
-        def build_term(curr_depth: int, remaining_complexity: int) -> z3.ExprRef:
-            if curr_depth == 0 or remaining_complexity <= 0:
-                return random.choice(args + constants)
+        subterms = [self.generate_term(sym, func_name, depth + 1) for sym in production.split() if sym != '+']
+        self.problem.logger.debug(f"subterms: {subterms}")
 
-            available_ops = [op for op in operations if remaining_complexity >= self.op_complexity(op)]
-            if not available_ops:
-                return random.choice(args + constants)
+        if any(subterm is None for subterm in subterms):
+            return None
 
-            op = random.choices(available_ops, weights=[op_weights[op] for op in available_ops])[0]
-            new_complexity = remaining_complexity - self.op_complexity(op)
-
-            op_weights[op] *= SynthesisProblem.options.synthesis_parameters.weight_multiplier
-
-            if op in ['+', '-']:
-                left = build_term(curr_depth - 1, new_complexity)
-                right = build_term(curr_depth - 1, new_complexity)
-                return left + right if op == '+' else left - right
-            elif op == '*':
-                left = build_term(curr_depth - 1, new_complexity)
-                right = random.choice(constants)
-                return left * right
-            elif op == 'If':
-                condition = self.generate_condition(args)
-                true_expr = build_term(curr_depth - 1, new_complexity)
-                false_expr = build_term(curr_depth - 1, new_complexity)
-                return z3.If(condition, true_expr, false_expr)
-            elif op == 'Neg':
-                return -build_term(curr_depth - 1, new_complexity)
-            SynthesisProblem.logger.error(f"Unexpected operation: {op}")
-            raise ValueError(f"Unexpected operation: {op}")
-
-        generated_expression = build_term(max_depth, max_complexity)
-        SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
-        return generated_expression
-
-    def generate_condition(self, args: List[z3.ExprRef]) -> z3.BoolRef:
-        if len(args) < 2:
-            return z3.BoolVal(random.choice([True, False]))
-
-        left: z3.ExprRef = random.choice(args)
-        right: z3.ExprRef = random.choice(args)
-        while right == left:
-            right = random.choice(args)
-
-        op = random.choice(['<', '<=', '>', '>=', '=='])
-        if op == '<':
-            return left < right
-        elif op == '<=':
-            return left <= right
-        elif op == '>':
-            return left > right
-        elif op == '>=':
-            return left >= right
+        if production.startswith('If'):
+            return z3.If(*subterms)
         else:
-            return left == right
+            return eval(production, {'z3': z3, **{arg: subterms[i] for i, arg in enumerate(self.problem.context.variable_mapping_dict[func_name].keys())}})
+
+    def simplify_term(self, term: z3.ExprRef) -> z3.ExprRef:
+        return z3.simplify(term)
+
+    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
+        return candidates

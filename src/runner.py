@@ -10,7 +10,7 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 def main() -> None:
     config = ConfigManager.get_config()
-    print(asdict(config))
+    ConfigManager.logger.info(asdict(config))
 
     if config.input_source == 'stdin':
         problem_input = sys.stdin.read()
@@ -19,7 +19,7 @@ def main() -> None:
             problem_input = file.read()
 
     problem = SynthesisProblem(problem_input, config)
-    print(problem.info_smt())
+    problem.logger.info(problem.info_smt())
 
     if config.synthesis_parameters.strategy == 'fast_enumerative':
         strategy = FastEnumerativeSynthesis(problem)
@@ -29,9 +29,9 @@ def main() -> None:
         else:
             strategy = RandomSearchStrategyBottomUp(problem)
     else:
+        ConfigManager.logger.error(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
         raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
 
-    print(strategy.problem.info_smt())
     strategy.execute_cegis()
 
 if __name__ == '__main__':
