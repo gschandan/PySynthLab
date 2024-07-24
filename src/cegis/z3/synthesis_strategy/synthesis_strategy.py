@@ -122,6 +122,7 @@ class SynthesisStrategy(ABC):
        """
 
         synth_func_names = list(self.problem.context.z3_synth_functions.keys())
+        SynthesisProblem.logger.debug(f" candidate_functions {candidate_functions}")
 
         if len(func_strs) != len(synth_func_names):
             raise ValueError("Number of candidate functions doesn't match number of synthesis functions")

@@ -76,6 +76,8 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
 
         for iteration in range(max_iterations):
             candidates = self.candidate_generator.generate_candidates()
+            if all(candidate is None for candidate in candidates):
+                continue
             pruned_candidates = self.candidate_generator.prune_candidates(candidates)
 
             SynthesisProblem.logger.info(f"Iteration {iteration + 1}/{max_iterations}:\n")

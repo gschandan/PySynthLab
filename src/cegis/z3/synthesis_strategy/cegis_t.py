@@ -290,7 +290,7 @@ class CegisT(SynthesisStrategy):
     def formulate_counterexample_constraint(self, counterexample: Dict[str, ExprRef]) -> ExprRef:
         constraints = []
         for func_name, func in self.problem.context.z3_synth_functions.items():
-            ce_args = [counterexample[arg.__str__()] for arg in
+            ce_args = [counterexample[arg.__str__] for arg in
                        self.problem.context.variable_mapping_dict[func_name].values()]
             ce_condition = And(*[arg == ce_arg for arg, ce_arg in
                                  zip(self.problem.context.variable_mapping_dict[func_name].values(), ce_args)])

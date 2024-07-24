@@ -388,7 +388,7 @@ class SynthesisProblemCvc5:
 
     def get_additional_constraints(self, counterexample):
         constraints = [self.enumerator_solver.mkTerm(Kind.NEQ, var,
-                                                     self.enumerator_solver.mkInteger(counterexample[var.__str__()]))
+                                                     self.enumerator_solver.mkInteger(counterexample[var.__str__]))
                        for var in self.func_args]
         return self.enumerator_solver.mkTerm(Kind.AND, *constraints)
 
