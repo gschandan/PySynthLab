@@ -1,6 +1,6 @@
 (set-logic LIA)
 
-(synth-fun f ((x Int) (y Int)) Int)
+(synth-fun f ((a Int) (b Int)) Int)
 
 (declare-var x Int)
 (declare-var y Int)

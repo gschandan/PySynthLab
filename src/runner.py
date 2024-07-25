@@ -12,7 +12,7 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
 def main() -> None:
-    
+
     config = ConfigManager.get_config()
     ConfigManager.logger.info(asdict(config))
 
