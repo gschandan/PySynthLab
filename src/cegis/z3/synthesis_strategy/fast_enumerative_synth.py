@@ -95,6 +95,8 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         for iteration in range(max_iterations):
             SynthesisProblem.logger.info(f"Iteration {iteration + 1}/{max_iterations}")
             candidates = self.candidate_generator.generate_candidates()
+            if not candidates:
+                continue
             for candidate, func_name in candidates:
                 SynthesisProblem.logger.info(f"Testing candidate: {func_name}: {str(candidate)}")
                 if self.test_candidates([func_name], [candidate]):

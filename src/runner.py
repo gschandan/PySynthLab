@@ -1,5 +1,8 @@
 import sys
 from dataclasses import asdict
+from itertools import product
+
+from z3 import *
 
 from src.utilities.config_manager import ConfigManager
 from src.cegis.z3.synthesis_strategy.fast_enumerative_synth import FastEnumerativeSynthesis
@@ -9,6 +12,7 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
 def main() -> None:
+
     config = ConfigManager.get_config()
     ConfigManager.logger.info(asdict(config))
 
@@ -33,6 +37,7 @@ def main() -> None:
         raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
 
     strategy.execute_cegis()
+
 
 if __name__ == '__main__':
     main()
