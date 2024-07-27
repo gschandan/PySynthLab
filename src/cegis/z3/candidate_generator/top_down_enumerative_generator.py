@@ -1,9 +1,6 @@
-import uuid
 from itertools import product
 from typing import List, Tuple, Union
 import z3
-from treelib import Tree
-
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
@@ -11,30 +8,6 @@ class Node:
     def __init__(self, value):
         self.value = value
         self.children = []
-
-
-def build_tree(grammar, expr, depth=0):
-    node = Node(str(expr))
-    if depth > 10:
-        return node
-
-    if isinstance(expr, tuple):
-        op, *args = expr
-        for arg in args:
-            child = build_tree(grammar, arg, depth + 1)
-            node.children.append(child)
-    elif expr in grammar:
-        for production in grammar[expr]:
-            child = build_tree(grammar, production, depth + 1)
-            node.children.append(child)
-
-    return node
-
-
-def print_tree(node, prefix="", is_last=True):
-    SynthesisProblem.logger.debug(prefix + ("└── " if is_last else "├── ") + node.value)
-    for i, child in enumerate(node.children):
-        print_tree(child, prefix + ("    " if is_last else "│   "), i == len(node.children) - 1)
 
 
 class TopDownCandidateGenerator:
@@ -57,13 +30,15 @@ class TopDownCandidateGenerator:
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         candidates = []
-        for iteration, (func_name, variable_mapping) in enumerate(self.problem.context.variable_mapping_dict.items(), 1):
+        for iteration, (func_name, variable_mapping) in enumerate(self.problem.context.variable_mapping_dict.items(),
+                                                                  1):
             variables = [str(var) for var in variable_mapping.values()]
             grammar = self.define_grammar(variables)
             self.problem.logger.debug(f'Grammar {grammar}')
             self.problem.logger.debug(f"\nIteration {iteration}:")
-            tree = build_tree(grammar, 'S')
-            print_tree(tree)
+            tree = self.build_tree(grammar, 'S')
+            tree_str = "\n".join(self.print_tree(tree))
+            self.problem.logger.debug(tree_str)
             for candidate in self.expand(grammar, 'S', 0):
                 simplified_expr = self.simplify_term(candidate)
                 expr_str = str(simplified_expr)
@@ -125,4 +100,26 @@ class TopDownCandidateGenerator:
 
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
         return candidates
-    
+
+    def build_tree(self, grammar, expr, depth=0):
+        node = Node(str(expr))
+        if depth > 10:
+            return node
+
+        if isinstance(expr, tuple):
+            op, *args = expr
+            for arg in args:
+                child = self.build_tree(grammar, arg, depth + 1)
+                node.children.append(child)
+        elif expr in grammar:
+            for production in grammar[expr]:
+                child = self.build_tree(grammar, production, depth + 1)
+                node.children.append(child)
+
+        return node
+
+    def print_tree(self, node, prefix="", is_last=True):
+        result = [prefix + ("└── " if is_last else "├── ") + node.value]
+        for i, child in enumerate(node.children):
+            result.extend(self.print_tree(child, prefix + ("    " if is_last else "│   "), i == len(node.children) - 1))
+        return result

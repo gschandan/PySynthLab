@@ -1,4 +1,5 @@
 from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
+from src.cegis.z3.candidate_generator.weighted_top_down_enumerative_generator import WeightedTopDownCandidateGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
@@ -54,7 +55,8 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         """
         super().__init__(problem)
         self.problem = problem
-        self.candidate_generator = TopDownCandidateGenerator(problem)
+        # self.candidate_generator = TopDownCandidateGenerator(problem)
+        self.candidate_generator = WeightedTopDownCandidateGenerator(problem)
 
     def execute_cegis(self) -> None:
         """
