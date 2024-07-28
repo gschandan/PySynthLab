@@ -5,7 +5,7 @@ import logging
 import os
 import re
 from dataclasses import asdict, fields
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 import yaml
 from src.utilities.options import Options, LoggingOptions, SynthesisParameters, SolverOptions
 
@@ -68,7 +68,16 @@ class ConfigManager:
                 elif field_obj.name == 'operation_costs':
                     kwargs['type'] = lambda x: json.loads(x.replace("'", '"'))
                 else:
-                    kwargs['type'] = eval(field_obj.metadata.get('type', 'str'))
+                    type_str = field_obj.metadata.get('type', 'str')
+                    if type_str.startswith('Optional['):
+                        type_str = type_str[9:-1]  # Remove 'Optional[' and ']'
+                    if type_str == 'Dict[str, List[Union[str, Tuple]]]':
+                        kwargs['type'] = json.loads
+                    elif type_str in ['str', 'int', 'float', 'bool']:
+                        kwargs['type'] = eval(type_str)
+                    else:
+                        kwargs['type'] = str  # Default to string for complex types
+
                     if 'choices' in field_obj.metadata:
                         kwargs['choices'] = field_obj.metadata['choices']
                         kwargs['help'] += f" Choices: {', '.join(map(str, field_obj.metadata['choices']))}"
@@ -146,6 +155,11 @@ class ConfigManager:
                                                                          subfield.name)
             elif merged_dict.get(field.name) is None:
                 merged_dict[field.name] = getattr(default_options, field.name)
+
+        if 'custom_grammar' in merged_dict['synthesis_parameters']:
+            custom_grammar = merged_dict['synthesis_parameters']['custom_grammar']
+            if isinstance(custom_grammar, str):
+                merged_dict['synthesis_parameters']['custom_grammar'] = json.loads(custom_grammar)
 
         return Options(
             logging=LoggingOptions(**merged_dict['logging']),

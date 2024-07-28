@@ -19,14 +19,17 @@ class TopDownCandidateGenerator:
         self.max_depth = problem.options.synthesis_parameters.max_depth
         self.explored_expressions: dict[str, set[str]] = {func_name: set() for func_name in
                                                           problem.context.variable_mapping_dict.keys()}
+        self.grammar = problem.options.synthesis_parameters.custom_grammar
 
     def define_grammar(self, variables):
-        return {
-            'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('Neg', 'S')],
-            'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'),
-                  ('!=', 'T', 'T')],
-            'T': list(variables) + [str(i) for i in range(self.min_const, self.max_const + 1)]
-        }
+        if self.grammar is None:
+            return {
+                'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('Neg', 'S')],
+                'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'),
+                      ('!=', 'T', 'T')],
+                'T': list(variables) + [str(i) for i in range(self.min_const, self.max_const + 1)]
+            }
+        return self.grammar
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
         candidates = []

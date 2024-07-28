@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Union
 
 
 @dataclass
@@ -47,42 +48,56 @@ class LoggingOptions:
 @dataclass
 class SynthesisParameters:
     """
-     Options for configuring the Synthesis process.
+    Options for configuring the Synthesis process.
 
-   Synthesis Parameters:
-       strategy (str): Synthesis strategy. Choices are random_enumerative, fast_enumerative. Default is random_enumerative.
-       candidate_generation (str): Candidate generation strategy. Choices are bottom_up, top_down, fast_enumerative. Default is bottom_up.
-       max_iterations (int): Maximum number of iterations. Default is 500.
-       max_depth (int): Maximum depth of generated expressions. Default is 5.
-       max_complexity (int): Maximum complexity of generated expressions. Default is 5.
-       random_seed (int): Random seed for all solvers. Default is 1234.
-       randomise_each_iteration (bool): Randomise seed between each synthesis iteration. Default is False.
-       max_candidates_at_each_depth (int): Maximum number of candidate programs to consider at each depth. Default is 10.
-       min_const (int): Minimum constant to introduce into the candidate programs. Default is -2.
-       max_const (int): Maximum constant to introduce into the candidate programs. Default is 2.
-       operation_costs (Dict[str, int]): Key-Value pairs representing operation costs for adjustable weighting. 
-                                         Default is {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.
-       initial_weight (float): Initial weight for operations in random candidate generation. Default is 1.0.
-       weight_multiplier (float): Weight multiplier for operations in candidate generation. 
-                                  1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away. Default is 1.0.
+    Synthesis Parameters:
+        strategy (str): Synthesis strategy. Choices are random_enumerative, fast_enumerative. Default is random_enumerative.
+        candidate_generation (str): Candidate generation strategy. Choices are bottom_up, top_down, fast_enumerative. Default is bottom_up.
+        max_iterations (int): Maximum number of iterations. Default is 500.
+        max_depth (int): Maximum depth of generated expressions. Default is 5.
+        max_complexity (int): Maximum complexity of generated expressions. Default is 5.
+        random_seed (int): Random seed for all solvers. Default is 1234.
+        randomise_each_iteration (bool): Randomise seed between each synthesis iteration. Default is False.
+        max_candidates_at_each_depth (int): Maximum number of candidate programs to consider at each depth. Default is 10.
+        min_const (int): Minimum constant to introduce into the candidate programs. Default is -2.
+        max_const (int): Maximum constant to introduce into the candidate programs. Default is 2.
+        operation_costs (Dict[str, int]): Key-Value pairs representing operation costs for adjustable weighting. 
+                                          Default is {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.
+        initial_weight (float): Initial weight for operations in random candidate generation. Default is 1.0.
+        weight_multiplier (float): Weight multiplier for operations in candidate generation. 
+                                   1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away. Default is 1.0.
+        custom_grammar (Optional[Dict[str, List[Union[str, Tuple]]]]): Custom grammar for candidate generation. Default is None.
+        use_weighted_generator (bool): Use weighted top-down generator instead of regular top-down generator. Default is False.
 
-   Note:
-       When using a YAML configuration file, these options can be grouped under 'logging', 'synthesis_parameters', and 'solver' sections.
-       For example:
+    Note:
+        When using a YAML configuration file, these options can be grouped under 'logging', 'synthesis_parameters', and 'solver' sections.
+        For example:
 
-       logging:
-         level: "DEBUG"
-       synthesis_parameters:
-         max_iterations: 20
-         operation_costs:
-           '+': 1
-           '-': 1
-           '*': 3
-           'If': 4
-           'Neg': 2
-       solver:
-         name: "z3"
-         timeout: 30000
+        logging:
+          level: "DEBUG"
+        synthesis_parameters:
+          max_iterations: 20
+          operation_costs:
+            '+': 1
+            '-': 1
+            '*': 3
+            'If': 4
+            'Neg': 2
+          custom_grammar:
+            S: ["T", ["+", "S", "S"], ["-", "S", "S"]]
+            T: ["x", "y", "1", "2"]
+          use_weighted_generator: true
+        solver:
+          name: "z3"
+          timeout: 30000
+
+        When providing a custom grammar, ensure it's in the correct format:
+        - For non-weighted grammars: Each key in the dictionary should have a list of strings or tuples as its value.
+        - For weighted grammars: Each key should have a list of tuples, where each tuple contains the production rule and its weight.
+
+        The custom_grammar can also be provided via command-line as a JSON string:
+        --synthesis_parameters__custom_grammar '{"S": ["T", ["+", "S", "S"], ["-", "S", "S"]], "T": ["x", "y", "1", "2"]}'
+
    """
     strategy: str = field(
         default="random_enumerative",
@@ -165,6 +180,20 @@ class SynthesisParameters:
                         "1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away",
             type="float"
         ))
+    custom_grammar: dict[str, list[Union[str, tuple]]] = field(
+        default=None,
+        metadata=dict(
+            description="Custom grammar for candidate generation",
+            type="dict[str, list[Union[str, tuple]]]"
+        )
+    )
+    use_weighted_generator: bool = field(
+        default=False,
+        metadata=dict(
+            description="Use weighted top-down generator instead of regular top-down generator",
+            type="bool"
+        )
+    )
 
 
 @dataclass

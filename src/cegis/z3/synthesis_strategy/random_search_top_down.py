@@ -55,8 +55,13 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         """
         super().__init__(problem)
         self.problem = problem
-        # self.candidate_generator = TopDownCandidateGenerator(problem)
-        self.candidate_generator = WeightedTopDownCandidateGenerator(problem)
+        if problem.options.synthesis_parameters.use_weighted_generator:
+            self.candidate_generator = WeightedTopDownCandidateGenerator(problem)
+        else:
+            self.candidate_generator = TopDownCandidateGenerator(problem)
+
+        if problem.options.synthesis_parameters.custom_grammar:
+            self.candidate_generator.grammar = problem.options.synthesis_parameters.custom_grammar
 
     def execute_cegis(self) -> None:
         """
