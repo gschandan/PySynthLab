@@ -1,6 +1,6 @@
 from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
 from src.cegis.z3.candidate_generator.weighted_top_down_enumerative_generator import WeightedTopDownCandidateGenerator
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
 
@@ -18,14 +18,14 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
     top-down candidate generator, depending on the configuration.
 
     Attributes:
-        problem (SynthesisProblem): The synthesis problem to be solved.
+        problem (SynthesisProblemZ3): The synthesis problem to be solved.
         candidate_generator (Union[TopDownCandidateGenerator, WeightedTopDownCandidateGenerator]): 
             The generator used to produce candidate solutions.
 
     Example:
         .. code-block:: python
 
-            from src.cegis.z3.synthesis_problem import SynthesisProblem
+            from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
             from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
             # Define the synthesis problem
@@ -53,12 +53,12 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         `use_weighted_generator` option in the synthesis parameters.
     """
 
-    def __init__(self, problem: SynthesisProblem):
+    def __init__(self, problem: SynthesisProblemZ3):
         """
         Initialize the RandomSearchStrategyTopDown strategy.
 
         Args:
-            problem (SynthesisProblem): The synthesis problem to be solved.
+            problem (SynthesisProblemZ3): The synthesis problem to be solved.
         """
         super().__init__(problem)
         self.problem = problem
@@ -94,15 +94,15 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
                 continue
             pruned_candidates = self.candidate_generator.prune_candidates(candidates)
 
-            SynthesisProblem.logger.info(f"Iteration {iteration + 1}/{max_iterations}:\n")
+            self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations}:\n")
             func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
             candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
             if self.test_candidates(func_strs, candidate_functions):
-                SynthesisProblem.logger.info(f"Found satisfying candidates!")
+                self.problem.logger.info(f"Found satisfying candidates!")
                 for candidate, func_name in pruned_candidates:
-                    SynthesisProblem.logger.info(f"{func_name}: {candidate}")
+                    self.problem.logger.info(f"{func_name}: {candidate}")
                 self.set_solution_found()
                 return
 
-        SynthesisProblem.logger.info("No satisfying candidates found.")
+        self.problem.logger.info("No satisfying candidates found.")

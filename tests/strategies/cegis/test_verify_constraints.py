@@ -5,7 +5,7 @@ from z3 import *
 
 from src.cegis.z3.synthesis_strategy.cegis_t import CegisT, CandidateType
 from src.utilities.options import Options
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 
 @unittest.skip("need to fix")
 class TestCegisT(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestCegisT(unittest.TestCase):
         (check-synth)
         """
         self.options = Options()
-        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.problem = SynthesisProblemZ3(self.problem_str, self.options)
         self.strategy = CegisT(self.problem)
 
     def test_verify_correct_candidate(self):
@@ -104,7 +104,7 @@ class TestCegisT(unittest.TestCase):
         (constraint (or (= x (min2 x y)) (= y (min2 x y))))
         (check-synth)
         """
-        problem_multi = SynthesisProblem(problem_str_multi, self.options)
+        problem_multi = SynthesisProblemZ3(problem_str_multi, self.options)
         strategy_multi = CegisT(problem_multi)
 
         def max2_correct(x, y):

@@ -1,5 +1,5 @@
 import unittest
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.utilities.options import Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
@@ -16,7 +16,7 @@ class SynthesisProblemTestCase(unittest.TestCase, ABC):
             raise NotImplementedError("Subclasses must define problem_str")
         cls.options = Options()
         cls.options.synthesis_parameters.max_iterations = 5
-        cls.problem = SynthesisProblem(cls.problem_str.strip(), cls.options)
+        cls.problem = SynthesisProblemZ3(cls.problem_str.strip(), cls.options)
 
     def setUp(self):
         self.test_strategy = TestSynthesisStrategy(self.problem)

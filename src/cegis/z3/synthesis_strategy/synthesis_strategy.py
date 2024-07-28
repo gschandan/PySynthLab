@@ -5,7 +5,7 @@ from z3 import ExprRef
 
 from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
 from src.cegis.z3.candidate_generator.random_candidate_generator import RandomCandidateGenerator
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 
 
 class SynthesisStrategy(ABC):
@@ -16,7 +16,7 @@ class SynthesisStrategy(ABC):
     particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS).
 
     Attributes:
-        problem (SynthesisProblem): The synthesis problem to be solved.
+        problem (SynthesisProblemZ3): The synthesis problem to be solved.
         solution_found (bool): Flag indicating whether a solution has been found.
         candidate_generator (CandidateGenerator): The generator used to produce candidate solutions.
 
@@ -42,12 +42,12 @@ class SynthesisStrategy(ABC):
             strategy.execute_cegis()
     """
 
-    def __init__(self, problem: 'SynthesisProblem', candidate_generator: CandidateGenerator = None):
+    def __init__(self, problem: 'SynthesisProblemZ3', candidate_generator: CandidateGenerator = None):
         """
         Initialize the SynthesisStrategy.
 
         Args:
-            problem (SynthesisProblem): The synthesis problem to be solved.
+            problem (SynthesisProblemZ3): The synthesis problem to be solved.
             candidate_generator (CandidateGenerator, optional): A custom candidate generator. If None, a default RandomCandidateGenerator will be used.
         """
         self.problem = problem
@@ -122,7 +122,7 @@ class SynthesisStrategy(ABC):
        """
 
         synth_func_names = list(self.problem.context.z3_synth_functions.keys())
-        SynthesisProblem.logger.debug(f" candidate_functions {candidate_functions}")
+        self.problem.logger.debug(f" candidate_functions {candidate_functions}")
 
         if len(func_strs) != len(synth_func_names):
             raise ValueError("Number of candidate functions doesn't match number of synthesis functions")
@@ -130,22 +130,22 @@ class SynthesisStrategy(ABC):
         for func, candidate, synth_func_name in zip(func_strs, candidate_functions, synth_func_names):
             if not self.check_counterexample(synth_func_name, candidate):
                 return False
-        SynthesisProblem.logger.debug("All individual counterexample checks passed")
+        self.problem.logger.debug("All individual counterexample checks passed")
 
         candidates = list(zip(candidate_functions, synth_func_names))
         new_counterexamples = self.generate_counterexample(candidates)
         if new_counterexamples is not None:
             for func_name, ce in new_counterexamples.items():
-                SynthesisProblem.logger.info(f"New counterexample found for {func_name}: {ce} Candidates: {candidates}")
+                self.problem.logger.info(f"New counterexample found for {func_name}: {ce} Candidates: {candidates}")
             return False
-        SynthesisProblem.logger.debug("No new counterexamples generated")
+        self.problem.logger.debug("No new counterexamples generated")
 
         if not self.verify_candidates(candidate_functions):
-            SynthesisProblem.logger.info(
+            self.problem.logger.info(
                 f"Verification failed for guess {'; '.join(func_strs)}. Candidates violate constraints.")
             return False
 
-        SynthesisProblem.logger.info(f"No counterexample found! Guess(es) should be correct: {'; '.join(func_strs)}.")
+        self.problem.logger.info(f"No counterexample found! Guess(es) should be correct: {'; '.join(func_strs)}.")
         return True
 
     def check_counterexample(self, func_name: str, candidate: z3.ExprRef) -> bool:
@@ -200,10 +200,10 @@ class SynthesisStrategy(ABC):
             list(self.problem.context.z3_synth_functions.values()),
             [candidate for candidate, _ in candidates])
         self.problem.context.enumerator_solver.add(substituted_neg_constraints)
-        SynthesisProblem.logger.debug(f"Negated constraints: {self.problem.context.z3_negated_constraints}")
-        SynthesisProblem.logger.debug(f"Substituted negated constraints: {substituted_neg_constraints}")
+        self.problem.logger.debug(f"Negated constraints: {self.problem.context.z3_negated_constraints}")
+        self.problem.logger.debug(f"Substituted negated constraints: {substituted_neg_constraints}")
         result = self.problem.context.enumerator_solver.check()
-        SynthesisProblem.logger.debug(f"generate_counterexample solver check result: {result}")
+        self.problem.logger.debug(f"generate_counterexample solver check result: {result}")
 
         if result == z3.sat:
             model = self.problem.context.enumerator_solver.model()
@@ -213,13 +213,13 @@ class SynthesisStrategy(ABC):
                 variable_mapping = self.problem.context.variable_mapping_dict[synth_func_name]
                 args = list(variable_mapping.values())
                 ce = {arg: model.eval(arg, model_completion=True) for arg in args}
-                SynthesisProblem.logger.info(f"Counterexample for {synth_func_name}: {ce}")
+                self.problem.logger.info(f"Counterexample for {synth_func_name}: {ce}")
                 counterexamples[synth_func_name] = ce
                 self.problem.context.counterexamples.append((synth_func_name, ce))
 
             return counterexamples
         else:
-            SynthesisProblem.logger.info(f"No counterexample found for candidates {candidates}")
+            self.problem.logger.info(f"No counterexample found for candidates {candidates}")
             return None
 
     def verify_candidates(self, candidates: List[z3.ExprRef]) -> bool:

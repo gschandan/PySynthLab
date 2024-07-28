@@ -2,8 +2,8 @@ import typing
 import unittest
 from typing import List, Tuple, Callable, Collection
 from z3 import *
-from src.cegis.z3.synthesis_strategy.random_search_bottom_up import SynthesisProblem
-from src.cegis.z3.synthesis_problem import Options
+from src.cegis.z3.synthesis_strategy.random_search_bottom_up import SynthesisProblemZ3
+from src.cegis.z3.synthesis_problem_z3 import Options
 
 
 class WhenTheConstraintIsCommutativity(unittest.TestCase):
@@ -17,7 +17,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
             (check-synth)
             """
         self.options = Options()
-        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.problem = SynthesisProblemZ3(self.problem_str, self.options)
 
     def test_substitute_constraints_multiple_commutativity(self):
         def generate_correct_abs_max_function(arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:

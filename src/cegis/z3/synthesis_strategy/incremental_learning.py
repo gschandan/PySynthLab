@@ -1,12 +1,12 @@
 from typing import List, Tuple, Dict, Any
 from z3 import z3
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
 
 class IncrementalLearningSynthesisStrategy(SynthesisStrategy):
 
-    def __init__(self, problem: SynthesisProblem):
+    def __init__(self, problem: SynthesisProblemZ3):
         super().__init__(problem)
         self.learned_constraints = z3.BoolVal(True)
 

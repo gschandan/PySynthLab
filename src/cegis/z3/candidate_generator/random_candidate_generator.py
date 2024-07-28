@@ -3,8 +3,6 @@ from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateG
 from typing import List, Tuple
 from z3 import *
 
-from src.cegis.z3.synthesis_problem import SynthesisProblem
-
 
 class RandomCandidateGenerator(CandidateGenerator):
     """
@@ -34,8 +32,8 @@ class RandomCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_random_term(
                 self.get_arg_sorts(func_name),
-                SynthesisProblem.options.synthesis_parameters.max_depth,
-                SynthesisProblem.options.synthesis_parameters.max_complexity,
+                self.problem.options.synthesis_parameters.max_depth,
+                self.problem.options.synthesis_parameters.max_complexity,
             )
             candidates.append((candidate, func_name))
         return candidates
@@ -77,7 +75,7 @@ class RandomCandidateGenerator(CandidateGenerator):
             op = random.choices(available_ops, weights=[op_weights[op] for op in available_ops])[0]
             remaining_complexity = curr_complexity - self.op_complexity(op)
 
-            op_weights[op] *= SynthesisProblem.options.synthesis_parameters.weight_multiplier
+            op_weights[op] *= self.problem.options.synthesis_parameters.weight_multiplier
 
             if op in ['+', '-']:
                 left = build_term(curr_depth - 1, remaining_complexity // 2)
@@ -94,11 +92,11 @@ class RandomCandidateGenerator(CandidateGenerator):
                 return z3.If(condition, true_expr, false_expr)
             elif op == 'Neg':
                 return -build_term(curr_depth - 1, remaining_complexity)
-            SynthesisProblem.logger.error(f"Unexpected operation: {op}")
+            self.problem.logger.error(f"Unexpected operation: {op}")
             raise ValueError(f"Unexpected operation: {op}")
 
         generated_expression = build_term(depth, complexity)
-        SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
+        self.problem.logger.info(f"Generated expression: {generated_expression}")
 
         return generated_expression
 

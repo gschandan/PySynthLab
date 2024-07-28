@@ -1,8 +1,8 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblem
-from src.cegis.z3.synthesis_problem import Options
+from src.cegis.z3.synthesis_strategy.random_search_bottom_up import  SynthesisProblemZ3
+from src.cegis.z3.synthesis_problem_z3 import Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 from src.helpers.parser.src.resolution import FunctionKind
 
@@ -19,7 +19,7 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
             (check-synth)
             """
         self.options = Options()
-        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.problem = SynthesisProblemZ3(self.problem_str, self.options)
 
     def test_initialization(self):
         self.assertEqual(self.problem.input_problem, self.problem_str)
@@ -33,14 +33,14 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         self.assertIn("(declare-fun", smt_problem)
 
     def test_initialise_z3_variables(self):
-        self.problem.initialise_z3_variables()
+        self.problem.initialise_variables()
         self.assertIn("x", self.problem.context.z3_variables)
         self.assertIn("y", self.problem.context.z3_variables)
         self.assertIsInstance(self.problem.context.z3_variables["x"], ArithRef)
         self.assertIsInstance(self.problem.context.z3_variables["y"], ArithRef)
 
     def test_initialise_z3_synth_functions(self):
-        self.problem.initialise_z3_synth_functions()
+        self.problem.initialise_synth_functions()
         self.assertIn("f", self.problem.context.z3_synth_functions)
         self.assertIsInstance(self.problem.context.z3_synth_functions["f"], FuncDeclRef)
 
@@ -50,8 +50,8 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         self.assertIsInstance(self.problem.context.z3_constraints[0], BoolRef)
 
     def test_substitute_constraints_multiple(self):
-        self.problem.initialise_z3_variables()
-        self.problem.initialise_z3_synth_functions()
+        self.problem.initialise_variables()
+        self.problem.initialise_synth_functions()
         constraints = self.problem.context.z3_constraints
         func = self.problem.context.z3_synth_functions["f"]
         candidate_expr, _ = self.generate_max_function([IntSort(), IntSort()])
@@ -62,8 +62,8 @@ class WhenTheProblemIsTheMaxOfTwoIntegers(unittest.TestCase):
         self.assertIsInstance(substituted_constraints[0], BoolRef)
 
     def test_test_multiple_candidates(self):
-        self.problem.initialise_z3_variables()
-        self.problem.initialise_z3_synth_functions()
+        self.problem.initialise_variables()
+        self.problem.initialise_synth_functions()
         self.problem.map_z3_variables()
         self.problem.parse_constraints()
         func = self.problem.context.z3_synth_functions["f"]

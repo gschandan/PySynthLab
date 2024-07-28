@@ -1,7 +1,7 @@
 from itertools import product
 from typing import List, Tuple, Union
 import z3
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 
 
 class Node:
@@ -20,7 +20,7 @@ class TopDownCandidateGenerator:
 
     Attributes:
         grammar (dict): The grammar used for generating expressions.
-        problem (SynthesisProblem): The synthesis problem being solved.
+        problem (SynthesisProblemZ3): The synthesis problem being solved.
         min_const (int): The minimum constant value to be used in expressions.
         max_const (int): The maximum constant value to be used in expressions.
         max_depth (int): The maximum depth of generated expressions.
@@ -36,7 +36,7 @@ class TopDownCandidateGenerator:
         print_tree(node, prefix, is_last): Print the tree representation of the grammar.
     """
 
-    def __init__(self, problem: 'SynthesisProblem'):
+    def __init__(self, problem: 'SynthesisProblemZ3'):
         self.grammar = None
         self.problem = problem
         self.min_const = problem.options.synthesis_parameters.min_const

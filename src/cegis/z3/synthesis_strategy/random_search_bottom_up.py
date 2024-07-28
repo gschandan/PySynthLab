@@ -1,4 +1,4 @@
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
 
@@ -16,14 +16,14 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
     candidate generator.
 
     Attributes:
-        problem (SynthesisProblem): The synthesis problem to be solved.
+        problem (SynthesisProblemZ3): The synthesis problem to be solved.
         min_const (int): The minimum constant value to consider in candidate generation.
         max_const (int): The maximum constant value to consider in candidate generation.
 
     Example:
         .. code-block:: python
 
-            from src.cegis.z3.synthesis_problem import SynthesisProblem
+            from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
             from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
 
             # Define the synthesis problem
@@ -48,12 +48,12 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         search space.
     """
 
-    def __init__(self, problem: SynthesisProblem):
+    def __init__(self, problem: SynthesisProblemZ3):
         """
         Initialize the RandomSearchStrategyBottomUp strategy.
 
         Args:
-            problem (SynthesisProblem): The synthesis problem to be solved.
+            problem (SynthesisProblemZ3): The synthesis problem to be solved.
         """
 
         super().__init__(problem)
@@ -90,17 +90,17 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                 for candidate_at_depth in range(max_candidates_per_depth):
                     candidates = self.candidate_generator.generate_candidates()
                     pruned_candidates = self.candidate_generator.prune_candidates(candidates)
-                    SynthesisProblem.logger.info(f"Iteration {iteration + 1}/{max_iterations} depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):\n")
+                    self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations} depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):\n")
                     func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
                     candidate_functions = [candidate for candidate, _ in pruned_candidates]
                     if self.test_candidates(func_strs, candidate_functions):
-                        SynthesisProblem.logger.info(f"Found satisfying candidates!")
+                        self.problem.logger.info(f"Found satisfying candidates!")
                         for candidate, func_name in pruned_candidates:
-                            SynthesisProblem.logger.info(f"{func_name}: {candidate}")
+                            self.problem.logger.info(f"{func_name}: {candidate}")
                         self.set_solution_found()
                         return
                     iteration += 1
                     if iteration >= max_iterations:
-                        SynthesisProblem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
+                        self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
                         return
-        SynthesisProblem.logger.info("No satisfying candidates found.")
+        self.problem.logger.info("No satisfying candidates found.")
