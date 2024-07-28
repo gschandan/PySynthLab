@@ -12,6 +12,7 @@ Welcome to PySynthLab's documentation!
    
    config_manager
    synthesis_strategy
+   candidate_generator
 
 Indices and tables
 ==================

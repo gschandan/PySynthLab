@@ -46,7 +46,7 @@ class TopDownCandidateGenerator:
                 simplified_expr = self.simplify_term(candidate)
                 expr_str = str(simplified_expr)
                 if expr_str not in self.explored_expressions[func_name]:
-                    self.problem.logger.debug(f'Generated candidate: {expr_str}')
+                    self.problem.logger.info(f'Generated expression: {expr_str}')
                     self.explored_expressions[func_name].add(expr_str)
                     candidates.append((simplified_expr, func_name))
                     break

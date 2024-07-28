@@ -37,13 +37,11 @@ class CegisT(SynthesisStrategy):
             if candidate is None:
                 continue
 
-            # Synthesis phase
             candidate = self.synthesize()
             if candidate is None:
                 SynthesisProblem.logger.info("No candidate found")
                 continue
 
-            # Verification phase
             counterexample = self.verify(candidate)
             if counterexample is None:
                 SynthesisProblem.logger.info("Solution found!")
@@ -52,10 +50,8 @@ class CegisT(SynthesisStrategy):
                 self.set_solution_found()
                 return
 
-            # Theory solver phase
             theory_constraint = self.theory_solver_phase(candidate, counterexample)
 
-            # Learning phase
             self.add_counterexample(counterexample)
             if theory_constraint is not None:
                 self.add_theory_constraint(theory_constraint)

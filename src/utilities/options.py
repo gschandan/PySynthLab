@@ -6,30 +6,15 @@ from typing import Union
 @dataclass
 class LoggingOptions:
     """
-     Options for configuring the Synthesis process.
+    Options for configuring logging in the Synthesis process.
 
-   Logging:
-       level (str): Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.
-       file (str): Log file path. Default is logs/default.log.
+    Attributes:
+        level: Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL.
+        file: Log file path.
 
-   Note:
-       When using a YAML configuration file, these options can be grouped under 'logging', 'synthesis_parameters', and 'solver' sections.
-       For example:
-
-       logging:
-         level: "DEBUG"
-       synthesis_parameters:
-         max_iterations: 20
-         operation_costs:
-           '+': 1
-           '-': 1
-           '*': 3
-           'ite': 4
-           'neg': 2
-       solver:
-         name: "z3"
-         timeout: 30000
-   """
+    Note:
+        These options can be grouped under the 'logging' section in a YAML file.
+    """
     level: str = field(
         default="INFO",
         metadata=dict(
@@ -70,35 +55,11 @@ class SynthesisParameters:
         use_weighted_generator (bool): Use weighted top-down generator instead of regular top-down generator. Default is False.
 
     Note:
-        When using a YAML configuration file, these options can be grouped under 'logging', 'synthesis_parameters', and 'solver' sections.
-        For example:
-
-        logging:
-          level: "DEBUG"
-        synthesis_parameters:
-          max_iterations: 20
-          operation_costs:
-            '+': 1
-            '-': 1
-            '*': 3
-            'ite': 4
-            'neg': 2
-          custom_grammar:
-            S: ["T", ["+", "S", "S"], ["-", "S", "S"]]
-            T: ["x", "y", "1", "2"]
-          use_weighted_generator: true
-        solver:
-          name: "z3"
-          timeout: 30000
-
         When providing a custom grammar, ensure it's in the correct format:
         - For non-weighted grammars: Each key in the dictionary should have a list of strings or tuples as its value.
         - For weighted grammars: Each key should have a list of tuples, where each tuple contains the production rule and its weight.
 
-        The custom_grammar can also be provided via command-line as a JSON string:
-        --synthesis_parameters__custom_grammar '{"S": ["T", ["+", "S", "S"], ["-", "S", "S"]], "T": ["x", "y", "1", "2"]}'
-
-   """
+    """
     strategy: str = field(
         default="random_enumerative",
         metadata=dict(
@@ -199,31 +160,15 @@ class SynthesisParameters:
 @dataclass
 class SolverOptions:
     """
-     Options for configuring the Synthesis process.
+    Options for configuring the SMT solver.
 
-     Solver Options:
-       name (str): SMT Solver to use. Choices are z3, cvc5 (experimental/alpha phase). Default is z3.
-       timeout (int): SMT Solver Configuration - Timeout. Default is 30000.
+    Attributes:
+        name: SMT Solver to use. Choices are z3, cvc5 (experimental/alpha phase).
+        timeout: SMT Solver Configuration - Timeout.
 
-     Note:
-       When using a YAML configuration file, these options can be grouped under 'logging', 'synthesis_parameters', and 'solver' sections.
-       For example:
-
-       logging:
-         level: "DEBUG"
-       synthesis_parameters:
-         max_iterations: 20
-         operation_costs:
-           '+': 1
-           '-': 1
-           '*': 3
-           'ite': 4
-           'neg': 2
-       solver:
-         name: "z3"
-         timeout: 30000
-     """
-
+    Note:
+        These options can be grouped under the 'solver' section in a YAML file.
+    """
     name: str = field(
         default="z3",
         metadata=dict(
@@ -242,29 +187,15 @@ class SolverOptions:
 @dataclass
 class Options:
     """
-   Options for configuring the Synthesis process.
+    Options for configuring the Synthesis process.
 
-   Other:
-       input_source (str): Input source. Choices are STDIN or a path to a problem file.
+    Attributes:
+        input_source: Input source. Choices are STDIN or a path to a problem file.
 
-   Note:
-       When using a YAML configuration file, these options can be grouped under 'logging', 'synthesis_parameters', and 'solver' sections.
-       For example:
-
-       logging:
-         level: "DEBUG"
-       synthesis_parameters:
-         max_iterations: 20
-         operation_costs:
-           '+': 1
-           '-': 1
-           '*': 3
-           'ite': 4
-           'neg': 2
-       solver:
-         name: "z3"
-         timeout: 30000
-   """
+    Note:
+        When using a YAML configuration file, options can be grouped under
+        'logging', 'synthesis_parameters', and 'solver' sections.
+    """
     logging: LoggingOptions = field(default_factory=LoggingOptions)
     synthesis_parameters: SynthesisParameters = field(default_factory=SynthesisParameters)
     solver: SolverOptions = field(default_factory=SolverOptions)
