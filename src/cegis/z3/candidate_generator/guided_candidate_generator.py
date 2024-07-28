@@ -6,6 +6,7 @@ from z3 import *
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
+# experimental
 class GuidedCandidateGenerator(CandidateGenerator):
 
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:

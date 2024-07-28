@@ -11,6 +11,7 @@ Welcome to PySynthLab's documentation!
    :caption: Contents:
    
    config_manager
+   synthesis_problem
    synthesis_strategy
    candidate_generator
 

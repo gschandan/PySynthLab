@@ -1,5 +1,5 @@
 from itertools import product
-from src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator import FastEnumerativeSynthesisGenerator
+from src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator import FastEnumerativeCandidateGenerator
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
@@ -16,7 +16,7 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
 
     Attributes:
         problem (SynthesisProblem): The synthesis problem to be solved.
-        candidate_generator (FastEnumerativeSynthesisGenerator): The generator used to produce candidate solutions.
+        candidate_generator (FastEnumerativeCandidateGenerator): The generator used to produce candidate solutions.
 
     Example:
         .. code-block:: python
@@ -54,7 +54,7 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         """
         super().__init__(problem)
         self.problem = problem
-        self.candidate_generator = FastEnumerativeSynthesisGenerator(problem)
+        self.candidate_generator = FastEnumerativeCandidateGenerator(problem)
 
     def execute_cegis(self) -> None:
         """

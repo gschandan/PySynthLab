@@ -14,9 +14,13 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
     where the general structure of the solution is known, but the specific details
     need to be refined.
 
+    The strategy can use either a regular top-down candidate generator or a weighted
+    top-down candidate generator, depending on the configuration.
+
     Attributes:
         problem (SynthesisProblem): The synthesis problem to be solved.
-        candidate_generator (TopDownCandidateGenerator): The generator used to produce candidate solutions.
+        candidate_generator (Union[TopDownCandidateGenerator, WeightedTopDownCandidateGenerator]): 
+            The generator used to produce candidate solutions.
 
     Example:
         .. code-block:: python
@@ -44,6 +48,9 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         structure of the solution and want to refine it. It can be more efficient
         than bottom-up approaches for certain types of problems, especially when
         the solution space is well-structured.
+
+        The use of a weighted generator can be controlled through the
+        `use_weighted_generator` option in the synthesis parameters.
     """
 
     def __init__(self, problem: SynthesisProblem):
@@ -65,9 +72,9 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
 
     def execute_cegis(self) -> None:
         """
-        Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using a top-down random search strategy.
+        Execute the CEGIS loop using a top-down random search strategy.
 
-        This method generates candidates using a top-down approach, prunes them, and tests them against
+        This method generates candidates using a top-down approach, and tests them against
         the synthesis problem. The search continues for a specified number of iterations or until a
         solution is found.
 

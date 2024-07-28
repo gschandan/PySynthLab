@@ -7,8 +7,19 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
 
 
-class FastEnumerativeSynthesisGenerator(CandidateGenerator):
+class FastEnumerativeCandidateGenerator(CandidateGenerator):
+    """
+    A candidate generator that uses fast enumerative synthesis to generate expressions.
 
+    This class implements a strategy to efficiently enumerate candidate solutions
+    for synthesis problems using a grammar-based approach and caching mechanisms.
+
+    Attributes:
+        grammar (Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]): The extracted grammar for term generation.
+        constructor_classes (Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]): Grouped constructors by argument types.
+        term_cache (Dict[Tuple[z3.SortRef, int], List[z3.ExprRef]]): Cache for generated terms.
+        candidate_cache (Dict[Tuple[str, int], List[z3.ExprRef]]): Cache for generated candidates.
+    """
     def __init__(self, problem: SynthesisProblem):
         super().__init__(problem)
         self.grammar = self.extract_grammar()
@@ -18,6 +29,12 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
 
     @lru_cache(maxsize=None)
     def extract_grammar(self) -> Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]:
+        """
+        Extract the grammar from the synthesis problem.
+
+        Returns:
+            Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]: The extracted grammar.
+        """
         grammar = {z3.IntSort(): [], z3.BoolSort(): []}
 
         for func_name, func_descriptor in self.problem.context.z3_synth_functions.items():
@@ -60,9 +77,10 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
     @lru_cache(maxsize=None)
     def compute_constructor_classes(self) -> Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]:
         """
-        Computes constructor classes for each sort in the grammar.
+        Compute constructor classes for each sort in the grammar.
 
-        :return: A dictionary mapping each sort to a list of its constructor classes.
+        Returns:
+            Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]: A dictionary mapping each sort to a list of its constructor classes.
         """
         constructor_classes = {sort: [] for sort in self.grammar}
         for sort, constructors in self.grammar.items():
@@ -79,11 +97,14 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
 
     def fast_enum(self, sort: z3.SortRef, size: int) -> List[z3.ExprRef]:
         """
-        Enumerates terms of the given sort and size.
+        Enumerate terms of the given sort and size.
 
-        :param sort: The Z3 sort of the terms to enumerate.
-        :param size: The maximum size of the terms.
-        :return: A list of Z3 expressions representing the enumerated terms.
+        Args:
+            sort (z3.SortRef): The Z3 sort of the terms to enumerate.
+            size (int): The maximum size of the terms.
+
+        Yields:
+            z3.ExprRef: Enumerated terms of the specified sort and size.
         """
         SynthesisProblem.logger.debug(f"Entering fast_enum with sort {sort} and size {size}")
         if size < 0:
@@ -124,11 +145,17 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
     @lru_cache(maxsize=None)
     def construct_term(self, constructor: str, term_combination: Tuple[z3.ExprRef, ...]) -> z3.ExprRef:
         """
-        Constructs a Z3 term using the given LIA constructor and arguments.
+        Construct a Z3 term using the given LIA constructor and arguments.
 
-        :param constructor: The name of the LIA constructor.
-        :param term_combination: A tuple of Z3 expressions representing the arguments.
-        :return: The constructed Z3 term.
+        Args:
+            constructor (str): The name of the LIA constructor.
+            term_combination (Tuple[z3.ExprRef, ...]): A tuple of Z3 expressions representing the arguments.
+
+        Returns:
+            z3.ExprRef: The constructed Z3 term.
+
+        Raises:
+            ValueError: If an unsupported constructor is provided.
         """
         if constructor == 'Plus':
             return term_combination[0] + term_combination[1]
@@ -165,20 +192,38 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
     @lru_cache(maxsize=None)
     def generate_size_combinations(self, num_args: int, total_size: int) -> List[Tuple[int, ...]]:
         """
-          Generates all possible combinations of argument sizes that sum up to the total size.
+        Generate all possible combinations of argument sizes that sum up to the total size.
 
-          :param num_args: The number of arguments.
-          :param total_size: The total size of the arguments.
-          :return: A list of tuples representing the size combinations.
+        Args:
+            num_args (int): The number of arguments.
+            total_size (int): The total size of the arguments.
+
+        Returns:
+            List[Tuple[int, ...]]: A list of tuples representing the size combinations.
         """
         return list(combinations_with_replacement(range(total_size + 1), num_args))
 
     @lru_cache(maxsize=None)
     def get_arity(self, sort: z3.SortRef) -> int:
+        """
+        Get the maximum arity of functions with the given sort as their range.
+
+        Args:
+            sort (z3.SortRef): The sort to check.
+
+        Returns:
+            int: The maximum arity found, or 0 if no functions have this sort as their range.
+        """
         return max((func.arity() for func in self.problem.context.z3_synth_functions.values() if func.range() == sort),
                    default=0)
 
     def generate_candidates(self) -> Generator[List[Tuple[z3.ExprRef, str]], None, None]:
+        """
+        Generate candidates for all synthesis functions up to the maximum depth.
+
+        Yields:
+            List[Tuple[z3.ExprRef, str]]: A list of tuples, each containing a candidate expression and the function name it's for.
+        """
         max_depth = SynthesisProblem.options.synthesis_parameters.max_depth
 
         for depth in range(max_depth + 1):
@@ -195,6 +240,15 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
                     yield from ((candidate, func_name) for candidate in self.candidate_cache[cache_key])
 
     def generate_candidates_at_depth(self, depth: int) -> Generator[Tuple[z3.ExprRef, str], None, None]:
+        """
+        Generate candidates for all synthesis functions at a specific depth.
+
+        Args:
+            depth (int): The depth at which to generate candidates.
+
+        Yields:
+            Tuple[z3.ExprRef, str]: A tuple containing a candidate expression and the function name it's for.
+        """
         for func_name, func in self.problem.context.z3_synth_functions.items():
             cache_key = (func_name, depth)
             if cache_key not in self.candidate_cache:
@@ -214,4 +268,16 @@ class FastEnumerativeSynthesisGenerator(CandidateGenerator):
                 SynthesisProblem.logger.warning(f"No candidates generated for {func_name} at depth {depth}")
 
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
-        pass
+        """
+        Prune the list of candidate expressions.
+
+        This method is a placeholder for potential future pruning strategies.
+        Currently, it doesn't perform any pruning.
+
+        Args:
+            candidates (List[Tuple[z3.ExprRef, str]]): The list of candidate expressions to prune.
+
+        Returns:
+            List[Tuple[z3.ExprRef, str]]: The pruned list of candidates (currently unchanged).
+        """
+        return candidates

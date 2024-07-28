@@ -11,6 +11,31 @@ class Node:
 
 
 class TopDownCandidateGenerator:
+    """
+    A top-down candidate generator for synthesis problems.
+
+    This class generates candidate solutions for synthesis problems using a top-down
+    approach. It starts with complex expressions and gradually simplifies them,
+    exploring the solution space in a top-down manner.
+
+    Attributes:
+        grammar (dict): The grammar used for generating expressions.
+        problem (SynthesisProblem): The synthesis problem being solved.
+        min_const (int): The minimum constant value to be used in expressions.
+        max_const (int): The maximum constant value to be used in expressions.
+        max_depth (int): The maximum depth of generated expressions.
+        explored_expressions (dict): A dictionary to keep track of explored expressions for each function.
+
+    Methods:
+        define_grammar(variables): Define the grammar for expression generation.
+        generate_candidates(): Generate candidate expressions.
+        expand(grammar, expr, depth): Expand an expression using the grammar.
+        simplify_term(term): Simplify a term in the expression.
+        prune_candidates(candidates): Prune the list of candidate expressions.
+        build_tree(grammar, expr, depth): Build a tree representation of the grammar.
+        print_tree(node, prefix, is_last): Print the tree representation of the grammar.
+    """
+
     def __init__(self, problem: 'SynthesisProblem'):
         self.grammar = None
         self.problem = problem
@@ -21,7 +46,19 @@ class TopDownCandidateGenerator:
                                                           problem.context.variable_mapping_dict.keys()}
         self.grammar = problem.options.synthesis_parameters.custom_grammar
 
-    def define_grammar(self, variables):
+    def define_grammar(self, variables: list[str]) -> dict[str, list]:
+        """
+        Define the grammar for expression generation.
+
+        If no custom grammar is provided, this method creates a default grammar
+        using the given variables and the configured constant range.
+
+        Args:
+            variables (list): List of variable names to be used in the grammar.
+
+        Returns:
+            dict: The defined grammar.
+        """
         if self.grammar is None:
             return {
                 'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')],
@@ -32,9 +69,18 @@ class TopDownCandidateGenerator:
         return self.grammar
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
+        """
+        Generate candidate expressions for each function in the synthesis problem.
+
+        This method generates candidate expressions using the defined grammar,
+        simplifies them, and ensures that only unexplored expressions are considered.
+
+        Returns:
+            List[Tuple[z3.ExprRef, str]]: A list of tuples, where each tuple contains
+            a candidate expression and the name of the function it's for.
+        """
         candidates = []
-        for iteration, (func_name, variable_mapping) in enumerate(self.problem.context.variable_mapping_dict.items(),
-                                                                  1):
+        for iteration, (func_name, variable_mapping) in enumerate(self.problem.context.variable_mapping_dict.items(),1):
             variables = [str(var) for var in variable_mapping.values()]
             grammar = self.define_grammar(variables)
             self.problem.logger.debug(f'Grammar {grammar}')
@@ -53,7 +99,25 @@ class TopDownCandidateGenerator:
 
         return candidates
 
-    def expand(self, grammar, expr, depth):
+    def expand(self, grammar: dict[str, list], expr: str, depth: int) -> List[Tuple[z3.ExprRef, str]]:
+        """
+        Recursively expand an expression using the grammar.
+
+        This method generates all possible expansions of a given expression
+        according to the grammar rules, up to a maximum depth.
+
+        Args:
+            grammar (dict): The grammar to use for expansions.
+            expr (Union[str, tuple]): The expression to expand.
+            depth (int): The current depth in the expansion process.
+
+        Returns:
+            List[z3.ExprRef]: A list of expanded expressions.
+
+        Example:
+            If expr is 'S' and the grammar includes a rule 'S': ['+', 'T', 'T'],
+            this method might return expansions like [x + y, x + 1, 1 + x, ...].
+        """
         if depth > self.max_depth:
             return []
 
@@ -96,15 +160,64 @@ class TopDownCandidateGenerator:
                     expansions.append(-arg_combo[0])
         return expansions
 
-    def simplify_term(self, term: Union[z3.ExprRef, int]) -> Union[z3.ExprRef, int]:
+    @staticmethod
+    def simplify_term(term: Union[z3.ExprRef, int]) -> Union[z3.ExprRef, int]:
+        """
+        Simplify a term in the expression.
+
+        This method uses Z3's simplification for Z3 expressions and
+        returns integers as-is.
+
+        Args:
+            term (Union[z3.ExprRef, int]): The term to simplify.
+
+        Returns:
+            Union[z3.ExprRef, int]: The simplified term.
+
+        Example:
+            simplify_term(z3.Int('x') + 0) might return z3.Int('x')
+            simplify_term(5) would return 5
+        """
         if isinstance(term, z3.ExprRef):
             return z3.simplify(term)
         return term
 
-    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
+    @staticmethod
+    def prune_candidates(candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
+        """
+        Prune the list of candidate expressions.
+
+        This method is a placeholder for potential future pruning strategies.
+        Currently, it returns the candidates unchanged.
+
+        Args:
+            candidates (List[Tuple[z3.ExprRef, str]]): The list of candidate
+            expressions to prune.
+
+        Returns:
+            List[Tuple[z3.ExprRef, str]]: The pruned list of candidates.
+        """
         return candidates
 
-    def build_tree(self, grammar, expr, depth=0):
+    def build_tree(self, grammar: dict[str, list], expr: Union[str, tuple], depth: int = 0):
+        """
+        Build a tree representation of the grammar.
+
+        This method constructs a tree structure that represents the
+        possible expansions of an expression according to the grammar.
+
+        Args:
+            grammar (dict): The grammar to use for tree construction.
+            expr (Union[str, tuple]): The expression to expand into a tree.
+            depth (int, optional): The current depth in the tree. Defaults to 0.
+
+        Returns:
+            Node: The root node of the constructed tree.
+
+        Note:
+            The tree construction stops at a depth of 10 to prevent
+            infinite recursion for recursive grammars.
+        """
         node = Node(str(expr))
         if depth > 10:
             return node
@@ -121,7 +234,39 @@ class TopDownCandidateGenerator:
 
         return node
 
-    def print_tree(self, node, prefix="", is_last=True):
+    def print_tree(self, node: Node, prefix: str = "", is_last: bool = True):
+        """
+        Generate a string representation of the grammar tree.
+
+        This method creates a formatted string that visually represents
+        the structure of the grammar tree.
+
+        Args:
+            node (Node): The current node in the tree.
+            prefix (str, optional): The prefix to use for this line. Defaults to "".
+            is_last (bool, optional): Whether this is the last child of its parent. Defaults to True.
+
+        Returns:
+            List[str]: A list of strings, each representing a line in the tree visualization.
+
+        Example:
+            For a simple grammar tree, the output might look like:
+
+            .. code-block::
+
+                S
+                ├── T
+                │   ├── x
+                │   └── y
+                └── ('+', 'T', 'T')
+                    ├── +
+                    ├── T
+                    │   ├── x
+                    │   └── y
+                    └── T
+                        ├── x
+                        └── y
+        """
         result = [prefix + ("└── " if is_last else "├── ") + node.value]
         for i, child in enumerate(node.children):
             result.extend(self.print_tree(child, prefix + ("    " if is_last else "│   "), i == len(node.children) - 1))

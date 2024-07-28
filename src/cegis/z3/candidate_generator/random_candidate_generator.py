@@ -7,11 +7,29 @@ from src.cegis.z3.synthesis_problem import SynthesisProblem
 
 
 class RandomCandidateGenerator(CandidateGenerator):
+    """
+    A candidate generator that produces random expressions for synthesis problems.
 
-    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
-        return candidates
+    This class implements a bottom up strategy to generate random candidate solutions
+    for synthesis problems. It creates expressions using a set of operations
+    and adheres to specified complexity and depth constraints.
+
+    Attributes:
+        Inherits all attributes from the CandidateGenerator base class.
+    """
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
+        """
+        Generate a list of random candidate expressions for each function in the synthesis problem.
+
+        Returns:
+            List[Tuple[z3.ExprRef, str]]: A list of tuples, where each tuple contains
+            a randomly generated expression and the name of the function it's for.
+
+        Example:
+            If the problem has two functions 'f' and 'g', this method might return:
+            [(x + 2, 'f'), (If(y > 0, y, -y), 'g')]
+        """
         candidates = []
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_random_term(
@@ -24,6 +42,22 @@ class RandomCandidateGenerator(CandidateGenerator):
 
     def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                              operations: List[str] = None) -> z3.ExprRef:
+        """
+        Generate a random term (expression) based on given constraints.
+
+        Args:
+            arg_sorts (List[z3.SortRef]): List of argument sorts for the function.
+            depth (int): Maximum depth of the generated expression tree.
+            complexity (int): Maximum complexity allowed for the expression.
+            operations (List[str], optional): List of allowed operations. Defaults to ['+', '-', '*', 'If', 'Neg'].
+
+        Returns:
+            z3.ExprRef: A randomly generated Z3 expression.
+
+        Example:
+            Given arg_sorts=[z3.IntSort(), z3.IntSort()], depth=3, complexity=5,
+            this method might return an expression like: If(x > y, x + 2, y - 1)
+        """
         if operations is None:
             operations = ['+', '-', '*', 'If', 'Neg']
 
@@ -69,6 +103,20 @@ class RandomCandidateGenerator(CandidateGenerator):
         return generated_expression
 
     def generate_condition(self, args: List[z3.ExprRef]) -> z3.BoolRef | bool:
+
+        """
+        Generate a random boolean condition using the given arguments.
+
+        Args:
+            args (List[z3.ExprRef]): List of available arguments to use in the condition.
+
+        Returns:
+            z3.BoolRef | bool: A randomly generated boolean condition.
+
+        Example:
+            Given args=[x, y], this method might return conditions like:
+            x < y, x == 2, y >= 0, etc.
+        """
         comparisons = ['<', '<=', '>', '>=', '==', '!=']
         left = random.choice(args)
         right = random.choice(args + [z3.IntVal(random.randint(self.min_const, self.max_const))])
@@ -86,3 +134,20 @@ class RandomCandidateGenerator(CandidateGenerator):
             return left == right
         else:
             return left != right
+
+    def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
+        """
+        Prune the list of candidate expressions.
+
+        This method is a placeholder for potential future pruning strategies.
+        Currently, it returns the candidates unchanged.
+
+        Args:
+            candidates (List[Tuple[z3.ExprRef, str]]): The list of candidate
+            expressions to prune.
+
+        Returns:
+            List[Tuple[z3.ExprRef, str]]: The pruned list of candidates.
+        """
+
+        return candidates
