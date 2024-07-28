@@ -2,7 +2,6 @@ SynthesisProblem
 ================
 
 .. automodule:: src.cegis.z3.synthesis_problem
-   :members:
    :undoc-members:
    :show-inheritance:
 
