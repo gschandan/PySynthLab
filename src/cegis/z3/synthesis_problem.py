@@ -89,7 +89,7 @@ class SynthesisProblem:
 
     Example:
         .. code-block:: python
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> options = Options()
             >>> synthesis_problem = SynthesisProblem(problem_str, options)
             >>> print(synthesis_problem.get_logic())
@@ -117,7 +117,7 @@ class SynthesisProblem:
             ParseException: If the problem cannot be parsed using either SygusV1Parser or SygusV2Parser.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> options = Options()
             >>> synthesis_problem = SynthesisProblem(problem_str, options)
         """
@@ -160,7 +160,7 @@ class SynthesisProblem:
             options (Options, optional): The options object containing logging configurations. Defaults to None.
 
         Example:
-            >>> options = Options(logging=LoggingOptions(file='synthesis.log', level=""DEBUG""))
+            >>> options = Options(logging=LoggingOptions(file='synthesis.log', level="DEBUG"))
             >>> SynthesisProblem.setup_logger(options)
         """
         if SynthesisProblem.logger is not None:
@@ -212,7 +212,7 @@ class SynthesisProblem:
             ParseException: If both parsers fail to parse the problem.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> parser, parsed_problem = SynthesisProblem.parse_problem(problem_str)
             >>> print(type(parser))
             <class 'src.helpers.parser.src.v1.parser.SygusV1Parser'>
@@ -248,7 +248,7 @@ class SynthesisProblem:
             str: The string representation of the problem.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> print(synthesis_problem)
             (set-logic LIA)
@@ -269,7 +269,7 @@ class SynthesisProblem:
         This method logs the SyGuS representation of the synthesis problem.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.info_sygus()
             # Output in log:
@@ -285,7 +285,7 @@ class SynthesisProblem:
         This method logs the SMT-LIB representation of the synthesis problem.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.info_smt()
             # Output in log:
@@ -303,7 +303,7 @@ class SynthesisProblem:
             str: The logic name.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> print(synthesis_problem.get_logic())
             LIA
@@ -318,7 +318,7 @@ class SynthesisProblem:
             Dict[str, FunctionDescriptor]: A dictionary mapping function names to their declaration commands.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int ...)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synth_funcs = synthesis_problem.get_synth_funcs()
             >>> print(list(synth_funcs.keys()))
@@ -336,7 +336,7 @@ class SynthesisProblem:
             Dict[str, FunctionDescriptor]: A dictionary mapping function names to their declaration commands.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))""
+            >>> problem_str = "(set-logic LIA)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> predefined_funcs = synthesis_problem.get_predefined_funcs()
             >>> print(list(predefined_funcs.keys()))
@@ -354,7 +354,7 @@ class SynthesisProblem:
             List[str]: A list of variable symbols.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(declare-var x Int)\n(declare-var y Int)""
+            >>> problem_str = "(set-logic LIA)\\n(declare-var x Int)\\n(declare-var y Int)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> print(synthesis_problem.get_var_symbols())
             ['x', 'y']
@@ -369,7 +369,7 @@ class SynthesisProblem:
             List[str]: A list of function symbols.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(define-fun f ((x Int)) Int (+ x 1))""
+            >>> problem_str = "(set-logic LIA)\\n(define-fun f ((x Int)) Int (+ x 1))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> print(synthesis_problem.get_function_symbols())
             ['f']
@@ -387,7 +387,7 @@ class SynthesisProblem:
             str: The synthesis problem in SMT-LIB format.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(declare-var a Int)\n(declare-var b Int)\n(constraint (>= (max2 a b) a))\n(check-synth)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (>= (max2 a b) a))\\n(check-synth)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> print(synthesis_problem.convert_sygus_to_smt())
             (set-logic LIA)
@@ -434,7 +434,7 @@ class SynthesisProblem:
         and stores them in the context.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(declare-var x Int)\n(declare-var y Bool)""
+            >>> problem_str = "(set-logic LIA)\\n(declare-var x Int)\\n(declare-var y Bool)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.initialise_z3_variables()
             >>> print(synthesis_problem.context.z3_variables)
@@ -454,7 +454,7 @@ class SynthesisProblem:
         in the problem and stores them in the context.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.initialise_z3_synth_functions()
             >>> print(synthesis_problem.context.z3_synth_functions)
@@ -480,7 +480,7 @@ class SynthesisProblem:
         in the problem and stores them in the context.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))""
+            >>> problem_str = "(set-logic LIA)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.initialise_z3_predefined_functions()
             >>> print(synthesis_problem.context.z3_predefined_functions)
@@ -514,7 +514,7 @@ class SynthesisProblem:
         into a single dictionary for easy access.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.initialise_z3_synth_functions()
             >>> synthesis_problem.initialise_z3_predefined_functions()
@@ -535,7 +535,7 @@ class SynthesisProblem:
         for each synthesis function.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(declare-var a Int)\n(declare-var b Int)""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.initialise_z3_variables()
             >>> synthesis_problem.initialise_z3_synth_functions()
@@ -558,7 +558,7 @@ class SynthesisProblem:
         undeclared variables, and adds the parsed constraints to the context.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(declare-var a Int)\n(declare-var b Int)\n(constraint (>= (max2 a b) a))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (>= (max2 a b) a))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> synthesis_problem.parse_constraints()
             >>> print(synthesis_problem.context.z3_constraints)
@@ -601,7 +601,7 @@ class SynthesisProblem:
             List[str]: A list of undeclared variables found in the term.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(declare-var a Int)\n(constraint (>= (max2 a b) a))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(constraint (>= (max2 a b) a))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> constraint = synthesis_problem.context.constraints[0]
             >>> undeclared = synthesis_problem.find_undeclared_variables(constraint.constraint, {'a'}, set(), {'max2'})
@@ -645,7 +645,7 @@ class SynthesisProblem:
             ValueError: If an undefined symbol or unsupported term type is encountered.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(declare-var a Int)\n(constraint (>= (max2 a 5) a))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(constraint (>= (max2 a 5) a))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> constraint = synthesis_problem.context.constraints[0]
             >>> parsed_term = synthesis_problem.parse_term(constraint.constraint)
@@ -853,7 +853,7 @@ class SynthesisProblem:
             List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]: A list of input-output pairs.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(constraint (>= (max2 1 2) 2))\n(constraint (= (max2 3 4) 4))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(constraint (>= (max2 1 2) 2))\\n(constraint (= (max2 3 4) 4))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> max2_func = synthesis_problem.context.z3_synth_functions['max2']
             >>> io_pairs = synthesis_problem.collect_function_io_pairs(max2_func)
@@ -888,7 +888,7 @@ class SynthesisProblem:
             List[z3.ExprRef]: The list of substituted constraints.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(constraint (>= (max2 a b) a))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(constraint (>= (max2 a b) a))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> max2 = synthesis_problem.context.z3_synth_functions['max2']
             >>> a, b = Int('a'), Int('b')
@@ -924,7 +924,7 @@ class SynthesisProblem:
             List[z3.ExprRef]: The list of substituted constraints.
 
         Example:
-            >>> problem_str = ""(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))\n(constraint (>= (max2 (min2 a b) c) c))""
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))\\n(constraint (>= (max2 (min2 a b) c) c))"
             >>> synthesis_problem = SynthesisProblem(problem_str)
             >>> max2 = synthesis_problem.context.z3_synth_functions['max2']
             >>> a, b, c = Int('a'), Int('b'), Int('c')
