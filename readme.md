@@ -1,34 +1,38 @@
 # PySynthLab
 
-This project is a synthesis engine for solving LIA synthesis problems using CEGIS. 
+PySynthLab is a synthesis engine for solving Linear Integer Arithmetic (LIA) synthesis problems using Counterexample-Guided Inductive Synthesis (CEGIS). 
+It provides various strategies and configurations for performing program synthesis.
+
+## Features
+
+- Multiple synthesis strategies: Fast Enumerative, Random Search (Bottom-Up and Top-Down)
+- Configurable candidate generation
+- Customizable synthesis parameters
+- Logging and configuration management
 
 ## Prerequisites
 
 - Python 3.8 or higher
 - Virtualenv
-- z3
+- z3 Theorem Prover
 
 ## Installation
 
 1. Clone the repository:
 
 ```shell
-git clone git@github.com:gschandan/PySynthLab.git
+git clone https://github.com/gschandan/PySynthLab.git
 cd PySynthLab
 ```
 
-2. Create a virtual environment:
+2. Create and activate the virtual environment:
 
 ```shell
 python -m venv venv
-```
-
-3. Activate the virtual environment:
-
-```shell
 source venv/bin/activate
 ```
-4. Install the requirements without using the venv:
+
+3Install the requirements without using the venv:
 ```shell
 pip install -r requirements.txt
 ```
@@ -50,13 +54,13 @@ You can run the Synthesiser by providing a path to the SyGuS input file or by pr
 
 Either provide a path to the sygus input file:
 ```shell
-python src/runner.py -s 1 /path_to_file/small.sl  
+python -m src.runner problems/debugging/small.sl  
 ```
 or provide the input problem via STDIN:
 ```shell
-python -m src.runner -s 1 - <<EOF
+python -m src.runner - <<EOF
 (set-logic LIA)
-(synth-fun f ((x Int) (y Int)) Int)
+(synth-fun max2 ((a Int) (b Int)) Int)
 (declare-var x Int)
 (declare-var y Int)
 (constraint (= (f x y) (f y x)))
@@ -66,10 +70,10 @@ EOF
 ```
 or if you have used the venv
 ```shell
-./venv/bin/python src/runner.py -s 1 /path_to_file/small.sl  
+./venv/bin/python -m src.runner problems/debugging/small.sl  
 ```
 ```shell
-./venv/bin/python -m src.runner -s 1 --strategy fast_enumerative --max-depth 4 --max-complexity 4  - <<EOF
+./venv/bin/python -m src.runner <<EOF
 (set-logic LIA)
 (synth-fun max2 ((a Int) (b Int)) Int)
 (declare-var x Int)
@@ -85,57 +89,59 @@ or if you have used the venv
 (check-synth)
 EOF
 ```
-## Command Line Options
+## Configuration
+PySynthLab supports configuration through command-line arguments, YAML files, and default options. The configuration is managed by the ConfigManager class.
 
-The following command line options are available:  
-`-s, --sygus-standard:` Specify the SyGuS language standard used in the input file. Accepted values are:
-- `1`: SyGuS language standard version 1.
-- `2`: SyGuS language standard version 2 (default).
+### Command Line Options
 
-`-v, --verbose`  
-  Set the debugging message suppression level of the program output. Accepted values are:
-- `0`: No suppression; all output is printed to the console (default).
-- `1`: Suppress some warnings.
-- `2`: Suppress all output except success/failure messages.
+- `--strategy`: Choose the synthesis strategy (fast_enumerative, random_search_bottom_up, random_search_top_down)
+- `--candidate-generation`: Candidate generation strategy (bottom_up, top_down, fast_enumerative)
+- `--max-iterations`: Maximum number of iterations
+- `--max-depth`: Maximum depth of generated expressions
+- `--max-complexity`: Maximum complexity of generated expressions
+- `--random-seed`: Random seed for solvers
+- `--randomise-each`-iteration: Randomize seed between each synthesis iteration
+- `--max-candidates`-at-each-depth: Maximum number of candidates to consider at each depth
+- `--min-const`, --max-const: Range of constants to introduce into candidate programs
+- `--use-weighted`-generator: Use weighted top-down generator
+- `--logging-level`: Set logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+- `--logging-file`: Specify log file path
 
-`input_file`: Path to the input file containing the synthesis problem.   
-- If `-` is provided, the program will read the input from STDIN.
-
-`--strategy`: Choose the synthesis strategy. Accepted values are:  
-- `fast_enumerative`: Fast enumerative strategy (default).  
-- `random_search`: Random search strategy.
-
-
-`--min-const`: Minimum integer constant value to include in expressions for candidate synthesis.    
-`--max-const`: Maximum integer constant value to include in expressions for candidate synthesis.  
-`--max-depth`: Maximum integer depth for candidate generation.    
-`--max-candidates-at-each-depth`: Maximum number of candidates to evaluate at each depth for the random search strategy.  
-`--max-complexity`: Maximum integer complexity for the random search strategy.  
-`--random-seed-behaviour`: Behaviour for the random seed for the solver. Accepted values are:  
-- `fixed`: Use the provided random seed on every iteration.  
-- `random`: Generate a new random seed for each iteration.  
-`--random-seed`: Random seed for the random search strategy (used when `--random-seed-behaviour` is set to `fixed`).  
-`--randomise-each-iteration`: Randomise the random seed for each iteration in the random search strategy.
-
-## Sample Commands
-Here are a few sample commands to run the various strategies:
-
-- Fast Enumerative Strategy with default parameters:
+For a complete list or further information, run:
 ```shell
-./venv/bin/python -m src.runner input.sl
+python -m src.runner --help
 ```
-- Fast Enumerative Strategy with some parameters:
-```shell
-./venv/bin/python -m src.runner input.sl --strategy fast_enumerative --min-const -5 --max-const 5
-```
-- Fast Enumerative Strategy with some parameters:
-```shell
-./venv/bin/python -m src.runner input.sl --strategy random_search --randomise-each-iteration
+### YAML configuration
+You can also use a YAML file for configuration. 
+Please see and edit the `user_config.yaml` in `src/config`:
+```yaml
+logging:
+  level: INFO
+  file: logs/synthesis.log
+
+synthesis_parameters:
+  strategy: fast_enumerative
+  max_iterations: 1000
+  max_depth: 5
+
+solver:
+  name: z3
+  timeout: 30000
 ```
 
-
+## Docs
+Please click [here](https://gschandan.github.io/PySynthLab/) to see the docs
 
 ## Run Tests
+Run general tests:
 ```shell
 make test
+```
+Run general tests:
+```shell
+python -m unittest discover -s tests -p "test_*.py"
+```
+Run some specific debugging tests built around specific problems:
+```shell
+python -m tests.run_problem_tests
 ```

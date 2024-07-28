@@ -1,14 +1,13 @@
-import sys
 from dataclasses import asdict
-from itertools import product
-
 from z3 import *
-
 from src.utilities.config_manager import ConfigManager
 from src.cegis.z3.synthesis_strategy.fast_enumerative_synth import FastEnumerativeSynthesis
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 from src.cegis.z3.synthesis_problem import SynthesisProblem
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def main() -> None:
