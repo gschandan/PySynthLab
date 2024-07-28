@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from typing import  List, Tuple
+from typing import List, Tuple
 from z3 import *
 from src.cegis.z3.synthesis_problem import SynthesisProblem
 

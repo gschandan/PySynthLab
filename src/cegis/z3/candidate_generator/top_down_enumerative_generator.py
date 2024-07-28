@@ -24,7 +24,7 @@ class TopDownCandidateGenerator:
     def define_grammar(self, variables):
         if self.grammar is None:
             return {
-                'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('Neg', 'S')],
+                'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')],
                 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'),
                       ('!=', 'T', 'T')],
                 'T': list(variables) + [str(i) for i in range(self.min_const, self.max_const + 1)]
@@ -92,7 +92,7 @@ class TopDownCandidateGenerator:
                     expansions.append(arg_combo[0] == arg_combo[1])
                 elif op == '!=':
                     expansions.append(arg_combo[0] != arg_combo[1])
-                elif op == 'Neg':
+                elif op == 'neg':
                     expansions.append(-arg_combo[0])
         return expansions
 

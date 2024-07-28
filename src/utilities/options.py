@@ -24,8 +24,8 @@ class LoggingOptions:
            '+': 1
            '-': 1
            '*': 3
-           'If': 4
-           'Neg': 2
+           'ite': 4
+           'neg': 2
        solver:
          name: "z3"
          timeout: 30000
@@ -62,7 +62,7 @@ class SynthesisParameters:
         min_const (int): Minimum constant to introduce into the candidate programs. Default is -2.
         max_const (int): Maximum constant to introduce into the candidate programs. Default is 2.
         operation_costs (Dict[str, int]): Key-Value pairs representing operation costs for adjustable weighting. 
-                                          Default is {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.
+                                          Default is {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1}.
         initial_weight (float): Initial weight for operations in random candidate generation. Default is 1.0.
         weight_multiplier (float): Weight multiplier for operations in candidate generation. 
                                    1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away. Default is 1.0.
@@ -81,8 +81,8 @@ class SynthesisParameters:
             '+': 1
             '-': 1
             '*': 3
-            'If': 4
-            'Neg': 2
+            'ite': 4
+            'neg': 2
           custom_grammar:
             S: ["T", ["+", "S", "S"], ["-", "S", "S"]]
             T: ["x", "y", "1", "2"]
@@ -161,7 +161,7 @@ class SynthesisParameters:
             type="int"
         ))
     operation_costs: dict[str, int] = field(
-        default_factory=lambda: {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1},
+        default_factory=lambda: {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1},
         metadata=dict(
             description="Operation costs for candidate generation",
             type="dict"
@@ -217,8 +217,8 @@ class SolverOptions:
            '+': 1
            '-': 1
            '*': 3
-           'If': 4
-           'Neg': 2
+           'ite': 4
+           'neg': 2
        solver:
          name: "z3"
          timeout: 30000
@@ -259,8 +259,8 @@ class Options:
            '+': 1
            '-': 1
            '*': 3
-           'If': 4
-           'Neg': 2
+           'ite': 4
+           'neg': 2
        solver:
          name: "z3"
          timeout: 30000

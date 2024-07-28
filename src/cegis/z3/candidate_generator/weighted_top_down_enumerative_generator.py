@@ -30,7 +30,7 @@ class WeightedTopDownCandidateGenerator:
                     (('+', 'S', 'S'), 30),
                     (('-', 'S', 'S'), 30),
                     (('*', 'S', 'S'), 35),
-                    (('Neg', 'S'), 20),
+                    (('neg', 'S'), 20),
                 ],
                 'B': [
                     (('>', 'T', 'T'), 15),
@@ -116,7 +116,7 @@ class WeightedTopDownCandidateGenerator:
                     expansions.append((args[0] == args[1], new_weight))
                 elif op == '!=':
                     expansions.append((args[0] != args[1], new_weight))
-                elif op == 'Neg':
+                elif op == 'neg':
                     expansions.append((-args[0], new_weight))
 
         return sorted(expansions, key=lambda x: -x[1])  # Sort expansions by weight in descending order
