@@ -1,3 +1,4 @@
+import json
 import logging
 import unittest
 from unittest.mock import patch, mock_open
@@ -134,6 +135,75 @@ class TestConfigManager(unittest.TestCase):
         self.assertIsInstance(config, Options)
         mock_parse_args.assert_called_once()
         mock_load_yaml.assert_called_once()
+
+    def test_merge_config_with_custom_grammar(self):
+        yaml_config = {
+            'synthesis_parameters': {
+                'custom_grammar': '{"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}'
+            }
+        }
+
+        cli_args = argparse.Namespace()
+
+        merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
+
+        expected_grammar = {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}
+        self.assertEqual(merged_options.synthesis_parameters.custom_grammar, expected_grammar)
+
+    def test_merge_config_with_weighted_generator(self):
+        yaml_config = {
+            'synthesis_parameters': {
+                'use_weighted_generator': True
+            }
+        }
+
+        cli_args = argparse.Namespace()
+
+        merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
+
+        self.assertTrue(merged_options.synthesis_parameters.use_weighted_generator)
+
+    @patch('src.utilities.config_manager.ConfigManager.load_yaml', return_value={
+        'synthesis_parameters': {
+            'custom_grammar': '{"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}',
+            'use_weighted_generator': True
+        }
+    })
+    @patch('argparse.ArgumentParser.parse_args', return_value=argparse.Namespace(config=None))
+    def test_get_config_with_new_options(self, mock_parse_args, mock_load_yaml):
+        config = ConfigManager.get_config()
+        self.assertEqual(config.synthesis_parameters.custom_grammar,
+                         {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]})
+        self.assertTrue(config.synthesis_parameters.use_weighted_generator)
+
+    def test_merge_config_with_cli_custom_grammar(self):
+        yaml_config = {}
+        cli_args = argparse.Namespace(
+            synthesis_parameters__custom_grammar='{"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}'
+        )
+
+        merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
+
+        expected_grammar = {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}
+        self.assertEqual(merged_options.synthesis_parameters.custom_grammar, expected_grammar)
+
+    def test_merge_config_with_cli_weighted_generator(self):
+        yaml_config = {}
+        cli_args = argparse.Namespace(synthesis_parameters__use_weighted_generator=True)
+
+        merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
+
+        self.assertTrue(merged_options.synthesis_parameters.use_weighted_generator)
+
+    def test_generate_argparse_includes_new_options(self):
+        parser = ConfigManager.generate_argparse_from_options()
+        args = parser.parse_args(['--synthesis_parameters__custom_grammar',
+                                  '{"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}',
+                                  '--synthesis_parameters__use_weighted_generator'])
+
+        self.assertEqual(json.loads(args.synthesis_parameters__custom_grammar),
+                         {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]})
+        self.assertTrue(args.synthesis_parameters__use_weighted_generator)
 
 
 if __name__ == '__main__':

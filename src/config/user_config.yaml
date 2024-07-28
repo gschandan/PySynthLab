@@ -4,7 +4,8 @@ synthesis_parameters:
     '+': 1
     '-': 1
     '*': 3
-    'If': 4
+    'ite': 4
     'Neg': 2
+  custom_grammar: '{"S": ["T", ["+", "S", "S"], ["-", "S", "S"]], "T": ["x", "y", "1", "2"]}'
 logging:
   level: "DEBUG"
