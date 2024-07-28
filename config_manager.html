@@ -61,11 +61,18 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#options-class">Options Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.input_source"><code class="docutils literal notranslate"><span class="pre">Options.input_source</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#loggingoptions-class">LoggingOptions Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.level"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.file"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.file</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#synthesisparameters-class">SynthesisParameters Class</a><ul>
@@ -73,12 +80,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#solveroptions-class">SolverOptions Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.SolverOptions.name"><code class="docutils literal notranslate"><span class="pre">SolverOptions.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.SolverOptions.timeout"><code class="docutils literal notranslate"><span class="pre">SolverOptions.timeout</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="candidate_generator.html">CandidateGenerator</a></li>
 </ul>
 
         </div>
@@ -193,31 +205,21 @@ CLI arguments will take priority over any user defined config in the user_config
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logging:</span> <span class="pre">~src.utilities.options.LoggingOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters:</span> <span class="pre">~src.utilities.options.SynthesisParameters</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver:</span> <span class="pre">~src.utilities.options.SolverOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_source:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'stdin'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.Options" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Options for configuring the Synthesis process.</p>
-<dl class="simple">
-<dt>Other:</dt><dd><p>input_source (str): Input source. Choices are STDIN or a path to a problem file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.Options.input_source">
+<span class="sig-name descname"><span class="pre">input_source</span></span><a class="headerlink" href="#src.utilities.options.Options.input_source" title="Link to this definition"></a></dt>
+<dd><p>Input source. Choices are STDIN or a path to a problem file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+</dd></dl>
+
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using a YAML configuration file, these options can be grouped under ‘logging’, ‘synthesis_parameters’, and ‘solver’ sections.
-For example:</p>
-<dl>
-<dt>logging:</dt><dd><p>level: “DEBUG”</p>
-</dd>
-<dt>synthesis_parameters:</dt><dd><p>max_iterations: 20
-operation_costs:</p>
-<blockquote>
-<div><p>‘+’: 1
-‘-’: 1
-‘*’: 3
-‘ite’: 4
-‘neg’: 2</p>
-</div></blockquote>
-</dd>
-<dt>solver:</dt><dd><p>name: “z3”
-timeout: 30000</p>
-</dd>
-</dl>
+<p>When using a YAML configuration file, options can be grouped under
+‘logging’, ‘synthesis_parameters’, and ‘solver’ sections.</p>
 </div>
 </dd></dl>
 
@@ -226,37 +228,34 @@ timeout: 30000</p>
 <h2>LoggingOptions Class<a class="headerlink" href="#loggingoptions-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.LoggingOptions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-07-28</span> <span class="pre">10:05:13.928910.log'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-07-28</span> <span class="pre">13:05:34.108801.log'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<blockquote>
-<div><p>Options for configuring the Synthesis process.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Logging:</dt><dd><p>level (str): Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.
-file (str): Log file path. Default is logs/default.log.</p>
+<p>Options for configuring logging in the Synthesis process.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.LoggingOptions.level">
+<span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#src.utilities.options.LoggingOptions.level" title="Link to this definition"></a></dt>
+<dd><p>Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.LoggingOptions.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#src.utilities.options.LoggingOptions.file" title="Link to this definition"></a></dt>
+<dd><p>Log file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using a YAML configuration file, these options can be grouped under ‘logging’, ‘synthesis_parameters’, and ‘solver’ sections.
-For example:</p>
-<dl>
-<dt>logging:</dt><dd><p>level: “DEBUG”</p>
-</dd>
-<dt>synthesis_parameters:</dt><dd><p>max_iterations: 20
-operation_costs:</p>
-<blockquote>
-<div><p>‘+’: 1
-‘-’: 1
-‘*’: 3
-‘ite’: 4
-‘neg’: 2</p>
-</div></blockquote>
-</dd>
-<dt>solver:</dt><dd><p>name: “z3”
-timeout: 30000</p>
-</dd>
-</dl>
+<p>These options can be grouped under the ‘logging’ section in a YAML file.</p>
 </div>
 </dd></dl>
 
@@ -294,36 +293,9 @@ use_weighted_generator (bool): Use weighted top-down generator instead of regula
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using a YAML configuration file, these options can be grouped under ‘logging’, ‘synthesis_parameters’, and ‘solver’ sections.
-For example:</p>
-<dl>
-<dt>logging:</dt><dd><p>level: “DEBUG”</p>
-</dd>
-<dt>synthesis_parameters:</dt><dd><p>max_iterations: 20
-operation_costs:</p>
-<blockquote>
-<div><p>‘+’: 1
-‘-’: 1
-‘*’: 3
-‘ite’: 4
-‘neg’: 2</p>
-</div></blockquote>
-<dl class="simple">
-<dt>custom_grammar:</dt><dd><p>S: [“T”, [“+”, “S”, “S”], [“-”, “S”, “S”]]
-T: [“x”, “y”, “1”, “2”]</p>
-</dd>
-</dl>
-<p>use_weighted_generator: true</p>
-</dd>
-<dt>solver:</dt><dd><p>name: “z3”
-timeout: 30000</p>
-</dd>
-</dl>
 <p>When providing a custom grammar, ensure it’s in the correct format:
 - For non-weighted grammars: Each key in the dictionary should have a list of strings or tuples as its value.
 - For weighted grammars: Each key should have a list of tuples, where each tuple contains the production rule and its weight.</p>
-<p>The custom_grammar can also be provided via command-line as a JSON string:
-–synthesis_parameters__custom_grammar ‘{“S”: [“T”, [“+”, “S”, “S”], [“-”, “S”, “S”]], “T”: [“x”, “y”, “1”, “2”]}’</p>
 </div>
 </dd></dl>
 
@@ -334,33 +306,32 @@ timeout: 30000</p>
 <dt class="sig sig-object py" id="src.utilities.options.SolverOptions">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">SolverOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'z3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.SolverOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Options for configuring the Synthesis process.</p>
-<dl class="simple">
-<dt>Solver Options:</dt><dd><p>name (str): SMT Solver to use. Choices are z3, cvc5 (experimental/alpha phase). Default is z3.
-timeout (int): SMT Solver Configuration - Timeout. Default is 30000.</p>
+<p>Options for configuring the SMT solver.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.SolverOptions.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#src.utilities.options.SolverOptions.name" title="Link to this definition"></a></dt>
+<dd><p>SMT Solver to use. Choices are z3, cvc5 (experimental/alpha phase).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.SolverOptions.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#src.utilities.options.SolverOptions.timeout" title="Link to this definition"></a></dt>
+<dd><p>SMT Solver Configuration - Timeout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using a YAML configuration file, these options can be grouped under ‘logging’, ‘synthesis_parameters’, and ‘solver’ sections.
-For example:</p>
-<dl>
-<dt>logging:</dt><dd><p>level: “DEBUG”</p>
-</dd>
-<dt>synthesis_parameters:</dt><dd><p>max_iterations: 20
-operation_costs:</p>
-<blockquote>
-<div><p>‘+’: 1
-‘-’: 1
-‘*’: 3
-‘ite’: 4
-‘neg’: 2</p>
-</div></blockquote>
-</dd>
-<dt>solver:</dt><dd><p>name: “z3”
-timeout: 30000</p>
-</dd>
-</dl>
+<p>These options can be grouped under the ‘solver’ section in a YAML file.</p>
 </div>
 </dd></dl>
 

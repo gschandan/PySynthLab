@@ -22,21 +22,21 @@ Options Class
    :show-inheritance:
 
 LoggingOptions Class
--------------
+--------------------
 
 .. autoclass:: src.utilities.options.LoggingOptions
    :undoc-members:
    :show-inheritance:
 
 SynthesisParameters Class
--------------
+-------------------------
 
 .. autoclass:: src.utilities.options.SynthesisParameters
    :undoc-members:
    :show-inheritance:
 
 SolverOptions Class
--------------
+-------------------
 
 .. autoclass:: src.utilities.options.SolverOptions
    :undoc-members:
