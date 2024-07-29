@@ -1,6 +1,5 @@
 import cvc5
 from cvc5 import Kind, Term
-
 from src.cegis.synthesis_problem_base import BaseSynthesisProblem
 from src.helpers.parser.src import ast
 from src.helpers.parser.src.ast import QuantifiedTerm, FunctionApplicationTerm, LiteralTerm, IdentifierTerm, CommandKind
@@ -69,6 +68,7 @@ class SynthesisProblemCVC5(BaseSynthesisProblem):
             elif symbol in self.cvc5_synth_functions:
                 return self.cvc5_synth_functions[symbol]
             else:
+                self.logger.error(f"Undefined symbol: {symbol}")
                 raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, LiteralTerm):
             literal = term.literal
@@ -77,6 +77,7 @@ class SynthesisProblemCVC5(BaseSynthesisProblem):
             elif literal.literal_kind == ast.LiteralKind.BOOLEAN:
                 return self.solver.mkBoolean(literal.literal_value.lower() == "true")
             else:
+                self.logger.error(f"Undefined literal kind: {literal.literal_kind}")
                 raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
         elif isinstance(term, FunctionApplicationTerm):
             func_symbol = term.function_identifier.symbol
@@ -107,6 +108,7 @@ class SynthesisProblemCVC5(BaseSynthesisProblem):
                 func, body = self.cvc5_predefined_functions[func_symbol]
                 return self.solver.mkTerm(Kind.APPLY_UF, func, *args)
             else:
+                self.logger.error(f"Undefined function symbol: {func_symbol}")
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
         elif isinstance(term, QuantifiedTerm):
             bound_vars = [self.solver.mkVar(self.convert_sort_descriptor_to_cvc5_sort(var[1]), var[0]) for var in term.quantified_variables]
@@ -116,16 +118,24 @@ class SynthesisProblemCVC5(BaseSynthesisProblem):
             elif term.quantifier_kind == ast.QuantifierKind.EXISTS:
                 return self.solver.mkTerm(Kind.EXISTS, self.solver.mkTerm(Kind.BOUND_VAR_LIST, *bound_vars), body)
             else:
+                self.logger.error(f"Unsupported quantifier kind: {term.quantifier_kind}")
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
         else:
+            self.logger.error(f"Unsupported term type: {type(term)}")
             raise ValueError(f"Unsupported term type: {type(term)}")
 
     def convert_sort_descriptor_to_cvc5_sort(self, sort_descriptor: SortDescriptor) -> cvc5.Sort:
         sort_symbol = sort_descriptor.identifier.symbol
-        return {
-            'Int': self.solver.getIntegerSort(),
-            'Bool': self.solver.getBooleanSort(),
-        }.get(sort_symbol, self.solver.getNullSort())
+        sort_map = {
+            'Int': self.solver.getIntegerSort,
+            'Bool': self.solver.getBooleanSort,
+        }
+
+        if sort_symbol in sort_map:
+            return sort_map[sort_symbol]()
+        else:
+            self.logger.error(f"Unsupported sort symbol: {sort_symbol}")
+            raise ValueError(f"Unsupported sort type: {sort_symbol}")
 
     def substitute_constraints(self, constraints, functions_to_replace, replacement_expressions):
         substituted_constraints = []

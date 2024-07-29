@@ -224,8 +224,8 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
             >>> synthesis_problem = SynthesisProblemZ3(problem_str)
-            >>> synthesis_problem.initialise_z3_synth_functions()
-            >>> synthesis_problem.initialise_z3_predefined_functions()
+            >>> synthesis_problem.initialise_synth_functions()
+            >>> synthesis_problem.initialise_predefined_functions()
             >>> synthesis_problem.populate_all_z3_functions()
             >>> print(list(synthesis_problem.context.all_z3_functions.keys()))
             ['max2', 'min2']
@@ -245,8 +245,8 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)"
             >>> synthesis_problem = SynthesisProblemZ3(problem_str)
-            >>> synthesis_problem.initialise_z3_variables()
-            >>> synthesis_problem.initialise_z3_synth_functions()
+            >>> synthesis_problem.initialise_variables()
+            >>> synthesis_problem.initialise_synth_functions()
             >>> synthesis_problem.map_z3_variables()
             >>> print(synthesis_problem.context.variable_mapping_dict['max2'])
             {Var(0, IntSort()): Int('a'), Var(1, IntSort()): Int('b')}
@@ -282,6 +282,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                 undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables,
                                                                       declared_functions, declared_synth_functions)
                 if undeclared_variables:
+                    self.logger.error(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                     raise ValueError(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                 term = self.parse_term(constraint.constraint)
                 all_constraints.append(term)
@@ -373,6 +374,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             elif symbol in self.context.z3_synth_functions:
                 return self.context.z3_synth_functions[symbol]
             else:
+                self.logger.error(f"Undefined symbol: {symbol}")
                 raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, ast.LiteralTerm):
             literal = term.literal
@@ -381,6 +383,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             elif literal.literal_kind == ast.LiteralKind.BOOLEAN:
                 return z3.BoolVal(literal.literal_value.lower() == "true")
             else:
+                self.logger.error(f"Unsupported literal kind: {literal.literal_kind}")
                 raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
         elif isinstance(term, ast.FunctionApplicationTerm):
             func_symbol = term.function_identifier.symbol
@@ -418,6 +421,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                     return -args[0]
                 elif len(args) == 2:
                     return args[0] - args[1]
+                self.logger.error("Minus operator '-' should have 1 or 2 arguments")
                 raise ValueError("Minus operator '-' should have 1 or 2 arguments")
             elif func_symbol == "=":
                 if len(args) == 2:
@@ -434,6 +438,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                                                  [(arg, value) for arg, value in zip(function_args.values(), args)])
                 return substituted_body
             else:
+                self.logger.error(f"Undefined function symbol: {func_symbol}")
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
         elif isinstance(term, ast.QuantifiedTerm):
             quantified_variables = []
@@ -441,6 +446,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                 if var_name in self.context.z3_variables:
                     quantified_variables.append(self.context.z3_variables[var_name])
                 else:
+                    self.logger.error(f"Undeclared variable used in quantifier: {var_name}")
                     raise ValueError(f"Undeclared variable used in quantifier: {var_name}")
             body = self.parse_term(term.term_body)
             if term.quantifier_kind == ast.QuantifierKind.FORALL:
@@ -448,8 +454,10 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             elif term.quantifier_kind == ast.QuantifierKind.EXISTS:
                 return z3.Exists(quantified_variables, body)
             else:
+                self.logger.error(f"Unsupported quantifier kind: {term.quantifier_kind}")
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
         else:
+            self.logger.error(f"Unsupported term type: {type(term)}")
             raise ValueError(f"Unsupported term type: {type(term)}")
 
     @staticmethod
@@ -492,6 +500,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                 elif z3.is_lt(assertion):
                     negated_assertions.append(assertion.arg(0) >= assertion.arg(1))
                 else:
+                    self.logger.error("Unsupported assertion type: {}".format(assertion))
                     raise ValueError("Unsupported assertion type: {}".format(assertion))
         return negated_assertions
 
@@ -548,6 +557,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
         elif sort == z3.BoolSort():
             return z3.Bool(name)
         else:
+            SynthesisProblemZ3.logger.error(f"Unsupported sort: {sort}")
             raise ValueError(f"Unsupported sort: {sort}")
 
     def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:

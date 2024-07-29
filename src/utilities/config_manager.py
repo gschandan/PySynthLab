@@ -156,10 +156,23 @@ class ConfigManager:
             elif merged_dict.get(field.name) is None:
                 merged_dict[field.name] = getattr(default_options, field.name)
 
+        def transform_grammar(grammar_dict):
+            transformed = {}
+            for key, value in grammar_dict.items():
+                transformed[key] = []
+                for item in value:
+                    if isinstance(item, list):
+                        transformed[key].append(tuple(item))
+                    else:
+                        transformed[key].append(item)
+            return transformed
+
         if 'custom_grammar' in merged_dict['synthesis_parameters']:
             custom_grammar = merged_dict['synthesis_parameters']['custom_grammar']
             if isinstance(custom_grammar, str):
-                merged_dict['synthesis_parameters']['custom_grammar'] = json.loads(custom_grammar)
+                parsed_grammar = json.loads(custom_grammar)
+                transformed_grammar = transform_grammar(parsed_grammar)
+                merged_dict['synthesis_parameters']['custom_grammar'] = transformed_grammar
 
         return Options(
             logging=LoggingOptions(**merged_dict['logging']),
