@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple
 import z3
 
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 
 
 class CandidateGenerator(ABC):
@@ -13,25 +13,25 @@ class CandidateGenerator(ABC):
     in the context of program synthesis.
 
     Attributes:
-        problem (SynthesisProblem): The synthesis problem instance.
+        problem (SynthesisProblemZ3): The synthesis problem instance.
         config (object): Configuration options for the synthesis problem.
         min_const (int): Minimum constant value allowed in candidate functions.
         max_const (int): Maximum constant value allowed in candidate functions.
         operation_costs (dict): Dictionary mapping operations to their complexity costs.
     """
 
-    def __init__(self, problem: 'SynthesisProblem'):
+    def __init__(self, problem: 'SynthesisProblemZ3'):
         """
         Initialize the CandidateGenerator.
 
         Args:
-            problem (SynthesisProblem): The synthesis problem instance.
+            problem (SynthesisProblemZ3): The synthesis problem instance.
         """
         self.problem = problem
         self.config = problem.options
-        self.min_const = SynthesisProblem.options.synthesis_parameters.min_const
-        self.max_const = SynthesisProblem.options.synthesis_parameters.max_const
-        self.operation_costs = SynthesisProblem.options.synthesis_parameters.operation_costs
+        self.min_const = self.config.synthesis_parameters.min_const
+        self.max_const = self.config.synthesis_parameters.max_const
+        self.operation_costs = self.config.synthesis_parameters.operation_costs
 
     @abstractmethod
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:

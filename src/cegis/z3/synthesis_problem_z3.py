@@ -1,25 +1,22 @@
 import dataclasses
 import logging
 import typing
-from datetime import datetime
 from typing import List, Dict, Tuple, Set, Callable, Collection, Any
 
-import pyparsing
 from z3 import *
 
-from src.helpers.parser.src.exceptions import ParseException
-from src.helpers.parser.src.v1.parser import SygusV1Parser
-from src.utilities.options import Options, LoggingOptions
+from src.cegis.synthesis_problem_base import BaseSynthesisProblem
 from src.helpers.parser.src import ast
 from src.helpers.parser.src.ast import Program, CommandKind
-from src.helpers.parser.src.resolution import FunctionDescriptor, FunctionKind, SortDescriptor
-from src.helpers.parser.src.symbol_table_builder import SymbolTableBuilder
+from src.helpers.parser.src.resolution import SortDescriptor
+from src.helpers.parser.src.v1.parser import SygusV1Parser
 from src.helpers.parser.src.v2.parser import SygusV2Parser
 from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from src.utilities.options import Options
 
 
 @dataclasses.dataclass
-class SynthesisProblemContext:
+class SynthesisProblemZ3Context:
     """
     A dataclass to store the context of a synthesis problem.
 
@@ -68,7 +65,7 @@ class SynthesisProblemContext:
     all_z3_functions: Dict[str, z3.FuncDeclRef] = dataclasses.field(default=dict)
 
 
-class SynthesisProblem:
+class SynthesisProblemZ3(BaseSynthesisProblem):
     """
     A class representing a synthesis problem in the SyGuS format.
 
@@ -85,22 +82,18 @@ class SynthesisProblem:
         problem (Program): The parsed SyGuS program.
         symbol_table (SymbolTable): Symbol table for the parsed program.
         printer (SygusV2ASTPrinter): Printer for the AST.
-        context (SynthesisProblemContext): Context holding various data structures and solvers.
+        context (SynthesisProblemZ3Context): Context holding various data structures and solvers.
 
     Example:
         .. code-block:: python
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> options = Options()
-            >>> synthesis_problem = SynthesisProblem(problem_str, options)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str, options)
             >>> print(synthesis_problem.get_logic())
             LIA
             >>> print(synthesis_problem.get_synth_funcs())
             {'max2': FunctionDescriptor(...)}
     """
-
-    pyparsing.ParserElement.enablePackrat()
-    logger: logging.Logger = None
-    options: Options = None
 
     def __init__(self, problem: str, options: Options = None):
         """
@@ -119,18 +112,11 @@ class SynthesisProblem:
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
             >>> options = Options()
-            >>> synthesis_problem = SynthesisProblem(problem_str, options)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str, options)
         """
-        if SynthesisProblem.logger is None:
-            SynthesisProblem.setup_logger(options)
+        super().__init__(problem, options)
 
-        self.input_problem: str = problem
-        self.options = options or Options()
-        self.parser, self.problem = self.parse_problem(problem)
-        self.symbol_table = SymbolTableBuilder.run(self.problem)
-        self.printer = SygusV2ASTPrinter(self.symbol_table)
-
-        self.context = SynthesisProblemContext()
+        self.context = SynthesisProblemZ3Context()
         self.context.enumerator_solver.set('smt.macro_finder', True)
         self.context.verification_solver.set('smt.macro_finder', True)
         if (self.options.synthesis_parameters.random_seed is not None and
@@ -138,295 +124,17 @@ class SynthesisProblem:
             self.context.enumerator_solver.set('random_seed', self.options.synthesis_parameters.random_seed)
             self.context.verification_solver.set('random_seed', self.options.synthesis_parameters.random_seed)
 
-        self.context.smt_problem = self.convert_sygus_to_smt()
-        self.context.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
+        self.context.smt_problem = self.smt_problem
+        self.context.constraints = self.constraints
 
-        self.initialise_z3_variables()
-        self.initialise_z3_synth_functions()
-        self.initialise_z3_predefined_functions()
+        self.initialise_variables()
+        self.initialise_synth_functions()
+        self.initialise_predefined_functions()
         self.map_z3_variables()
         self.populate_all_z3_functions()
         self.parse_constraints()
 
-    @staticmethod
-    def setup_logger(options: Options = None):
-        """
-        Setup the logger for the SynthesisProblem class.
-
-        This method configures the logging system for the SynthesisProblem class,
-        setting up both file and console handlers with appropriate log levels and formats.
-
-        Args:
-            options (Options, optional): The options object containing logging configurations. Defaults to None.
-
-        Example:
-            >>> options = Options(logging=LoggingOptions(file='synthesis.log', level="DEBUG"))
-            >>> SynthesisProblem.setup_logger(options)
-        """
-        if SynthesisProblem.logger is not None:
-            return
-
-        logger = logging.getLogger(__name__)
-        log_dir = "logs"
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-
-        if options and options.logging.file:
-            log_file = options.logging.file
-        else:
-            log_file = os.path.join(log_dir, f"run_{datetime.now()}.log")
-
-        file_handler = logging.FileHandler(log_file)
-        console_handler = logging.StreamHandler()
-
-        log_level = options.logging.level if options else logging.DEBUG
-        file_handler.setLevel(log_level)
-        console_handler.setLevel(log_level)
-
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        file_handler.setFormatter(formatter)
-        console_handler.setFormatter(formatter)
-
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
-        logger.setLevel(log_level)
-
-        SynthesisProblem.logger = logger
-        SynthesisProblem.options = options
-
-    @staticmethod
-    def parse_problem(problem: str) -> tuple[SygusV1Parser | SygusV2Parser, Program]:
-        """
-        Attempt to parse the problem string using SygusV1Parser and SygusV2Parser.
-
-        This method tries to parse the input problem using SygusV1Parser first,
-        and if that fails, it attempts to parse with SygusV2Parser.
-
-        Args:
-            problem (str): The input problem string in SyGuS format.
-
-        Returns:
-            tuple: A tuple containing the successful parser and the parsed problem.
-
-        Raises:
-            ParseException: If both parsers fail to parse the problem.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
-            >>> parser, parsed_problem = SynthesisProblem.parse_problem(problem_str)
-            >>> print(type(parser))
-            <class 'src.helpers.parser.src.v1.parser.SygusV1Parser'>
-            >>> print(type(parsed_problem))
-            <class 'src.helpers.parser.src.ast.Program'>
-        """
-        try:
-            parser = SygusV1Parser()
-            parsed_problem = parser.parse(problem)
-            SynthesisProblem.logger.info("Successfully parsed with SygusV1Parser")
-            return parser, parsed_problem
-        except ParseException as e:
-            SynthesisProblem.logger.warning(f"Failed to parse with SygusV1Parser: {e}")
-            SynthesisProblem.logger.warning("Attempting to parse with SygusV2Parser")
-
-            try:
-                parser = SygusV2Parser()
-                parsed_problem = parser.parse(problem)
-                SynthesisProblem.logger.info("Successfully parsed with SygusV2Parser")
-                return parser, parsed_problem
-            except ParseException as e:
-                SynthesisProblem.logger.error(f"Failed to parse with both SygusV1Parser and SygusV2Parser: {e}")
-                raise ParseException(f"Failed to parse with both SygusV1Parser and SygusV2Parser: {e}")
-
-    def __str__(self, as_smt=False) -> str:
-        """
-        Return the string representation of the synthesis problem.
-
-        Args:
-            as_smt (bool, optional): If True, return the problem in SMT-LIB format. Defaults to False.
-
-        Returns:
-            str: The string representation of the problem.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> print(synthesis_problem)
-            (set-logic LIA)
-            (synth-fun max2 ((x Int) (y Int)) Int ...)
-            >>> print(synthesis_problem.__str__(as_smt=True))
-            (set-logic LIA)
-            (declare-fun max2 (Int Int) Int)
-            ...
-        """
-        if as_smt:
-            return self.context.smt_problem
-        return self.printer.run(self.problem, self.symbol_table)
-
-    def info_sygus(self) -> None:
-        """
-        Log the string representation of the synthesis problem in SyGuS format.
-
-        This method logs the SyGuS representation of the synthesis problem.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synthesis_problem.info_sygus()
-            # Output in log:
-            # (set-logic LIA)
-            # (synth-fun max2 ((x Int) (y Int)) Int ...)
-        """
-        SynthesisProblem.logger.info(str(self))
-
-    def info_smt(self) -> None:
-        """
-        Log the string representation of the synthesis problem in SMT-LIB format.
-
-        This method logs the SMT-LIB representation of the synthesis problem.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synthesis_problem.info_smt()
-            # Output in log:
-            # (set-logic LIA)
-            # (declare-fun max2 (Int Int) Int)
-            # ...
-        """
-        SynthesisProblem.logger.info(self.__str__(as_smt=True))
-
-    def get_logic(self) -> str:
-        """
-        Get the logic of the synthesis problem.
-
-        Returns:
-            str: The logic name.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> print(synthesis_problem.get_logic())
-            LIA
-        """
-        return self.symbol_table.logic_name
-
-    def get_synth_funcs(self) -> Dict[str, FunctionDescriptor]:
-        """
-        Get the synthesis functions of the problem.
-
-        Returns:
-            Dict[str, FunctionDescriptor]: A dictionary mapping function names to their declaration commands.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synth_funcs = synthesis_problem.get_synth_funcs()
-            >>> print(list(synth_funcs.keys()))
-            ['max2']
-            >>> print(synth_funcs['max2'].argument_sorts)
-            [SortDescriptor(identifier=Identifier(symbol='Int')), SortDescriptor(identifier=Identifier(symbol='Int'))]
-        """
-        return self.symbol_table.synth_functions
-
-    def get_predefined_funcs(self) -> Dict[str, FunctionDescriptor]:
-        """
-        Get the predefined functions of the problem.
-
-        Returns:
-            Dict[str, FunctionDescriptor]: A dictionary mapping function names to their declaration commands.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> predefined_funcs = synthesis_problem.get_predefined_funcs()
-            >>> print(list(predefined_funcs.keys()))
-            ['min2']
-            >>> print(predefined_funcs['min2'].function_body)
-            FunctionApplicationTerm(function_identifier=Identifier(symbol='ite'), arguments=[...])
-        """
-        return self.symbol_table.user_defined_functions
-
-    def get_var_symbols(self) -> List[str]:
-        """
-        Get the variable names decalred by the problem.
-
-        Returns:
-            List[str]: A list of variable symbols.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(declare-var x Int)\\n(declare-var y Int)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> print(synthesis_problem.get_var_symbols())
-            ['x', 'y']
-        """
-        return [x.symbol for x in self.problem.commands if x.command_kind == CommandKind.DECLARE_VAR]
-
-    def get_function_symbols(self) -> List[str]:
-        """
-        Get the function symbols declared by the problem.
-
-        Returns:
-            List[str]: A list of function symbols.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(define-fun f ((x Int)) Int (+ x 1))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> print(synthesis_problem.get_function_symbols())
-            ['f']
-        """
-        return [x.function_name for x in self.problem.commands if x.command_kind == CommandKind.DEFINE_FUN]
-
-    def convert_sygus_to_smt(self) -> str:
-        """
-        Convert the synthesis problem from SyGuS format to SMT-LIB format.
-
-        This method parses the input SyGuS problem, transforms it into SMT-LIB format,
-        and returns the result as a string.
-
-        Returns:
-            str: The synthesis problem in SMT-LIB format.
-
-        Example:
-            >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (>= (max2 a b) a))\\n(check-synth)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> print(synthesis_problem.convert_sygus_to_smt())
-            (set-logic LIA)
-            (declare-fun max2 (Int Int) Int)
-            (declare-var a Int)
-            (declare-var b Int)
-            (assert (>= (max2 a b) a))
-            (check-sat)
-        """
-        i_expr = pyparsing.QuotedString(quoteChar='"') | pyparsing.QuotedString(quoteChar='|', unquoteResults=False)
-        s_expr = pyparsing.nestedExpr(opener='(', closer=')', ignoreExpr=i_expr)
-        s_expr.ignore(';' + pyparsing.restOfLine)
-
-        sygus_parser = pyparsing.ZeroOrMore(s_expr)
-        sygus_ast = sygus_parser.parseString(self.input_problem, parseAll=True).asList()
-
-        constraints = []
-        constraint_indices = []
-        for i, statement in enumerate(sygus_ast):
-            if statement[0] == 'constraint':
-                constraints.append(statement[1])
-                constraint_indices.append(i)
-            elif statement[0] == 'check-synth':
-                statement[0] = 'check-sat'
-            elif statement[0] == 'synth-fun':
-                statement[0] = 'declare-fun'
-                statement[2] = [var_decl[1] for var_decl in statement[2]]
-        if constraints:
-            conjoined_constraints = ['and'] + constraints
-            sygus_ast[constraint_indices[0]] = ['assert', conjoined_constraints]
-            for index in reversed(constraint_indices[1:]):
-                del sygus_ast[index]
-
-        def serialise(line):
-            return line if type(line) is not list else f'({" ".join(serialise(expression) for expression in line)})'
-
-        return '\n'.join(serialise(statement) for statement in sygus_ast)
-
-    def initialise_z3_variables(self) -> None:
+    def initialise_variables(self) -> None:
         """
         Initialise Z3 variables based on the declared variables in the problem.
 
@@ -435,8 +143,8 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(declare-var x Int)\\n(declare-var y Bool)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synthesis_problem.initialise_z3_variables()
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
+            >>> synthesis_problem.initialise_variables()
             >>> print(synthesis_problem.context.z3_variables)
             {'x': Int('x'), 'y': Bool('y')}
         """
@@ -446,7 +154,7 @@ class SynthesisProblem:
             if command.command_kind == CommandKind.DECLARE_VAR and command.sort_expression.identifier.symbol == 'Bool':
                 self.context.z3_variables[command.symbol] = z3.Bool(command.symbol)
 
-    def initialise_z3_synth_functions(self) -> None:
+    def initialise_synth_functions(self) -> None:
         """
         Initialise Z3 synthesis functions based on the synth-fun commands in the problem.
 
@@ -455,8 +163,8 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synthesis_problem.initialise_z3_synth_functions()
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
+            >>> synthesis_problem.initialise_synth_functions()
             >>> print(synthesis_problem.context.z3_synth_functions)
             {'max2': Function('max2', IntSort(), IntSort(), IntSort())}
         """
@@ -472,7 +180,7 @@ class SynthesisProblem:
                 func.identifier.symbol, *z3_arg_sorts, z3_range_sort
             )
 
-    def initialise_z3_predefined_functions(self) -> None:
+    def initialise_predefined_functions(self) -> None:
         """
         Initialize Z3 predefined functions based on the define-fun commands in the problem.
 
@@ -481,7 +189,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> synthesis_problem.initialise_z3_predefined_functions()
             >>> print(synthesis_problem.context.z3_predefined_functions)
             {'min2': (Function('min2', IntSort(), IntSort(), IntSort()), If(x <= y, x, y))}
@@ -515,9 +223,9 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synthesis_problem.initialise_z3_synth_functions()
-            >>> synthesis_problem.initialise_z3_predefined_functions()
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
+            >>> synthesis_problem.initialise_synth_functions()
+            >>> synthesis_problem.initialise_predefined_functions()
             >>> synthesis_problem.populate_all_z3_functions()
             >>> print(list(synthesis_problem.context.all_z3_functions.keys()))
             ['max2', 'min2']
@@ -536,9 +244,9 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
-            >>> synthesis_problem.initialise_z3_variables()
-            >>> synthesis_problem.initialise_z3_synth_functions()
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
+            >>> synthesis_problem.initialise_variables()
+            >>> synthesis_problem.initialise_synth_functions()
             >>> synthesis_problem.map_z3_variables()
             >>> print(synthesis_problem.context.variable_mapping_dict['max2'])
             {Var(0, IntSort()): Int('a'), Var(1, IntSort()): Int('b')}
@@ -559,7 +267,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (>= (max2 a b) a))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> synthesis_problem.parse_constraints()
             >>> print(synthesis_problem.context.z3_constraints)
             [And(max2(a, b) >= a)]
@@ -574,6 +282,7 @@ class SynthesisProblem:
                 undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables,
                                                                       declared_functions, declared_synth_functions)
                 if undeclared_variables:
+                    self.logger.error(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                     raise ValueError(f"Undeclared variables used in constraint: {', '.join(undeclared_variables)}")
                 term = self.parse_term(constraint.constraint)
                 all_constraints.append(term)
@@ -583,7 +292,7 @@ class SynthesisProblem:
             combined_constraint = z3.And(*all_constraints)
             self.context.z3_constraints.append(combined_constraint)
         else:
-            SynthesisProblem.logger.info("Warning: No constraints found or generated.")
+            SynthesisProblemZ3.logger.info("Warning: No constraints found or generated.")
 
         self.context.z3_negated_constraints = self.negate_assertions(self.context.z3_constraints)
 
@@ -602,7 +311,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(constraint (>= (max2 a b) a))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> constraint = synthesis_problem.context.constraints[0]
             >>> undeclared = synthesis_problem.find_undeclared_variables(constraint.constraint, {'a'}, set(), {'max2'})
             >>> print(undeclared)
@@ -646,7 +355,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(constraint (>= (max2 a 5) a))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> constraint = synthesis_problem.context.constraints[0]
             >>> parsed_term = synthesis_problem.parse_term(constraint.constraint)
             >>> print(parsed_term)
@@ -665,6 +374,7 @@ class SynthesisProblem:
             elif symbol in self.context.z3_synth_functions:
                 return self.context.z3_synth_functions[symbol]
             else:
+                self.logger.error(f"Undefined symbol: {symbol}")
                 raise ValueError(f"Undefined symbol: {symbol}")
         elif isinstance(term, ast.LiteralTerm):
             literal = term.literal
@@ -673,6 +383,7 @@ class SynthesisProblem:
             elif literal.literal_kind == ast.LiteralKind.BOOLEAN:
                 return z3.BoolVal(literal.literal_value.lower() == "true")
             else:
+                self.logger.error(f"Unsupported literal kind: {literal.literal_kind}")
                 raise ValueError(f"Unsupported literal kind: {literal.literal_kind}")
         elif isinstance(term, ast.FunctionApplicationTerm):
             func_symbol = term.function_identifier.symbol
@@ -710,6 +421,7 @@ class SynthesisProblem:
                     return -args[0]
                 elif len(args) == 2:
                     return args[0] - args[1]
+                self.logger.error("Minus operator '-' should have 1 or 2 arguments")
                 raise ValueError("Minus operator '-' should have 1 or 2 arguments")
             elif func_symbol == "=":
                 if len(args) == 2:
@@ -726,6 +438,7 @@ class SynthesisProblem:
                                                  [(arg, value) for arg, value in zip(function_args.values(), args)])
                 return substituted_body
             else:
+                self.logger.error(f"Undefined function symbol: {func_symbol}")
                 raise ValueError(f"Undefined function symbol: {func_symbol}")
         elif isinstance(term, ast.QuantifiedTerm):
             quantified_variables = []
@@ -733,6 +446,7 @@ class SynthesisProblem:
                 if var_name in self.context.z3_variables:
                     quantified_variables.append(self.context.z3_variables[var_name])
                 else:
+                    self.logger.error(f"Undeclared variable used in quantifier: {var_name}")
                     raise ValueError(f"Undeclared variable used in quantifier: {var_name}")
             body = self.parse_term(term.term_body)
             if term.quantifier_kind == ast.QuantifierKind.FORALL:
@@ -740,8 +454,10 @@ class SynthesisProblem:
             elif term.quantifier_kind == ast.QuantifierKind.EXISTS:
                 return z3.Exists(quantified_variables, body)
             else:
+                self.logger.error(f"Unsupported quantifier kind: {term.quantifier_kind}")
                 raise ValueError(f"Unsupported quantifier kind: {term.quantifier_kind}")
         else:
+            self.logger.error(f"Unsupported term type: {type(term)}")
             raise ValueError(f"Unsupported term type: {type(term)}")
 
     @staticmethod
@@ -759,7 +475,7 @@ class SynthesisProblem:
             >>> from z3 import Int, And, Or
             >>> x, y = Int('x'), Int('y')
             >>> assertions = [And(x > 0, y > 0), Or(x < 10, y < 10)]
-            >>> negated = SynthesisProblem.negate_assertions(assertions)
+            >>> negated = SynthesisProblemZ3.negate_assertions(assertions)
             >>> print(negated)
             [Or(Not(x > 0), Not(y > 0)), And(Not(x < 10), Not(y < 10))]
         """
@@ -784,6 +500,7 @@ class SynthesisProblem:
                 elif z3.is_lt(assertion):
                     negated_assertions.append(assertion.arg(0) >= assertion.arg(1))
                 else:
+                    self.logger.error("Unsupported assertion type: {}".format(assertion))
                     raise ValueError("Unsupported assertion type: {}".format(assertion))
         return negated_assertions
 
@@ -802,7 +519,7 @@ class SynthesisProblem:
             >>> from src.helpers.parser.src.resolution import SortDescriptor
             >>> from src.helpers.parser.src.ast import Identifier
             >>> int_sort = SortDescriptor(identifier=Identifier(symbol='Int'))
-            >>> z3_sort = SynthesisProblem.convert_sort_descriptor_to_z3_sort(int_sort)
+            >>> z3_sort = SynthesisProblemZ3.convert_sort_descriptor_to_z3_sort(int_sort)
             >>> print(z3_sort)
             Int
         """
@@ -828,10 +545,10 @@ class SynthesisProblem:
             ValueError: If the sort is not supported.
 
         Example:
-            >>> int_var = SynthesisProblem.create_z3_variable('x', z3.IntSort())
+            >>> int_var = SynthesisProblemZ3.create_z3_variable('x', z3.IntSort())
             >>> print(int_var)
             x
-            >>> bool_var = SynthesisProblem.create_z3_variable('y', z3.BoolSort())
+            >>> bool_var = SynthesisProblemZ3.create_z3_variable('y', z3.BoolSort())
             >>> print(bool_var)
             y
         """
@@ -840,6 +557,7 @@ class SynthesisProblem:
         elif sort == z3.BoolSort():
             return z3.Bool(name)
         else:
+            SynthesisProblemZ3.logger.error(f"Unsupported sort: {sort}")
             raise ValueError(f"Unsupported sort: {sort}")
 
     def collect_function_io_pairs(self, func: z3.FuncDeclRef) -> List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]:
@@ -854,7 +572,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(constraint (>= (max2 1 2) 2))\\n(constraint (= (max2 3 4) 4))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> max2_func = synthesis_problem.context.z3_synth_functions['max2']
             >>> io_pairs = synthesis_problem.collect_function_io_pairs(max2_func)
             >>> print(io_pairs)
@@ -889,7 +607,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(constraint (>= (max2 a b) a))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> max2 = synthesis_problem.context.z3_synth_functions['max2']
             >>> a, b = Int('a'), Int('b')
             >>> replacement = lambda x, y: If(x > y, x, y)
@@ -925,7 +643,7 @@ class SynthesisProblem:
 
         Example:
             >>> problem_str = "(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (<= x y) x y))\\n(constraint (>= (max2 (min2 a b) c) c))"
-            >>> synthesis_problem = SynthesisProblem(problem_str)
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
             >>> max2 = synthesis_problem.context.z3_synth_functions['max2']
             >>> a, b, c = Int('a'), Int('b'), Int('c')
             >>> replacement = lambda x, y: If(x > y, x, y)

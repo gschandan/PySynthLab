@@ -1,10 +1,10 @@
 import unittest
 from pathlib import Path
 
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.utilities.options import Options
 
-#@unittest.skip("optimising")
+
 class TestSyGusParsing(unittest.TestCase):
     def setUp(self):
         self.options = Options()
@@ -21,7 +21,7 @@ class TestSyGusParsing(unittest.TestCase):
                 with open(sygus_file, "r") as f:
                     problem_content = f.read()
 
-                problem = SynthesisProblem(problem_content, self.options)
+                problem = SynthesisProblemZ3(problem_content, self.options)
 
                 self.assertIsNotNone(problem.context, f"Failed to create context for {sygus_file.name}")
 

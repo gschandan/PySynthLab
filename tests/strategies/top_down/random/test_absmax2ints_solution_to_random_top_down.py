@@ -3,7 +3,7 @@ from typing import Tuple
 from unittest.mock import patch
 import z3
 from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
-from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
 
@@ -18,7 +18,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
         (constraint (and (<= x (f x y)) (<= y (f x y))))
         """
         self.options = Options()
-        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.problem = SynthesisProblemZ3(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 
     def generate_correct_abs_max_function(self) -> Tuple[z3.ExprRef, str]:

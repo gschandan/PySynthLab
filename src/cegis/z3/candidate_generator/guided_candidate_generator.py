@@ -3,7 +3,7 @@ from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateG
 from typing import List, Tuple, Any
 from z3 import *
 
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 
 
 # experimental
@@ -17,8 +17,8 @@ class GuidedCandidateGenerator(CandidateGenerator):
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             candidate = self.generate_guided_term(
                 self.get_arg_sorts(func_name),
-                SynthesisProblem.options.synthesis_parameters.max_depth,
-                SynthesisProblem.options.synthesis_parameters.max_complexity,
+                SynthesisProblemZ3.options.synthesis_parameters.max_depth,
+                SynthesisProblemZ3.options.synthesis_parameters.max_complexity,
                 #self.config.candidate_generator_cost_function
             )
             candidates.append((candidate, func_name))
@@ -60,7 +60,7 @@ class GuidedCandidateGenerator(CandidateGenerator):
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
-        SynthesisProblem.logger.info(f"Generated expression: {generated_expression}")
+        SynthesisProblemZ3.logger.info(f"Generated expression: {generated_expression}")
 
         return generated_expression
 

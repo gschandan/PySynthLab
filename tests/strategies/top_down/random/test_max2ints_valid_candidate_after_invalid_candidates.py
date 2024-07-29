@@ -4,7 +4,7 @@ from typing import List, Tuple
 import z3
 
 from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
-from src.cegis.z3.synthesis_problem import SynthesisProblem, Options
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3, Options
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
 
 
@@ -21,7 +21,7 @@ class TestValidCandidateAfterSeveralInvalidCandidatesAndCounterexamples(unittest
         self.options = Options()
         self.options.synthesis_parameters.max_candidates_at_each_depth = 5
         self.options.synthesis_parameters.max_iterations = 50
-        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.problem = SynthesisProblemZ3(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 
     def generate_correct_max_function(self) -> Tuple[z3.ExprRef, str]:

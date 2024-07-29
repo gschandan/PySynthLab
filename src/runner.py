@@ -1,10 +1,11 @@
 from dataclasses import asdict
-from z3 import *
+
+from src.cegis.cvc5.synthesis_problem_cvc5 import SynthesisProblemCVC5
 from src.utilities.config_manager import ConfigManager
 from src.cegis.z3.synthesis_strategy.fast_enumerative_synth import FastEnumerativeSynthesis
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
 from src.cegis.z3.synthesis_strategy.random_search_top_down import RandomSearchStrategyTopDown
-from src.cegis.z3.synthesis_problem import SynthesisProblem
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,7 +22,13 @@ def main() -> None:
         with open(config.input_source, 'r') as file:
             problem_input = file.read()
 
-    problem = SynthesisProblem(problem_input, config)
+    if config.solver.name.lower() == "z3":
+        problem = SynthesisProblemZ3(problem_input, config)
+    elif config.solver.name.lower() == "cvc5":
+        problem = SynthesisProblemCVC5(problem_input, config)
+    else:
+        raise ValueError(f"Unsupported solver: {config.solver.name}")
+
     problem.logger.info(problem.info_smt())
 
     if config.synthesis_parameters.strategy == 'fast_enumerative':

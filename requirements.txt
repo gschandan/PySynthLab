@@ -5,3 +5,4 @@ pyparsing
 z3-solver
 sphinx
 pyyaml
+cvc5

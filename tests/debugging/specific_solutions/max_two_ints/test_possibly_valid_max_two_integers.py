@@ -1,8 +1,8 @@
 import unittest
 from typing import List, Tuple, Callable
 from z3 import *
-from src.cegis.z3.synthesis_strategy.random_search_bottom_up import SynthesisProblem
-from src.cegis.z3.synthesis_problem import Options
+from src.cegis.z3.synthesis_strategy.random_search_bottom_up import SynthesisProblemZ3
+from src.cegis.z3.synthesis_problem_z3 import Options
 from tests.helpers.SynthesisStrategyHelper import TestSynthesisStrategy
 
 
@@ -16,7 +16,7 @@ class GivenTheMaxOfTwoIntegersProblem(unittest.TestCase):
         (constraint (and (<= x (f x y)) (<= y (f x y))))
         """
         self.options = Options()
-        self.problem = SynthesisProblem(self.problem_str, self.options)
+        self.problem = SynthesisProblemZ3(self.problem_str, self.options)
         self.strategy = TestSynthesisStrategy(self.problem)
 
     def test_valid_solutions_Are_correctly_identified(self):
