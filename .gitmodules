@@ -7,3 +7,6 @@
 [submodule "other_solvers/dryad_synth"]
 	path = other_solvers/dryad_synth
 	url = https://github.com/purdue-cap/DryadSynth.git
+[submodule "other_solvers/eusolver_priority"]
+	path = other_solvers/eusolver_priority
+	url = https://github.com/akrasuski1/eusolver-priority.git
