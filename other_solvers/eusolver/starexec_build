@@ -1,0 +1,24 @@
+
+#!/bin/bash
+
+cd thirdparty
+
+# Build libeusolver
+cd libeusolver/build && cmake ..
+make && cd ..
+cd ..
+
+# Build python3
+tar -xf Python-3.5.1.tgz
+cd Python-3.5.1 && ./configure && make && cp python python3 && cd ..
+
+# Build z3
+cd z3
+python scripts/mk_make.py
+cd build && make && cd ..
+cd ..
+
+cd ..
+
+cd bin && ./starexec_run_default icfp_103_10.sl
+
