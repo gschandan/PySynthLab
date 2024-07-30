@@ -147,7 +147,7 @@ class TestConfigManager(unittest.TestCase):
 
         merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
 
-        expected_grammar = {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}
+        expected_grammar = {"S": ["T", ("+", "S", "S")], "T": ["x", "y", "1", "2"]}
         self.assertEqual(merged_options.synthesis_parameters.custom_grammar, expected_grammar)
 
     def test_merge_config_with_weighted_generator(self):
@@ -173,7 +173,7 @@ class TestConfigManager(unittest.TestCase):
     def test_get_config_with_new_options(self, mock_parse_args, mock_load_yaml):
         config = ConfigManager.get_config()
         self.assertEqual(config.synthesis_parameters.custom_grammar,
-                         {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]})
+                         {"S": ["T", ("+", "S", "S")], "T": ["x", "y", "1", "2"]})
         self.assertTrue(config.synthesis_parameters.use_weighted_generator)
 
     def test_merge_config_with_cli_custom_grammar(self):
@@ -184,7 +184,7 @@ class TestConfigManager(unittest.TestCase):
 
         merged_options = ConfigManager.merge_config(self.default_options, yaml_config, cli_args)
 
-        expected_grammar = {"S": ["T", ["+", "S", "S"]], "T": ["x", "y", "1", "2"]}
+        expected_grammar = {"S": ["T", ("+", "S", "S")], "T": ["x", "y", "1", "2"]}
         self.assertEqual(merged_options.synthesis_parameters.custom_grammar, expected_grammar)
 
     def test_merge_config_with_cli_weighted_generator(self):
