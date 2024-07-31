@@ -10,3 +10,6 @@
 [submodule "other_solvers/eusolver_priority"]
 	path = other_solvers/eusolver_priority
 	url = https://github.com/akrasuski1/eusolver-priority.git
+[submodule "eusolver_clone"]
+	path = eusolver_clone
+	url = https://github.com/yuntongzhang/eusolver.git
