@@ -13,6 +13,6 @@
 [submodule "eusolver_clone"]
 	path = eusolver_clone
 	url = https://github.com/yuntongzhang/eusolver.git
-[submodule "other_solvers/eusolver_clone"]
-	path = other_solvers/eusolver_clone
+[submodule "other_solvers/eusolver"]
+	path = other_solvers/eusolver
 	url = https://github.com/yuntongzhang/eusolver.git

@@ -1,1 +1,0 @@
-Solver combining enumerative and unification synthesis strategies
