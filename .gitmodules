@@ -16,3 +16,6 @@
 [submodule "other_solvers/eusolver"]
 	path = other_solvers/eusolver
 	url = https://github.com/yuntongzhang/eusolver.git
+[submodule "other_solvers/dryadsynth"]
+	path = other_solvers/dryadsynth
+	url = https://github.com/purdue-cap/DryadSynth.git
