@@ -1,10 +1,9 @@
-import os
 import time
 import subprocess
 import csv
 from pathlib import Path
 
-sygus_dir = "/path/to/sygus/problems"
+sygus_dir = "problems/debugging"
 output_csv = "sygus_solver_comparison.csv"
 
 cvc5_configs = [
@@ -29,11 +28,9 @@ cvc5_configs = [
 
 py_synth_lab_solver_configs = [
     "--synthesis_parameters__strategy=random_enumerative --synthesis_parameters__candidate_generation=bottom_up",
-    "--synthesis_parameters__strategy=fast_enumerative --synthesis_parameters__candidate_generation=bottom_up",
-    "--synthesis_parameters__strategy=random_enumerative --synthesis_parameters__candidate_generation=top_down",
-    "--synthesis_parameters__strategy=fast_enumerative --synthesis_parameters__candidate_generation=top_down",
-    "--synthesis_parameters__strategy=random_enumerative --synthesis_parameters__candidate_generation=fast_enumerative",
-    "--synthesis_parameters__strategy=fast_enumerative --synthesis_parameters__candidate_generation=fast_enumerative",
+    "--synthesis_parameters__strategy=partial",
+    # "--synthesis_parameters__strategy=random_enumerative --synthesis_parameters__candidate_generation=top_down",
+    # "--synthesis_parameters__strategy=fast_enumerative",
 ]
 
 
@@ -84,6 +81,7 @@ def run_experiments():
         writer.writeheader()
         for result in results:
             writer.writerow(result)
+
 
 if __name__ == "__main__":
     run_experiments()
