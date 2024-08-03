@@ -155,8 +155,12 @@ class BaseSynthesisProblem(ABC):
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
 
         if constraints:
-            for i, constraint in zip(constraint_indices, constraints):
-                sygus_ast[i] = ['assert', constraint]
+            if len(constraints) > 1:
+                sygus_ast[constraint_indices[0]] = ['assert', ['and'] + constraints]
+                for index in reversed(constraint_indices[1:]):
+                    del sygus_ast[index]
+            else:
+                sygus_ast[constraint_indices[0]] = ['assert', constraints[0]]
 
         def serialise(line):
             return line if isinstance(line, str) else f'({" ".join(serialise(expression) for expression in line)})'

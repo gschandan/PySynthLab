@@ -297,11 +297,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                     non_conjoined_constraints.append(term)
 
         if all_constraints:
-            if len(all_constraints) > 1:
-                combined_constraint = z3.And(*all_constraints)
-                self.context.z3_constraints = [combined_constraint]
-            else:
-                self.context.z3_constraints = all_constraints
+            self.context.z3_constraints = [z3.And(*all_constraints)]
         else:
             SynthesisProblemZ3.logger.info("Warning: No constraints found or generated.")
 

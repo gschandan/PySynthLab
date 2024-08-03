@@ -62,12 +62,12 @@ class WeightedTopDownCandidateGenerator:
         if self.grammar is None:
             return {
                 'S': [
-                    ('T', 10),
                     (('ite', 'B', 'S', 'S'), 50),
                     (('+', 'S', 'S'), 30),
                     (('-', 'S', 'S'), 30),
                     (('*', 'S', 'S'), 35),
                     (('neg', 'S'), 20),
+                    ('T', 10),
                 ],
                 'B': [
                     (('>', 'T', 'T'), 15),

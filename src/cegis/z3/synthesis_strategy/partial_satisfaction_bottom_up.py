@@ -8,43 +8,69 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
         super().__init__(problem)
         self.candidate_generator = EnhancedRandomCandidateGenerator(problem)
 
-    def set_partial_satisfaction_method(self, method: str, active: bool):
-        self.candidate_generator.set_partial_satisfaction_method(method, active)
-
     def execute_cegis(self) -> None:
-        # testing - move to config/options if works
-        self.set_partial_satisfaction_method('splitting', True)
-        self.set_partial_satisfaction_method('soft_constraints', True)
-        self.set_partial_satisfaction_method('max_smt', False)
-        self.set_partial_satisfaction_method('quantitative', True)
-        self.set_partial_satisfaction_method('unsat_core', False)
-        self.set_partial_satisfaction_method('fuzzy', True)
+        # TODO: add this to the config/options or make available to other strategies?
+        # also probably filter out candidates if they have particularly poor scores? but may be good for generating stronger counterexamples
+        methods = ['splitting', 'soft_constraints', 'max_smt', 'quantitative', 'unsat_core', 'fuzzy']
+        for method in methods:
+            self.candidate_generator.set_partial_satisfaction_method(method, True)
 
         max_depth = self.problem.options.synthesis_parameters.max_depth
         max_complexity = self.problem.options.synthesis_parameters.max_complexity
         max_iterations = self.problem.options.synthesis_parameters.max_iterations
+        max_candidates_per_depth = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
+
         iteration = 0
 
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
-                candidates = self.candidate_generator.generate_candidates()
-                pruned_candidates = self.candidate_generator.prune_candidates(candidates)
+                for candidate_at_depth in range(max_candidates_per_depth):
+                    iteration += 1
 
-                self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations}max iterations, depth: {depth}, complexity: {complexity}")
+                    if self.process_iteration(iteration, max_iterations, depth, complexity, candidate_at_depth,max_candidates_per_depth):
+                        return
 
-                func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
-                candidate_functions = [candidate for candidate, _ in pruned_candidates]
+                    if iteration >= max_iterations:
+                        self.log_final_results(max_iterations)
+                        return
 
-                if self.test_candidates(func_strs, candidate_functions):
-                    self.problem.logger.info(f"Found satisfying candidates!")
-                    for candidate, func_name in pruned_candidates:
-                        self.problem.logger.info(f"{func_name}: {candidate}")
-                    self.set_solution_found()
-                    return
+        self.log_final_results(max_iterations)
 
-                iteration += 1
-                if iteration >= max_iterations:
-                    self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
-                    return
+    def process_iteration(self, iteration, max_iterations, depth, complexity, candidate_at_depth,max_candidates_per_depth):
+        self.problem.logger.info(
+            f"Iteration {iteration}/{max_iterations} max iterations, depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):")
 
-        self.problem.logger.info("No satisfying candidates found.")
+        candidates = self.candidate_generator.generate_candidates()
+        pruned_candidates = self.candidate_generator.prune_candidates(candidates)
+
+        func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
+        candidate_functions = [candidate for candidate, _ in pruned_candidates]
+
+        if self.test_candidates(func_strs, candidate_functions):
+            self.log_solution_found(pruned_candidates)
+            return True
+
+        return False
+
+    def log_solution_found(self, pruned_candidates):
+        self.problem.logger.info(f"Found satisfying candidates!")
+        for candidate, func_name in pruned_candidates:
+            self.problem.logger.info(f"{func_name}: {candidate}")
+        self.set_solution_found()
+        self.log_final_results()
+        self.problem.logger.info("\n"+"=" * 100)
+
+    def log_final_results(self, max_iterations=None):
+        if max_iterations:
+            self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
+        for func_name in self.problem.context.z3_synth_functions.keys():
+            self.problem.logger.info(f"Candidate Stats: {self.candidate_generator.get_score_statistics(func_name)}")
+            self.problem.logger.debug(f"Final Scores (higher is better):")
+            sorted_scores = sorted(self.candidate_generator.score_history[func_name],
+                                   key=lambda x: x[0], reverse=True)
+
+            joined_scores = "\n"
+            for score, candidate in sorted_scores:
+                joined_scores += f"{score:.4f}: {candidate}\n"
+
+            self.problem.logger.debug(joined_scores)

@@ -47,7 +47,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         This strategy is particularly useful when you have an idea of the overall
         structure of the solution and want to refine it. It can be more efficient
         than bottom-up approaches for certain types of problems, especially when
-        the solution space is well-structured.
+        the solution space is well-defined.
 
         The use of a weighted generator can be controlled through the
         `use_weighted_generator` option in the synthesis parameters.
