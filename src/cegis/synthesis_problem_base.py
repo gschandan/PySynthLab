@@ -155,10 +155,8 @@ class BaseSynthesisProblem(ABC):
                 statement[2] = [var_decl[1] for var_decl in statement[2]]
 
         if constraints:
-            conjoined_constraints = ['and'] + constraints
-            sygus_ast[constraint_indices[0]] = ['assert', conjoined_constraints]
-            for index in reversed(constraint_indices[1:]):
-                del sygus_ast[index]
+            for i, constraint in zip(constraint_indices, constraints):
+                sygus_ast[i] = ['assert', constraint]
 
         def serialise(line):
             return line if isinstance(line, str) else f'({" ".join(serialise(expression) for expression in line)})'

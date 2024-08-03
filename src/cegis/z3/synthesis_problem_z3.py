@@ -33,7 +33,8 @@ class SynthesisProblemZ3Context:
         z3_synth_function_args (Dict[str, Dict[str, ExprRef]]): Dictionary mapping synthesis function names to their arguments.
         z3_predefined_functions (Dict[str, Tuple[FuncDeclRef, ExprRef | FuncDeclRef | bool | int]]): Dictionary mapping predefined function names to their Z3 representations.
         z3_predefined_function_args (Dict[str, Dict[str, ExprRef]]): Dictionary mapping predefined function names to their arguments.
-        z3_constraints (List[ExprRef]): List of Z3 constraints.
+        z3_constraints (List[ExprRef]): List of Z3 constraints conjoined with And.
+        z3_non_conjoined_constraints (List[ExprRef]): List of Z3 constraints, non-conjoined.
         assertions (Set[ExprRef]): Set of Z3 assertions.
         counterexamples (List[Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]]): List of counterexamples.
         z3_negated_constraints (Set[ExprRef]): Set of negated Z3 constraints.
@@ -54,6 +55,7 @@ class SynthesisProblemZ3Context:
         default_factory=dict)
     z3_predefined_function_args: Dict[str, Dict[str, ExprRef]] = dataclasses.field(default_factory=dict)
     z3_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
+    z3_non_conjoined_constraints: List[ExprRef] = dataclasses.field(default_factory=list)
     assertions: Set[ExprRef] = dataclasses.field(default_factory=set)
     counterexamples: List[
         Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]] = dataclasses.field(
@@ -273,6 +275,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             [And(max2(a, b) >= a)]
         """
         all_constraints = []
+        non_conjoined_constraints = []
         declared_variables = set(self.get_var_symbols())
         declared_functions = set(self.get_function_symbols())
         declared_synth_functions = set(self.get_synth_funcs().keys())
@@ -288,13 +291,45 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                 all_constraints.append(term)
                 self.context.original_assertions.append(term)
 
+                if z3.is_and(term):
+                    non_conjoined_constraints.extend(term.children())
+                else:
+                    non_conjoined_constraints.append(term)
+
         if all_constraints:
-            combined_constraint = z3.And(*all_constraints)
-            self.context.z3_constraints.append(combined_constraint)
+            if len(all_constraints) > 1:
+                combined_constraint = z3.And(*all_constraints)
+                self.context.z3_constraints = [combined_constraint]
+            else:
+                self.context.z3_constraints = all_constraints
         else:
             SynthesisProblemZ3.logger.info("Warning: No constraints found or generated.")
 
+        self.context.z3_non_conjoined_constraints = non_conjoined_constraints
         self.context.z3_negated_constraints = self.negate_assertions(self.context.z3_constraints)
+
+    def split_conjoined_constraint(self, constraint: z3.ExprRef) -> List[z3.ExprRef]:
+        """
+        Split a potentially conjoined constraint into its individual components.
+
+        Args:
+            constraint (z3.ExprRef): The constraint to split.
+
+        Returns:
+            List[z3.ExprRef]: A list of individual constraints.
+
+        Example:
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun f ((x Int)) Int)\\n(constraint (and (>= (f 0) 0) (>= (f 1) 1)))"
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
+            >>> conjoined_constraint = synthesis_problem.context.z3_constraints[0]
+            >>> split_constraints = synthesis_problem.split_conjoined_constraint(conjoined_constraint)
+            >>> print(split_constraints)
+            [f(0) >= 0, f(1) >= 1]
+        """
+        if z3.is_and(constraint):
+            return list(constraint.children())
+        else:
+            return [constraint]
 
     def find_undeclared_variables(self, term, declared_variables, declared_functions, declared_synth_functions):
         """
@@ -500,7 +535,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
                 elif z3.is_lt(assertion):
                     negated_assertions.append(assertion.arg(0) >= assertion.arg(1))
                 else:
-                    self.logger.error("Unsupported assertion type: {}".format(assertion))
+                    SynthesisProblemZ3.logger.error("Unsupported assertion type: {}".format(assertion))
                     raise ValueError("Unsupported assertion type: {}".format(assertion))
         return negated_assertions
 
@@ -660,3 +695,26 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             predefined_substituted = z3.substitute_funs(synth_substituted, predefined_substitutions)
             substituted_constraints.append(predefined_substituted)
         return substituted_constraints
+
+    def partial_evaluate_constraint(self, constraint: z3.ExprRef, partial_assignment: Dict[z3.ExprRef, z3.ExprRef]) -> z3.ExprRef:
+        """
+        Partially evaluate a constraint given a partial assignment.
+
+        Args:
+            constraint (z3.ExprRef): The constraint to evaluate.
+            partial_assignment (Dict[z3.ExprRef, z3.ExprRef]): A dictionary mapping variables to their partial assignments.
+
+        Returns:
+            z3.ExprRef: The partially evaluated constraint.
+
+        Example:
+            >>> problem_str = "(set-logic LIA)\\n(synth-fun f ((x Int)) Int)\\n(constraint (and (>= (f 0) 0) (>= (f 1) 1)))"
+            >>> synthesis_problem = SynthesisProblemZ3(problem_str)
+            >>> f = synthesis_problem.context.z3_synth_functions['f']
+            >>> constraint = synthesis_problem.context.z3_non_conjoined_constraints[0]
+            >>> partial_assignment = {f(0): z3.IntVal(5)}
+            >>> evaluated = synthesis_problem.partial_evaluate_constraint(constraint, partial_assignment)
+            >>> print(evaluated)
+            5 >= 0
+        """
+        return z3.substitute(constraint, [(var, val) for var, val in partial_assignment.items()])
