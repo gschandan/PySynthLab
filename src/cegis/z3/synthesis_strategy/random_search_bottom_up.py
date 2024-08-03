@@ -90,7 +90,7 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                 for candidate_at_depth in range(max_candidates_per_depth):
                     candidates = self.candidate_generator.generate_candidates()
                     pruned_candidates = self.candidate_generator.prune_candidates(candidates)
-                    self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations} depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):\n")
+                    self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations} max iterations, depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):")
                     func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
                     candidate_functions = [candidate for candidate, _ in pruned_candidates]
                     if self.test_candidates(func_strs, candidate_functions):

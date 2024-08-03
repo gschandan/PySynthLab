@@ -57,7 +57,7 @@ class RandomCandidateGenerator(CandidateGenerator):
             this method might return an expression like: If(x > y, x + 2, y - 1)
         """
         if operations is None:
-            operations = ['+', '-', '*', 'If', 'Neg']
+            operations = ['+', '-', '*', 'ite', 'neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
@@ -85,12 +85,12 @@ class RandomCandidateGenerator(CandidateGenerator):
                 left = random.choice(args) if args else random.choice(constants)
                 right = random.choice(constants)
                 return left * right
-            elif op == 'If':
+            elif op == 'ite':
                 condition = self.generate_condition(args)
                 true_expr = build_term(curr_depth - 1, remaining_complexity // 2)
                 false_expr = build_term(curr_depth - 1, remaining_complexity - (remaining_complexity // 2))
                 return z3.If(condition, true_expr, false_expr)
-            elif op == 'Neg':
+            elif op == 'neg':
                 return -build_term(curr_depth - 1, remaining_complexity)
             self.problem.logger.error(f"Unexpected operation: {op}")
             raise ValueError(f"Unexpected operation: {op}")

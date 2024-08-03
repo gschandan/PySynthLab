@@ -75,18 +75,18 @@ class SynthesisParameters:
             choices=["bottom_up", "top_down", "fast_enumerative"]
         ))
     max_iterations: int = field(
-        default=500,
+        default=10000,
         metadata=dict(
             description="Maximum number of iterations",
             type="int"))
     max_depth: int = field(
-        default=5,
+        default=7,
         metadata=dict(
             description="Maximum depth of generated expressions",
             type="int"
         ))
     max_complexity: int = field(
-        default=5,
+        default=8,
         metadata=dict(
             description="Maximum complexity of generated expressions",
             type="int"
@@ -104,7 +104,7 @@ class SynthesisParameters:
             type="bool"
         ))
     max_candidates_at_each_depth: int = field(
-        default=10,
+        default=100,
         metadata=dict(
             description="Maximum number of candidate programs to consider at each depth",
             type="int"
