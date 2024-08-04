@@ -56,7 +56,7 @@ def run_cvc5_experiments(timeout_ms=30000):
         f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-si=none",
         f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-si=use",
         f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-si=all",
-        f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-rr-synth=true",
+        f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-rr-synth-input",
         f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-abort-size=10",
         f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-abort-size=20",
         f"--tlimit={timeout_ms} --sygus-enum=smart --sygus-grammar-cons=simple",
