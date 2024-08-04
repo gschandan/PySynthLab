@@ -12,7 +12,7 @@ class RandomSearchStrategyBottomUpCVC5(SynthesisStrategyCVC5):
         self.min_const = problem.options.synthesis_parameters.min_const
         self.max_const = problem.options.synthesis_parameters.max_const
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         max_depth = self.problem.options.synthesis_parameters.max_depth
         max_complexity = self.problem.options.synthesis_parameters.max_complexity
         max_candidates_per_depth = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
@@ -29,15 +29,16 @@ class RandomSearchStrategyBottomUpCVC5(SynthesisStrategyCVC5):
                     candidate_functions = [candidate for candidate, _ in pruned_candidates]
                     if self.test_candidates(func_strs, candidate_functions):
                         self.problem.logger.info(f"Found satisfying candidates!")
+                        valid_candidates = ''
                         for candidate, func_name in pruned_candidates:
                             self.problem.logger.info(f"{func_name}: {candidate}")
+                            valid_candidates += f"{func_name}: {candidate}\n"
                         self.set_solution_found()
-                        return
+                        return True, valid_candidates
                     iteration += 1
                     if iteration >= max_iterations:
                         self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
-                        return
-        self.problem.logger.info("No satisfying candidates found.")
+                        return False, f"No satisfying candidates found within {max_iterations} iterations."
 
     def test_candidates(self, func_strs: list[str], candidate_functions: list[cvc5.Term]) -> bool:
         # TODO

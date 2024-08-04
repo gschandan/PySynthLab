@@ -70,7 +70,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         if problem.options.synthesis_parameters.custom_grammar:
             self.candidate_generator.grammar = problem.options.synthesis_parameters.custom_grammar
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         """
         Execute the CEGIS loop using a top-down random search strategy.
 
@@ -100,9 +100,12 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
 
             if self.test_candidates(func_strs, candidate_functions):
                 self.problem.logger.info(f"Found satisfying candidates!")
+                valid_candidates = ''
                 for candidate, func_name in pruned_candidates:
                     self.problem.logger.info(f"{func_name}: {candidate}")
+                    valid_candidates += f"{func_name}: {candidate}\n"
                 self.set_solution_found()
-                return
+                return True, valid_candidates
 
-        self.problem.logger.info("No satisfying candidates found.")
+        self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
+        return False, f"No satisfying candidates found within {max_iterations} iterations."

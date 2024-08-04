@@ -8,7 +8,7 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
         super().__init__(problem)
         self.candidate_generator = EnhancedRandomCandidateGenerator(problem)
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         # TODO: add this to the config/options or make available to other strategies?
         # also probably filter out candidates if they have particularly poor scores? but may be good for generating stronger counterexamples
         methods = ['splitting', 'soft_constraints', 'max_smt', 'quantitative', 'unsat_core', 'fuzzy']
@@ -27,16 +27,16 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
                 for candidate_at_depth in range(max_candidates_per_depth):
                     iteration += 1
 
-                    if self.process_iteration(iteration, max_iterations, depth, complexity, candidate_at_depth,max_candidates_per_depth):
-                        return
+                    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                                                               candidate_at_depth, max_candidates_per_depth)
+                    if process_iteration[0]:
+                        return process_iteration
 
                     if iteration >= max_iterations:
                         self.log_final_results(max_iterations)
-                        return
+                        return process_iteration
 
-        self.log_final_results(max_iterations)
-
-    def process_iteration(self, iteration, max_iterations, depth, complexity, candidate_at_depth,max_candidates_per_depth):
+    def process_iteration(self, iteration, max_iterations, depth, complexity, candidate_at_depth,max_candidates_per_depth) -> tuple[bool, str]:
         self.problem.logger.info(
             f"Iteration {iteration}/{max_iterations} max iterations, depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):")
 
@@ -48,9 +48,13 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
 
         if self.test_candidates(func_strs, candidate_functions):
             self.log_solution_found(pruned_candidates)
-            return True
+            valid_candidates = ''
+            for candidate, func_name in pruned_candidates:
+                valid_candidates += f"{func_name}: {candidate}\n"
+            self.set_solution_found()
+            return True, valid_candidates
 
-        return False
+        return False, f"No satisfying candidates found."
 
     def log_solution_found(self, pruned_candidates):
         self.problem.logger.info(f"Found satisfying candidates!")

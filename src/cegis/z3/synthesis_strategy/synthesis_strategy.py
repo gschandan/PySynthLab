@@ -31,8 +31,8 @@ class SynthesisStrategy(ABC):
                         for candidate, func_name in candidates:
                             if self.test_candidates([func_name], [candidate]):
                                 self.set_solution_found()
-                                return
-                    print("No solution found within max iterations.")
+                                return True, candidate
+                    return False, "No solution found within max iterations."
 
     Usage:
         .. code-block:: python
@@ -69,7 +69,7 @@ class SynthesisStrategy(ABC):
         return self.candidate_generator.generate_candidates()
 
     @abstractmethod
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         """
         Execute the CEGIS loop.
 
