@@ -89,3 +89,505 @@ run_id,run_datetime,solver,config,file,return_code,time,stdout,stderr
 "
 7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/four.sl,1,0.014518022537231445,,"(error ""Parse Error: problems/debugging/four.sl:4.16: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
 "
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/large.sl,-6,30.609890460968018,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/large.sl,-6,30.489967346191406,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/large.sl,-6,32.16668200492859,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/large.sl,-6,30.465094327926636,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/large.sl,-6,30.540377616882324,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/large.sl,-6,30.578570127487183,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/large.sl,-6,30.57051658630371,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/large.sl,-6,30.553821563720703,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/large.sl,-6,30.575162649154663,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/large.sl,-6,30.589457273483276,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/large.sl,-6,30.505507469177246,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/large.sl,-6,30.597164392471313,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/large.sl,0,0.018152475357055664,"fail
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/large.sl,0,0.007224321365356445,"fail
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/large.sl,-6,30.54373264312744,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/loop.sl,1,0.004465341567993164,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/loop.sl,1,0.007705211639404297,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/loop.sl,1,0.009544610977172852,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/loop.sl,1,0.0072901248931884766,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/loop.sl,1,0.00475311279296875,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/loop.sl,1,0.004796028137207031,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/loop.sl,1,0.004997968673706055,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/loop.sl,1,0.003906726837158203,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/loop.sl,1,0.004943132400512695,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/loop.sl,1,0.00410008430480957,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/loop.sl,1,0.0036122798919677734,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/loop.sl,1,0.003389596939086914,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/loop.sl,1,0.003276824951171875,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/loop.sl,1,0.0043182373046875,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/loop.sl,1,0.00423121452331543,,"(error ""Parse Error: problems/debugging/loop.sl:4.13: Expected a RPAREN_TOK, got `(` (LPAREN_TOK)."")
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/max2ints.sl,0,0.005844831466674805,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/max2ints.sl,0,0.008312702178955078,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/max2ints.sl,0,0.008962869644165039,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/max2ints.sl,0,0.00659942626953125,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/max2ints.sl,0,0.08082842826843262,"(
+(define-fun max ((x Int) (y Int)) Int (ite (<= y x) x y))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/max2ints.sl,0,0.0055294036865234375,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/max2ints.sl,0,0.00706028938293457,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/max2ints.sl,0,0.005435466766357422,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/max2ints.sl,0,0.0072956085205078125,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/max2ints.sl,0,0.006135702133178711,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/max2ints.sl,0,0.006071805953979492,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/max2ints.sl,0,0.007761955261230469,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/max2ints.sl,0,0.009202003479003906,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/max2ints.sl,0,0.01365351676940918,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/max2ints.sl,0,0.01991581916809082,"(
+(define-fun max ((x Int) (y Int)) Int (ite (and (not (= x y)) (not (>= (+ x (* (- 1) y)) 0))) y x))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/max3.sl,0,0.016893386840820312,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/max3.sl,0,0.013996124267578125,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/max3.sl,0,0.01797199249267578,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/max3.sl,0,0.015210390090942383,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/max3.sl,-6,30.49800205230713,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/max3.sl,0,0.013818979263305664,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/max3.sl,0,0.015174627304077148,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/max3.sl,0,0.015246391296386719,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/max3.sl,0,0.01696157455444336,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/max3.sl,0,0.01560211181640625,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/max3.sl,0,0.0203859806060791,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/max3.sl,0,0.024614810943603516,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/max3.sl,0,0.025788545608520508,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/max3.sl,0,0.02002692222595215,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/max3.sl,0,0.03211212158203125,"(
+(define-fun fn ((vr0 Int) (vr1 Int) (vr2 Int)) Int (let ((_let_1 (+ vr0 (* (- 1) vr1)))) (let ((_let_2 (* (- 1) vr2))) (ite (and (>= _let_1 0) (>= (+ vr0 _let_2) 0)) vr0 (ite (and (>= (+ vr1 _let_2) 0) (not (>= _let_1 1))) vr1 vr2)))))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/simple.sl,0,0.019732952117919922,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/simple.sl,0,0.014398813247680664,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/simple.sl,0,0.014857053756713867,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/simple.sl,0,0.00762176513671875,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/simple.sl,0,0.015569925308227539,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/simple.sl,0,0.007810354232788086,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/simple.sl,0,0.0062255859375,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/simple.sl,0,0.008191347122192383,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/simple.sl,0,0.004831552505493164,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/simple.sl,0,0.003979682922363281,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/simple.sl,0,0.004338264465332031,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/simple.sl,0,0.006026506423950195,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/simple.sl,0,0.008684873580932617,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/simple.sl,0,0.006405830383300781,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/simple.sl,0,0.007246732711791992,"(
+(define-fun f ((x Int)) Int x)
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/small.sl,0,0.08720922470092773,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/small.sl,0,0.12068343162536621,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/small.sl,0,0.014404773712158203,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= a b) b a))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/small.sl,0,0.08449792861938477,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= a b) b a))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/small.sl,0,0.08287692070007324,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/small.sl,0,0.08044147491455078,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/small.sl,0,0.08245205879211426,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/small.sl,0,0.08278799057006836,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/small.sl,0,0.08020663261413574,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/small.sl,0,0.08116769790649414,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/small.sl,-6,30.543506145477295,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/small.sl,0,0.06033468246459961,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= a b) b a))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/small.sl,0,0.00679469108581543,"fail
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/small.sl,0,0.007619380950927734,"fail
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/small.sl,0,0.09273719787597656,"(
+(define-fun f ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/small_2.sl,0,0.005980253219604492,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/small_2.sl,0,0.006394863128662109,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/small_2.sl,0,0.007523536682128906,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/small_2.sl,0,0.005959749221801758,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/small_2.sl,0,0.055414438247680664,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (<= a b) b a))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/small_2.sl,0,0.005835533142089844,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/small_2.sl,0,0.0068395137786865234,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/small_2.sl,0,0.005480766296386719,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/small_2.sl,0,0.0048558712005615234,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/small_2.sl,0,0.005351066589355469,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/small_2.sl,0,0.004760026931762695,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/small_2.sl,0,0.005399465560913086,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/small_2.sl,0,0.004977703094482422,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/small_2.sl,0,0.00536656379699707,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/small_2.sl,0,0.005757808685302734,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/small_3.sl,0,0.005334138870239258,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/small_3.sl,0,0.0069141387939453125,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/small_3.sl,0,0.005782127380371094,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/small_3.sl,0,0.0060579776763916016,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/small_3.sl,0,0.09458637237548828,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/small_3.sl,0,0.009082794189453125,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/small_3.sl,0,0.01137232780456543,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/small_3.sl,0,0.010355710983276367,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/small_3.sl,0,0.009669780731201172,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/small_3.sl,0,0.007829427719116211,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/small_3.sl,0,0.006681680679321289,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/small_3.sl,0,0.006306648254394531,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/small_3.sl,0,0.006526947021484375,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/small_3.sl,0,0.0054378509521484375,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/small_3.sl,0,0.005815029144287109,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/small_4.sl,0,0.005857706069946289,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/small_4.sl,0,0.006029605865478516,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/small_4.sl,0,0.00762486457824707,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/small_4.sl,0,0.0060443878173828125,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/small_4.sl,0,0.1640617847442627,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (<= b a) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/small_4.sl,0,0.007796049118041992,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/small_4.sl,0,0.006879568099975586,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/small_4.sl,0,0.0068128108978271484,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/small_4.sl,0,0.007135629653930664,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/small_4.sl,0,0.009778738021850586,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/small_4.sl,0,0.014153003692626953,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/small_4.sl,0,0.02274775505065918,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/small_4.sl,0,0.024709463119506836,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/small_4.sl,0,0.017787456512451172,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/small_4.sl,0,0.013020038604736328,"(
+(define-fun max2 ((a Int) (b Int)) Int (ite (>= (+ a (* (- 1) b)) 0) a b))
+)
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart,problems/debugging/small_linear_func.sl,-6,30.570855379104614,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=random,problems/debugging/small_linear_func.sl,-6,30.56506872177124,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=fast,problems/debugging/small_linear_func.sl,-6,32.57651662826538,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=var-agnostic,problems/debugging/small_linear_func.sl,-6,30.516932010650635,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=none,problems/debugging/small_linear_func.sl,-6,30.56708002090454,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=use,problems/debugging/small_linear_func.sl,-6,30.584444046020508,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-si=all,problems/debugging/small_linear_func.sl,-6,30.544366598129272,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=10,problems/debugging/small_linear_func.sl,-6,30.576789140701294,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-abort-size=20,problems/debugging/small_linear_func.sl,-6,30.59428334236145,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=simple,problems/debugging/small_linear_func.sl,-6,30.60543131828308,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-grammar-cons=any-term,problems/debugging/small_linear_func.sl,-6,30.50839066505432,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=direct,problems/debugging/small_linear_func.sl,-6,30.526704788208008,,"cvc5 interrupted by timeout.
+"
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=dt-size-bound,problems/debugging/small_linear_func.sl,0,0.008643627166748047,"fail
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-fair=none,problems/debugging/small_linear_func.sl,0,0.013917684555053711,"fail
+",
+7c0f2bb5-6f41-4406-9d47-4a1f8c7bf12d,2024-08-04T18:57:32.463308,cvc5,--tlimit=30000 --sygus-enum=smart --sygus-repair-const,problems/debugging/small_linear_func.sl,-6,30.595036029815674,,"cvc5 interrupted by timeout.
+"
