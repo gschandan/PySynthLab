@@ -36,19 +36,29 @@ py_synth_lab_solver_configs = [
 
 def run_command(command):
     start_time = time.time()
+    print(f"Running command: {command}")
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     end_time = time.time()
     elapsed_time = end_time - start_time
+    print(f"Command finished: {command}")
     return process.returncode, elapsed_time, stdout, stderr
 
 
 def run_experiments():
     results = []
+    with open(output_csv, "w", newline="") as csvfile:
+        fieldnames = ["solver", "config", "file", "return_code", "time", "stdout", "stderr"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
 
     sygus_files = list(Path(sygus_dir).glob("*.sl"))
     for sygus_file in sygus_files:
+        results = []
+        print(f"Processing SyGuS file: {sygus_file}")
         for config in cvc5_configs:
+            print(f"Running cvc5 with config: {config}")
             command = f"cvc5 {config} {sygus_file}"
             retcode, elapsed_time, stdout, stderr = run_command(command)
             results.append({
@@ -62,7 +72,8 @@ def run_experiments():
             })
 
         for config in py_synth_lab_solver_configs:
-            command = f"python runner.py {config} {sygus_file}"
+            print(f"Running my_solver with config: {config}")
+            command = f"./venv/bin/python -m src.runner {config} {sygus_file}"
             retcode, elapsed_time, stdout, stderr = run_command(command)
             results.append({
                 "solver": "my_solver",
@@ -74,13 +85,13 @@ def run_experiments():
                 "stderr": stderr.decode("utf-8"),
             })
 
-    with open(output_csv, "w", newline="") as csvfile:
-        fieldnames = ["solver", "config", "file", "return_code", "time", "stdout", "stderr"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-        writer.writeheader()
-        for result in results:
-            writer.writerow(result)
+        print(f"Writing results to {output_csv}")
+        with open(output_csv, "w", newline="") as csvfile:
+            fieldnames = ["solver", "config", "file", "return_code", "time", "stdout", "stderr"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            for result in results:
+                writer.writerow(result)
+    print(f"Finished writing results to {output_csv}")
 
 
 if __name__ == "__main__":
