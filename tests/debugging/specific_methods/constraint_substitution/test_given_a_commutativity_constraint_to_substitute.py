@@ -1,6 +1,5 @@
-import typing
 import unittest
-from typing import List, Tuple, Callable, Collection
+from typing import List, Tuple, Callable
 from z3 import *
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import SynthesisProblemZ3
 from src.cegis.z3.synthesis_problem_z3 import Options
@@ -42,22 +41,19 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
         substituted_constraints = self.problem.substitute_constraints(constraints, [func], [candidate_func])
         self.assertGreater(len(substituted_constraints), 0)
 
-        expected_commutativity = And(
-            If(If(args[0] >= 0, args[0], -args[0]) > If(args[1] >= 0, args[1], -args[1]),
-               If(args[0] >= 0, args[0], -args[0]),
-               If(args[1] >= 0, args[1], -args[1])) ==
-            If(If(args[0] >= 0, args[0], -args[0]) > If(args[1] >= 0, args[1], -args[1]),
-               If(args[0] >= 0, args[0], -args[0]),
-               If(args[1] >= 0, args[1], -args[1]))
-        )
+        simplified_constraint = z3.simplify(substituted_constraints[0])
+        self.assertEqual(simplified_constraint, z3.BoolVal(True),
+                         f"Substituted constraint did not simplify to True. Got: {simplified_constraint}")
 
-        for constraint in substituted_constraints:
-            self.assertIsInstance(constraint, BoolRef)
-            self.assertIn("If", str(constraint))
+        x, y = z3.Ints('x y')
+        expected_commutativity = candidate_expr(x, y) == candidate_expr(y, x)
+        s = z3.Solver()
+        s.add(z3.Not(expected_commutativity))
+        result = s.check()
+        self.assertEqual(result, z3.unsat,
+                         f"Expected commutativity is not always true. Counterexample: {s.model() if result == z3.sat else None}")
 
-        commutativity_constraints = [c for c in substituted_constraints if "==" in str(c)]
-        self.assertGreater(len(commutativity_constraints), 0)
-        self.assertIn(str(expected_commutativity), [str(c) for c in commutativity_constraints])
+        print("Test passed: The substituted constraint simplifies to True, and the function is proven to be commutative.")
 
 
 if __name__ == "__main__":

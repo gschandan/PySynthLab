@@ -61,7 +61,7 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         self.min_const = problem.options.synthesis_parameters.min_const
         self.max_const = problem.options.synthesis_parameters.max_const
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         """
         Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using a bottom-up random search strategy.
 
@@ -95,12 +95,13 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                     candidate_functions = [candidate for candidate, _ in pruned_candidates]
                     if self.test_candidates(func_strs, candidate_functions):
                         self.problem.logger.info(f"Found satisfying candidates!")
+                        valid_candidates = ''
                         for candidate, func_name in pruned_candidates:
                             self.problem.logger.info(f"{func_name}: {candidate}")
+                            valid_candidates += f"{func_name}: {candidate}\n"
                         self.set_solution_found()
-                        return
+                        return True, valid_candidates
                     iteration += 1
                     if iteration >= max_iterations:
                         self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
-                        return
-        self.problem.logger.info("No satisfying candidates found.")
+                        return False, f"No satisfying candidates found within {max_iterations} iterations."

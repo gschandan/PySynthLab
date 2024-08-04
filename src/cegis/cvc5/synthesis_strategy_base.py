@@ -24,7 +24,7 @@ class SynthesisStrategyCVC5(ABC):
         return self.candidate_generator.generate_candidates()
 
     @abstractmethod
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         pass
 
     def set_solution_found(self) -> None:

@@ -1,6 +1,7 @@
 from dataclasses import asdict
 
 from src.cegis.cvc5.synthesis_problem_cvc5 import SynthesisProblemCVC5
+from src.cegis.z3.synthesis_strategy.partial_satisfaction_bottom_up import PartialSatisfactionBottomUp
 from src.utilities.config_manager import ConfigManager
 from src.cegis.z3.synthesis_strategy.fast_enumerative_synth import FastEnumerativeSynthesis
 from src.cegis.z3.synthesis_strategy.random_search_bottom_up import RandomSearchStrategyBottomUp
@@ -11,7 +12,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def main() -> None:
+def main() -> tuple[bool, str]:
 
     config = ConfigManager.get_config()
     ConfigManager.logger.info(asdict(config))
@@ -38,11 +39,13 @@ def main() -> None:
             strategy = RandomSearchStrategyTopDown(problem)
         else:
             strategy = RandomSearchStrategyBottomUp(problem)
+    elif config.synthesis_parameters.strategy == 'partial':
+        strategy = PartialSatisfactionBottomUp(problem)
     else:
         ConfigManager.logger.error(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
         raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
 
-    strategy.execute_cegis()
+    return strategy.execute_cegis()
 
 
 if __name__ == '__main__':

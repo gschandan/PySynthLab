@@ -65,7 +65,7 @@ class SynthesisParameters:
         metadata=dict(
             description="Synthesis strategy",
             type="str",
-            choices=["random_enumerative", "fast_enumerative"]
+            choices=["random_enumerative", "fast_enumerative", "partial"]
         ))
     candidate_generation: str = field(
         default="bottom_up",

@@ -25,7 +25,7 @@ class CegisT(SynthesisStrategy):
         self.encountered_counterexamples = set()
         self.term_bank = {}
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         max_depth = self.problem.options.synthesis_parameters.max_depth
         max_complexity = self.problem.options.synthesis_parameters.max_complexity
         max_candidates_per_depth = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
@@ -39,16 +39,18 @@ class CegisT(SynthesisStrategy):
 
             candidate = self.synthesize()
             if candidate is None:
-                SynthesisProblemZ3.logger.info("No candidate found")
+                self.problem.logger.info("No candidate found")
                 continue
 
             counterexample = self.verify(candidate)
             if counterexample is None:
-                SynthesisProblemZ3.logger.info("Solution found!")
+                self.problem.logger.info("Solution found!")
+                valid_candidates = ''
                 for func_name, expr in candidate.items():
-                    SynthesisProblemZ3.logger.info(f"{func_name}: {expr}")
+                    self.problem.logger.info(f"{func_name}: {expr}")
+                    valid_candidates += f"{func_name}: {expr}\n"
                 self.set_solution_found()
-                return
+                return True, valid_candidates
 
             theory_constraint = self.theory_solver_phase(candidate, counterexample)
 
@@ -56,7 +58,8 @@ class CegisT(SynthesisStrategy):
             if theory_constraint is not None:
                 self.add_theory_constraint(theory_constraint)
 
-        SynthesisProblemZ3.logger.info("Maximum iterations reached without finding a solution.")
+        self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
+        return False, f"No satisfying candidates found within {max_iterations} iterations."
 
     def synthesize(self) -> Optional[Dict[str, ExprRef]]:
         candidates = {}
@@ -111,7 +114,7 @@ class CegisT(SynthesisStrategy):
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
-        SynthesisProblemZ3.logger.info(f"Generated expression: {generated_expression}")
+        self.problem.logger.info(f"Generated expression: {generated_expression}")
 
         func_str = f"def arithmetic_function({', '.join(f'arg{i}' for i in range(num_args))}):\n"
         func_str += f"    return {str(generated_expression)}\n"
@@ -273,14 +276,14 @@ class CegisT(SynthesisStrategy):
 
         if ce_tuple not in self.encountered_counterexamples:
             ce_constraint = self.formulate_counterexample_constraint(counterexample)
-            SynthesisProblemZ3.logger.info(f"adding ce constraint: {ce_constraint}")
+            self.problem.logger.info(f"adding ce constraint: {ce_constraint}")
             self.problem.context.counterexamples.append(ce_constraint)
             self.encountered_counterexamples.add(ce_tuple)
         else:
-            SynthesisProblemZ3.logger.info(f"Skipping duplicate counterexample: {counterexample}")
+            self.problem.logger.info(f"Skipping duplicate counterexample: {counterexample}")
 
     def add_theory_constraint(self, constraint: ExprRef) -> None:
-        SynthesisProblemZ3.logger.info(f"Adding theory constraint: {constraint}")
+        self.problem.logger.info(f"Adding theory constraint: {constraint}")
         self.problem.context.z3_constraints.append(constraint)
 
     def formulate_counterexample_constraint(self, counterexample: Dict[str, ExprRef]) -> ExprRef:

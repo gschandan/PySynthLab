@@ -47,7 +47,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         This strategy is particularly useful when you have an idea of the overall
         structure of the solution and want to refine it. It can be more efficient
         than bottom-up approaches for certain types of problems, especially when
-        the solution space is well-structured.
+        the solution space is well-defined.
 
         The use of a weighted generator can be controlled through the
         `use_weighted_generator` option in the synthesis parameters.
@@ -70,7 +70,7 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         if problem.options.synthesis_parameters.custom_grammar:
             self.candidate_generator.grammar = problem.options.synthesis_parameters.custom_grammar
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         """
         Execute the CEGIS loop using a top-down random search strategy.
 
@@ -100,9 +100,12 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
 
             if self.test_candidates(func_strs, candidate_functions):
                 self.problem.logger.info(f"Found satisfying candidates!")
+                valid_candidates = ''
                 for candidate, func_name in pruned_candidates:
                     self.problem.logger.info(f"{func_name}: {candidate}")
+                    valid_candidates += f"{func_name}: {candidate}\n"
                 self.set_solution_found()
-                return
+                return True, valid_candidates
 
-        self.problem.logger.info("No satisfying candidates found.")
+        self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
+        return False, f"No satisfying candidates found within {max_iterations} iterations."

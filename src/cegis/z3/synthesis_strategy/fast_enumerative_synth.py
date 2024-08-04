@@ -56,7 +56,7 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         self.problem = problem
         self.candidate_generator = FastEnumerativeCandidateGenerator(problem)
 
-    def execute_cegis(self) -> None:
+    def execute_cegis(self) -> tuple[bool, str]:
         """
         Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using fast enumerative synthesis.
 
@@ -79,13 +79,11 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
         synth_func_names = list(self.problem.context.z3_synth_functions.keys())
 
         if len(synth_func_names) <= 1:
-            self._execute_single_function_cegis(max_iterations)
-            return
+            return self._execute_single_function_cegis(max_iterations)
         else:
-            self._execute_multi_function_cegis(max_iterations, max_depth, synth_func_names)
-            return
+            return self._execute_multi_function_cegis(max_iterations, max_depth, synth_func_names)
 
-    def _execute_single_function_cegis(self, max_iterations: int) -> None:
+    def _execute_single_function_cegis(self, max_iterations: int) -> tuple[bool, str]:
         """
         Execute CEGIS for a single synthesis function.
 
@@ -103,11 +101,12 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
                     self.problem.logger.info(f"Found satisfying candidate!")
                     self.problem.logger.info(f"{func_name}: {candidate}")
                     self.set_solution_found()
-                    return
+                    return True, f"{func_name}: {candidate}"
 
         self.problem.logger.info(f"No solution found after {max_iterations} iterations")
-
-    def _execute_multi_function_cegis(self, max_iterations: int, max_depth: int, synth_func_names: list[str]) -> None:
+        return False, f"No solution found after {max_iterations} iterations"
+    
+    def _execute_multi_function_cegis(self, max_iterations: int, max_depth: int, synth_func_names: list[str]) -> tuple[bool, str]:
         """
         Execute CEGIS for multiple synthesis functions.
 
@@ -127,7 +126,7 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
 
             if any(not candidates for candidates in all_candidates.values()):
                 self.problem.logger.warning(f"Missing candidates for some functions at depth {depth}")
-                return
+                return False, f"Missing candidates for some functions at depth {depth}"
 
             for candidate_combination in product(*(all_candidates[func_name] for func_name in synth_func_names)):
                 func_strs = synth_func_names
@@ -138,14 +137,13 @@ class FastEnumerativeSynthesis(SynthesisStrategy):
 
                 if self.test_candidates(func_strs, candidate_functions):
                     self.problem.logger.info(f"Found satisfying candidates!")
+                    valid_candidates = ''
                     for func_name, candidate in zip(func_strs, candidate_functions):
                         self.problem.logger.info(f"{func_name}: {candidate}")
+                        valid_candidates += f"{func_name}: {candidate}\n"
                     self.set_solution_found()
-                    return
+                    return True, valid_candidates
             iteration += 1
             if iteration >= max_iterations:
-                self.problem.logger.info(
-                    f"No satisfying candidates found within {max_iterations} iterations.")
-                return
-
-        self.problem.logger.info(f"No solution found up to depth {max_depth}")
+                self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations, up to depth {depth}.")
+                return False, f"No satisfying candidates found within {max_iterations} iterations, up to depth {depth}."
