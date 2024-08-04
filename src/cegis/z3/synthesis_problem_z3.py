@@ -119,10 +119,11 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
         super().__init__(problem, options)
 
         self.context = SynthesisProblemZ3Context()
+        self.context.enumerator_solver.set('timeout', self.options.solver.timeout)
+        self.context.verification_solver.set('timeout', self.options.solver.timeout)
         self.context.enumerator_solver.set('smt.macro_finder', True)
         self.context.verification_solver.set('smt.macro_finder', True)
-        if (self.options.synthesis_parameters.random_seed is not None and
-                not self.options.synthesis_parameters.randomise_each_iteration):
+        if not self.options.synthesis_parameters.randomise_each_iteration:
             self.context.enumerator_solver.set('random_seed', self.options.synthesis_parameters.random_seed)
             self.context.verification_solver.set('random_seed', self.options.synthesis_parameters.random_seed)
 

@@ -12,7 +12,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def main() -> tuple[bool, str]:
+def main() -> None:
 
     config = ConfigManager.get_config()
     ConfigManager.logger.info(asdict(config))
@@ -44,8 +44,12 @@ def main() -> tuple[bool, str]:
     else:
         ConfigManager.logger.error(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
         raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
-
-    return strategy.execute_cegis()
+    result, candidates = strategy.execute_cegis()
+    if result:
+        print(candidates)
+    else:
+        print("No satisfying candidates found.")
+    return
 
 
 if __name__ == '__main__':

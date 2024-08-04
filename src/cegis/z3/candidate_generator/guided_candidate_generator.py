@@ -27,7 +27,7 @@ class GuidedCandidateGenerator(CandidateGenerator):
     def generate_guided_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                              cost_function: callable = None, operations: List[str] = None) -> z3.ExprRef:
         if operations is None:
-            operations = ['+', '-', '*', 'If', 'Neg']
+            operations = ['+', '-', '*', 'ite', 'neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
@@ -51,12 +51,12 @@ class GuidedCandidateGenerator(CandidateGenerator):
                 left = random.choice(args) if args else random.choice(constants)
                 right = random.choice(constants)
                 return left * right
-            elif op == 'If':
+            elif op == 'ite':
                 condition = self.generate_condition(args)
                 true_expr = build_term(curr_depth - 1, remaining_complexity // 2)
                 false_expr = build_term(curr_depth - 1, remaining_complexity - (remaining_complexity // 2))
                 return z3.If(condition, true_expr, false_expr)
-            elif op == 'Neg':
+            elif op == 'neg':
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
@@ -86,4 +86,4 @@ class GuidedCandidateGenerator(CandidateGenerator):
     @staticmethod
     def op_complexity(op: str) -> int:
         # experimenting with cost of operation for biasing random choice
-        return {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.get(op, 0)
+        return {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1}.get(op, 0)

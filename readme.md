@@ -32,7 +32,7 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-3Install the requirements without using the venv:
+3. Install the requirements without using the venv:
 ```shell
 pip install -r requirements.txt
 ```

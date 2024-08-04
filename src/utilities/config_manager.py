@@ -201,7 +201,7 @@ class ConfigManager:
             try:
                 yaml_config = ConfigManager.load_yaml("config/user_config.yaml")
             except FileNotFoundError:
-                ConfigManager.logger.warning("Default config file '../config/user_config.yaml' not found. "
+                ConfigManager.logger.warning("Default config file 'config/user_config.yaml' not found. "
                                              "Using default options.")
 
         return ConfigManager.merge_config(default_options, yaml_config, args)

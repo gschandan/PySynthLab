@@ -22,6 +22,8 @@ class CegisT(SynthesisStrategy):
         self.verifier_solver = self.problem.context.verification_solver
         self.theory_solver = Solver()
         self.theory_solver.set('smt.macro_finder', True)
+        self.theory_solver.set('timeout', self.problem.options.solver.timeout)
+        self.theory_solver.set('random_seed', self.problem.options.synthesis_parameters.random_seed)
         self.encountered_counterexamples = set()
         self.term_bank = {}
 
@@ -79,7 +81,7 @@ class CegisT(SynthesisStrategy):
     def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                              operations: List[str] = None) -> Tuple[z3.ExprRef, str]:
         if operations is None:
-            operations = ['+', '-', '*', 'If', 'Neg']
+            operations = ['+', '-', '*', 'ite', 'neg']
 
         args = [z3.Const(f'arg{i}', sort) for i, sort in enumerate(arg_sorts)]
         num_args = len(args)
@@ -105,12 +107,12 @@ class CegisT(SynthesisStrategy):
                 left = random.choice(args) if args else random.choice(constants)
                 right = random.choice(constants)
                 return left * right
-            elif op == 'If':
+            elif op == 'ite':
                 condition = self.generate_condition(args)
                 true_expr = build_term(curr_depth - 1, remaining_complexity // 2)
                 false_expr = build_term(curr_depth - 1, remaining_complexity - (remaining_complexity // 2))
                 return z3.If(condition, true_expr, false_expr)
-            elif op == 'Neg':
+            elif op == 'neg':
                 return -build_term(curr_depth - 1, remaining_complexity)
 
         generated_expression = build_term(depth, complexity)
@@ -144,7 +146,7 @@ class CegisT(SynthesisStrategy):
     @staticmethod
     def op_complexity(op: str) -> int:
         # experimenting with cost of operation for biasing random choice, may make this configurable
-        return {'+': 1, '-': 1, '*': 2, 'If': 3, 'Neg': 1}.get(op, 0)
+        return {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1}.get(op, 0)
 
     def generate_candidates(self) -> Dict[str, z3.ExprRef]:
         candidates = {}

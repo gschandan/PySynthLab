@@ -56,6 +56,10 @@ class SynthesisStrategy(ABC):
             self.candidate_generator = RandomCandidateGenerator(problem)
         else:
             self.candidate_generator = candidate_generator
+        self.counter_example_solver = Solver()
+        self.counter_example_solver.set('smt.macro_finder', True)
+        self.counter_example_solver.set('timeout', self.problem.options.solver.timeout)
+        self.counter_example_solver.set('random_seed', self.problem.options.synthesis_parameters.random_seed)
 
     def generate_candidates(self) -> list[tuple[ExprRef, str]]:
         """
@@ -169,14 +173,13 @@ class SynthesisStrategy(ABC):
                     [candidate]
                 )
 
-                solver = z3.Solver()
-
+                self.counter_example_solver.reset()
                 for var, value in ce.items():
-                    solver.add(var == value)
+                    self.counter_example_solver.add(var == value)
 
-                solver.add(substituted_constraints)
+                self.counter_example_solver.add(substituted_constraints)
 
-                if solver.check() == z3.unsat:
+                if self.counter_example_solver.check() == z3.unsat:
                     return False
         return True
 

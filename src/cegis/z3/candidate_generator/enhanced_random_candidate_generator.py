@@ -20,6 +20,10 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         self.candidate_scores: Dict[Tuple[ExprRef, str], float] = {}
         self.score_history: Dict[str, List[Tuple[float, str]]] = {func_name: [] for func_name in
                                                                   self.problem.context.z3_synth_functions.keys()}
+        self.solver = Solver()
+        self.solver.set('smt.macro_finder', True)
+        self.solver.set('timeout', self.problem.options.solver.timeout)
+        self.solver.set('random_seed', self.problem.options.synthesis_parameters.random_seed)
 
     def set_partial_satisfaction_method(self, method: str, active: bool):
         if method in self.partial_satisfaction_methods:
@@ -42,18 +46,18 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
 
     def check_partial_satisfaction(self, candidate: ExprRef, func_name: str) -> float:
         constraints = self.problem.context.z3_non_conjoined_constraints
-        s = Solver()
+        self.solver.reset()
         satisfied_constraints = 0
         for constraint in constraints:
-            s.push()
+            self.solver.push()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([constraint]),
                 [self.problem.context.z3_synth_functions[func_name]],
                 [candidate])
-            s.add(substituted_constraint)
-            if s.check() == unsat:
+            self.solver.add(substituted_constraint)
+            if self.solver.check() == unsat:
                 satisfied_constraints += 1
-            s.pop()
+            self.solver.pop()
         return satisfied_constraints / len(constraints)
 
     def check_with_soft_constraints(self, candidate: ExprRef, func_name: str) -> float:
@@ -86,7 +90,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         return 0.0
 
     def quantitative_satisfaction(self, candidate: ExprRef, func_name: str) -> float:
-        s = Solver()
+        self.solver.reset()
         total_diff = 0.0
         for constraint in self.problem.context.z3_non_conjoined_constraints:
             substituted_constraint = self.problem.substitute_constraints(
@@ -94,33 +98,33 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
                 [self.problem.context.z3_synth_functions[func_name]],
                 [candidate])[0]
             if is_bool(substituted_constraint):
-                s.push()
-                s.add(substituted_constraint)
-                if s.check() == unsat:
+                self.solver.push()
+                self.solver.add(substituted_constraint)
+                if self.solver.check() == unsat:
                     total_diff += 0
                 else:
                     total_diff += 1
-                s.pop()
+                self.solver.pop()
             elif is_arith(substituted_constraint):
                 diff = Abs(substituted_constraint)
-                s.push()
-                s.add(diff >= 0)
-                if s.check() == unsat:
-                    diff_value = s.model().eval(diff)
+                self.solver.push()
+                self.solver.add(diff >= 0)
+                if self.solver.check() == unsat:
+                    diff_value = self.solver.model().eval(diff)
                     if is_rational_value(diff_value):
                         total_diff += diff_value.as_fraction()
                     elif is_int_value(diff_value):
                         total_diff += float(diff_value.as_long())
                     else:
                         total_diff += 1
-                s.pop()
+                self.solver.pop()
             else:
                 total_diff += 1
         return 1.0 / (1.0 + total_diff)
 
     def unsat_core_analysis(self, candidate: ExprRef, func_name: str) -> float:
-        s = Solver()
-        s.set(unsat_core=True)
+        self.solver.reset()
+        self.solver.set(unsat_core=True)
         tracked_constraints = [Const(f'c_{i}', BoolSort()) for i in
                                range(len(self.problem.context.z3_non_conjoined_constraints))]
         for t, c in zip(tracked_constraints, self.problem.context.z3_non_conjoined_constraints):
@@ -128,15 +132,16 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
                 self.problem.negate_assertions([c]),
                 [self.problem.context.z3_synth_functions[func_name]],
                 [candidate])
-            s.assert_and_track(substituted_constraint[0], t)
-        if s.check() == unsat:
-            core = s.unsat_core()
+            self.solver.assert_and_track(substituted_constraint[0], t)
+        if self.solver.check() == unsat:
+            core = self.solver.unsat_core()
             return (len(self.problem.context.z3_non_conjoined_constraints) - len(core)) / len(
                 self.problem.context.z3_non_conjoined_constraints)
+        self.solver.set(unsat_core=False)
         return 1.0
 
     def fuzzy_satisfaction(self, candidate: ExprRef, func_name: str) -> float:
-        s = Solver()
+        self.solver.reset()
         all_satisfied = True
         num_satisfied = 0
 
@@ -145,13 +150,13 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
                 self.problem.negate_assertions([constraint]),
                 [self.problem.context.z3_synth_functions[func_name]],
                 [candidate])
-            s.push()
-            s.add(substituted_constraint)
-            if s.check() == unsat:
+            self.solver.push()
+            self.solver.add(substituted_constraint)
+            if self.solver.check() == unsat:
                 num_satisfied += 1
             else:
                 all_satisfied = False
-            s.pop()
+            self.solver.pop()
 
         if all_satisfied:
             return 1.0
