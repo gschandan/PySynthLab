@@ -180,8 +180,8 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
             <span class="k">for</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">func_name</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_candidates</span><span class="p">([</span><span class="n">func_name</span><span class="p">],</span> <span class="p">[</span><span class="n">candidate</span><span class="p">]):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">set_solution_found</span><span class="p">()</span>
-                    <span class="k">return</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found within max iterations.&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">candidate</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;No solution found within max iterations.&quot;</span>
 </pre></div>
 </div>
 <dl>
@@ -225,7 +225,7 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop.</p>
 <p>This method should implement the core logic of the synthesis strategy.
 It typically involves generating candidates, testing them, and refining
@@ -397,7 +397,7 @@ divide-and-conquer techniques to scale to larger synthesis tasks.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis">
-<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using fast enumerative synthesis.</p>
 <p>This method implements two different approaches based on the number of synthesis functions:</p>
 <ol class="arabic simple">
@@ -506,7 +506,7 @@ search space.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis">
-<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using a bottom-up random search strategy.</p>
 <p>This method generates candidates by incrementally increasing depth and complexity. It prunes candidates
 and tests them against the synthesis problem. The search continues until a solution is found or the
@@ -587,7 +587,7 @@ top-down candidate generator, depending on the configuration.</p>
 <p>This strategy is particularly useful when you have an idea of the overall
 structure of the solution and want to refine it. It can be more efficient
 than bottom-up approaches for certain types of problems, especially when
-the solution space is well-structured.</p>
+the solution space is well-defined.</p>
 <p>The use of a weighted generator can be controlled through the
 <cite>use_weighted_generator</cite> option in the synthesis parameters.</p>
 </div>
@@ -604,7 +604,7 @@ the solution space is well-structured.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis">
-<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop using a top-down random search strategy.</p>
 <p>This method generates candidates using a top-down approach, and tests them against
 the synthesis problem. The search continues for a specified number of iterations or until a
