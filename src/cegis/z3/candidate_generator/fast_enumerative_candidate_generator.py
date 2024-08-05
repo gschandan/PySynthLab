@@ -224,7 +224,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
         Yields:
             List[Tuple[z3.ExprRef, str]]: A list of tuples, each containing a candidate expression and the function name it's for.
         """
-        max_depth = SynthesisProblemZ3.options.synthesis_parameters.max_depth
+        max_depth = self.problem.options.synthesis_parameters.max_depth
 
         for depth in range(max_depth + 1):
             for func_name, func in self.problem.context.z3_synth_functions.items():

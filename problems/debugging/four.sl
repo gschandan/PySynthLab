@@ -9,7 +9,7 @@
 ))
 
 (synth-fun id3 ((x Int)) Int (
-    (Start Int (0 (- Start) (+ Start x)))
+    (Start Int (x (- Start) (+ Start x)))
 ))
 
 (synth-fun id4 ((x Int)) Int (

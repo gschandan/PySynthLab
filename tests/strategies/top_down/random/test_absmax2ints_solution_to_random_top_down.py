@@ -18,6 +18,7 @@ class TestValidCandidateDirectlyForAbsMax2Ints(unittest.TestCase):
         (constraint (and (<= x (f x y)) (<= y (f x y))))
         """
         self.options = Options()
+        self.options.synthesis_parameters.max_iterations = 10
         self.problem = SynthesisProblemZ3(self.problem_str, self.options)
         self.strategy = RandomSearchStrategyTopDown(self.problem)
 

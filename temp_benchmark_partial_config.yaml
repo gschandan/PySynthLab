@@ -1,0 +1,27 @@
+input_source: stdin
+logging:
+  file: logs/benchmark_partial_20240805_101024.log
+  level: INFO
+solver:
+  name: z3
+  timeout: 30000
+synthesis_parameters:
+  candidate_generation: bottom_up
+  initial_weight: 1.0
+  max_candidates_at_each_depth: 200
+  max_complexity: 10
+  max_const: 2
+  max_depth: 10
+  max_iterations: 30000
+  min_const: -2
+  operation_costs:
+    '*': 2
+    +: 1
+    '-': 1
+    ite: 3
+    neg: 1
+  random_seed: 1234
+  randomise_each_iteration: false
+  strategy: partial
+  use_weighted_generator: false
+  weight_multiplier: 1.0

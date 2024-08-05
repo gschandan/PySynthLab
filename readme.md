@@ -145,3 +145,10 @@ Run some specific debugging tests built around specific problems:
 ```shell
 python -m tests.run_problem_tests
 ```
+
+## Run Benchmarks
+Edit the file `src/benchmark/run_all_benchmarks.py` with the desired configuration(s) and point it at the relevant folder
+of problems, then run:
+```shell
+./venv/bin/python src/benchmark/run_all_benchmarks.py 
+```

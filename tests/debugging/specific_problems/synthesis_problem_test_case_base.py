@@ -13,7 +13,7 @@ class SynthesisProblemTestCase(unittest.TestCase, ABC):
     @classmethod
     def setUpClass(cls):
         if cls.problem_str is None:
-            raise NotImplementedError("Subclasses must define problem_str")
+            raise NotImplementedError("Subclasses must define a problem_str")
         cls.options = Options()
         cls.options.synthesis_parameters.max_iterations = 5
         cls.problem = SynthesisProblemZ3(cls.problem_str.strip(), cls.options)

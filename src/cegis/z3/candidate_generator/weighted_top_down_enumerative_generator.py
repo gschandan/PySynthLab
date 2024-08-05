@@ -1,3 +1,4 @@
+import logging
 from itertools import product
 from typing import List, Tuple, Union
 import z3
@@ -99,9 +100,10 @@ class WeightedTopDownCandidateGenerator:
             grammar = self.define_grammar(variables)
             self.problem.logger.debug(f'Grammar {grammar}')
 
-            tree = self.build_tree(grammar, 'S')
-            tree_str = "\n".join(self.print_tree(tree))
-            self.problem.logger.debug(f"Expansion Tree:\n{tree_str}")
+            if self.problem.logger.getEffectiveLevel() <= logging.DEBUG:
+                tree = self.build_tree(grammar, 'S')
+                tree_str = "\n".join(self.print_tree(tree))
+                self.problem.logger.debug(tree_str)
 
             for candidate, complexity in self.expand(grammar, 'S', 0):
                 simplified_expr = self.simplify_term(candidate)

@@ -15,11 +15,11 @@ output_pysynthlab_csv = "sygus_solver_pysynthlab_results.csv"
 project_root = Path(__file__).parent.parent.parent
 
 py_synth_lab_solver_configs = [
-    str(project_root / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
-    str(project_root / "config" / "benchmark_fast_enumerative.yaml"),
-    str(project_root / "config" / "benchmark_partial.yaml"),
-    #str(project_root / "config" / "benchmark_random_weighted_topdown.yaml"),
-    #str(project_root / "config" / "benchmark_random_top_down.yaml"),
+    str(project_root / "src" / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
+    str(project_root / "src" / "config" / "benchmark_fast_enumerative.yaml"),
+    str(project_root / "src" / "config" / "benchmark_partial.yaml"),
+    #str(project_root /"src" / "config" / "benchmark_random_weighted_topdown.yaml"),
+    #str(project_root /"src" / "config" / "benchmark_random_top_down.yaml"),
 ]
 
 
@@ -102,7 +102,7 @@ def run_pysynthlab_experiments():
     fieldnames = ["run_id", "run_datetime", "solver", "config", "file", "return_code", "time", "stdout", "stderr"]
 
     sygus_files = list(Path(sygus_dir).glob("*.sl"))
-    for sygus_file in sygus_files[:2]:
+    for sygus_file in sygus_files:
         results = []
         print(f"Processing SyGuS file: {sygus_file}")
 
@@ -112,12 +112,12 @@ def run_pysynthlab_experiments():
             if config is None:
                 print(f"Skipping {config_file} due to missing configuration")
                 continue
-            benchmark_name = Path(config_file).stem
             config['logging']['file'] = config['logging']['file'].format(
                 datetime=datetime.now().strftime("%Y%m%d_%H%M%S")
             )
 
-            temp_config_file = f"temp_{benchmark_name}_config.yaml"
+            benchmark_name = Path(config_file).stem.replace('benchmark','')
+            temp_config_file = f"temp_{benchmark_name}_{sygus_file}_config.yaml"
             with open(temp_config_file, 'w') as f:
                 yaml.dump(config, f)
 

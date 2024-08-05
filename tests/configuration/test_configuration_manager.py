@@ -49,7 +49,6 @@ class TestConfigManager(unittest.TestCase):
         self.assertIs(logger1, logger2)
         self.assertIs(logger1, ConfigManager.logger)
 
-
     @patch('builtins.open', new_callable=mock_open, read_data="logging:\n  level: DEBUG\n")
     def test_load_yaml(self, mock_file):
         config = ConfigManager.load_yaml('dummy_path.yaml')
