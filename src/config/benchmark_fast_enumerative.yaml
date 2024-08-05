@@ -1,6 +1,6 @@
 logging:
   level: INFO
-  file: "logs/benchmark_fast_enumerative_{datetime}.log"
+  file: "logs/fast_enumerative_{datetime}_{problem}.log"
 
 synthesis_parameters:
   strategy: fast_enumerative

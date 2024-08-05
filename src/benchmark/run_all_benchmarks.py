@@ -113,11 +113,12 @@ def run_pysynthlab_experiments():
                 print(f"Skipping {config_file} due to missing configuration")
                 continue
             config['logging']['file'] = config['logging']['file'].format(
-                datetime=datetime.now().strftime("%Y%m%d_%H%M%S")
+                datetime=datetime.now().strftime("%Y%m%d_%H%M%S"),
+                problem=sygus_file.stem
             )
 
-            benchmark_name = Path(config_file).stem.replace('benchmark','')
-            temp_config_file = f"temp_{benchmark_name}_{sygus_file}_config.yaml"
+            benchmark_name = Path(config_file).stem
+            temp_config_file = f"temp_{benchmark_name}_config.yaml"
             with open(temp_config_file, 'w') as f:
                 yaml.dump(config, f)
 

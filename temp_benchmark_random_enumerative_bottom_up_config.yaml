@@ -1,6 +1,6 @@
 input_source: stdin
 logging:
-  file: logs/benchmark_partial_20240805_101024.log
+  file: logs/random_enumerative_bottom_up_20240805_104216_four.log
   level: INFO
 solver:
   name: z3
@@ -9,10 +9,10 @@ synthesis_parameters:
   candidate_generation: bottom_up
   initial_weight: 1.0
   max_candidates_at_each_depth: 200
-  max_complexity: 10
+  max_complexity: 7
   max_const: 2
-  max_depth: 10
-  max_iterations: 30000
+  max_depth: 7
+  max_iterations: 10000
   min_const: -2
   operation_costs:
     '*': 2
@@ -22,6 +22,6 @@ synthesis_parameters:
     neg: 1
   random_seed: 1234
   randomise_each_iteration: false
-  strategy: partial
+  strategy: random_enumerative
   use_weighted_generator: false
   weight_multiplier: 1.0

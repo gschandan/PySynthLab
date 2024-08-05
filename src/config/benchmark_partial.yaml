@@ -1,6 +1,6 @@
 logging:
   level: INFO
-  file: "logs/benchmark_partial_{datetime}.log"
+  file: "logs/partial_{datetime}_{problem}.log"
 
 synthesis_parameters:
   strategy: partial

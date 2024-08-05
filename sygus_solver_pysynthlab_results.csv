@@ -1,55 +1,67 @@
 run_id,run_datetime,solver,config,file,return_code,time,stdout,stderr
-2e640ca8-ab61-43f8-9669-28e51d69d544,2024-08-05T10:07:12.711771,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/debugging/absolute.sl,0,0.12944293022155762,"abs: Var(0)*0 + -(Var(0)*1)
+7ce32ca5-95da-40d1-b3b1-8eeebdd38a04,2024-08-05T10:42:15.784812,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/debugging/absolute.sl,0,0.16061997413635254,"abs: If(Var(0) < Var(0), -2 + --2, Var(0)*-1)
 
-","2024-08-05 10:07:12,798 - src.utilities.config_manager - INFO - {'logging': {'level': 'INFO', 'file': 'logs/benchmark_random_enumerative_bottomup_20240805_100712.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 30000, 'max_depth': 10, 'max_complexity': 10, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/debugging/absolute.sl'}
-2024-08-05 10:07:12,810 - src.cegis.synthesis_problem_base - INFO - (set-logic LIA)
+","2024-08-05 10:42:15,870 - src.utilities.config_manager - INFO - {'logging': {'level': 'INFO', 'file': 'logs/random_enumerative_bottom_up_20240805_104215_absolute.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/debugging/absolute.sl'}
+2024-08-05 10:42:15,883 - src.cegis.synthesis_problem_base - INFO - (set-logic LIA)
 (declare-fun abs (Int) Int)
 (declare-var x Int)
 (assert (or (= (abs x) x) (= (abs x) (- x))))
 (check-sat)
-2024-08-05 10:07:12,810 - src.cegis.synthesis_problem_base - INFO - None
-2024-08-05 10:07:12,810 - src.cegis.synthesis_problem_base - INFO - Generated expression: Var(0)*0 + -(Var(0)*1)
-2024-08-05 10:07:12,810 - src.cegis.synthesis_problem_base - INFO - Iteration 1/30000 max iterations, depth: 1, complexity: 1, candidate at depth: 1/200):
-2024-08-05 10:07:12,819 - src.cegis.synthesis_problem_base - INFO - No counterexample found for candidates [(Var(0)*0 + -(Var(0)*1), 'abs')]
-2024-08-05 10:07:12,826 - src.cegis.synthesis_problem_base - INFO - No counterexample found! Guess(es) should be correct: abs: Var(0)*0 + -(Var(0)*1).
-2024-08-05 10:07:12,826 - src.cegis.synthesis_problem_base - INFO - Found satisfying candidates!
-2024-08-05 10:07:12,826 - src.cegis.synthesis_problem_base - INFO - abs: Var(0)*0 + -(Var(0)*1)
+2024-08-05 10:42:15,883 - src.cegis.synthesis_problem_base - INFO - None
+2024-08-05 10:42:15,883 - src.cegis.synthesis_problem_base - INFO - Generated expression: Var(0)*2
+2024-08-05 10:42:15,883 - src.cegis.synthesis_problem_base - INFO - Iteration 1/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 1/200):
+2024-08-05 10:42:15,891 - src.cegis.synthesis_problem_base - INFO - Counterexample for abs: {x: 1}
+2024-08-05 10:42:15,892 - src.cegis.synthesis_problem_base - INFO - New counterexample found for abs: {x: 1} Candidates: [(Var(0)*2, 'abs')]
+2024-08-05 10:42:15,892 - src.cegis.synthesis_problem_base - INFO - Generated expression: If(0 < Var(0), -1 + 0 - 1, 2 + Var(0) - 1)
+2024-08-05 10:42:15,892 - src.cegis.synthesis_problem_base - INFO - Iteration 2/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 2/200):
+2024-08-05 10:42:15,901 - src.cegis.synthesis_problem_base - INFO - Generated expression: -0 - (-1 - 2) - Var(0)*-2
+2024-08-05 10:42:15,901 - src.cegis.synthesis_problem_base - INFO - Iteration 3/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 3/200):
+2024-08-05 10:42:15,908 - src.cegis.synthesis_problem_base - INFO - Generated expression: If(Var(0) < Var(0), -2 + --2, Var(0)*-1)
+2024-08-05 10:42:15,908 - src.cegis.synthesis_problem_base - INFO - Iteration 4/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 4/200):
+2024-08-05 10:42:15,923 - src.cegis.synthesis_problem_base - INFO - No counterexample found for candidates [(If(Var(0) < Var(0), -2 + --2, Var(0)*-1), 'abs')]
+2024-08-05 10:42:15,930 - src.cegis.synthesis_problem_base - INFO - No counterexample found! Guess(es) should be correct: abs: If(Var(0) < Var(0), -2 + --2, Var(0)*-1).
+2024-08-05 10:42:15,930 - src.cegis.synthesis_problem_base - INFO - Found satisfying candidates!
+2024-08-05 10:42:15,931 - src.cegis.synthesis_problem_base - INFO - abs: If(Var(0) < Var(0), -2 + --2, Var(0)*-1)
 "
-2e640ca8-ab61-43f8-9669-28e51d69d544,2024-08-05T10:07:12.711771,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/debugging/absolute.sl,0,0.1266157627105713,"abs: Var(0)
-","2024-08-05 10:07:12,929 - src.utilities.config_manager - INFO - {'logging': {'level': 'INFO', 'file': 'logs/benchmark_fast_enumerative_20240805_100712.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 30000, 'max_depth': 10, 'max_complexity': 10, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/debugging/absolute.sl'}
-2024-08-05 10:07:12,941 - src.cegis.synthesis_problem_base - INFO - (set-logic LIA)
+7ce32ca5-95da-40d1-b3b1-8eeebdd38a04,2024-08-05T10:42:15.784812,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/debugging/absolute.sl,0,0.12589216232299805,"abs: Var(0)
+","2024-08-05 10:42:16,031 - src.utilities.config_manager - INFO - {'logging': {'level': 'INFO', 'file': 'logs/fast_enumerative_20240805_104215_absolute.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/debugging/absolute.sl'}
+2024-08-05 10:42:16,045 - src.cegis.synthesis_problem_base - INFO - (set-logic LIA)
 (declare-fun abs (Int) Int)
 (declare-var x Int)
 (assert (or (= (abs x) x) (= (abs x) (- x))))
 (check-sat)
-2024-08-05 10:07:12,941 - src.cegis.synthesis_problem_base - INFO - None
-2024-08-05 10:07:12,941 - src.cegis.synthesis_problem_base - INFO - Iteration 1/30000
-2024-08-05 10:07:12,941 - src.cegis.synthesis_problem_base - INFO - Testing candidate: abs: Var(0)
-2024-08-05 10:07:12,949 - src.cegis.synthesis_problem_base - INFO - No counterexample found for candidates [(Var(0), 'abs')]
-2024-08-05 10:07:12,955 - src.cegis.synthesis_problem_base - INFO - No counterexample found! Guess(es) should be correct: abs.
-2024-08-05 10:07:12,955 - src.cegis.synthesis_problem_base - INFO - Found satisfying candidate!
-2024-08-05 10:07:12,955 - src.cegis.synthesis_problem_base - INFO - abs: Var(0)
+2024-08-05 10:42:16,045 - src.cegis.synthesis_problem_base - INFO - None
+2024-08-05 10:42:16,045 - src.cegis.synthesis_problem_base - INFO - Iteration 1/10000
+2024-08-05 10:42:16,045 - src.cegis.synthesis_problem_base - INFO - Testing candidate: abs: Var(0)
+2024-08-05 10:42:16,053 - src.cegis.synthesis_problem_base - INFO - No counterexample found for candidates [(Var(0), 'abs')]
+2024-08-05 10:42:16,059 - src.cegis.synthesis_problem_base - INFO - No counterexample found! Guess(es) should be correct: abs.
+2024-08-05 10:42:16,059 - src.cegis.synthesis_problem_base - INFO - Found satisfying candidate!
+2024-08-05 10:42:16,059 - src.cegis.synthesis_problem_base - INFO - abs: Var(0)
 "
-2e640ca8-ab61-43f8-9669-28e51d69d544,2024-08-05T10:07:12.711771,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/debugging/absolute.sl,0,0.17694759368896484,"abs: If(Var(0) == Var(0), Var(0)*1, If(0 > Var(0), 0, 1 - 2))
+7ce32ca5-95da-40d1-b3b1-8eeebdd38a04,2024-08-05T10:42:15.784812,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/debugging/absolute.sl,0,0.22107172012329102,"abs: If(0 <= Var(0), Var(0)*-1, Var(0)*1)
 
-","2024-08-05 10:07:13,055 - src.utilities.config_manager - INFO - {'logging': {'level': 'INFO', 'file': 'logs/benchmark_partial_20240805_100712.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 30000, 'max_depth': 10, 'max_complexity': 10, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/debugging/absolute.sl'}
-2024-08-05 10:07:13,067 - src.cegis.synthesis_problem_base - INFO - (set-logic LIA)
+","2024-08-05 10:42:16,159 - src.utilities.config_manager - INFO - {'logging': {'level': 'INFO', 'file': 'logs/partial_20240805_104216_absolute.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/debugging/absolute.sl'}
+2024-08-05 10:42:16,172 - src.cegis.synthesis_problem_base - INFO - (set-logic LIA)
 (declare-fun abs (Int) Int)
 (declare-var x Int)
 (assert (or (= (abs x) x) (= (abs x) (- x))))
 (check-sat)
-2024-08-05 10:07:13,067 - src.cegis.synthesis_problem_base - INFO - None
-2024-08-05 10:07:13,067 - src.cegis.synthesis_problem_base - INFO - Iteration 1/30000 max iterations, depth: 1, complexity: 1, candidate at depth: 1/200):
-2024-08-05 10:07:13,068 - src.cegis.synthesis_problem_base - INFO - Generated expression: Var(0)*-2 - If(Var(0) < Var(0), 1 - 1, -1)
-2024-08-05 10:07:13,093 - src.cegis.synthesis_problem_base - INFO - Counterexample for abs: {x: 2}
-2024-08-05 10:07:13,094 - src.cegis.synthesis_problem_base - INFO - New counterexample found for abs: {x: 2} Candidates: [(Var(0)*-2 - If(Var(0) < Var(0), 1 - 1, -1), 'abs')]
-2024-08-05 10:07:13,094 - src.cegis.synthesis_problem_base - INFO - Iteration 2/30000 max iterations, depth: 1, complexity: 1, candidate at depth: 2/200):
-2024-08-05 10:07:13,095 - src.cegis.synthesis_problem_base - INFO - Generated expression: If(Var(0) == Var(0), Var(0)*1, If(0 > Var(0), 0, 1 - 2))
-2024-08-05 10:07:13,125 - src.cegis.synthesis_problem_base - INFO - No counterexample found for candidates [(If(Var(0) == Var(0), Var(0)*1, If(0 > Var(0), 0, 1 - 2)), 'abs')]
-2024-08-05 10:07:13,131 - src.cegis.synthesis_problem_base - INFO - No counterexample found! Guess(es) should be correct: abs: If(Var(0) == Var(0), Var(0)*1, If(0 > Var(0), 0, 1 - 2)).
-2024-08-05 10:07:13,131 - src.cegis.synthesis_problem_base - INFO - Found satisfying candidates!
-2024-08-05 10:07:13,132 - src.cegis.synthesis_problem_base - INFO - abs: If(Var(0) == Var(0), Var(0)*1, If(0 > Var(0), 0, 1 - 2))
-2024-08-05 10:07:13,132 - src.cegis.synthesis_problem_base - INFO - Candidate Stats: {'avg': 0.25, 'best': 0.25, 'worst': 0.25, 'best_candidate': 'Var(0)*-2 - If(Var(0) < Var(0), 1 - 1, -1)'}
-2024-08-05 10:07:13,132 - src.cegis.synthesis_problem_base - INFO - 
+2024-08-05 10:42:16,172 - src.cegis.synthesis_problem_base - INFO - None
+2024-08-05 10:42:16,173 - src.cegis.synthesis_problem_base - INFO - Iteration 1/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 1/200):
+2024-08-05 10:42:16,173 - src.cegis.synthesis_problem_base - INFO - Generated expression: -(Var(0)*2)
+2024-08-05 10:42:16,197 - src.cegis.synthesis_problem_base - INFO - Counterexample for abs: {x: 1}
+2024-08-05 10:42:16,198 - src.cegis.synthesis_problem_base - INFO - New counterexample found for abs: {x: 1} Candidates: [(-(Var(0)*2), 'abs')]
+2024-08-05 10:42:16,198 - src.cegis.synthesis_problem_base - INFO - Iteration 2/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 2/200):
+2024-08-05 10:42:16,198 - src.cegis.synthesis_problem_base - INFO - Generated expression: If(Var(0) > Var(0), -2 + -1 + Var(0), 0 + --2)
+2024-08-05 10:42:16,220 - src.cegis.synthesis_problem_base - INFO - Iteration 3/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 3/200):
+2024-08-05 10:42:16,221 - src.cegis.synthesis_problem_base - INFO - Generated expression: Var(0)*-2
+2024-08-05 10:42:16,242 - src.cegis.synthesis_problem_base - INFO - Iteration 4/10000 max iterations, depth: 1, complexity: 1, candidate at depth: 4/200):
+2024-08-05 10:42:16,243 - src.cegis.synthesis_problem_base - INFO - Generated expression: If(0 <= Var(0), Var(0)*-1, Var(0)*1)
+2024-08-05 10:42:16,274 - src.cegis.synthesis_problem_base - INFO - No counterexample found for candidates [(If(0 <= Var(0), Var(0)*-1, Var(0)*1), 'abs')]
+2024-08-05 10:42:16,280 - src.cegis.synthesis_problem_base - INFO - No counterexample found! Guess(es) should be correct: abs: If(0 <= Var(0), Var(0)*-1, Var(0)*1).
+2024-08-05 10:42:16,281 - src.cegis.synthesis_problem_base - INFO - Found satisfying candidates!
+2024-08-05 10:42:16,281 - src.cegis.synthesis_problem_base - INFO - abs: If(0 <= Var(0), Var(0)*-1, Var(0)*1)
+2024-08-05 10:42:16,281 - src.cegis.synthesis_problem_base - INFO - Candidate Stats: {'avg': 0.25, 'best': 0.25, 'worst': 0.25, 'best_candidate': '-(Var(0)*2)'}
+2024-08-05 10:42:16,281 - src.cegis.synthesis_problem_base - INFO - 
 ====================================================================================================
 "

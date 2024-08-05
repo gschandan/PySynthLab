@@ -1,6 +1,6 @@
 logging:
   level: INFO
-  file: "logs/benchmark_random_enumerative_bottomup_{datetime}.log"
+  file: "logs/random_enumerative_bottom_up_{datetime}_{problem}.log"
 
 synthesis_parameters:
   strategy: random_enumerative
