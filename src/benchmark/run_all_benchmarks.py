@@ -12,13 +12,14 @@ from src.utilities.config_manager import ConfigManager
 sygus_dir = "problems/debugging"
 output_cvc5_csv = "sygus_solver_cvc5_results.csv"
 output_pysynthlab_csv = "sygus_solver_pysynthlab_results.csv"
+project_root = Path(__file__).parent.parent.parent
 
 py_synth_lab_solver_configs = [
-    "config/benchmark_random_enumerative_bottom_up.yaml",
-    "config/benchmark_random_top_down.yaml",
-    "config/benchmark_random_weighted_topdown.yaml",
-    "config/benchmark_fast_enumerative.yaml",
-    "config/benchmark_partial.yaml",
+    str(project_root / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
+    str(project_root / "config" / "benchmark_fast_enumerative.yaml"),
+    str(project_root / "config" / "benchmark_partial.yaml"),
+    #str(project_root / "config" / "benchmark_random_weighted_topdown.yaml"),
+    #str(project_root / "config" / "benchmark_random_top_down.yaml"),
 ]
 
 
@@ -101,14 +102,16 @@ def run_pysynthlab_experiments():
     fieldnames = ["run_id", "run_datetime", "solver", "config", "file", "return_code", "time", "stdout", "stderr"]
 
     sygus_files = list(Path(sygus_dir).glob("*.sl"))
-    for sygus_file in sygus_files:
+    for sygus_file in sygus_files[:2]:
         results = []
         print(f"Processing SyGuS file: {sygus_file}")
 
         for config_file in py_synth_lab_solver_configs:
             print(f"Running PySynthLab with config file: {config_file}")
             config = ConfigManager.load_yaml(config_file)
-
+            if config is None:
+                print(f"Skipping {config_file} due to missing configuration")
+                continue
             benchmark_name = Path(config_file).stem
             config['logging']['file'] = config['logging']['file'].format(
                 datetime=datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -140,5 +143,5 @@ def run_pysynthlab_experiments():
 
 
 if __name__ == "__main__":
-    run_cvc5_experiments()
-    #run_pysynthlab_experiments()
+    #run_cvc5_experiments()
+    run_pysynthlab_experiments()

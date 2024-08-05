@@ -2,6 +2,7 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Tuple, Union, Any, List
 import pyparsing
 
@@ -21,7 +22,9 @@ class BaseSynthesisProblem(ABC):
 
     def __init__(self, problem: str, options: Options = None):
         self.options = options or Options()
-        self.setup_logger(self.options)
+        if self.logger is None:
+            self.setup_logger(self.options)
+
         self.parser, self.problem = self.parse_problem(problem)
         self.symbol_table = symbol_table_builder.SymbolTableBuilder.run(self.problem)
         self.printer = SygusV2ASTPrinter(self.symbol_table)
@@ -30,7 +33,8 @@ class BaseSynthesisProblem(ABC):
         self.smt_problem = self.convert_sygus_to_smt()
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
 
-    def setup_logger(self, options: Options = None):
+    @classmethod
+    def setup_logger(cls, options: Options = None):
         """
         Setup the logger for the SynthesisProblem class.
 
@@ -46,23 +50,25 @@ class BaseSynthesisProblem(ABC):
             >>> problem = BaseSynthesisProblem(problem_str, options)
             >>> problem.setup_logger(options)
         """
-        if self.logger is not None:
+        if cls.logger is not None:
             return
 
-        logger = logging.getLogger(__name__)
-        log_dir = "logs"
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
+        cls.logger = logging.getLogger(__name__)
+        log_level = options.logging.level if options else logging.DEBUG
+        cls.logger.setLevel(log_level)
+
+        project_root = Path(__file__).resolve().parent.parent.parent
+        log_dir = project_root / "logs"
+        log_dir.mkdir(exist_ok=True)
 
         if options and options.logging.file:
             log_file = options.logging.file
         else:
-            log_file = os.path.join(log_dir, f"run_{datetime.now()}.log")
+            log_file = log_dir / f"config_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 
         file_handler = logging.FileHandler(log_file)
         console_handler = logging.StreamHandler()
 
-        log_level = options.logging.level if options else logging.DEBUG
         file_handler.setLevel(log_level)
         console_handler.setLevel(log_level)
 
@@ -70,12 +76,8 @@ class BaseSynthesisProblem(ABC):
         file_handler.setFormatter(formatter)
         console_handler.setFormatter(formatter)
 
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
-        logger.setLevel(log_level)
-
-        self.logger = logger
-        self.options = options
+        cls.logger.addHandler(file_handler)
+        cls.logger.addHandler(console_handler)
 
     @staticmethod
     def parse_problem(problem: str) -> Tuple[Union[SygusV1Parser, SygusV2Parser], Program]:

@@ -1,6 +1,7 @@
 import json
 import logging
 import unittest
+from pathlib import Path
 from unittest.mock import patch, mock_open
 import argparse
 import yaml
@@ -24,8 +25,30 @@ class TestConfigManager(unittest.TestCase):
 
     def test_setup_logger(self):
         ConfigManager.setup_logger()
-        self.assertEqual(ConfigManager.logger.level, logging.NOTSET)
+
+        self.assertIsNotNone(ConfigManager.logger)
+
+        self.assertEqual(ConfigManager.logger.level, logging.DEBUG)
         self.assertTrue(ConfigManager.logger.hasHandlers())
+        self.assertEqual(len(ConfigManager.logger.handlers), 2)
+
+        self.assertIsInstance(ConfigManager.logger.handlers[0], logging.FileHandler)
+        self.assertIsInstance(ConfigManager.logger.handlers[1], logging.StreamHandler)
+
+        project_root = Path(__file__).resolve().parent.parent.parent
+        log_dir = project_root / "logs"
+        self.assertTrue(log_dir.exists())
+
+        log_files = list(log_dir.glob("config_*.log"))
+        self.assertGreater(len(log_files), 0)
+
+    def test_get_logger(self):
+        logger1 = ConfigManager.get_logger()
+        logger2 = ConfigManager.get_logger()
+
+        self.assertIs(logger1, logger2)
+        self.assertIs(logger1, ConfigManager.logger)
+
 
     @patch('builtins.open', new_callable=mock_open, read_data="logging:\n  level: DEBUG\n")
     def test_load_yaml(self, mock_file):

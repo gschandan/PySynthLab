@@ -5,6 +5,7 @@ import logging
 import os
 import re
 from dataclasses import asdict, fields
+from pathlib import Path
 from typing import Dict, Any, Optional, Union
 import yaml
 from src.utilities.options import Options, LoggingOptions, SynthesisParameters, SolverOptions
@@ -14,21 +15,24 @@ class ConfigManager:
     logger: logging.Logger = None
 
     def __init__(self):
-        if ConfigManager.logger is None:
-            ConfigManager.setup_logger()
+        if self.logger is None:
+            self.setup_logger()
 
-    @staticmethod
-    def setup_logger():
-        if ConfigManager.logger is not None:
+    @classmethod
+    def setup_logger(cls):
+        if cls.logger is not None:
             return
 
-        logger = logging.getLogger(__name__)
+        cls.logger = logging.getLogger(__name__)
+        cls.logger.setLevel(logging.DEBUG)
 
-        log_dir = "logs"
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
+        project_root = Path(__file__).resolve().parent.parent.parent
+        log_dir = project_root / "logs"
+        log_dir.mkdir(exist_ok=True)
 
-        file_handler = logging.FileHandler(os.path.join(log_dir, f"config_{datetime.now()}.log"))
+        log_file = log_dir / f"config_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+
+        file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(logging.DEBUG)
 
         console_handler = logging.StreamHandler()
@@ -38,10 +42,14 @@ class ConfigManager:
         file_handler.setFormatter(formatter)
         console_handler.setFormatter(formatter)
 
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
+        cls.logger.addHandler(file_handler)
+        cls.logger.addHandler(console_handler)
 
-        ConfigManager.logger = logger
+    @classmethod
+    def get_logger(cls):
+        if cls.logger is None:
+            cls.setup_logger()
+        return cls.logger
 
     @staticmethod
     def generate_argparse_from_options() -> argparse.ArgumentParser:
@@ -87,8 +95,8 @@ class ConfigManager:
 
         return parser
 
-    @staticmethod
-    def load_yaml(file_path: str) -> Dict[str, Any]:
+    @classmethod
+    def load_yaml(cls, file_path: str) -> Dict[str, Any]:
         """
         Load configuration from a YAML file.
 
@@ -102,14 +110,15 @@ class ConfigManager:
             FileNotFoundError: If the config file doesn't exist.
             yaml.YAMLError: If there's an error parsing the YAML file.
         """
+        logger = cls.get_logger()
         try:
             with open(file_path, 'r') as file:
                 return yaml.safe_load(file)
         except FileNotFoundError:
-            ConfigManager.logger.error(f"Config file {file_path} not found")
+            logger.error(f"Config file {file_path} not found")
             raise FileNotFoundError(f"Configuration file not found: {file_path}")
         except yaml.YAMLError as e:
-            ConfigManager.logger.error(f"Error parsing YAML file: {e}")
+            logger.error(f"Error parsing YAML file: {e}")
             raise yaml.YAMLError(f"Error parsing YAML file: {e}")
 
     @staticmethod
@@ -181,15 +190,15 @@ class ConfigManager:
             input_source=merged_dict['input_source']
         )
 
-    @staticmethod
-    def get_config() -> Options:
+    @classmethod
+    def get_config(cls) -> Options:
         """
         Get the final configuration by merging defaults, YAML config, and CLI args.
 
         Returns:
             Options: Final merged configuration as Options dataclass.
         """
-        ConfigManager.setup_logger()
+        logger = cls.get_logger()
         default_options = Options()
         parser = ConfigManager.generate_argparse_from_options()
         args = parser.parse_args()
@@ -201,7 +210,7 @@ class ConfigManager:
             try:
                 yaml_config = ConfigManager.load_yaml("config/user_config.yaml")
             except FileNotFoundError:
-                ConfigManager.logger.warning("Default config file 'config/user_config.yaml' not found. "
+                logger.warning("Default config file 'config/user_config.yaml' not found. "
                                              "Using default options.")
 
         return ConfigManager.merge_config(default_options, yaml_config, args)
