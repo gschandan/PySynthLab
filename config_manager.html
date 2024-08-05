@@ -72,6 +72,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.level"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.level</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.file"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.collect_metrics"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.collect_metrics</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -235,13 +236,13 @@ CLI arguments will take priority over any user defined config in the user_config
 <h2>LoggingOptions Class<a class="headerlink" href="#loggingoptions-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.LoggingOptions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-08-05</span> <span class="pre">19:03:22.992016.log'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-08-05</span> <span class="pre">20:21:42.726865.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Options for configuring logging in the Synthesis process.</p>
+<p>Options for configuring logging and metrics in the Synthesis process.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="src.utilities.options.LoggingOptions.level">
 <span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#src.utilities.options.LoggingOptions.level" title="Link to this definition"></a></dt>
-<dd><p>Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL.</p>
+<dd><p>Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -252,10 +253,21 @@ CLI arguments will take priority over any user defined config in the user_config
 <dl class="py attribute">
 <dt class="sig sig-object py" id="src.utilities.options.LoggingOptions.file">
 <span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#src.utilities.options.LoggingOptions.file" title="Link to this definition"></a></dt>
-<dd><p>Log file path.</p>
+<dd><p>Log file path. Defaults to logs/run_{datetime}.log.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utilities.options.LoggingOptions.collect_metrics">
+<span class="sig-name descname"><span class="pre">collect_metrics</span></span><a class="headerlink" href="#src.utilities.options.LoggingOptions.collect_metrics" title="Link to this definition"></a></dt>
+<dd><p>Whether to collect metrics or not. Default is True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
