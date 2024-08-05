@@ -18,8 +18,8 @@ py_synth_lab_solver_configs = [
     str(project_root / "src" / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
     str(project_root / "src" / "config" / "benchmark_fast_enumerative.yaml"),
     str(project_root / "src" / "config" / "benchmark_partial.yaml"),
-    #str(project_root /"src" / "config" / "benchmark_random_weighted_topdown.yaml"),
-    #str(project_root /"src" / "config" / "benchmark_random_top_down.yaml"),
+    str(project_root /"src" / "config" / "benchmark_random_weighted_topdown.yaml"),
+    str(project_root /"src" / "config" / "benchmark_random_top_down.yaml"),
 ]
 
 
@@ -144,5 +144,5 @@ def run_pysynthlab_experiments():
 
 
 if __name__ == "__main__":
-    #run_cvc5_experiments()
+    run_cvc5_experiments()
     run_pysynthlab_experiments()

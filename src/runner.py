@@ -79,8 +79,10 @@ def main() -> None:
 
     except TimeoutError:
         print(f"Program execution timed out after {config.synthesis_parameters.timeout} seconds.")
+        raise
     except Exception as e:
         print(f"An error occurred: {str(e)}")
+        raise
 
 
 if __name__ == '__main__':
