@@ -2,7 +2,6 @@ import argparse
 from datetime import datetime
 import json
 import logging
-import os
 import re
 from dataclasses import asdict, fields
 from pathlib import Path
@@ -171,7 +170,11 @@ class ConfigManager:
                 transformed[key] = []
                 for item in value:
                     if isinstance(item, list):
-                        transformed[key].append(tuple(item))
+                        # for weighted grammars, the last item should be the weight
+                        if isinstance(item[-1], int):
+                            transformed[key].append((tuple(item[:-1]), item[-1]))
+                        else:
+                            transformed[key].append(tuple(item))
                     else:
                         transformed[key].append(item)
             return transformed
@@ -181,6 +184,9 @@ class ConfigManager:
             if isinstance(custom_grammar, str):
                 parsed_grammar = json.loads(custom_grammar)
                 transformed_grammar = transform_grammar(parsed_grammar)
+                merged_dict['synthesis_parameters']['custom_grammar'] = transformed_grammar
+            elif isinstance(custom_grammar, dict):
+                transformed_grammar = transform_grammar(custom_grammar)
                 merged_dict['synthesis_parameters']['custom_grammar'] = transformed_grammar
 
         return Options(

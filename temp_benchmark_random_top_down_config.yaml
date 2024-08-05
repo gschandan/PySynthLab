@@ -1,6 +1,6 @@
 input_source: stdin
 logging:
-  file: logs/random_enumerative_topdown_20240805_141057_small_2.log
+  file: logs/random_enumerative_topdown_20240805_142217_large.log
   level: ERROR
 solver:
   name: z3
