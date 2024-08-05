@@ -73,7 +73,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
             ("Implies", [z3.BoolSort(), z3.BoolSort()]),
             ("Xor", [z3.BoolSort(), z3.BoolSort()])
         ])
-
+        self.metrics.grammar_size = sum(len(rules) for rules in grammar.values())
         return grammar
 
     @lru_cache(maxsize=None)

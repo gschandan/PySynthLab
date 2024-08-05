@@ -108,6 +108,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         for method in self.active_methods:
             GlobalCancellationToken.check_cancellation()
             score = self.partial_satisfaction_methods[method](candidate, func_name)
+            self.metrics.update_partial_score(score)
             scores.append(score)
         return sum(scores) / len(scores)
 
@@ -155,9 +156,14 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         This method uses Z3's Optimize solver to treat constraints as soft and
         maximize the number of satisfied constraints.
 
-        For each constraint, we create an indicator (z3.Optimize doesn't support as_ast) which is added to the optimizer.
-        If the indicator is true, the constraint must be satisfied. A function is used to counter the number of indicators
-        that are true i.e. satisifed constraints via the maximised function.
+        For each constraint, we create an indicator (z3.Optimize doesn't support as_ast, so we can't interrogate the model)
+        which is added to the optimizer. If the indicator is true, the constraint must be satisfied.
+        An objective function is used to counter the number of indicators that are true:
+        objective = Sum([If(ind, 1, 0) for ind in indicators]) is an objective func that counts the number of satisfied constraints.
+        Maximising this function finds assignments to variables that satisfy as many hard constraints as possible.
+        In this case we make the constraints soft constraints - implications - allowing it to try to enforce the constraint, 
+        but if it fails, this allows it to return false, so we can find partial solutions that satisfy some constraints.
+        The resulting score is normalised by the total number of constraints, so we can quantify it.
 
         Args:
             candidate (ExprRef): The candidate solution to evaluate.
@@ -182,10 +188,10 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
             indicators.append(indicator)
 
         objective = Sum([If(ind, 1, 0) for ind in indicators])
-        h = o.maximize(objective)
+        handle = o.maximize(objective)
 
         if o.check() == sat:
-            satisfied = o.lower(h)
+            satisfied = o.lower(handle)
             return satisfied.as_long() / len(self.problem.context.z3_non_conjoined_constraints)
         return 0.0
 

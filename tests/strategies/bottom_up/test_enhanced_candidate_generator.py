@@ -22,7 +22,7 @@ class TestEnhancedRandomCandidateGenerator(unittest.TestCase):
         """
         self.options = Options()
         self.problem = SynthesisProblemZ3(self.problem_str, self.options)
-        self.generator = EnhancedRandomCandidateGenerator(self.problem, self.metrics)
+        self.generator = EnhancedRandomCandidateGenerator(self.problem)
 
     def generate_correct_candidate(self) -> tuple[ExprRef, str]:
         vars = [Var(i, IntSort()) for i in range(2)]
