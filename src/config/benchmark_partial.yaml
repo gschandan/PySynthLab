@@ -11,6 +11,7 @@ synthesis_parameters:
   random_seed: 1234
   randomise_each_iteration: false
   max_candidates_at_each_depth: 200
+  timeout: 30
   min_const: -2
   max_const: 2
   operation_costs:

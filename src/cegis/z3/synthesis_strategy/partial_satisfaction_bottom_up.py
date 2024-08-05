@@ -10,7 +10,7 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
 
     def execute_cegis(self) -> tuple[bool, str]:
         # TODO: add this to the config/options or make available to other strategies?
-        # also probably filter out candidates if they have particularly poor scores? but may be good for generating stronger counterexamples
+        # also probably filter out candidates if they have particularly poor scores? but poor scores may be good for generating 'stronger' counterexamples
         methods = ['splitting', 'soft_constraints', 'max_smt', 'quantitative', 'unsat_core', 'fuzzy']
         for method in methods:
             self.candidate_generator.set_partial_satisfaction_method(method, True)
