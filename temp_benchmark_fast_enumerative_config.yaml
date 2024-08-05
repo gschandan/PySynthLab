@@ -1,20 +1,17 @@
 input_source: stdin
 logging:
-  file: logs/random_enumerative_topdown_20240805_153627_absolute.log
+  file: logs/fast_enumerative_20240805_160753_jmbl_fg_max8.log
   level: ERROR
 solver:
   name: z3
   timeout: 30000
 synthesis_parameters:
-  candidate_generation: top_down
-  custom_grammar: '{ "S": [ "T", ["ite", "B", "S", "S"], ["+", "S", "S"], ["-", "S",
-    "S"], ["*", "S", "S"], ["neg", "S"] ], "B": [ [">", "T", "T"], [">=", "T", "T"],
-    ["<", "T", "T"], ["<=", "T", "T"], ["==", "T", "T"], ["!=", "T", "T"] ] }'
+  candidate_generation: fast_enumerative
   initial_weight: 1.0
   max_candidates_at_each_depth: 200
   max_complexity: 7
   max_const: 2
-  max_depth: 5
+  max_depth: 7
   max_iterations: 10000
   min_const: -2
   operation_costs:
@@ -25,7 +22,7 @@ synthesis_parameters:
     ite: 3
   random_seed: 1234
   randomise_each_iteration: false
-  strategy: random_enumerative
+  strategy: fast_enumerative
   timeout: 30
   use_weighted_generator: false
   weight_multiplier: 1.0

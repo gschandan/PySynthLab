@@ -154,8 +154,15 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
 
         for constraint in self.problem.context.z3_non_conjoined_constraints:
             GlobalCancellationToken.check_cancellation()
+
+            if is_implies(constraint):
+                antecedent, consequent = constraint.arg(0), constraint.arg(1)
+                negated_constraint = And(antecedent, Not(consequent))
+            else:
+                negated_constraint = Not(constraint)
+
             substituted_constraint = self.problem.substitute_constraints(
-                self.problem.negate_assertions([constraint]),
+                [negated_constraint],
                 [self.problem.context.z3_synth_functions[func_name]],
                 [candidate])
             self.solver.push()
