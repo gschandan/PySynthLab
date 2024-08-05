@@ -1,3 +1,5 @@
+import time
+
 from src.cegis.z3.candidate_generator.enhanced_random_candidate_generator import EnhancedRandomCandidateGenerator
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
@@ -7,6 +9,7 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
     def __init__(self, problem: SynthesisProblemZ3):
         super().__init__(problem)
         self.candidate_generator = EnhancedRandomCandidateGenerator(problem)
+        self.start_time = None
 
     def execute_cegis(self) -> tuple[bool, str]:
         # TODO: add this to the config/options or make available to other strategies?
@@ -21,10 +24,11 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
         max_candidates_per_depth = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
 
         iteration = 0
-
+        self.start_time = time.time()
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
                 for candidate_at_depth in range(max_candidates_per_depth):
+                    self.metrics.iterations += 1
                     iteration += 1
 
                     process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
@@ -41,12 +45,19 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
             f"Iteration {iteration}/{max_iterations} max iterations, depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):")
 
         candidates = self.candidate_generator.generate_candidates()
+        self.metrics.candidates_generated += len(candidates)
+
         pruned_candidates = self.candidate_generator.prune_candidates(candidates)
+        self.metrics.candidates_pruned += len(candidates) - len(pruned_candidates)
 
         func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
         candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
         if self.test_candidates(func_strs, candidate_functions):
+            self.metrics.time_spent = time.time() - self.start_time
+            self.metrics.solution_found = True
+            self.metrics.solution_height = depth
+            self.metrics.solution_complexity = complexity
             self.log_solution_found(pruned_candidates)
             valid_candidates = ''
             for candidate, func_name in pruned_candidates:
@@ -54,6 +65,7 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
             self.set_solution_found()
             return True, valid_candidates
 
+        self.metrics.time_spent = time.time() - self.start_time
         return False, f"No satisfying candidates found."
 
     def log_solution_found(self, pruned_candidates):

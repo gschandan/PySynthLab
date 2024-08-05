@@ -14,12 +14,14 @@ from src.helpers.parser.src.v2.parser import SygusV2Parser
 from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
 from src.utilities.cancellation_token import GlobalCancellationToken
 from src.utilities.options import Options, LoggingOptions
+from src.utilities.synthesis_metrics import Metrics
 
 
 class BaseSynthesisProblem(ABC):
     pyparsing.ParserElement.enablePackrat()
     logger: logging.Logger = None
     options: Options = None
+    metrics: Metrics = None
 
     def __init__(self, problem: str, options: Options = None):
         self.options = options or Options()
@@ -33,6 +35,7 @@ class BaseSynthesisProblem(ABC):
         self.input_problem = problem
         self.smt_problem = self.convert_sygus_to_smt()
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
+        self.metrics = Metrics(self.options.logging.collect_metrics)
 
     @classmethod
     def setup_logger(cls, options: Options = None):

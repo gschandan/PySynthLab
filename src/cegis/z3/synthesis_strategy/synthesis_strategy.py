@@ -52,6 +52,7 @@ class SynthesisStrategy(ABC):
             candidate_generator (CandidateGenerator, optional): A custom candidate generator. If None, a default RandomCandidateGenerator will be used.
         """
         self.problem = problem
+        self.metrics = self.problem.metrics
         self.solution_found = False
         if candidate_generator is None:
             self.candidate_generator = RandomCandidateGenerator(problem)

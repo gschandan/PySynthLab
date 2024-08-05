@@ -1,3 +1,5 @@
+import time
+
 from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
 from src.cegis.z3.candidate_generator.weighted_top_down_enumerative_generator import WeightedTopDownCandidateGenerator
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
@@ -69,6 +71,8 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
 
         if problem.options.synthesis_parameters.custom_grammar:
             self.candidate_generator.grammar = problem.options.synthesis_parameters.custom_grammar
+            self.metrics.grammar = sum(len(rules) for rules in self.candidate_generator.grammar.values())
+
 
     def execute_cegis(self) -> tuple[bool, str]:
         """
@@ -85,20 +89,29 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             The specific behavior and termination conditions can be customized through
             the synthesis parameters in the problem definition.
         """
-
+        start_time = time.time()
         max_iterations = self.problem.options.synthesis_parameters.max_iterations
 
         for iteration in range(max_iterations):
+            self.metrics.iterations += 1
+
             candidates = self.candidate_generator.generate_candidates()
+            self.metrics.candidates_generated += len(candidates)
+
             if all(candidate is None for candidate in candidates):
                 continue
+
             pruned_candidates = self.candidate_generator.prune_candidates(candidates)
+            self.metrics.candidates_pruned += len(candidates) - len(pruned_candidates)
 
             self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations}:\n")
             func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
             candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
             if self.test_candidates(func_strs, candidate_functions):
+                self.metrics.time_spent = time.time() - start_time
+                self.metrics.candidates_generated += len(candidates)
+
                 self.problem.logger.info(f"Found satisfying candidates!")
                 valid_candidates = ''
                 for candidate, func_name in pruned_candidates:

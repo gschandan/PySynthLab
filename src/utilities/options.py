@@ -6,11 +6,12 @@ from typing import Union
 @dataclass
 class LoggingOptions:
     """
-    Options for configuring logging in the Synthesis process.
+    Options for configuring logging and metrics in the Synthesis process.
 
     Attributes:
-        level: Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL.
-        file: Log file path.
+        level: Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.
+        file: Log file path. Defaults to logs/run_{datetime}.log.
+        collect_metrics: Whether to collect metrics or not. Default is True.
 
     Note:
         These options can be grouped under the 'logging' section in a YAML file.
@@ -27,6 +28,12 @@ class LoggingOptions:
         metadata=dict(
             description="Log file path",
             type="str"
+        ))
+    collect_metrics: bool = field(
+        default=True,
+        metadata=dict(
+            description="Collect metrics about the synthesis process",
+            type="bool"
         ))
 
 

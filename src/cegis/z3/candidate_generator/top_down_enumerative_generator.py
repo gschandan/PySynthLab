@@ -38,7 +38,7 @@ class TopDownCandidateGenerator:
         print_tree(node, prefix, is_last): Print the tree representation of the grammar.
     """
 
-    def __init__(self, problem: 'SynthesisProblemZ3'):
+    def __init__(self, problem: SynthesisProblemZ3):
         self.grammar = None
         self.problem = problem
         self.min_const = problem.options.synthesis_parameters.min_const
@@ -47,6 +47,7 @@ class TopDownCandidateGenerator:
         self.explored_expressions: dict[str, set[str]] = {func_name: set() for func_name in
                                                           problem.context.variable_mapping_dict.keys()}
         self.grammar = problem.options.synthesis_parameters.custom_grammar
+        self.metrics = problem.metrics
 
     def define_grammar(self, variables: list[str]) -> dict[str, list]:
         """

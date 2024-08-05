@@ -3,6 +3,7 @@ from itertools import product
 from typing import List, Tuple, Union
 import z3
 
+from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.utilities.cancellation_token import GlobalCancellationToken
 
 
@@ -39,9 +40,10 @@ class WeightedTopDownCandidateGenerator:
         print_tree(node, prefix, is_last): Print the tree representation of the weighted grammar.
     """
 
-    def __init__(self, problem: 'SynthesisProblem'):
+    def __init__(self, problem: SynthesisProblemZ3):
         self.grammar = None
         self.problem = problem
+        self.metrics = problem.metrics
         self.min_const = problem.options.synthesis_parameters.min_const
         self.max_const = problem.options.synthesis_parameters.max_const
         self.max_depth = problem.options.synthesis_parameters.max_depth
@@ -63,7 +65,7 @@ class WeightedTopDownCandidateGenerator:
             dict: The defined weighted grammar.
         """
         if self.grammar is None:
-            return {
+            grammar = {
                 'S': [
                     (('ite', 'B', 'S', 'S'), 50),
                     (('+', 'S', 'S'), 30),
@@ -82,6 +84,8 @@ class WeightedTopDownCandidateGenerator:
                 ],
                 'T': [(var, 5) for var in variables] + [(str(i), 5) for i in range(self.min_const, self.max_const + 1)]
             }
+            self.metrics.grammar_size = sum(len(rules) for rules in grammar.values())
+            return grammar
         return self.grammar
 
     def generate_candidates(self) -> List[Tuple[z3.ExprRef, str]]:
@@ -100,6 +104,7 @@ class WeightedTopDownCandidateGenerator:
         for func_name, variable_mapping in self.problem.context.variable_mapping_dict.items():
             variables = [str(var) for var in variable_mapping.values()]
             grammar = self.define_grammar(variables)
+            self.metrics.grammar_size = sum(len(rules) for rules in self.grammar.values())
             self.problem.logger.debug(f'Grammar {grammar}')
 
             if self.problem.logger.getEffectiveLevel() <= logging.DEBUG:

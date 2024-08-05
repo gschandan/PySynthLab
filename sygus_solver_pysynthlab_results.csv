@@ -4736,3 +4736,488 @@ ValueError: Unsupported assertion type: Implies(And(x1 < x2,
 Synthesis timed out after 30 seconds
 ","2024-08-05 20:01:06,714 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_200106_jmbl_fg_array_search_12.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_12.sl'}
 "
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl,0,30.10329580307007,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:01:36,816 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_200136_jmbl_fg_array_search_13.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl,0,30.119772911071777,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:02:06,927 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_200206_jmbl_fg_array_search_13.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl,0,0.31152868270874023,,"2024-08-05 20:02:37,046 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_200236_jmbl_fg_array_search_13.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl'}
+2024-08-05 20:02:37,255 - src.cegis.synthesis_problem_base - ERROR - Unsupported assertion type: Implies(And(x1 < x2,
+            And(x2 < x3,
+                And(x3 < x4,
+                    And(x4 < x5,
+                        And(x5 < x6,
+                            And(x6 < x7,
+                                And(x7 < x8,
+                                    And(x8 < x9,
+                                        And(x9 < x10,
+                                        And(x10 < x11,
+                                        And(x11 < x12,
+                                        x12 < x13))))))))))),
+        Implies(k < x1,
+                0 ==
+                findIdx(x1,
+                        x2,
+                        x3,
+                        x4,
+                        x5,
+                        x6,
+                        x7,
+                        x8,
+                        x9,
+                        x10,
+                        x11,
+                        x12,
+                        x13,
+                        k)))
+Exception in thread Thread-1 (thread_target):
+Traceback (most recent call last):
+  File ""/usr/lib/python3.12/threading.py"", line 1073, in _bootstrap_inner
+    self.run()
+  File ""/usr/lib/python3.12/threading.py"", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 63, in thread_target
+    result, candidates = run_synthesis(config)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 52, in run_synthesis
+    result, candidates = strategy.execute_cegis()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 30, in execute_cegis
+    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 43, in process_iteration
+    candidates = self.candidate_generator.generate_candidates()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 185, in generate_candidates
+    score = self.evaluate_candidate(candidate_func, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 45, in evaluate_candidate
+    score = self.partial_satisfaction_methods[method](candidate, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 86, in max_smt_satisfaction
+    self.problem.negate_assertions([constraint]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_problem_z3.py"", line 543, in negate_assertions
+    raise ValueError(""Unsupported assertion type: {}"".format(assertion))
+ValueError: Unsupported assertion type: Implies(And(x1 < x2,
+            And(x2 < x3,
+                And(x3 < x4,
+                    And(x4 < x5,
+                        And(x5 < x6,
+                            And(x6 < x7,
+                                And(x7 < x8,
+                                    And(x8 < x9,
+                                        And(x9 < x10,
+                                        And(x10 < x11,
+                                        And(x11 < x12,
+                                        x12 < x13))))))))))),
+        Implies(k < x1,
+                0 ==
+                findIdx(x1,
+                        x2,
+                        x3,
+                        x4,
+                        x5,
+                        x6,
+                        x7,
+                        x8,
+                        x9,
+                        x10,
+                        x11,
+                        x12,
+                        x13,
+                        k)))
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl,0,13.61750054359436,"No satisfying candidates found.
+","2024-08-05 20:02:37,357 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_200237_jmbl_fg_array_search_13.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl,0,30.109412908554077,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:02:50,983 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_200250_jmbl_fg_array_search_13.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_13.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl,0,30.10567283630371,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:03:21,092 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_200321_jmbl_fg_array_search_14.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl,0,30.111273050308228,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:03:51,199 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_200351_jmbl_fg_array_search_14.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl,0,0.3530561923980713,,"2024-08-05 20:04:21,311 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_200421_jmbl_fg_array_search_14.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl'}
+2024-08-05 20:04:21,558 - src.cegis.synthesis_problem_base - ERROR - Unsupported assertion type: Implies(And(x1 < x2,
+            And(x2 < x3,
+                And(x3 < x4,
+                    And(x4 < x5,
+                        And(x5 < x6,
+                            And(x6 < x7,
+                                And(x7 < x8,
+                                    And(x8 < x9,
+                                        And(x9 < x10,
+                                        And(x10 < x11,
+                                        And(x11 < x12,
+                                        And(x12 < x13,
+                                        x13 < x14)))))))))))),
+        Implies(k < x1,
+                0 ==
+                findIdx(x1,
+                        x2,
+                        x3,
+                        x4,
+                        x5,
+                        x6,
+                        x7,
+                        x8,
+                        x9,
+                        x10,
+                        x11,
+                        x12,
+                        x13,
+                        x14,
+                        k)))
+Exception in thread Thread-1 (thread_target):
+Traceback (most recent call last):
+  File ""/usr/lib/python3.12/threading.py"", line 1073, in _bootstrap_inner
+    self.run()
+  File ""/usr/lib/python3.12/threading.py"", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 63, in thread_target
+    result, candidates = run_synthesis(config)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 52, in run_synthesis
+    result, candidates = strategy.execute_cegis()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 30, in execute_cegis
+    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 43, in process_iteration
+    candidates = self.candidate_generator.generate_candidates()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 185, in generate_candidates
+    score = self.evaluate_candidate(candidate_func, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 45, in evaluate_candidate
+    score = self.partial_satisfaction_methods[method](candidate, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 86, in max_smt_satisfaction
+    self.problem.negate_assertions([constraint]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_problem_z3.py"", line 543, in negate_assertions
+    raise ValueError(""Unsupported assertion type: {}"".format(assertion))
+ValueError: Unsupported assertion type: Implies(And(x1 < x2,
+            And(x2 < x3,
+                And(x3 < x4,
+                    And(x4 < x5,
+                        And(x5 < x6,
+                            And(x6 < x7,
+                                And(x7 < x8,
+                                    And(x8 < x9,
+                                        And(x9 < x10,
+                                        And(x10 < x11,
+                                        And(x11 < x12,
+                                        And(x12 < x13,
+                                        x13 < x14)))))))))))),
+        Implies(k < x1,
+                0 ==
+                findIdx(x1,
+                        x2,
+                        x3,
+                        x4,
+                        x5,
+                        x6,
+                        x7,
+                        x8,
+                        x9,
+                        x10,
+                        x11,
+                        x12,
+                        x13,
+                        x14,
+                        k)))
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl,0,14.772969722747803,"No satisfying candidates found.
+","2024-08-05 20:04:21,668 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_200421_jmbl_fg_array_search_14.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl,0,30.115535259246826,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:04:36,447 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_200436_jmbl_fg_array_search_14.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_14.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl,0,30.115402698516846,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:05:06,566 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_200506_jmbl_fg_array_search_15.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl,0,30.11490511894226,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:05:36,679 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_200536_jmbl_fg_array_search_15.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl,0,0.3822517395019531,,"2024-08-05 20:06:06,794 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_200606_jmbl_fg_array_search_15.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl'}
+2024-08-05 20:06:07,071 - src.cegis.synthesis_problem_base - ERROR - Unsupported assertion type: Implies(And(x1 < x2,
+            And(x2 < x3,
+                And(x3 < x4,
+                    And(x4 < x5,
+                        And(x5 < x6,
+                            And(x6 < x7,
+                                And(x7 < x8,
+                                    And(x8 < x9,
+                                        And(x9 < x10,
+                                        And(x10 < x11,
+                                        And(x11 < x12,
+                                        And(x12 < x13,
+                                        And(x13 < x14,
+                                        x14 < x15))))))))))))),
+        Implies(k < x1,
+                0 ==
+                findIdx(x1,
+                        x2,
+                        x3,
+                        x4,
+                        x5,
+                        x6,
+                        x7,
+                        x8,
+                        x9,
+                        x10,
+                        x11,
+                        x12,
+                        x13,
+                        x14,
+                        x15,
+                        k)))
+Exception in thread Thread-1 (thread_target):
+Traceback (most recent call last):
+  File ""/usr/lib/python3.12/threading.py"", line 1073, in _bootstrap_inner
+    self.run()
+  File ""/usr/lib/python3.12/threading.py"", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 63, in thread_target
+    result, candidates = run_synthesis(config)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 52, in run_synthesis
+    result, candidates = strategy.execute_cegis()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 30, in execute_cegis
+    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 43, in process_iteration
+    candidates = self.candidate_generator.generate_candidates()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 185, in generate_candidates
+    score = self.evaluate_candidate(candidate_func, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 45, in evaluate_candidate
+    score = self.partial_satisfaction_methods[method](candidate, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 86, in max_smt_satisfaction
+    self.problem.negate_assertions([constraint]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_problem_z3.py"", line 543, in negate_assertions
+    raise ValueError(""Unsupported assertion type: {}"".format(assertion))
+ValueError: Unsupported assertion type: Implies(And(x1 < x2,
+            And(x2 < x3,
+                And(x3 < x4,
+                    And(x4 < x5,
+                        And(x5 < x6,
+                            And(x6 < x7,
+                                And(x7 < x8,
+                                    And(x8 < x9,
+                                        And(x9 < x10,
+                                        And(x10 < x11,
+                                        And(x11 < x12,
+                                        And(x12 < x13,
+                                        And(x13 < x14,
+                                        x14 < x15))))))))))))),
+        Implies(k < x1,
+                0 ==
+                findIdx(x1,
+                        x2,
+                        x3,
+                        x4,
+                        x5,
+                        x6,
+                        x7,
+                        x8,
+                        x9,
+                        x10,
+                        x11,
+                        x12,
+                        x13,
+                        x14,
+                        x15,
+                        k)))
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl,0,14.757015228271484,"No satisfying candidates found.
+","2024-08-05 20:06:07,178 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_200607_jmbl_fg_array_search_15.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl,0,30.10990571975708,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:06:21,936 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_200621_jmbl_fg_array_search_15.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_15.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl,0,30.117477655410767,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:06:52,061 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_200651_jmbl_fg_array_search_2.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl,0,30.123207569122314,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:07:22,189 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_200722_jmbl_fg_array_search_2.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl,0,0.1244666576385498,,"2024-08-05 20:07:52,293 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_200752_jmbl_fg_array_search_2.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl'}
+2024-08-05 20:07:52,319 - src.cegis.synthesis_problem_base - ERROR - Unsupported assertion type: Implies(x1 < x2, Implies(k < x1, 0 == findIdx(x1, x2, k)))
+Exception in thread Thread-1 (thread_target):
+Traceback (most recent call last):
+  File ""/usr/lib/python3.12/threading.py"", line 1073, in _bootstrap_inner
+    self.run()
+  File ""/usr/lib/python3.12/threading.py"", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 63, in thread_target
+    result, candidates = run_synthesis(config)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 52, in run_synthesis
+    result, candidates = strategy.execute_cegis()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 30, in execute_cegis
+    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 43, in process_iteration
+    candidates = self.candidate_generator.generate_candidates()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 185, in generate_candidates
+    score = self.evaluate_candidate(candidate_func, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 45, in evaluate_candidate
+    score = self.partial_satisfaction_methods[method](candidate, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 57, in check_partial_satisfaction
+    self.problem.negate_assertions([constraint]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_problem_z3.py"", line 543, in negate_assertions
+    raise ValueError(""Unsupported assertion type: {}"".format(assertion))
+ValueError: Unsupported assertion type: Implies(x1 < x2, Implies(k < x1, 0 == findIdx(x1, x2, k)))
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl,0,11.887327432632446,"No satisfying candidates found.
+","2024-08-05 20:07:52,422 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_200752_jmbl_fg_array_search_2.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl,0,30.106157302856445,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:08:04,313 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_200804_jmbl_fg_array_search_2.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_2.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl,0,30.102484703063965,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:08:34,418 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_200834_jmbl_fg_array_search_3.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl,0,30.103305101394653,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:09:04,524 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_200904_jmbl_fg_array_search_3.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl,0,0.13489723205566406,,"2024-08-05 20:09:34,628 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_200934_jmbl_fg_array_search_3.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl'}
+2024-08-05 20:09:34,662 - src.cegis.synthesis_problem_base - ERROR - Unsupported assertion type: Implies(And(x1 < x2, x2 < x3),
+        Implies(k < x1, 0 == findIdx(x1, x2, x3, k)))
+Exception in thread Thread-1 (thread_target):
+Traceback (most recent call last):
+  File ""/usr/lib/python3.12/threading.py"", line 1073, in _bootstrap_inner
+    self.run()
+  File ""/usr/lib/python3.12/threading.py"", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 63, in thread_target
+    result, candidates = run_synthesis(config)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 52, in run_synthesis
+    result, candidates = strategy.execute_cegis()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 30, in execute_cegis
+    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 43, in process_iteration
+    candidates = self.candidate_generator.generate_candidates()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 185, in generate_candidates
+    score = self.evaluate_candidate(candidate_func, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 45, in evaluate_candidate
+    score = self.partial_satisfaction_methods[method](candidate, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 71, in check_with_soft_constraints
+    self.problem.negate_assertions([constraint]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_problem_z3.py"", line 543, in negate_assertions
+    raise ValueError(""Unsupported assertion type: {}"".format(assertion))
+ValueError: Unsupported assertion type: Implies(And(x1 < x2, x2 < x3),
+        Implies(k < x1, 0 == findIdx(x1, x2, x3, k)))
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl,0,11.62242341041565,"No satisfying candidates found.
+","2024-08-05 20:09:34,765 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_200934_jmbl_fg_array_search_3.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl,0,30.115074634552002,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:09:46,399 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_200946_jmbl_fg_array_search_3.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_3.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl,0,30.11057186126709,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:10:16,514 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_201016_jmbl_fg_array_search_4.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl,0,30.124258995056152,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:10:46,627 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_201046_jmbl_fg_array_search_4.log'}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl,0,0.158935546875,,"2024-08-05 20:11:16,764 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_201116_jmbl_fg_array_search_4.log'}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl'}
+2024-08-05 20:11:16,806 - src.cegis.synthesis_problem_base - ERROR - Unsupported assertion type: Implies(And(x1 < x2, And(x2 < x3, x3 < x4)),
+        Implies(k < x1, 0 == findIdx(x1, x2, x3, x4, k)))
+Exception in thread Thread-1 (thread_target):
+Traceback (most recent call last):
+  File ""/usr/lib/python3.12/threading.py"", line 1073, in _bootstrap_inner
+    self.run()
+  File ""/usr/lib/python3.12/threading.py"", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 63, in thread_target
+    result, candidates = run_synthesis(config)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/runner.py"", line 52, in run_synthesis
+    result, candidates = strategy.execute_cegis()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 30, in execute_cegis
+    process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_strategy/partial_satisfaction_bottom_up.py"", line 43, in process_iteration
+    candidates = self.candidate_generator.generate_candidates()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 185, in generate_candidates
+    score = self.evaluate_candidate(candidate_func, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 45, in evaluate_candidate
+    score = self.partial_satisfaction_methods[method](candidate, func_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/candidate_generator/enhanced_random_candidate_generator.py"", line 139, in unsat_core_analysis
+    self.problem.negate_assertions([c]),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/data/Documents/DataScience/Courses/Dissertation/src/cegis/z3/synthesis_problem_z3.py"", line 543, in negate_assertions
+    raise ValueError(""Unsupported assertion type: {}"".format(assertion))
+ValueError: Unsupported assertion type: Implies(And(x1 < x2, And(x2 < x3, x3 < x4)),
+        Implies(k < x1, 0 == findIdx(x1, x2, x3, x4, k)))
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl,0,11.861822128295898,"No satisfying candidates found.
+","2024-08-05 20:11:16,908 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_201116_jmbl_fg_array_search_4.log'}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl,0,30.10423994064331,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:11:28,773 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_201128_jmbl_fg_array_search_4.log', 'collect_metrics': False}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_array_search_4.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_enumerative_bottom_up.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl,0,30.103930234909058,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:11:58,880 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_bottom_up_20240805_201158_jmbl_fg_max7.log', 'collect_metrics': True}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_fast_enumerative.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl,0,30.139631271362305,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:12:28,987 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/fast_enumerative_20240805_201228_jmbl_fg_max7.log', 'collect_metrics': True}, 'synthesis_parameters': {'strategy': 'fast_enumerative', 'candidate_generation': 'fast_enumerative', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl,0,30.111624240875244,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:12:59,135 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240805_201259_jmbl_fg_max7.log', 'collect_metrics': True}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_weighted_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl,0,12.584152698516846,"No satisfying candidates found.
+","2024-08-05 20:13:29,240 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_weighted_topdown_20240805_201329_jmbl_fg_max7.log', 'collect_metrics': True}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.2, 'custom_grammar': {'S': [(('ite', 'B', 'S', 'S'), 50), (('+', 'S', 'S'), 30), (('-', 'S', 'S'), 30), (('*', 'S', 'S'), 35), (('neg', 'S'), 20), (('T',), 10)], 'B': [(('>', 'T', 'T'), 15), (('>=', 'T', 'T'), 15), (('<', 'T', 'T'), 15), (('<=', 'T', 'T'), 15), (('==', 'T', 'T'), 15), (('!=', 'T', 'T'), 15)]}, 'use_weighted_generator': True, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl'}
+"
+0d8bf92b-2d34-49d5-a356-186f58a72cbb,2024-08-05T19:43:09.742657,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_random_top_down.yaml,problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl,0,30.10250687599182,"Synthesis was cancelled after 30 seconds
+Synthesis timed out after 30 seconds
+","2024-08-05 20:13:41,825 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/random_enumerative_topdown_20240805_201341_jmbl_fg_max7.log', 'collect_metrics': True}, 'synthesis_parameters': {'strategy': 'random_enumerative', 'candidate_generation': 'top_down', 'max_iterations': 10000, 'max_depth': 5, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'Neg': 1, 'ite': 3}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': {'S': ['T', ('ite', 'B', 'S', 'S'), ('+', 'S', 'S'), ('-', 'S', 'S'), ('*', 'S', 'S'), ('neg', 'S')], 'B': [('>', 'T', 'T'), ('>=', 'T', 'T'), ('<', 'T', 'T'), ('<=', 'T', 'T'), ('==', 'T', 'T'), ('!=', 'T', 'T')]}, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/jmbl_fg_max7.sl'}
+"

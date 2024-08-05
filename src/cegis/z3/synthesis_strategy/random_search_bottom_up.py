@@ -1,3 +1,5 @@
+import time
+
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
@@ -85,15 +87,27 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
         max_candidates_per_depth = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
         max_iterations = self.problem.options.synthesis_parameters.max_iterations
         iteration = 0
+        start_time = time.time()
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
                 for candidate_at_depth in range(max_candidates_per_depth):
+                    self.metrics.iterations += 1
+
                     candidates = self.candidate_generator.generate_candidates()
+                    self.metrics.candidates_generated += len(candidates)
+
                     pruned_candidates = self.candidate_generator.prune_candidates(candidates)
+                    self.metrics.candidates_pruned += len(candidates) - len(pruned_candidates)
                     self.problem.logger.info(f"Iteration {iteration + 1}/{max_iterations} max iterations, depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):")
+
                     func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
                     candidate_functions = [candidate for candidate, _ in pruned_candidates]
+
                     if self.test_candidates(func_strs, candidate_functions):
+                        self.metrics.solution_found = True
+                        self.metrics.solution_height = depth
+                        self.metrics.solution_complexity = complexity
+                        self.metrics.time_spent = time.time() - start_time
                         self.problem.logger.info(f"Found satisfying candidates!")
                         valid_candidates = ''
                         for candidate, func_name in pruned_candidates:
@@ -104,4 +118,5 @@ class RandomSearchStrategyBottomUp(SynthesisStrategy):
                     iteration += 1
                     if iteration >= max_iterations:
                         self.problem.logger.info(f"No satisfying candidates found within {max_iterations} iterations.")
+                        self.metrics.time_spent = time.time() - start_time
                         return False, f"No satisfying candidates found within {max_iterations} iterations."

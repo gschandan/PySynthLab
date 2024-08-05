@@ -21,7 +21,7 @@ class CandidateGenerator(ABC):
         operation_costs (dict): Dictionary mapping operations to their complexity costs.
     """
 
-    def __init__(self, problem: 'SynthesisProblemZ3'):
+    def __init__(self, problem: SynthesisProblemZ3):
         """
         Initialize the CandidateGenerator.
 
@@ -29,6 +29,7 @@ class CandidateGenerator(ABC):
             problem (SynthesisProblemZ3): The synthesis problem instance.
         """
         self.problem = problem
+        self.metrics = problem.metrics
         self.config = problem.options
         self.min_const = self.config.synthesis_parameters.min_const
         self.max_const = self.config.synthesis_parameters.max_const

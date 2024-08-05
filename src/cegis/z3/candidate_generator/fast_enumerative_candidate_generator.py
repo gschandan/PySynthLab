@@ -27,6 +27,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
         self.constructor_classes = self.compute_constructor_classes()
         self.term_cache: Dict[Tuple[z3.SortRef, int], List[z3.ExprRef]] = {}
         self.candidate_cache: Dict[Tuple[str, int], List[z3.ExprRef]] = {}
+        self.metrics = problem.metrics
 
     @lru_cache(maxsize=None)
     def extract_grammar(self) -> Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]:
