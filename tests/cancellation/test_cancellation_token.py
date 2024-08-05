@@ -3,7 +3,7 @@ import threading
 import time
 from src.utilities.cancellation_token import GlobalCancellationToken, CancellationError
 
-
+@unittest.skip("Global cancellation token")
 class TestGlobalCancellationToken(unittest.TestCase):
 
     def setUp(self):

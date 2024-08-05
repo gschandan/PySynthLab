@@ -18,6 +18,7 @@ class WhenTheConstraintIsCommutativity(unittest.TestCase):
         self.options = Options()
         self.problem = SynthesisProblemZ3(self.problem_str, self.options)
 
+
     def test_substitute_constraints_multiple_commutativity(self):
         def generate_correct_abs_max_function(arg_sorts: List[z3.SortRef]) -> Tuple[Callable, str]:
             args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]

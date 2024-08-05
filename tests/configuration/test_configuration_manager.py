@@ -5,6 +5,8 @@ from pathlib import Path
 from unittest.mock import patch, mock_open
 import argparse
 import yaml
+
+from src.utilities.cancellation_token import GlobalCancellationToken
 from src.utilities.options import Options
 from src.utilities.config_manager import ConfigManager
 
@@ -12,6 +14,7 @@ from src.utilities.config_manager import ConfigManager
 class TestConfigManager(unittest.TestCase):
     def setUp(self):
         self.default_options = Options()
+        GlobalCancellationToken._instance = GlobalCancellationToken()
 
     def test_generate_argparse_from_options(self):
         parser = ConfigManager.generate_argparse_from_options()
