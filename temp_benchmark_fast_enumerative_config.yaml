@@ -1,6 +1,6 @@
 input_source: stdin
 logging:
-  file: logs/fast_enumerative_20240805_160753_jmbl_fg_max8.log
+  file: logs/fast_enumerative_20240805_170510_large_linear_func.log
   level: ERROR
 solver:
   name: z3
