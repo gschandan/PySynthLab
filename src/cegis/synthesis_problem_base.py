@@ -12,6 +12,7 @@ from src.helpers.parser.src.resolution import FunctionDescriptor
 from src.helpers.parser.src.v1.parser import SygusV1Parser
 from src.helpers.parser.src.v2.parser import SygusV2Parser
 from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from src.utilities.cancellation_token import GlobalCancellationToken
 from src.utilities.options import Options, LoggingOptions
 
 
@@ -147,6 +148,7 @@ class BaseSynthesisProblem(ABC):
         constraints = []
         constraint_indices = []
         for i, statement in enumerate(sygus_ast):
+            GlobalCancellationToken.check_cancellation()
             if statement[0] == 'constraint':
                 constraints.append(statement[1])
                 constraint_indices.append(i)

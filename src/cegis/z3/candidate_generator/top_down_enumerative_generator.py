@@ -3,6 +3,7 @@ from itertools import product
 from typing import List, Tuple, Union
 import z3
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
+from src.utilities.cancellation_token import GlobalCancellationToken
 
 
 class Node:
@@ -120,6 +121,8 @@ class TopDownCandidateGenerator:
             If expr is 'S' and the grammar includes a rule 'S': ['+', 'T', 'T'],
             this method might return expansions like [x + y, x + 1, 1 + x, ...].
         """
+        GlobalCancellationToken.check_cancellation()
+
         if depth > self.max_depth:
             return []
 
@@ -220,6 +223,7 @@ class TopDownCandidateGenerator:
             The tree construction stops at a depth of 10 to prevent
             infinite recursion for recursive grammars.
         """
+        GlobalCancellationToken.check_cancellation()
         node = Node(str(expr))
         if depth > 10:
             return node

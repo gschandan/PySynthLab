@@ -5,6 +5,7 @@ from itertools import product, combinations_with_replacement
 
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
+from src.utilities.cancellation_token import GlobalCancellationToken
 
 
 class FastEnumerativeCandidateGenerator(CandidateGenerator):
@@ -106,19 +107,20 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
         Yields:
             z3.ExprRef: Enumerated terms of the specified sort and size.
         """
-        SynthesisProblemZ3.logger.debug(f"Entering fast_enum with sort {sort} and size {size}")
+        GlobalCancellationToken.check_cancellation()
+        self.problem.logger.debug(f"Entering fast_enum with sort {sort} and size {size}")
         if size < 0:
             return
 
         cache_key = (sort, size)
         if cache_key in self.term_cache:
-            SynthesisProblemZ3.logger.debug(f"Returning {len(self.term_cache[cache_key])} cached terms for {cache_key}")
+            self.problem.logger.debug(f"Returning {len(self.term_cache[cache_key])} cached terms for {cache_key}")
             yield from self.term_cache[cache_key]
             return
 
         terms = []
         if size == 0:
-            SynthesisProblemZ3.logger.debug(f"Generating terms for size 0 and sort {sort}")
+            self.problem.logger.debug(f"Generating terms for size 0 and sort {sort}")
             if sort == z3.BoolSort():
                 terms = [z3.BoolVal(b) for b in [True, False]]
             else:
@@ -137,9 +139,9 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
                             if simplified_term not in terms:
                                 terms.append(simplified_term)
                                 yield simplified_term
-        SynthesisProblemZ3.logger.debug(f"Generated {len(terms)} terms for {cache_key}")
+        self.problem.logger.debug(f"Generated {len(terms)} terms for {cache_key}")
         if not terms:
-            SynthesisProblemZ3.logger.warning(f"No terms generated for {cache_key}")
+            self.problem.logger.warning(f"No terms generated for {cache_key}")
         self.term_cache[cache_key] = terms
 
     @lru_cache(maxsize=None)
@@ -157,6 +159,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
         Raises:
             ValueError: If an unsupported constructor is provided.
         """
+        GlobalCancellationToken.check_cancellation()
         if constructor == 'Plus':
             return term_combination[0] + term_combination[1]
         elif constructor == 'Minus':
@@ -201,6 +204,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
         Returns:
             List[Tuple[int, ...]]: A list of tuples representing the size combinations.
         """
+        GlobalCancellationToken.check_cancellation()
         return list(combinations_with_replacement(range(total_size + 1), num_args))
 
     @lru_cache(maxsize=None)
@@ -255,7 +259,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
                 arg_sorts = [func.domain(i) for i in range(func.arity())]
                 self.candidate_cache[cache_key] = []
                 terms = list(self.fast_enum(func.range(), depth))
-                SynthesisProblemZ3.logger.debug(f"Generated {len(terms)} terms for {func_name} at depth {depth}")
+                self.problem.logger.debug(f"Generated {len(terms)} terms for {func_name} at depth {depth}")
                 for term in terms:
                     candidate = self.create_candidate_function(term, arg_sorts)
                     self.candidate_cache[cache_key].append(candidate)
@@ -265,7 +269,7 @@ class FastEnumerativeCandidateGenerator(CandidateGenerator):
 
         for func_name, candidates in self.candidate_cache.items():
             if not candidates:
-                SynthesisProblemZ3.logger.warning(f"No candidates generated for {func_name} at depth {depth}")
+                self.problem.logger.warning(f"No candidates generated for {func_name} at depth {depth}")
 
     def prune_candidates(self, candidates: List[Tuple[z3.ExprRef, str]]) -> List[Tuple[z3.ExprRef, str]]:
         """

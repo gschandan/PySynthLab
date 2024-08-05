@@ -3,6 +3,7 @@ from typing import List, Tuple
 import z3
 
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
+from src.utilities.cancellation_token import GlobalCancellationToken
 
 
 class CandidateGenerator(ABC):
@@ -103,5 +104,6 @@ class CandidateGenerator(ABC):
         Returns:
             z3.ExprRef: A Z3 expression representing the candidate function.
         """
+        GlobalCancellationToken.check_cancellation()
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         return z3.substitute(candidate_expr, [(arg, z3.Var(i, arg.sort())) for i, arg in enumerate(args)])

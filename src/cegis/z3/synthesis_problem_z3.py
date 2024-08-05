@@ -12,6 +12,7 @@ from src.helpers.parser.src.resolution import SortDescriptor
 from src.helpers.parser.src.v1.parser import SygusV1Parser
 from src.helpers.parser.src.v2.parser import SygusV2Parser
 from src.helpers.parser.src.v2.printer import SygusV2ASTPrinter
+from src.utilities.cancellation_token import GlobalCancellationToken
 from src.utilities.options import Options
 
 
@@ -275,6 +276,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(synthesis_problem.context.z3_constraints)
             [And(max2(a, b) >= a)]
         """
+
         all_constraints = []
         non_conjoined_constraints = []
         declared_variables = set(self.get_var_symbols())
@@ -282,6 +284,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
         declared_synth_functions = set(self.get_synth_funcs().keys())
 
         for constraint in self.context.constraints:
+            GlobalCancellationToken.check_cancellation()
             if isinstance(constraint, ast.ConstraintCommand):
                 undeclared_variables = self.find_undeclared_variables(constraint.constraint, declared_variables,
                                                                       declared_functions, declared_synth_functions)
@@ -349,6 +352,8 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(undeclared)
             ['b']
         """
+        GlobalCancellationToken.check_cancellation()
+
         undeclared_variables = []
 
         if isinstance(term, ast.IdentifierTerm):
@@ -393,6 +398,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(parsed_term)
             max2(a, 5) >= a
         """
+        GlobalCancellationToken.check_cancellation()
         local_variables = local_variables if local_variables else {}
         if isinstance(term, ast.IdentifierTerm):
             symbol = term.identifier.symbol
@@ -511,6 +517,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(negated)
             [Or(Not(x > 0), Not(y > 0)), And(Not(x < 10), Not(y < 10))]
         """
+        GlobalCancellationToken.check_cancellation()
         negated_assertions = []
         for assertion in assertions:
             args = assertion.num_args()
@@ -647,6 +654,8 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(substituted[0])
             If(a > b, a, b) >= a
         """
+        GlobalCancellationToken.check_cancellation()
+
         synth_substitutions = list(zip(functions_to_replace, replacement_expressions))
 
         substituted_constraints = []
@@ -684,6 +693,7 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(substituted[0])
             If(If(a <= b, a, b) > c, If(a <= b, a, b), c) >= c
         """
+        GlobalCancellationToken.check_cancellation()
         predefined_substitutions = [(func, body) for func, body in self.context.z3_predefined_functions.values()]
 
         substituted_constraints = []
@@ -714,4 +724,5 @@ class SynthesisProblemZ3(BaseSynthesisProblem):
             >>> print(evaluated)
             5 >= 0
         """
+        GlobalCancellationToken.check_cancellation()
         return z3.substitute(constraint, [(var, val) for var, val in partial_assignment.items()])

@@ -2,6 +2,7 @@ from typing import List, Tuple, Dict, Any
 from z3 import *
 from src.cegis.z3.candidate_generator.random_candidate_generator import RandomCandidateGenerator
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
+from src.utilities.cancellation_token import GlobalCancellationToken
 
 
 # idea inspired by optimisation/maximisation of candidates here https://github.com/108anup/cegis/tree/main
@@ -40,6 +41,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
 
         scores = []
         for method in self.active_methods:
+            GlobalCancellationToken.check_cancellation()
             score = self.partial_satisfaction_methods[method](candidate, func_name)
             scores.append(score)
         return sum(scores) / len(scores)
@@ -49,6 +51,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         self.solver.reset()
         satisfied_constraints = 0
         for constraint in constraints:
+            GlobalCancellationToken.check_cancellation()
             self.solver.push()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([constraint]),
@@ -63,6 +66,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
     def check_with_soft_constraints(self, candidate: ExprRef, func_name: str) -> float:
         o = Optimize()
         for constraint in self.problem.context.z3_non_conjoined_constraints:
+            GlobalCancellationToken.check_cancellation()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([constraint]),
                 [self.problem.context.z3_synth_functions[func_name]],
@@ -77,6 +81,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         o = Optimize()
         indicators = [Bool(f'ind_{i}') for i in range(len(self.problem.context.z3_non_conjoined_constraints))]
         for ind, constraint in zip(indicators, self.problem.context.z3_non_conjoined_constraints):
+            GlobalCancellationToken.check_cancellation()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([constraint]),
                 [self.problem.context.z3_synth_functions[func_name]],
@@ -93,6 +98,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         self.solver.reset()
         total_diff = 0.0
         for constraint in self.problem.context.z3_non_conjoined_constraints:
+            GlobalCancellationToken.check_cancellation()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([constraint]),
                 [self.problem.context.z3_synth_functions[func_name]],
@@ -128,6 +134,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         tracked_constraints = [Const(f'c_{i}', BoolSort()) for i in
                                range(len(self.problem.context.z3_non_conjoined_constraints))]
         for t, c in zip(tracked_constraints, self.problem.context.z3_non_conjoined_constraints):
+            GlobalCancellationToken.check_cancellation()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([c]),
                 [self.problem.context.z3_synth_functions[func_name]],
@@ -146,6 +153,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         num_satisfied = 0
 
         for constraint in self.problem.context.z3_non_conjoined_constraints:
+            GlobalCancellationToken.check_cancellation()
             substituted_constraint = self.problem.substitute_constraints(
                 self.problem.negate_assertions([constraint]),
                 [self.problem.context.z3_synth_functions[func_name]],

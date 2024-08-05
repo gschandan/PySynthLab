@@ -1,5 +1,5 @@
 logging:
-  level: INFO
+  level: ERROR
   file: "logs/partial_{datetime}_{problem}.log"
 
 synthesis_parameters:

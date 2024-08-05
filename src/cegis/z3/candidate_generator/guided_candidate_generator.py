@@ -4,6 +4,7 @@ from typing import List, Tuple, Any
 from z3 import *
 
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
+from src.utilities.cancellation_token import GlobalCancellationToken
 
 
 # experimental
@@ -26,6 +27,7 @@ class GuidedCandidateGenerator(CandidateGenerator):
 
     def generate_guided_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
                              cost_function: callable = None, operations: List[str] = None) -> z3.ExprRef:
+        GlobalCancellationToken.check_cancellation()
         if operations is None:
             operations = ['+', '-', '*', 'ite', 'neg']
 

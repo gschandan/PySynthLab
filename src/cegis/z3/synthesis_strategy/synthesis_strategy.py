@@ -6,6 +6,7 @@ from z3 import ExprRef
 from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateGenerator
 from src.cegis.z3.candidate_generator.random_candidate_generator import RandomCandidateGenerator
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
+from src.utilities.cancellation_token import GlobalCancellationToken
 
 
 class SynthesisStrategy(ABC):
@@ -124,7 +125,6 @@ class SynthesisStrategy(ABC):
         Raises:
            ValueError: If the number of candidate functions doesn't match the number of synthesis functions.
        """
-
         synth_func_names = list(self.problem.context.z3_synth_functions.keys())
         self.problem.logger.debug(f" candidate_functions {candidate_functions}")
 
@@ -132,8 +132,9 @@ class SynthesisStrategy(ABC):
             raise ValueError("Number of candidate functions doesn't match number of synthesis functions")
 
         for func, candidate, synth_func_name in zip(func_strs, candidate_functions, synth_func_names):
+            GlobalCancellationToken.check_cancellation()
             if not self.check_counterexample(synth_func_name, candidate):
-                return False
+                    return False
         self.problem.logger.debug("All individual counterexample checks passed")
 
         candidates = list(zip(candidate_functions, synth_func_names))
@@ -164,6 +165,7 @@ class SynthesisStrategy(ABC):
             bool: True if the candidate satisfies all counterexamples, False otherwise.
         """
         for stored_func_name, ce in self.problem.context.counterexamples:
+            GlobalCancellationToken.check_cancellation()
             if stored_func_name == func_name:
                 synth_func = self.problem.context.z3_synth_functions[func_name]
 
@@ -197,6 +199,7 @@ class SynthesisStrategy(ABC):
             Dict[str, Dict[str, Any]] | None: A dictionary of counterexamples for each function,
             or None if no counterexample is found.
         """
+        GlobalCancellationToken.check_cancellation()
         self.problem.context.enumerator_solver.reset()
         substituted_neg_constraints = self.problem.substitute_constraints(
             self.problem.context.z3_negated_constraints,
@@ -238,7 +241,7 @@ class SynthesisStrategy(ABC):
         Returns:
            bool: True if the candidates satisfy all constraints, False otherwise.
        """
-
+        GlobalCancellationToken.check_cancellation()
         self.problem.context.verification_solver.reset()
         substituted_constraints = self.problem.substitute_constraints(
             self.problem.context.z3_constraints,

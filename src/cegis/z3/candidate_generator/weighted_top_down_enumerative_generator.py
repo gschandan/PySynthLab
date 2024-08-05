@@ -3,6 +3,8 @@ from itertools import product
 from typing import List, Tuple, Union
 import z3
 
+from src.utilities.cancellation_token import GlobalCancellationToken
+
 
 class Node:
     def __init__(self, value, weight=0):
@@ -138,6 +140,8 @@ class WeightedTopDownCandidateGenerator:
             If expr is 'S' and the grammar includes a rule 'S': [('+', 'T', 'T'), 30],
             this method might return expansions like [(x + y, 35), (x + 1, 40), ...].
         """
+        GlobalCancellationToken.check_cancellation()
+
         if depth > self.max_depth:
             return []
         expansions = []
@@ -250,6 +254,8 @@ class WeightedTopDownCandidateGenerator:
             The tree construction stops at a depth of 10 to prevent
             infinite recursion for recursive grammars.
         """
+        GlobalCancellationToken.check_cancellation()
+
         if isinstance(expr, tuple):
             if len(expr) == 2 and isinstance(expr[1], int):
                 symbol, weight = expr

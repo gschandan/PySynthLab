@@ -3,6 +3,8 @@ from src.cegis.z3.candidate_generator.candidate_generator_base import CandidateG
 from typing import List, Tuple
 from z3 import *
 
+from src.utilities.cancellation_token import GlobalCancellationToken
+
 
 class RandomCandidateGenerator(CandidateGenerator):
     """
@@ -56,6 +58,7 @@ class RandomCandidateGenerator(CandidateGenerator):
             Given arg_sorts=[z3.IntSort(), z3.IntSort()], depth=3, complexity=5,
             this method might return an expression like: If(x > y, x + 2, y - 1)
         """
+        GlobalCancellationToken.check_cancellation()
         if operations is None:
             operations = ['+', '-', '*', 'ite', 'neg']
 
@@ -65,6 +68,7 @@ class RandomCandidateGenerator(CandidateGenerator):
         op_weights = {op: self.op_complexity(op) for op in operations}
 
         def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
+            GlobalCancellationToken.check_cancellation()
             if curr_depth == 0 or curr_complexity <= 0:
                 return random.choice(args + constants)
 

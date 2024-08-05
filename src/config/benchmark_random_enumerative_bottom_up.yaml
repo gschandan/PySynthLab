@@ -1,5 +1,5 @@
 logging:
-  level: INFO
+  level: ERROR
   file: "logs/random_enumerative_bottom_up_{datetime}_{problem}.log"
 
 synthesis_parameters:

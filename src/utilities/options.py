@@ -53,7 +53,7 @@ class SynthesisParameters:
                                    1 = no diversity, >1 will bias towards previously chosen operations and <1 will bias away. Default is 1.0.
         custom_grammar (Optional[Dict[str, List[Union[str, Tuple]]]]): Custom grammar for candidate generation. Default is None.
         use_weighted_generator (bool): Use weighted top-down generator instead of regular top-down generator. Default is False.
-        timeout (int): Global timeout for the synthesis process (in seconds). Default is 30 seconds. Only for Unix/Mac, will not work on Windows.
+        timeout (int): Global timeout for the synthesis process (in seconds). Default is 30 seconds.
 
     Note:
         When providing a custom grammar, ensure it's in the correct format:
