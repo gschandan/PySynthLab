@@ -5,7 +5,6 @@ from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.utilities.cancellation_token import GlobalCancellationToken
 
 
-# idea inspired by optimisation/maximisation of candidates here https://github.com/108anup/cegis/tree/main
 class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
     """
     An 'enhanced' random candidate generator that uses several (optional) partial satisfaction
@@ -49,8 +48,6 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         super().__init__(problem)
         self.partial_satisfaction_methods = {
             'splitting': self.check_partial_satisfaction,
-            'soft_constraints': self.check_with_soft_constraints,
-            'max_smt': self.max_smt_satisfaction,
             'quantitative': self.quantitative_satisfaction,
             'unsat_core': self.unsat_core_analysis,
             'fuzzy': self.fuzzy_satisfaction
@@ -149,106 +146,22 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
             self.solver.pop()
         return satisfied_constraints / len(constraints)
 
-    def check_with_soft_constraints(self, candidate: ExprRef, func_name: str) -> float:
-        """
-        Evaluate the candidate using soft constraints.
-
-        This method uses Z3's Optimize solver to treat constraints as soft and
-        maximize the number of satisfied constraints.
-
-        For each constraint, we create an indicator (z3.Optimize doesn't support as_ast, so we can't interrogate the model)
-        which is added to the optimizer. If the indicator is true, the constraint must be satisfied.
-        An objective function is used to counter the number of indicators that are true:
-        objective = Sum([If(ind, 1, 0) for ind in indicators]) is an objective func that counts the number of satisfied constraints.
-        Maximising this function finds assignments to variables that satisfy as many hard constraints as possible.
-        In this case we make the constraints soft constraints - implications - allowing it to try to enforce the constraint, 
-        but if it fails, this allows it to return false, so we can find partial solutions that satisfy some constraints.
-        The resulting score is normalised by the total number of constraints, so we can quantify it.
-
-        Args:
-            candidate (ExprRef): The candidate solution to evaluate.
-            func_name (str): The name of the function being synthesized.
-
-        Returns:
-            float: The fraction of soft constraints satisfied by the candidate.
-
-        Example:
-            score = generator.check_with_soft_constraints(candidate, 'f')
-        """
-        o = Optimize()
-        indicators = []
-        for i, constraint in enumerate(self.problem.context.z3_non_conjoined_constraints):
-            GlobalCancellationToken.check_cancellation()
-            indicator = Bool(f'ind_{i}')
-            substituted_constraint = self.problem.substitute_constraints(
-                [constraint],
-                [self.problem.context.z3_synth_functions[func_name]],
-                [candidate])[0]
-            o.add(Implies(indicator, substituted_constraint))
-            indicators.append(indicator)
-
-        objective = Sum([If(ind, 1, 0) for ind in indicators])
-        handle = o.maximize(objective)
-
-        if o.check() == sat:
-            satisfied = o.lower(handle)
-            return satisfied.as_long() / len(self.problem.context.z3_non_conjoined_constraints)
-        return 0.0
-
-    def max_smt_satisfaction(self, candidate: ExprRef, func_name: str) -> float:
-        """
-        Evaluate the candidate using MaxSMT satisfaction.
-
-        This method uses Z3's Optimize solver to maximize the number of satisfied
-        hard constraints.
-
-        Args:
-            candidate (ExprRef): The candidate solution to evaluate.
-            func_name (str): The name of the function being synthesized.
-
-        Returns:
-            float: The fraction of constraints satisfied by the candidate.
-
-        Example:
-            score = generator.max_smt_satisfaction(candidate, 'f')
-        """
-        o = Optimize()
-        indicators = [Bool(f'ind_{i}') for i in range(len(self.problem.context.z3_non_conjoined_constraints))]
-        for ind, constraint in zip(indicators, self.problem.context.z3_non_conjoined_constraints):
-            GlobalCancellationToken.check_cancellation()
-            if is_implies(constraint):
-                antecedent, consequent = constraint.arg(0), constraint.arg(1)
-                negated_constraint = And(antecedent, Not(consequent))
-            else:
-                negated_constraint = Not(constraint)
-            substituted_constraint = self.problem.substitute_constraints(
-                [negated_constraint],
-                [self.problem.context.z3_synth_functions[func_name]],
-                [candidate])[0]
-            o.add(Implies(ind, substituted_constraint))
-        objective = Sum([If(ind, 1, 0) for ind in indicators])
-        o.maximize(objective)
-        if o.check() == unsat:
-            satisfied = o.model().eval(objective)
-            return satisfied.as_long() / len(self.problem.context.z3_non_conjoined_constraints)
-        return 0.0
-
     def quantitative_satisfaction(self, candidate: ExprRef, func_name: str) -> float:
         """
-        Evaluate the candidate using MaxSMT satisfaction.
+        Evaluate the candidate using quantitative satisfaction.
 
-        This method uses Z3's Optimize solver to maximize the number of satisfied
-        hard constraints.
+        This method measures how close the candidate is to satisfying each constraint,
+        providing a more nuanced score than binary satisfaction.
 
         Args:
             candidate (ExprRef): The candidate solution to evaluate.
             func_name (str): The name of the function being synthesized.
 
         Returns:
-            float: The fraction of constraints satisfied by the candidate.
+            float: A score between 0 and 1, where 1 indicates full satisfaction.
 
         Example:
-            score = generator.max_smt_satisfaction(candidate, 'f')
+            score = generator.quantitative_satisfaction(candidate, 'f')
         """
         self.solver.reset()
         total_diff = 0.0
@@ -292,8 +205,7 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
         """
         Evaluate the candidate using unsat core analysis.
 
-        This method uses Z3's unsat core feature to identify the minimal set of
-        unsatisfiable constraints, providing insight into how close the candidate
+        This method uses Z3's unsat core providing a score and insight into how close the candidate
         is to satisfying all constraints.
 
         Args:
@@ -307,27 +219,36 @@ class EnhancedRandomCandidateGenerator(RandomCandidateGenerator):
             score = generator.unsat_core_analysis(candidate, 'f')
         """
         self.solver.reset()
+        negated = self.problem.substitute_constraints(
+            self.problem.context.z3_negated_constraints,
+            [self.problem.context.z3_synth_functions[func_name]],
+            [candidate])
+        self.solver.assert_exprs(negated)
+        if self.solver.check() == unsat:
+            return 1.0
+
+        self.solver.reset()
         self.solver.set(unsat_core=True)
-        tracked_constraints = [Const(f'c_{i}', BoolSort()) for i in
-                               range(len(self.problem.context.z3_non_conjoined_constraints))]
-        for tracked_constraint, constraint in zip(tracked_constraints, self.problem.context.z3_non_conjoined_constraints):
-            GlobalCancellationToken.check_cancellation()
-            if is_implies(constraint):
-                antecedent, consequent = constraint.arg(0), constraint.arg(1)
-                negated_constraint = And(antecedent, Not(consequent))
-            else:
-                negated_constraint = Not(constraint)
-            substituted_constraint = self.problem.substitute_constraints(
-                negated_constraint,
+
+        substituted_constraints = self.problem.substitute_constraints(
+                self.problem.context.z3_non_conjoined_constraints,
                 [self.problem.context.z3_synth_functions[func_name]],
                 [candidate])
-            self.solver.assert_and_track(substituted_constraint[0], tracked_constraint)
-        if self.solver.check() == unsat:
-            core = self.solver.unsat_core()
-            return (len(self.problem.context.z3_non_conjoined_constraints) - len(core)) / len(
-                self.problem.context.z3_non_conjoined_constraints)
+        for i, constraint in enumerate(substituted_constraints):
+            self.solver.assert_and_track(Not(constraint), Bool(f'c_{i}'))
+
+        result = self.solver.check()
+
+        if result == unsat:
+            unsat_core = self.solver.unsat_core()
+            satisfied_constraints = len(substituted_constraints) - len(unsat_core)
+        else:
+            satisfied_constraints = 0
+
+        score = satisfied_constraints / len(substituted_constraints)
+
         self.solver.set(unsat_core=False)
-        return 1.0
+        return score
 
     def fuzzy_satisfaction(self, candidate: ExprRef, func_name: str) -> float:
         """

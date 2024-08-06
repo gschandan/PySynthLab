@@ -1,5 +1,13 @@
 synthesis_parameters:
   max_iterations: 3000
+  timeout: 100
+  max_depth: 5
+  max_complexity: 6
+  random_seed: 1234
+  randomise_each_iteration: false
+  max_candidates_at_each_depth: 100
+  min_const: -2
+  max_const: 2
   operation_costs:
     '+': 1
     '-': 1

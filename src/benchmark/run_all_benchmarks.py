@@ -10,15 +10,15 @@ from src.utilities.config_manager import ConfigManager
 # sygus_dir = "problems/debugging"
 sygus_dir = "problems/sygus_comp_2019_clia_track"
 output_cvc5_csv = "sygus_solver_cvc5_results.csv"
-output_pysynthlab_csv = "sygus_solver_pysynthlab_results.csv"
+output_pysynthlab_csv = "sygus_solver_pysynthlab_results_2.csv"
 project_root = Path(__file__).parent.parent.parent
 
 py_synth_lab_solver_configs = [
-    str(project_root / "src" / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
-    str(project_root / "src" / "config" / "benchmark_fast_enumerative.yaml"),
+    # str(project_root / "src" / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
+    # str(project_root / "src" / "config" / "benchmark_fast_enumerative.yaml"),
     str(project_root / "src" / "config" / "benchmark_partial.yaml"),
-    str(project_root / "src" / "config" / "benchmark_random_weighted_top_down.yaml"),
-    str(project_root / "src" / "config" / "benchmark_random_top_down.yaml"),
+    # str(project_root / "src" / "config" / "benchmark_random_weighted_top_down.yaml"),
+    # str(project_root / "src" / "config" / "benchmark_random_top_down.yaml"),
 ]
 
 
@@ -143,6 +143,6 @@ def run_pysynthlab_experiments():
 
 
 if __name__ == "__main__":
-    for i in range(5):
-        run_cvc5_experiments()
+    for i in range(1):
+        #run_cvc5_experiments()
         run_pysynthlab_experiments()
