@@ -14,11 +14,11 @@ output_pysynthlab_csv = "sygus_solver_pysynthlab_results_2.csv"
 project_root = Path(__file__).parent.parent.parent
 
 py_synth_lab_solver_configs = [
-    # str(project_root / "src" / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
-    # str(project_root / "src" / "config" / "benchmark_fast_enumerative.yaml"),
+    str(project_root / "src" / "config" / "benchmark_random_enumerative_bottom_up.yaml"),
+    str(project_root / "src" / "config" / "benchmark_fast_enumerative.yaml"),
     str(project_root / "src" / "config" / "benchmark_partial.yaml"),
-    # str(project_root / "src" / "config" / "benchmark_random_weighted_top_down.yaml"),
-    # str(project_root / "src" / "config" / "benchmark_random_top_down.yaml"),
+    str(project_root / "src" / "config" / "benchmark_random_weighted_top_down.yaml"),
+    str(project_root / "src" / "config" / "benchmark_random_top_down.yaml"),
 ]
 
 
