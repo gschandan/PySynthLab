@@ -1,5 +1,0 @@
-run_id,run_datetime,solver,config,file,return_code,time,stdout,stderr
-50dc54b8-fb72-4afb-92b8-5b8642fe23e6,2024-08-06T11:19:28.207964,PySynthLab,/data/Documents/DataScience/Courses/Dissertation/src/config/benchmark_partial.yaml,problems/sygus_comp_2019_clia_track/absolute.sl,0,0.1533820629119873,"abs: Var(0)*1
-
-","2024-08-06 11:19:28,304 - src.utilities.config_manager - INFO - {'logging': {'level': 'ERROR', 'file': 'logs/partial_20240806_111928_absolute.log', 'collect_metrics': True}, 'synthesis_parameters': {'strategy': 'partial', 'candidate_generation': 'bottom_up', 'max_iterations': 10000, 'max_depth': 7, 'max_complexity': 7, 'random_seed': 1234, 'randomise_each_iteration': False, 'max_candidates_at_each_depth': 200, 'min_const': -2, 'max_const': 2, 'operation_costs': {'*': 2, '+': 1, '-': 1, 'ite': 3, 'neg': 1}, 'initial_weight': 1.0, 'weight_multiplier': 1.0, 'custom_grammar': None, 'use_weighted_generator': False, 'timeout': 30}, 'solver': {'name': 'z3', 'timeout': 30000}, 'input_source': 'problems/sygus_comp_2019_clia_track/absolute.sl'}
-"

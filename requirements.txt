@@ -6,3 +6,8 @@ z3-solver
 sphinx
 pyyaml
 cvc5
+matplotlib
+pandas
+numpy
+jupyter
+seaborn
