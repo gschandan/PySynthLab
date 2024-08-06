@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="runner_top_down_small" type="PythonConfigurationType" factoryName="Python" folderName="random">
+  <configuration default="false" name="partial" type="PythonConfigurationType" factoryName="Python" folderName="random">
     <module name="Dissertation" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -19,7 +19,7 @@
       <option name="useCurrentConnection" value="false" />
     </EXTENSION>
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/runner.py" />
-    <option name="PARAMETERS" value="--synthesis_parameters__strategy random_enumerative --synthesis_parameters__candidate_generation top_down &quot;$PROJECT_DIR$/problems/debugging/small.sl&quot;" />
+    <option name="PARAMETERS" value="--synthesis_parameters__strategy partial &quot;$PROJECT_DIR$/problems/debugging/small.sl&quot;" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

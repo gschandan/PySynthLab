@@ -1,6 +1,6 @@
 input_source: stdin
 logging:
-  file: /data/Documents/DataScience/Courses/Dissertation/logs/fast_enumerative_20240806_161523_jmbl_fg_max4.log
+  file: /data/Documents/DataScience/Courses/Dissertation/logs/fast_enumerative_20240806_165731_arraysearch20.log
   level: ERROR
 solver:
   name: z3
