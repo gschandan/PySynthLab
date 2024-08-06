@@ -130,7 +130,7 @@ class SynthesisParameters:
             type="int"
         ))
     operation_costs: dict[str, int] = field(
-        default_factory=lambda: {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1, '<': 1, '<=': 1, '>': 1, '>=': 1, '==': 1, '!=': 1},
+        default_factory=lambda: {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1},
         metadata=dict(
             description="Operation costs for candidate generation",
             type="dict"

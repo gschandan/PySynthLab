@@ -64,6 +64,7 @@ class EnhancedRandomCandidateGenerator(CandidateGenerator):
         self.solver.set('timeout', self.problem.options.solver.timeout)
         self.solver.set('random_seed', self.problem.options.synthesis_parameters.random_seed)
         self.metrics = problem.metrics
+        self.operations = self.problem.options.synthesis_parameters.operation_costs.keys()
 
     def generate_candidates(self) -> List[Tuple[ExprRef, str]]:
         """
@@ -97,8 +98,7 @@ class EnhancedRandomCandidateGenerator(CandidateGenerator):
             self.score_history[func_name].append((score, str(candidate)))
         return candidates
 
-    def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int,
-                             operations: List[str] = None) -> z3.ExprRef:
+    def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int) -> z3.ExprRef:
         """
         Generate a random term (expression) based on given constraints.
 
@@ -106,7 +106,6 @@ class EnhancedRandomCandidateGenerator(CandidateGenerator):
             arg_sorts (List[z3.SortRef]): List of argument sorts for the function.
             depth (int): Maximum depth of the generated expression tree.
             complexity (int): Maximum complexity allowed for the expression.
-            operations (List[str], optional): List of allowed operations. Defaults to ['+', '-', '*', 'If', 'Neg'].
 
         Returns:
             z3.ExprRef: A randomly generated Z3 expression.
@@ -116,20 +115,18 @@ class EnhancedRandomCandidateGenerator(CandidateGenerator):
             this method might return an expression like: If(x > y, x + 2, y - 1)
         """
         GlobalCancellationToken.check_cancellation()
-        if operations is None:
-            operations = ['+', '-', '*', 'ite', 'neg']
 
         args = [z3.Var(i, sort) for i, sort in enumerate(arg_sorts)]
         constants = [z3.IntVal(i) for i in range(self.min_const, self.max_const + 1)]
 
-        op_weights = {op: self.op_complexity(op) for op in operations}
+        op_weights = {op: self.op_complexity(op) for op in self.operations}
 
         def build_term(curr_depth: int, curr_complexity: int) -> z3.ExprRef:
             GlobalCancellationToken.check_cancellation()
             if curr_depth == 0 or curr_complexity <= 0:
                 return random.choice(args + constants)
 
-            available_ops = [op for op in operations if curr_complexity >= self.operation_costs[op]]
+            available_ops = [op for op in self.operations if curr_complexity >= self.operation_costs[op]]
             if not available_ops:
                 return random.choice(args + constants)
 
