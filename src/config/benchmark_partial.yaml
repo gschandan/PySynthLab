@@ -1,6 +1,6 @@
 logging:
   level: ERROR
-  file: "logs/partial_{datetime}_{problem}.log"
+  file: "{root}/logs/partial_{datetime}_{problem}.log"
 
 synthesis_parameters:
   strategy: partial

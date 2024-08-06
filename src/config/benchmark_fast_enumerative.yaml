@@ -1,6 +1,6 @@
 logging:
   level: ERROR
-  file: "logs/fast_enumerative_{datetime}_{problem}.log"
+  file: "{root}/logs/fast_enumerative_{datetime}_{problem}.log"
 
 synthesis_parameters:
   strategy: fast_enumerative

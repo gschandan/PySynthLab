@@ -1,6 +1,6 @@
 logging:
   level: ERROR
-  file: "logs/random_enumerative_bottom_up_{datetime}_{problem}.log"
+  file: "{root}/logs/random_enumerative_bottom_up_{datetime}_{problem}.log"
 
 synthesis_parameters:
   strategy: random_enumerative
