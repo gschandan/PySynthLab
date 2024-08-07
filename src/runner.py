@@ -44,7 +44,10 @@ def run_synthesis(config: Options):
             else:
                 strategy = RandomSearchStrategyBottomUp(problem)
         elif config.synthesis_parameters.strategy == 'partial':
-            strategy = PartialSatisfactionBottomUp(problem)
+            if config.synthesis_parameters.candidate_generation == 'top_down':
+                strategy = RandomSearchStrategyTopDown(problem)
+            else:
+                strategy = PartialSatisfactionBottomUp(problem)
         else:
             ConfigManager.logger.error(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
             raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")

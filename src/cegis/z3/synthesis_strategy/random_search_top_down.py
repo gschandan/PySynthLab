@@ -1,5 +1,6 @@
 import time
 
+from src.cegis.z3.candidate_generator.partial_top_down_enumerative_generator import PartialTopDownCandidateGenerator
 from src.cegis.z3.candidate_generator.top_down_enumerative_generator import TopDownCandidateGenerator
 from src.cegis.z3.candidate_generator.weighted_top_down_enumerative_generator import WeightedTopDownCandidateGenerator
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
@@ -65,7 +66,9 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
         super().__init__(problem)
         self.problem = problem
         if problem.options.synthesis_parameters.use_weighted_generator:
-            self.candidate_generator = WeightedTopDownCandidateGenerator(problem)
+            self.candidate_generator = WeightedTopDownCandidateGenerator(problem) 
+        elif problem.options.synthesis_parameters.strategy == "partial":
+            self.candidate_generator = PartialTopDownCandidateGenerator(problem)
         else:
             self.candidate_generator = TopDownCandidateGenerator(problem)
 

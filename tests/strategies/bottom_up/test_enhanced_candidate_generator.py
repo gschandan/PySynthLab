@@ -2,7 +2,7 @@ import unittest
 import time
 from z3 import *
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
-from src.cegis.z3.candidate_generator.enhanced_random_candidate_generator import EnhancedRandomCandidateGenerator
+from src.cegis.z3.candidate_generator.partial_random_candidate_generator import PartialRandomCandidateGenerator
 from src.utilities.options import Options
 
 
@@ -22,7 +22,7 @@ class TestEnhancedRandomCandidateGenerator(unittest.TestCase):
         """
         self.options = Options()
         self.problem = SynthesisProblemZ3(self.problem_str, self.options)
-        self.generator = EnhancedRandomCandidateGenerator(self.problem)
+        self.generator = PartialRandomCandidateGenerator(self.problem)
 
     def generate_correct_candidate(self) -> tuple[ExprRef, str]:
         vars = [Var(i, IntSort()) for i in range(2)]

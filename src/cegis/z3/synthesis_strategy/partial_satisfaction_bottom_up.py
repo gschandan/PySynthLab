@@ -1,5 +1,5 @@
 import time
-from src.cegis.z3.candidate_generator.enhanced_random_candidate_generator import EnhancedRandomCandidateGenerator
+from src.cegis.z3.candidate_generator.partial_random_candidate_generator import PartialRandomCandidateGenerator
 from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
 from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 
@@ -7,7 +7,7 @@ from src.cegis.z3.synthesis_strategy.synthesis_strategy import SynthesisStrategy
 class PartialSatisfactionBottomUp(SynthesisStrategy):
     def __init__(self, problem: SynthesisProblemZ3):
         super().__init__(problem)
-        self.candidate_generator = EnhancedRandomCandidateGenerator(problem)
+        self.candidate_generator = PartialRandomCandidateGenerator(problem)
         self.start_time = None
 
     def execute_cegis(self) -> tuple[bool, str]:
