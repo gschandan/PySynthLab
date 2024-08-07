@@ -257,6 +257,26 @@ expression with fresh variables of the appropriate sorts.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">check_partial_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<dd><p>Check partial satisfaction of constraints by the candidate solution.</p>
+<p>This method checks each constraint individually and returns the fraction satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate</strong> (<em>ExprRef</em>) – The candidate solution to evaluate.</p></li>
+<li><p><strong>func_name</strong> (<em>str</em>) – The name of the function being synthesized.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>float</em> – The fraction of constraints satisfied by the candidate.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>score = generator.check_partial_satisfaction(candidate, ‘f’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_candidate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span></dt>
 <dd><p>Create a candidate function from an expression and argument sorts.</p>
 <p>This method creates a Z3 function by substituting variables in the candidate
@@ -272,6 +292,27 @@ expression with fresh variables of the appropriate sorts.</p>
 <dd class="field-even"><p><em>z3.ExprRef</em> – A Z3 expression representing the candidate function.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fuzzy_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<dd><p>Evaluate the candidate using fuzzy satisfaction.</p>
+<p>This method checks each constraint individually but allows for partial
+satisfaction, providing a more gradual measure of constraint satisfaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate</strong> (<em>ExprRef</em>) – The candidate solution to evaluate.</p></li>
+<li><p><strong>func_name</strong> (<em>str</em>) – The name of the function being synthesized.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>float</em> – A score between 0 and 1, where 1 indicates full satisfaction.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>score = generator.fuzzy_satisfaction(candidate, ‘f’)</p>
 </dd></dl>
 
 <dl class="py method">
@@ -330,6 +371,48 @@ candidates from the given list.</p>
 <dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A filtered list of candidate functions.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">quantitative_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<dd><p>Evaluate the candidate using quantitative satisfaction.</p>
+<p>This method measures how close the candidate is to satisfying each constraint,
+providing a more nuanced score than binary satisfaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate</strong> (<em>ExprRef</em>) – The candidate solution to evaluate.</p></li>
+<li><p><strong>func_name</strong> (<em>str</em>) – The name of the function being synthesized.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>float</em> – A score between 0 and 1, where 1 indicates full satisfaction.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>score = generator.quantitative_satisfaction(candidate, ‘f’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">unsat_core_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<dd><p>Evaluate the candidate using unsat core analysis.</p>
+<p>This method uses Z3’s unsat core providing a score and insight into how close the candidate
+is to satisfying all constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate</strong> (<em>ExprRef</em>) – The candidate solution to evaluate.</p></li>
+<li><p><strong>func_name</strong> (<em>str</em>) – The name of the function being synthesized.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>float</em> – The fraction of constraints not in the unsat core (i.e., satisfied).</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>score = generator.unsat_core_analysis(candidate, ‘f’)</p>
 </dd></dl>
 
 </dd></dl>
