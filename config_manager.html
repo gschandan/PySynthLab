@@ -7,6 +7,7 @@
   <title>ConfigManager &mdash; PySynthLab 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
@@ -22,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="SynthesisProblem" href="synthesis_problem.html" />
-    <link rel="prev" title="Welcome to PySynthLab’s documentation!" href="index.html" /> 
+    <link rel="prev" title="API Reference" href="api_reference.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,54 +47,105 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ConfigManager</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#configmanager-class">ConfigManager Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.camel_to_snake"><code class="docutils literal notranslate"><span class="pre">ConfigManager.camel_to_snake()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options"><code class="docutils literal notranslate"><span class="pre">ConfigManager.generate_argparse_from_options()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.get_config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get_config()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.get_logger"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get_logger()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.load_yaml"><code class="docutils literal notranslate"><span class="pre">ConfigManager.load_yaml()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.logger"><code class="docutils literal notranslate"><span class="pre">ConfigManager.logger</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.merge_config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.merge_config()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager.setup_logger"><code class="docutils literal notranslate"><span class="pre">ConfigManager.setup_logger()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#options-class">Options Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.Options.input_source"><code class="docutils literal notranslate"><span class="pre">Options.input_source</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#loggingoptions-class">LoggingOptions Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.level"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.level</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.file"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.file</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.LoggingOptions.collect_metrics"><code class="docutils literal notranslate"><span class="pre">LoggingOptions.collect_metrics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#synthesisparameters-class">SynthesisParameters Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#solveroptions-class">SolverOptions Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.SolverOptions.name"><code class="docutils literal notranslate"><span class="pre">SolverOptions.name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.utilities.options.SolverOptions.timeout"><code class="docutils literal notranslate"><span class="pre">SolverOptions.timeout</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="candidate_generator.html">Candidate Generators</a></li>
 </ul>
 
         </div>
@@ -110,6 +162,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API Reference</a></li>
       <li class="breadcrumb-item active">ConfigManager</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/config_manager.rst.txt" rel="nofollow"> View page source</a>
@@ -126,47 +179,53 @@
 <h2>ConfigManager Class<a class="headerlink" href="#configmanager-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.config_manager.</span></span><span class="sig-name descname"><span class="pre">ConfigManager</span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.config_manager.</span></span><span class="sig-name descname"><span class="pre">ConfigManager</span></span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.camel_to_snake">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camel_to_snake</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.camel_to_snake" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camel_to_snake</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.camel_to_snake"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.camel_to_snake" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.generate_argparse_from_options">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_argparse_from_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_argparse_from_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.generate_argparse_from_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.generate_argparse_from_options" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.get_config">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.get_config" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.get_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.get_config" title="Link to this definition"></a></dt>
 <dd><p>Get the final configuration by merging defaults, YAML config, and CLI args.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Options</em> – Final merged configuration as Options dataclass.</p>
+<dd class="field-odd"><p>Final merged configuration as Options dataclass.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options">Options</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.get_logger">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.get_logger" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.get_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.get_logger" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.load_yaml">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.load_yaml" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.load_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.load_yaml" title="Link to this definition"></a></dt>
 <dd><p>Load configuration from a YAML file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Path to the YAML configuration file.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Dict[str, Any]</em> – Configuration as a dictionary.</p>
+<dd class="field-even"><p>Configuration as a dictionary.</p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
 <li><p><strong>FileNotFoundError</strong> – If the config file doesn’t exist.</p></li>
 <li><p><strong>yaml.YAMLError</strong> – If there’s an error parsing the YAML file.</p></li>
 </ul>
@@ -181,7 +240,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.merge_config">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cli_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.merge_config" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cli_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.merge_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.merge_config" title="Link to this definition"></a></dt>
 <dd><p>Merge default options with any user defined YAML config and CLI arguments.
 CLI arguments will take priority over any user defined config in the user_config.yaml file.</p>
 <dl class="field-list simple">
@@ -193,14 +252,17 @@ CLI arguments will take priority over any user defined config in the user_config
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Options</em> – Merged configuration as Options dataclass.</p>
+<dd class="field-even"><p>Merged configuration as Options dataclass.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.utilities.options.Options" title="src.utilities.options.Options">Options</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.utilities.config_manager.ConfigManager.setup_logger">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.setup_logger" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/config_manager.html#ConfigManager.setup_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.config_manager.ConfigManager.setup_logger" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -210,7 +272,7 @@ CLI arguments will take priority over any user defined config in the user_config
 <h2>Options Class<a class="headerlink" href="#options-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.Options">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logging:</span> <span class="pre">~src.utilities.options.LoggingOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters:</span> <span class="pre">~src.utilities.options.SynthesisParameters</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver:</span> <span class="pre">~src.utilities.options.SolverOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_source:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'stdin'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.Options" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logging:</span> <span class="pre">~src.utilities.options.LoggingOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_parameters:</span> <span class="pre">~src.utilities.options.SynthesisParameters</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver:</span> <span class="pre">~src.utilities.options.SolverOptions</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_source:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'stdin'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/options.html#Options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.options.Options" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Options for configuring the Synthesis process.</p>
 <dl class="py attribute">
@@ -236,7 +298,7 @@ CLI arguments will take priority over any user defined config in the user_config
 <h2>LoggingOptions Class<a class="headerlink" href="#loggingoptions-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.LoggingOptions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-08-08</span> <span class="pre">19:20:23.335689.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-08-10</span> <span class="pre">19:38:16.630997.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/options.html#LoggingOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Options for configuring logging and metrics in the Synthesis process.</p>
 <dl class="py attribute">
@@ -283,7 +345,7 @@ CLI arguments will take priority over any user defined config in the user_config
 <h2>SynthesisParameters Class<a class="headerlink" href="#synthesisparameters-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.SynthesisParameters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">SynthesisParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'random_enumerative'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'bottom_up'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_complexity:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1234</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomise_each_iteration:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_candidates_at_each_depth:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_const:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">-2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_const:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation_costs:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_weight:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_multiplier:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_grammar:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list[str</span> <span class="pre">|</span> <span class="pre">tuple]]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_weighted_generator:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.SynthesisParameters" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">SynthesisParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'random_enumerative'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'bottom_up'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_complexity:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1234</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomise_each_iteration:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_candidates_at_each_depth:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_const:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">-2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_const:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation_costs:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_weight:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_multiplier:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_grammar:</span> <span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list[str</span> <span class="pre">|</span> <span class="pre">tuple]]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_weighted_generator:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/options.html#SynthesisParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.options.SynthesisParameters" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Options for configuring the Synthesis process.</p>
 <dl>
@@ -324,7 +386,7 @@ timeout (int): Global timeout for the synthesis process (in seconds). Default is
 <h2>SolverOptions Class<a class="headerlink" href="#solveroptions-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.SolverOptions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">SolverOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'z3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.utilities.options.SolverOptions" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">SolverOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'z3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/options.html#SolverOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.options.SolverOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Options for configuring the SMT solver.</p>
 <dl class="py attribute">
@@ -362,7 +424,7 @@ timeout (int): Global timeout for the synthesis process (in seconds). Default is
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to PySynthLab’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="synthesis_problem.html" class="btn btn-neutral float-right" title="SynthesisProblem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

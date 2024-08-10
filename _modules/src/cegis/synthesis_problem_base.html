@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.cegis.synthesis_problem_base &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.cegis.synthesis_problem_base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.cegis.synthesis_problem_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">pyparsing</span>
+
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src</span> <span class="kn">import</span> <span class="n">symbol_table_builder</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.ast</span> <span class="kn">import</span> <span class="n">Program</span><span class="p">,</span> <span class="n">CommandKind</span><span class="p">,</span> <span class="n">Term</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.resolution</span> <span class="kn">import</span> <span class="n">FunctionDescriptor</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.v1.parser</span> <span class="kn">import</span> <span class="n">SygusV1Parser</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.v2.parser</span> <span class="kn">import</span> <span class="n">SygusV2Parser</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.v2.printer</span> <span class="kn">import</span> <span class="n">SygusV2ASTPrinter</span>
+<span class="kn">from</span> <span class="nn">src.utilities.cancellation_token</span> <span class="kn">import</span> <span class="n">GlobalCancellationToken</span>
+<span class="kn">from</span> <span class="nn">src.utilities.options</span> <span class="kn">import</span> <span class="n">Options</span><span class="p">,</span> <span class="n">LoggingOptions</span>
+<span class="kn">from</span> <span class="nn">src.utilities.synthesis_metrics</span> <span class="kn">import</span> <span class="n">Metrics</span>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseSynthesisProblem</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="n">pyparsing</span><span class="o">.</span><span class="n">ParserElement</span><span class="o">.</span><span class="n">enablePackrat</span><span class="p">()</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">Options</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">metrics</span><span class="p">:</span> <span class="n">Metrics</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BaseSynthesisProblem.__init__">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span> <span class="ow">or</span> <span class="n">Options</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_problem</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbol_table</span> <span class="o">=</span> <span class="n">symbol_table_builder</span><span class="o">.</span><span class="n">SymbolTableBuilder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">printer</span> <span class="o">=</span> <span class="n">SygusV2ASTPrinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol_table</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smt_problem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_sygus_to_smt</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">commands</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">command_kind</span> <span class="o">==</span> <span class="n">CommandKind</span><span class="o">.</span><span class="n">CONSTRAINT</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="n">Metrics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">collect_metrics</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.setup_logger">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.setup_logger">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setup_logger</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Setup the logger for the SynthesisProblem class.</span>
+
+<span class="sd">        This method configures the logging system for the SynthesisProblem class,</span>
+<span class="sd">        setting up both file and console handlers with appropriate log levels and formats.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            options (Options, optional): The options object containing logging configurations. Defaults to None.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (&gt;= (max2 a b) a))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; options = Options(logging=LoggingOptions(file=&#39;synthesis.log&#39;, level=&quot;DEBUG&quot;))</span>
+<span class="sd">            &gt;&gt;&gt; problem = BaseSynthesisProblem(problem_str, options)</span>
+<span class="sd">            &gt;&gt;&gt; problem.setup_logger(options)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">log_level</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">level</span> <span class="k">if</span> <span class="n">options</span> <span class="k">else</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+
+        <span class="n">project_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">&quot;logs&quot;</span>
+        <span class="n">log_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">and</span> <span class="n">options</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="n">log_file</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log_file</span> <span class="o">=</span> <span class="n">log_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;config_</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">_%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.log&quot;</span>
+
+        <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+        <span class="n">console_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+
+        <span class="n">file_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+        <span class="n">console_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">console_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console_handler</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.parse_problem">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.parse_problem">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_problem</span><span class="p">(</span><span class="n">problem</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">SygusV1Parser</span><span class="p">,</span> <span class="n">SygusV2Parser</span><span class="p">],</span> <span class="n">Program</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to parse the problem string using SygusV1Parser and SygusV2Parser.</span>
+
+<span class="sd">        This method tries to parse the input problem using SygusV1Parser first,</span>
+<span class="sd">        and if that fails, it attempts to parse with SygusV2Parser.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            problem (str): The input problem string in SyGuS format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing the successful parser and the parsed problem.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ParseException: If both parsers fail to parse the problem.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; parser, parsed_problem = BaseSynthesisProblem.parse_problem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; print(type(parser))</span>
+<span class="sd">            &lt;class &#39;src.helpers.parser.src.v1.parser.SygusV1Parser&#39;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; print(type(parsed_problem))</span>
+<span class="sd">            &lt;class &#39;src.helpers.parser.src.ast.Program&#39;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parser</span> <span class="o">=</span> <span class="n">SygusV1Parser</span><span class="p">()</span>
+            <span class="n">parsed_problem</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">parsed_problem</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">parser</span> <span class="o">=</span> <span class="n">SygusV2Parser</span><span class="p">()</span>
+                <span class="n">parsed_problem</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">parsed_problem</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse problem: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.convert_sygus_to_smt">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.convert_sygus_to_smt">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert_sygus_to_smt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the synthesis problem from SyGuS format to SMT-LIB format.</span>
+
+<span class="sd">        This method parses the input SyGuS problem, transforms it into SMT-LIB format,</span>
+<span class="sd">        and returns the result as a string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The synthesis problem in SMT-LIB format.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (&gt;= (max2 a b) a))\\n(check-synth)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.convert_sygus_to_smt())</span>
+<span class="sd">            (set-logic LIA)</span>
+<span class="sd">            (declare-fun max2 (Int Int) Int)</span>
+<span class="sd">            (declare-var a Int)</span>
+<span class="sd">            (declare-var b Int)</span>
+<span class="sd">            (assert (&gt;= (max2 a b) a))</span>
+<span class="sd">            (check-sat)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">i_expr</span> <span class="o">=</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">QuotedString</span><span class="p">(</span><span class="n">quoteChar</span><span class="o">=</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">QuotedString</span><span class="p">(</span><span class="n">quoteChar</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">unquoteResults</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">s_expr</span> <span class="o">=</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">nestedExpr</span><span class="p">(</span><span class="n">opener</span><span class="o">=</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="n">closer</span><span class="o">=</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">ignoreExpr</span><span class="o">=</span><span class="n">i_expr</span><span class="p">)</span>
+        <span class="n">s_expr</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">restOfLine</span><span class="p">)</span>
+
+        <span class="n">sygus_parser</span> <span class="o">=</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">ZeroOrMore</span><span class="p">(</span><span class="n">s_expr</span><span class="p">)</span>
+        <span class="n">sygus_ast</span> <span class="o">=</span> <span class="n">sygus_parser</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_problem</span><span class="p">,</span> <span class="n">parseAll</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">asList</span><span class="p">()</span>
+
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">constraint_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">statement</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sygus_ast</span><span class="p">):</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">statement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constraint&#39;</span><span class="p">:</span>
+                <span class="n">constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statement</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">constraint_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">statement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;check-synth&#39;</span><span class="p">:</span>
+                <span class="n">statement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;check-sat&#39;</span>
+            <span class="k">elif</span> <span class="n">statement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;synth-fun&#39;</span><span class="p">:</span>
+                <span class="n">statement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;declare-fun&#39;</span>
+                <span class="n">statement</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">var_decl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">var_decl</span> <span class="ow">in</span> <span class="n">statement</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">constraints</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">constraints</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">sygus_ast</span><span class="p">[</span><span class="n">constraint_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;assert&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;and&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">constraints</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">constraint_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="k">del</span> <span class="n">sygus_ast</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sygus_ast</span><span class="p">[</span><span class="n">constraint_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;assert&#39;</span><span class="p">,</span> <span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="k">def</span> <span class="nf">serialise</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">line</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">serialise</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">expression</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">line</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">serialise</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span> <span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">sygus_ast</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.__str__">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.__str__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_smt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the string representation of the synthesis problem.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            as_smt (bool, optional): If True, return the problem in SMT-LIB format. Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The string representation of the problem.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem)</span>
+<span class="sd">            (set-logic LIA)</span>
+<span class="sd">            (synth-fun max2 ((x Int) (y Int)) Int ...)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.__str__(as_smt=True))</span>
+<span class="sd">            (set-logic LIA)</span>
+<span class="sd">            (declare-fun max2 (Int Int) Int)</span>
+<span class="sd">            ...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">as_smt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">smt_problem</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol_table</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.info_sygus">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.info_sygus">[docs]</a>
+    <span class="k">def</span> <span class="nf">info_sygus</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Log the string representation of the synthesis problem in SyGuS format.</span>
+
+<span class="sd">        This method logs the SyGuS representation of the synthesis problem.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.info_sygus()</span>
+<span class="sd">            # Output in log:</span>
+<span class="sd">            # (set-logic LIA)</span>
+<span class="sd">            # (synth-fun max2 ((x Int) (y Int)) Int ...)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.info_smt">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.info_smt">[docs]</a>
+    <span class="k">def</span> <span class="nf">info_smt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Log the string representation of the synthesis problem in SMT-LIB format.</span>
+
+<span class="sd">        This method logs the SMT-LIB representation of the synthesis problem.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.info_smt()</span>
+<span class="sd">            # Output in log:</span>
+<span class="sd">            # (set-logic LIA)</span>
+<span class="sd">            # (declare-fun max2 (Int Int) Int)</span>
+<span class="sd">            # ...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(</span><span class="n">as_smt</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.get_logic">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_logic">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the logic of the synthesis problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The logic name.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.get_logic())</span>
+<span class="sd">            LIA</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol_table</span><span class="o">.</span><span class="n">logic_name</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.get_synth_funcs">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_synth_funcs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_synth_funcs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FunctionDescriptor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the synthesis functions of the problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, FunctionDescriptor]: A dictionary mapping function names to their declaration commands.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synth_funcs = synthesis_problem.get_synth_funcs()</span>
+<span class="sd">            &gt;&gt;&gt; print(list(synth_funcs.keys()))</span>
+<span class="sd">            [&#39;max2&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; print(synth_funcs[&#39;max2&#39;].argument_sorts)</span>
+<span class="sd">            [SortDescriptor(identifier=Identifier(symbol=&#39;Int&#39;)), SortDescriptor(identifier=Identifier(symbol=&#39;Int&#39;))]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol_table</span><span class="o">.</span><span class="n">synth_functions</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.get_predefined_funcs">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_predefined_funcs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_predefined_funcs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FunctionDescriptor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the predefined functions of the problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, FunctionDescriptor]: A dictionary mapping function names to their declaration commands.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (&lt;= x y) x y))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; predefined_funcs = synthesis_problem.get_predefined_funcs()</span>
+<span class="sd">            &gt;&gt;&gt; print(list(predefined_funcs.keys()))</span>
+<span class="sd">            [&#39;min2&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; print(predefined_funcs[&#39;min2&#39;].function_body)</span>
+<span class="sd">            FunctionApplicationTerm(function_identifier=Identifier(symbol=&#39;ite&#39;), arguments=[...])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol_table</span><span class="o">.</span><span class="n">user_defined_functions</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.get_var_symbols">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_var_symbols">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_var_symbols</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the variable names decalred by the problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: A list of variable symbols.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(declare-var x Int)\\n(declare-var y Int)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.get_var_symbols())</span>
+<span class="sd">            [&#39;x&#39;, &#39;y&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">symbol</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">commands</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">command_kind</span> <span class="o">==</span> <span class="n">CommandKind</span><span class="o">.</span><span class="n">DECLARE_VAR</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.get_function_symbols">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_function_symbols">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_function_symbols</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the function symbols declared by the problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: A list of function symbols.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(define-fun f ((x Int)) Int (+ x 1))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = BaseSynthesisProblem(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.get_function_symbols())</span>
+<span class="sd">            [&#39;f&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">function_name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">commands</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">command_kind</span> <span class="o">==</span> <span class="n">CommandKind</span><span class="o">.</span><span class="n">DEFINE_FUN</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.initialise_variables">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.initialise_variables">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">initialise_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.initialise_synth_functions">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.initialise_synth_functions">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">initialise_synth_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.initialise_predefined_functions">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.initialise_predefined_functions">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">initialise_predefined_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.parse_constraints">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.parse_constraints">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">parse_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.parse_term">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.parse_term">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">parse_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="n">Term</span><span class="p">,</span> <span class="n">local_variables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BaseSynthesisProblem.substitute_constraints">
+<a class="viewcode-back" href="../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.substitute_constraints">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">substitute_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">functions_to_replace</span><span class="p">,</span> <span class="n">replacement_expressions</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+</div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

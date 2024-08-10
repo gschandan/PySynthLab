@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.cegis.z3.synthesis_strategy.synthesis_strategy &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.cegis.z3.synthesis_strategy.synthesis_strategy</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.cegis.z3.synthesis_strategy.synthesis_strategy</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="n">ExprRef</span>
+
+<span class="kn">from</span> <span class="nn">src.cegis.z3.candidate_generator.candidate_generator_base</span> <span class="kn">import</span> <span class="n">CandidateGenerator</span>
+<span class="kn">from</span> <span class="nn">src.cegis.z3.candidate_generator.random_candidate_generator</span> <span class="kn">import</span> <span class="n">RandomCandidateGenerator</span>
+<span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblemZ3</span>
+<span class="kn">from</span> <span class="nn">src.utilities.cancellation_token</span> <span class="kn">import</span> <span class="n">GlobalCancellationToken</span>
+
+
+<div class="viewcode-block" id="SynthesisStrategy">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy">[docs]</a>
+<span class="k">class</span> <span class="nc">SynthesisStrategy</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An abstract base class for implementing various synthesis strategies.</span>
+
+<span class="sd">    This class provides a framework for implementing different approaches to program synthesis,</span>
+<span class="sd">    particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        problem (SynthesisProblemZ3): The synthesis problem to be solved.</span>
+<span class="sd">        solution_found (bool): Flag indicating whether a solution has been found.</span>
+<span class="sd">        candidate_generator (CandidateGenerator): The generator used to produce candidate solutions.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            class MyCustomStrategy(SynthesisStrategy):</span>
+<span class="sd">                def execute_cegis(self):</span>
+<span class="sd">                    max_iterations = 100</span>
+<span class="sd">                    for iteration in range(max_iterations):</span>
+<span class="sd">                        candidates = self.generate_candidates()</span>
+<span class="sd">                        for candidate, func_name in candidates:</span>
+<span class="sd">                            if self.test_candidates([func_name], [candidate]):</span>
+<span class="sd">                                self.set_solution_found()</span>
+<span class="sd">                                return True, candidate</span>
+<span class="sd">                    return False, &quot;No solution found within max iterations.&quot;</span>
+
+<span class="sd">    Usage:</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            problem = SynthesisProblem(...)</span>
+<span class="sd">            strategy = MyCustomStrategy(problem)</span>
+<span class="sd">            strategy.execute_cegis()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthesisStrategy.__init__">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">:</span> <span class="s1">&#39;SynthesisProblemZ3&#39;</span><span class="p">,</span> <span class="n">candidate_generator</span><span class="p">:</span> <span class="n">CandidateGenerator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the SynthesisStrategy.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            problem (SynthesisProblemZ3): The synthesis problem to be solved.</span>
+<span class="sd">            candidate_generator (CandidateGenerator, optional): A custom candidate generator. If None, a default RandomCandidateGenerator will be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">metrics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">candidate_generator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">candidate_generator</span> <span class="o">=</span> <span class="n">RandomCandidateGenerator</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">candidate_generator</span> <span class="o">=</span> <span class="n">candidate_generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;smt.macro_finder&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.generate_candidates">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate candidate solutions using the candidate generator.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[tuple[ExprRef, str]]: A list of tuples, each containing a candidate solution</span>
+<span class="sd">            (as a Z3 expression) and its string representation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_generator</span><span class="o">.</span><span class="n">generate_candidates</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.execute_cegis">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">execute_cegis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the CEGIS loop.</span>
+
+<span class="sd">        This method should implement the core logic of the synthesis strategy.</span>
+<span class="sd">        It typically involves generating candidates, testing them, and refining</span>
+<span class="sd">        the search based on counterexamples until a solution is found or</span>
+<span class="sd">        a termination condition is met.</span>
+
+<span class="sd">        This is an abstract method that must be implemented by subclasses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.set_solution_found">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_solution_found</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mark that a solution has been found.</span>
+
+<span class="sd">        This method sets the solution_found flag to True, indicating that</span>
+<span class="sd">        the synthesis process has successfully found a solution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_found</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.set_candidate_generator">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_candidate_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">:</span> <span class="n">CandidateGenerator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a new candidate generator.</span>
+
+<span class="sd">        This method allows changing the candidate generator during the synthesis process,</span>
+<span class="sd">        which can be useful for implementing adaptive or other custom strategies.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            generator (CandidateGenerator): The new candidate generator to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_generator</span> <span class="o">=</span> <span class="n">generator</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.test_candidates">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">candidate_functions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a set of candidate functions against the synthesis problem.</span>
+
+<span class="sd">        This method checks if the given candidate functions satisfy all constraints</span>
+<span class="sd">        and pass stored counterexamples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           func_strs (List[str]): List of function names corresponding to the candidates.</span>
+<span class="sd">           candidate_functions (List[z3.ExprRef]): List of candidate functions as Z3 expressions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           bool: True if the candidates satisfy all constraints, False otherwise.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">           ValueError: If the number of candidate functions doesn&#39;t match the number of synthesis functions.</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+        <span class="n">synth_func_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; candidate_functions </span><span class="si">{</span><span class="n">candidate_functions</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">func_strs</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">synth_func_names</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of candidate functions doesn&#39;t match number of synthesis functions&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">synth_func_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func_strs</span><span class="p">,</span> <span class="n">candidate_functions</span><span class="p">,</span> <span class="n">synth_func_names</span><span class="p">):</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_counterexample</span><span class="p">(</span><span class="n">synth_func_name</span><span class="p">,</span> <span class="n">candidate</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;All individual counterexample checks passed&quot;</span><span class="p">)</span>
+
+        <span class="n">candidates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">candidate_functions</span><span class="p">,</span> <span class="n">synth_func_names</span><span class="p">))</span>
+        <span class="n">new_counterexamples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_counterexample</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_counterexamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">ce</span> <span class="ow">in</span> <span class="n">new_counterexamples</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New counterexample found for </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ce</span><span class="si">}</span><span class="s2"> Candidates: </span><span class="si">{</span><span class="n">candidates</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No new counterexamples generated&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_candidates</span><span class="p">(</span><span class="n">candidate_functions</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Verification failed for guess </span><span class="si">{</span><span class="s1">&#39;; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func_strs</span><span class="p">)</span><span class="si">}</span><span class="s2">. Candidates violate constraints.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No counterexample found! Guess(es) should be correct: </span><span class="si">{</span><span class="s1">&#39;; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">func_strs</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.check_counterexample">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_counterexample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a candidate satisfies all stored counterexamples for a given function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func_name (str): Name of the function being synthesized.</span>
+<span class="sd">            candidate (z3.ExprRef): The candidate function to check.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the candidate satisfies all counterexamples, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">stored_func_name</span><span class="p">,</span> <span class="n">ce</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">counterexamples</span><span class="p">:</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">stored_func_name</span> <span class="o">==</span> <span class="n">func_name</span><span class="p">:</span>
+                <span class="n">synth_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
+
+                <span class="n">substituted_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_constraints</span><span class="p">,</span>
+                    <span class="p">[</span><span class="n">synth_func</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">candidate</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ce</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">var</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">substituted_constraints</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter_example_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">unsat</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.generate_counterexample">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_counterexample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find a potential counterexample for a set of candidates, if one can be found.</span>
+
+<span class="sd">        This method attempts to find input values that violate the problem constraints</span>
+<span class="sd">        for the given candidate functions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidates (List[Tuple[z3.ExprRef, str]]): List of tuples containing candidate functions and their names.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, Dict[str, Any]] | None: A dictionary of counterexamples for each function,</span>
+<span class="sd">            or None if no counterexample is found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">substituted_neg_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_negated_constraints</span><span class="p">,</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+            <span class="p">[</span><span class="n">candidate</span> <span class="k">for</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">substituted_neg_constraints</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Negated constraints: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_negated_constraints</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Substituted negated constraints: </span><span class="si">{</span><span class="n">substituted_neg_constraints</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;generate_counterexample solver check result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">sat</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+            <span class="n">counterexamples</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">synth_func_name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="n">variable_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">variable_mapping_dict</span><span class="p">[</span><span class="n">synth_func_name</span><span class="p">]</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">variable_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="n">ce</span> <span class="o">=</span> <span class="p">{</span><span class="n">arg</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">model_completion</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Counterexample for </span><span class="si">{</span><span class="n">synth_func_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ce</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">counterexamples</span><span class="p">[</span><span class="n">synth_func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ce</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">counterexamples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">synth_func_name</span><span class="p">,</span> <span class="n">ce</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">counterexamples</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No counterexample found for candidates </span><span class="si">{</span><span class="n">candidates</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="SynthesisStrategy.verify_candidates">
+<a class="viewcode-back" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">verify_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verify if a set of candidates satisfies all constraints.</span>
+
+<span class="sd">        This method performs a final verification step to ensure that the candidate functions</span>
+<span class="sd">        satisfy all constraints of the synthesis problem.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           candidates (List[z3.ExprRef]): List of candidate functions to verify.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           bool: True if the candidates satisfy all constraints, False otherwise.</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">verification_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">substituted_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_constraints</span><span class="p">,</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+            <span class="n">candidates</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">verification_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">substituted_constraints</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">verification_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">sat</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

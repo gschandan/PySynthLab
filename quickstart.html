@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &mdash; PySynthLab 0.1.0 documentation</title>
+  <title>Quickstart Guide &mdash; PySynthLab 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
-    
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -20,10 +20,10 @@
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
-    <script src="_static/searchtools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api_reference.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,7 +38,7 @@
             PySynthLab
           </a>
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -46,7 +46,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to PySynthLab</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#key-features">Key Features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
@@ -58,15 +58,15 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installation-steps">Installation Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#configuration">Configuration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart.html#command-line-options">Command Line Options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart.html#yaml-configuration">YAML Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml-configuration">YAML Configuration</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-tests">Running Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-benchmarks">Running Benchmarks</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
@@ -162,8 +162,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Search</li>
+      <li class="breadcrumb-item active">Quickstart Guide</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -171,22 +172,123 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search functionality.
-    </p>
-  </div>
-  </noscript>
+  <section id="quickstart-guide">
+<h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Link to this heading"></a></h1>
+<p>This guide will help you get started with PySynthLab quickly.</p>
+<section id="running-the-synthesiser">
+<h2>Running the Synthesiser<a class="headerlink" href="#running-the-synthesiser" title="Link to this heading"></a></h2>
+<p>You can run the Synthesiser by providing a path to the SyGuS input file or by providing the input problem via stdin.</p>
+<ol class="arabic">
+<li><p>Using a SyGuS input file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>problems/debugging/small.sl
+</pre></div>
+</div>
+<p>If you’re using a virtual environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./venv/bin/python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>problems/debugging/small.sl
+</pre></div>
+</div>
+</li>
+<li><p>Providing input via STDIN:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s">(set-logic LIA)</span>
+<span class="s">(synth-fun max2 ((a Int) (b Int)) Int)</span>
+<span class="s">(declare-var x Int)</span>
+<span class="s">(declare-var y Int)</span>
+<span class="s">(constraint (&gt;= (max2 x y) x))</span>
+<span class="s">(constraint (&gt;= (max2 x y) y))</span>
+<span class="s">(constraint (or (= x (max2 x y)) (= y (max2 x y))))</span>
+<span class="s">(constraint (= (max2 x x) x))</span>
+<span class="s">(declare-var a Int)</span>
+<span class="s">(declare-var b Int)</span>
+<span class="s">(constraint (=&gt; (and (&gt;= a b) (&gt;= b a)) (= (max2 a b) a)))</span>
+<span class="s">(constraint (=&gt; (and (&gt;= b a) (&gt;= a b)) (= (max2 b a) b)))</span>
+<span class="s">(check-synth)</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>If you’re using a virtual environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./venv/bin/python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s"># (same input as above)</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>PySynthLab supports configuration through command-line arguments, YAML files, and default options.</p>
+<section id="command-line-options">
+<h3>Command Line Options<a class="headerlink" href="#command-line-options" title="Link to this heading"></a></h3>
+<p>Here are some key command-line options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--strategy</span></code>: Choose the synthesis strategy (fast_enumerative, random_search_bottom_up, random_search_top_down)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--candidate-generation</span></code>: Candidate generation strategy (bottom_up, top_down, fast_enumerative)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--max-iterations</span></code>: Maximum number of iterations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--max-depth</span></code>: Maximum depth of generated expressions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--logging-level</span></code>: Set logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)</p></li>
+</ul>
+<p>For a complete list of options, run:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+<section id="yaml-configuration">
+<h3>YAML Configuration<a class="headerlink" href="#yaml-configuration" title="Link to this heading"></a></h3>
+<p>You can also use a YAML file for configuration. Edit the <code class="docutils literal notranslate"><span class="pre">user_config.yaml</span></code> in <code class="docutils literal notranslate"><span class="pre">src/config</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">logging</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INFO</span>
+<span class="w">  </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logs/synthesis.log</span>
 
-  
-  <div id="search-results">
-  
-  </div>
+<span class="nt">synthesis_parameters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fast_enumerative</span>
+<span class="w">  </span><span class="nt">max_iterations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">max_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="nt">solver</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">z3</span>
+<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30000</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h2>
+<p>To run general tests:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;test_*.py&quot;</span>
+</pre></div>
+</div>
+<p>To run specific debugging tests:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>tests.run_problem_tests
+</pre></div>
+</div>
+</section>
+<section id="running-benchmarks">
+<h2>Running Benchmarks<a class="headerlink" href="#running-benchmarks" title="Link to this heading"></a></h2>
+<p>To run benchmarks:</p>
+<ol class="arabic">
+<li><p>Edit the file <code class="docutils literal notranslate"><span class="pre">src/benchmark/run_all_benchmarks.py</span></code> with the desired configuration(s) and point it at the relevant folder of problems.</p></li>
+<li><p>Run the benchmarks:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./venv/bin/python<span class="w"> </span>src/benchmark/run_all_benchmarks.py
+</pre></div>
+</div>
+</li>
+</ol>
+<p>For more detailed information, please refer to the full documentation.</p>
+</section>
+</section>
+
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
@@ -208,14 +310,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-  <script>
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script id="searchindexloader"></script>
-   
-
+  </script> 
 
 </body>
 </html>

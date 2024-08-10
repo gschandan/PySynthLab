@@ -7,6 +7,7 @@
   <title>Candidate Generators &mdash; PySynthLab 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
@@ -45,23 +46,103 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="config_manager.html">ConfigManager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Candidate Generators</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#getting-started">Getting Started</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -80,6 +161,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API Reference</a></li>
       <li class="breadcrumb-item active">Candidate Generators</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/candidate_generator.rst.txt" rel="nofollow"> View page source</a>
@@ -96,7 +178,7 @@
 <h2>CandidateGenerator Base Class<a class="headerlink" href="#candidategenerator-base-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.candidate_generator_base.</span></span><span class="sig-name descname"><span class="pre">CandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.candidate_generator_base.</span></span><span class="sig-name descname"><span class="pre">CandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Abstract base class for candidate function generators.</p>
 <p>This class defines the interface for generating and pruning candidate functions
@@ -107,7 +189,7 @@ in the context of program synthesis.</p>
 <dd><p>The synthesis problem instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SynthesisProblemZ3</p>
+<dd class="field-odd"><p><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">SynthesisProblemZ3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -158,32 +240,35 @@ in the context of program synthesis.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize the CandidateGenerator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>problem</strong> (<em>SynthesisProblemZ3</em>) – The synthesis problem instance.</p>
+<dd class="field-odd"><p><strong>problem</strong> (<a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><em>SynthesisProblemZ3</em></a>) – The synthesis problem instance.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates" title="Link to this definition"></a></dt>
 <dd><p>Generate candidate functions.</p>
 <p>This method should be implemented by subclasses to generate a list of
 candidate functions for the synthesis problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A list of tuples, where each tuple contains
+<dd class="field-odd"><p>A list of tuples, where each tuple contains
 a Z3 expression representing a candidate function and its string representation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates" title="Link to this definition"></a></dt>
 <dd><p>Prune candidate functions.</p>
 <p>This method should be implemented by subclasses to filter out unsuitable
 candidates from the given list.</p>
@@ -192,42 +277,51 @@ candidates from the given list.</p>
 <dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of candidate functions to prune.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A filtered list of candidate functions.</p>
+<dd class="field-even"><p>A filtered list of candidate functions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity">
-<span class="sig-name descname"><span class="pre">op_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">op_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.op_complexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity" title="Link to this definition"></a></dt>
 <dd><p>Get the complexity cost of an operation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>op</strong> (<em>str</em>) – The operation name.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>int</em> – The complexity cost of the operation, or 0 if not defined.</p>
+<dd class="field-even"><p>The complexity cost of the operation, or 0 if not defined.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts">
-<span class="sig-name descname"><span class="pre">get_arg_sorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_arg_sorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.get_arg_sorts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts" title="Link to this definition"></a></dt>
 <dd><p>Get the argument sorts (types) for a given function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>func_name</strong> (<em>str</em>) – The name of the function.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[z3.SortRef]</em> – A list of Z3 sorts representing the argument types.</p>
+<dd class="field-even"><p>A list of Z3 sorts representing the argument types.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[z3.SortRef]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_candidate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_candidate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.create_candidate_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function" title="Link to this definition"></a></dt>
 <dd><p>Create a candidate function from an expression and argument sorts.</p>
 <p>This method creates a Z3 function by substituting variables in the candidate
 expression with fresh variables of the appropriate sorts.</p>
@@ -239,25 +333,28 @@ expression with fresh variables of the appropriate sorts.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>z3.ExprRef</em> – A Z3 expression representing the candidate function.</p>
+<dd class="field-even"><p>A Z3 expression representing the candidate function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>z3.ExprRef</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Initialize the CandidateGenerator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>problem</strong> (<em>SynthesisProblemZ3</em>) – The synthesis problem instance.</p>
+<dd class="field-odd"><p><strong>problem</strong> (<a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><em>SynthesisProblemZ3</em></a>) – The synthesis problem instance.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">check_partial_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">check_partial_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.check_partial_satisfaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Check partial satisfaction of constraints by the candidate solution.</p>
 <p>This method checks each constraint individually and returns the fraction satisfied.</p>
 <dl class="field-list simple">
@@ -268,16 +365,21 @@ expression with fresh variables of the appropriate sorts.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>float</em> – The fraction of constraints satisfied by the candidate.</p>
+<dd class="field-even"><p>The fraction of constraints satisfied by the candidate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>score = generator.check_partial_satisfaction(candidate, ‘f’)</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_candidate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_candidate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.create_candidate_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Create a candidate function from an expression and argument sorts.</p>
 <p>This method creates a Z3 function by substituting variables in the candidate
 expression with fresh variables of the appropriate sorts.</p>
@@ -289,14 +391,17 @@ expression with fresh variables of the appropriate sorts.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>z3.ExprRef</em> – A Z3 expression representing the candidate function.</p>
+<dd class="field-even"><p>A Z3 expression representing the candidate function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>z3.ExprRef</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">fuzzy_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">fuzzy_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.fuzzy_satisfaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Evaluate the candidate using fuzzy satisfaction.</p>
 <p>This method checks each constraint individually but allows for partial
 satisfaction, providing a more gradual measure of constraint satisfaction.</p>
@@ -308,58 +413,72 @@ satisfaction, providing a more gradual measure of constraint satisfaction.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>float</em> – A score between 0 and 1, where 1 indicates full satisfaction.</p>
+<dd class="field-even"><p>A score between 0 and 1, where 1 indicates full satisfaction.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>score = generator.fuzzy_satisfaction(candidate, ‘f’)</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidate functions.</p>
 <p>This method should be implemented by subclasses to generate a list of
 candidate functions for the synthesis problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A list of tuples, where each tuple contains
+<dd class="field-odd"><p>A list of tuples, where each tuple contains
 a Z3 expression representing a candidate function and its string representation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_arg_sorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">get_arg_sorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.get_arg_sorts"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Get the argument sorts (types) for a given function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>func_name</strong> (<em>str</em>) – The name of the function.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[z3.SortRef]</em> – A list of Z3 sorts representing the argument types.</p>
+<dd class="field-even"><p>A list of Z3 sorts representing the argument types.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[z3.SortRef]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">op_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">op_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.op_complexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Get the complexity cost of an operation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>op</strong> (<em>str</em>) – The operation name.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>int</em> – The complexity cost of the operation, or 0 if not defined.</p>
+<dd class="field-even"><p>The complexity cost of the operation, or 0 if not defined.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune candidate functions.</p>
 <p>This method should be implemented by subclasses to filter out unsuitable
 candidates from the given list.</p>
@@ -368,14 +487,17 @@ candidates from the given list.</p>
 <dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of candidate functions to prune.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A filtered list of candidate functions.</p>
+<dd class="field-even"><p>A filtered list of candidate functions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">quantitative_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">quantitative_satisfaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.quantitative_satisfaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Evaluate the candidate using quantitative satisfaction.</p>
 <p>This method measures how close the candidate is to satisfying each constraint,
 providing a more nuanced score than binary satisfaction.</p>
@@ -387,16 +509,21 @@ providing a more nuanced score than binary satisfaction.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>float</em> – A score between 0 and 1, where 1 indicates full satisfaction.</p>
+<dd class="field-even"><p>A score between 0 and 1, where 1 indicates full satisfaction.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>score = generator.quantitative_satisfaction(candidate, ‘f’)</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">unsat_core_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">unsat_core_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/candidate_generator_base.html#CandidateGenerator.unsat_core_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Evaluate the candidate using unsat core analysis.</p>
 <p>This method uses Z3’s unsat core providing a score and insight into how close the candidate
 is to satisfying all constraints.</p>
@@ -408,11 +535,16 @@ is to satisfying all constraints.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>float</em> – The fraction of constraints not in the unsat core (i.e., satisfied).</p>
+<dd class="field-even"><p>The fraction of constraints not in the unsat core (i.e., satisfied).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>score = generator.unsat_core_analysis(candidate, ‘f’)</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -422,7 +554,7 @@ is to satisfying all constraints.</p>
 <h2>TopDownCandidateGenerator Class<a class="headerlink" href="#topdowncandidategenerator-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.top_down_enumerative_generator.</span></span><span class="sig-name descname"><span class="pre">TopDownCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.top_down_enumerative_generator.</span></span><span class="sig-name descname"><span class="pre">TopDownCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A top-down candidate generator for synthesis problems.</p>
 <p>This class generates candidate solutions for synthesis problems using a top-down
@@ -445,7 +577,7 @@ exploring the solution space in a top-down manner.</p>
 <dd><p>The synthesis problem being solved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SynthesisProblemZ3</p>
+<dd class="field-odd"><p><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">SynthesisProblemZ3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -496,49 +628,49 @@ exploring the solution space in a top-down manner.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.define_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Define the grammar for expression generation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidate expressions.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Expand an expression using the grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.simplify_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Simplify a term in the expression.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune the list of candidate expressions.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.build_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Build a tree representation of the grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.print_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Print the tree representation of the grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.build_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Build a tree representation of the grammar.</p>
 <p>This method constructs a tree structure that represents the
 possible expansions of an expression according to the grammar.</p>
@@ -551,7 +683,10 @@ possible expansions of an expression according to the grammar.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Node</em> – The root node of the constructed tree.</p>
+<dd class="field-even"><p>The root node of the constructed tree.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Node</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -563,7 +698,7 @@ infinite recursion for recursive grammars.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.define_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Define the grammar for expression generation.</p>
 <p>If no custom grammar is provided, this method creates a default grammar
 using the given variables and the configured constant range.</p>
@@ -572,14 +707,17 @@ using the given variables and the configured constant range.</p>
 <dd class="field-odd"><p><strong>variables</strong> (<em>list</em>) – List of variable names to be used in the grammar.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>dict</em> – The defined grammar.</p>
+<dd class="field-even"><p>The defined grammar.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Recursively expand an expression using the grammar.</p>
 <p>This method generates all possible expansions of a given expression
 according to the grammar rules, up to a maximum depth.</p>
@@ -592,31 +730,39 @@ according to the grammar rules, up to a maximum depth.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[z3.ExprRef]</em> – A list of expanded expressions.</p>
+<dd class="field-even"><p>A list of expanded expressions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[z3.ExprRef]</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>If expr is ‘S’ and the grammar includes a rule ‘S’: [‘+’, ‘T’, ‘T’],
 this method might return expansions like [x + y, x + 1, 1 + x, …].</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidate expressions for each function in the synthesis problem.</p>
 <p>This method generates candidate expressions using the defined grammar,
 simplifies them, and ensures that only unexplored expressions are considered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A list of tuples, where each tuple contains
+<dd class="field-odd"><p>A list of tuples, where each tuple contains
 a candidate expression and the name of the function it’s for.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.print_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate a string representation of the grammar tree.</p>
 <p>This method creates a formatted string that visually represents
 the structure of the grammar tree.</p>
@@ -629,10 +775,14 @@ the structure of the grammar tree.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[str]</em> – A list of strings, each representing a line in the tree visualization.</p>
+<dd class="field-even"><p>A list of strings, each representing a line in the tree visualization.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>For a simple grammar tree, the output might look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>S
 ├── T
@@ -648,11 +798,12 @@ the structure of the grammar tree.</p>
         └── y
 </pre></div>
 </div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune the list of candidate expressions.</p>
 <p>This method is a placeholder for potential future pruning strategies.
 Currently, it returns the candidates unchanged.</p>
@@ -664,14 +815,17 @@ Currently, it returns the candidates unchanged.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – The pruned list of candidates.</p>
+<dd class="field-even"><p>The pruned list of candidates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/top_down_enumerative_generator.html#TopDownCandidateGenerator.simplify_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Simplify a term in the expression.</p>
 <p>This method uses Z3’s simplification for Z3 expressions and
 returns integers as-is.</p>
@@ -680,12 +834,17 @@ returns integers as-is.</p>
 <dd class="field-odd"><p><strong>term</strong> (<em>Union</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>int</em><em>]</em>) – The term to simplify.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Union[z3.ExprRef, int]</em> – The simplified term.</p>
+<dd class="field-even"><p>The simplified term.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[z3.ExprRef, int]</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>simplify_term(z3.Int(‘x’) + 0) might return z3.Int(‘x’)
 simplify_term(5) would return 5</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -695,7 +854,7 @@ simplify_term(5) would return 5</p>
 <h2>WeightedTopDownCandidateGenerator Class<a class="headerlink" href="#weightedtopdowncandidategenerator-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.weighted_top_down_enumerative_generator.</span></span><span class="sig-name descname"><span class="pre">WeightedTopDownCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.weighted_top_down_enumerative_generator.</span></span><span class="sig-name descname"><span class="pre">WeightedTopDownCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A weighted top-down candidate generator for synthesis problems.</p>
 <p>This class generates candidate solutions for synthesis problems using a weighted
@@ -769,49 +928,49 @@ allowing for more control over the generation process.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.define_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Define the weighted grammar for expression generation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidate expressions using the weighted grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Expand an expression using the weighted grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.simplify_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Simplify a term in the expression.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune the list of candidate expressions.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.build_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Build a tree representation of the weighted grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.print_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Print the tree representation of the weighted grammar.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Node</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">build_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Node</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.build_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Build a tree representation of the weighted grammar.</p>
 <p>This method constructs a tree structure that represents the
 possible expansions of an expression according to the grammar.</p>
@@ -824,7 +983,10 @@ possible expansions of an expression according to the grammar.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Node</em> – The root node of the constructed tree.</p>
+<dd class="field-even"><p>The root node of the constructed tree.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Node</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -836,7 +998,7 @@ infinite recursion for recursive grammars.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">define_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.define_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Define the weighted grammar for expression generation.</p>
 <p>If no custom grammar is provided, this method creates a default weighted grammar
 using the given variables and the configured constant range.</p>
@@ -845,14 +1007,17 @@ using the given variables and the configured constant range.</p>
 <dd class="field-odd"><p><strong>variables</strong> (<em>list</em>) – List of variable names to be used in the grammar.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>dict</em> – The defined weighted grammar.</p>
+<dd class="field-even"><p>The defined weighted grammar.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Recursively expand an expression using the weighted grammar.</p>
 <p>This method generates all possible expansions of a given expression
 according to the grammar rules, up to a maximum depth. It also
@@ -866,34 +1031,42 @@ calculates and propagates weights for each expansion.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, int]]</em> – A list of tuples, each containing
+<dd class="field-even"><p>A list of tuples, each containing
 an expanded expression and its associated weight, sorted by
 weight in descending order.</p>
 </dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, int]]</p>
+</dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>If expr is ‘S’ and the grammar includes a rule ‘S’: [(‘+’, ‘T’, ‘T’), 30],
 this method might return expansions like [(x + y, 35), (x + 1, 40), …].</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidate expressions for each function in the synthesis problem.</p>
 <p>This method generates candidate expressions using the defined weighted grammar,
 simplifies them, and ensures that only unexplored expressions are considered.
 It also takes into account the weights of different productions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A list of tuples, where each tuple contains
+<dd class="field-odd"><p>A list of tuples, where each tuple contains
 a candidate expression and the name of the function it’s for.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">print_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_last</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.print_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate a string representation of the grammar tree.</p>
 <p>This method creates a formatted string that visually represents
 the structure of the grammar tree.</p>
@@ -906,10 +1079,14 @@ the structure of the grammar tree.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[str]</em> – A list of strings, each representing a line in the tree visualization.</p>
+<dd class="field-even"><p>A list of strings, each representing a line in the tree visualization.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>For a simple grammar tree, the output might look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>S (weight: 0)
 ├── T (weight: 10)
@@ -925,11 +1102,12 @@ the structure of the grammar tree.</p>
         └── y (weight: 5)
 </pre></div>
 </div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune the list of candidate expressions.</p>
 <p>This method is a placeholder for potential future pruning strategies.
 Currently, it returns the candidates unchanged.</p>
@@ -941,14 +1119,17 @@ Currently, it returns the candidates unchanged.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – The pruned list of candidates.</p>
+<dd class="field-even"><p>The pruned list of candidates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simplify_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">term</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/weighted_top_down_enumerative_generator.html#WeightedTopDownCandidateGenerator.simplify_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Simplify a term in the expression.</p>
 <p>This method uses Z3’s simplification for Z3 expressions and
 returns integers as-is.</p>
@@ -957,12 +1138,17 @@ returns integers as-is.</p>
 <dd class="field-odd"><p><strong>term</strong> (<em>Union</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>int</em><em>]</em>) – The term to simplify.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Union[z3.ExprRef, int]</em> – The simplified term.</p>
+<dd class="field-even"><p>The simplified term.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[z3.ExprRef, int]</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>simplify_term(z3.Int(‘x’) + 0) might return z3.Int(‘x’)
 simplify_term(5) would return 5</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -972,7 +1158,7 @@ simplify_term(5) would return 5</p>
 <h2>RandomCandidateGenerator Class<a class="headerlink" href="#randomcandidategenerator-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.random_candidate_generator.</span></span><span class="sig-name descname"><span class="pre">RandomCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.random_candidate_generator.</span></span><span class="sig-name descname"><span class="pre">RandomCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/random_candidate_generator.html#RandomCandidateGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CandidateGenerator</span></code></p>
 <p>A candidate generator that produces random expressions for synthesis problems.</p>
 <p>This class implements a bottom up strategy to generate random candidate solutions
@@ -985,39 +1171,49 @@ and adheres to specified complexity and depth constraints.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/random_candidate_generator.html#RandomCandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate a list of random candidate expressions for each function in the synthesis problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>List[Tuple[z3.ExprRef, str]]</em> – A list of tuples, where each tuple contains
+<dd class="field-odd"><p>A list of tuples, where each tuple contains
 a randomly generated expression and the name of the function it’s for.</p>
 </dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Tuple[z3.ExprRef, str]]</p>
+</dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>If the problem has two functions ‘f’ and ‘g’, this method might return:
 [(x + 2, ‘f’), (If(y &gt; 0, y, -y), ‘g’)]</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BoolRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BoolRef</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/random_candidate_generator.html#RandomCandidateGenerator.generate_condition"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate a random boolean condition using the given arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>args</strong> (<em>List</em><em>[</em><em>z3.ExprRef</em><em>]</em>) – List of available arguments to use in the condition.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>z3.BoolRef | bool</em> – A randomly generated boolean condition.</p>
+<dd class="field-even"><p>A randomly generated boolean condition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>z3.BoolRef | bool</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>Given args=[x, y], this method might return conditions like:
 x &lt; y, x == 2, y &gt;= 0, etc.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_random_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complexity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_random_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg_sorts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complexity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/random_candidate_generator.html#RandomCandidateGenerator.generate_random_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate a random term (expression) based on given constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1029,17 +1225,22 @@ x &lt; y, x == 2, y &gt;= 0, etc.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>z3.ExprRef</em> – A randomly generated Z3 expression.</p>
+<dd class="field-even"><p>A randomly generated Z3 expression.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>z3.ExprRef</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>Given arg_sorts=[z3.IntSort(), z3.IntSort()], depth=3, complexity=5,
 this method might return an expression like: If(x &gt; y, x + 2, y - 1)</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/random_candidate_generator.html#RandomCandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune the list of candidate expressions.</p>
 <p>This method is a placeholder for potential future pruning strategies.
 Currently, it returns the candidates unchanged.</p>
@@ -1051,7 +1252,10 @@ Currently, it returns the candidates unchanged.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – The pruned list of candidates.</p>
+<dd class="field-even"><p>The pruned list of candidates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1063,7 +1267,7 @@ Currently, it returns the candidates unchanged.</p>
 <h2>FastEnumerativeCandidateGenerator Class<a class="headerlink" href="#fastenumerativecandidategenerator-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.</span></span><span class="sig-name descname"><span class="pre">FastEnumerativeCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.</span></span><span class="sig-name descname"><span class="pre">FastEnumerativeCandidateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CandidateGenerator</span></code></p>
 <p>A candidate generator that uses fast enumerative synthesis to generate expressions.</p>
 <p>This class implements a strategy to efficiently enumerate candidate solutions
@@ -1114,18 +1318,21 @@ for synthesis problems using a grammar-based approach and caching mechanisms.</p
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">compute_constructor_classes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">compute_constructor_classes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.compute_constructor_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Compute constructor classes for each sort in the grammar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]</em> – A dictionary mapping each sort to a list of its constructor classes.</p>
+<dd class="field-odd"><p>A dictionary mapping each sort to a list of its constructor classes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">construct_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constructor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">term_combination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">construct_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constructor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">term_combination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExprRef</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.construct_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Construct a Z3 term using the given LIA constructor and arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1135,28 +1342,34 @@ for synthesis problems using a grammar-based approach and caching mechanisms.</p
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>z3.ExprRef</em> – The constructed Z3 term.</p>
+<dd class="field-even"><p>The constructed Z3 term.</p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If an unsupported constructor is provided.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>z3.ExprRef</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If an unsupported constructor is provided.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">extract_grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">extract_grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SortRef</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.extract_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Extract the grammar from the synthesis problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]</em> – The extracted grammar.</p>
+<dd class="field-odd"><p>The extracted grammar.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">fast_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SortRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">fast_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SortRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.fast_enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Enumerate terms of the given sort and size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1173,7 +1386,7 @@ for synthesis problems using a grammar-based approach and caching mechanisms.</p
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidates for all synthesis functions up to the maximum depth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Yields<span class="colon">:</span></dt>
@@ -1184,7 +1397,7 @@ for synthesis problems using a grammar-based approach and caching mechanisms.</p
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_candidates_at_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates_at_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.generate_candidates_at_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate candidates for all synthesis functions at a specific depth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1198,7 +1411,7 @@ for synthesis problems using a grammar-based approach and caching mechanisms.</p
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">generate_size_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">generate_size_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.generate_size_combinations"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Generate all possible combinations of argument sizes that sum up to the total size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1208,28 +1421,34 @@ for synthesis problems using a grammar-based approach and caching mechanisms.</p
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[int, …]]</em> – A list of tuples representing the size combinations.</p>
+<dd class="field-even"><p>A list of tuples representing the size combinations.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[int, …]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_arity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SortRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">get_arity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SortRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.get_arity"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Get the maximum arity of functions with the given sort as their range.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sort</strong> (<em>z3.SortRef</em>) – The sort to check.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>int</em> – The maximum arity found, or 0 if no functions have this sort as their range.</p>
+<dd class="field-even"><p>The maximum arity found, or 0 if no functions have this sort as their range.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">prune_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/candidate_generator/fast_enumerative_candidate_generator.html#FastEnumerativeCandidateGenerator.prune_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Prune the list of candidate expressions.</p>
 <p>This method is a placeholder for potential future pruning strategies.
 Currently, it doesn’t perform any pruning.</p>
@@ -1238,7 +1457,10 @@ Currently, it doesn’t perform any pruning.</p>
 <dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>str</em><em>]</em><em>]</em>) – The list of candidate expressions to prune.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List[Tuple[z3.ExprRef, str]]</em> – The pruned list of candidates (currently unchanged).</p>
+<dd class="field-even"><p>The pruned list of candidates (currently unchanged).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[z3.ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>

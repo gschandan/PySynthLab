@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.cegis.z3.synthesis_problem_z3 &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.cegis.z3.synthesis_problem_z3</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.cegis.z3.synthesis_problem_z3</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">src.cegis.synthesis_problem_base</span> <span class="kn">import</span> <span class="n">BaseSynthesisProblem</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src</span> <span class="kn">import</span> <span class="n">ast</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.ast</span> <span class="kn">import</span> <span class="n">Program</span><span class="p">,</span> <span class="n">CommandKind</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.resolution</span> <span class="kn">import</span> <span class="n">SortDescriptor</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.v1.parser</span> <span class="kn">import</span> <span class="n">SygusV1Parser</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.v2.parser</span> <span class="kn">import</span> <span class="n">SygusV2Parser</span>
+<span class="kn">from</span> <span class="nn">src.helpers.parser.src.v2.printer</span> <span class="kn">import</span> <span class="n">SygusV2ASTPrinter</span>
+<span class="kn">from</span> <span class="nn">src.utilities.cancellation_token</span> <span class="kn">import</span> <span class="n">GlobalCancellationToken</span>
+<span class="kn">from</span> <span class="nn">src.utilities.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3Context">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context">[docs]</a>
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">SynthesisProblemZ3Context</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A dataclass to store the context of a synthesis problem.</span>
+
+<span class="sd">    This class holds various solvers, constraints, variables, and other data</span>
+<span class="sd">    structures used throughout the synthesis process.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enumerator_solver (Solver): Z3 solver for enumeration.</span>
+<span class="sd">        verification_solver (Solver): Z3 solver for verification.</span>
+<span class="sd">        original_assertions (List[ExprRef]): List of original Z3 assertions.</span>
+<span class="sd">        constraints (List[ast.Command]): List of constraint commands.</span>
+<span class="sd">        z3_variables (Dict[str, ExprRef]): Dictionary mapping variable names to Z3 expressions.</span>
+<span class="sd">        z3_synth_functions (Dict[str, FuncDeclRef]): Dictionary mapping synthesis function names to Z3 function declarations.</span>
+<span class="sd">        z3_synth_function_args (Dict[str, Dict[str, ExprRef]]): Dictionary mapping synthesis function names to their arguments.</span>
+<span class="sd">        z3_predefined_functions (Dict[str, Tuple[FuncDeclRef, ExprRef | FuncDeclRef | bool | int]]): Dictionary mapping predefined function names to their Z3 representations.</span>
+<span class="sd">        z3_predefined_function_args (Dict[str, Dict[str, ExprRef]]): Dictionary mapping predefined function names to their arguments.</span>
+<span class="sd">        z3_constraints (List[ExprRef]): List of Z3 constraints conjoined with And.</span>
+<span class="sd">        z3_non_conjoined_constraints (List[ExprRef]): List of Z3 constraints, non-conjoined.</span>
+<span class="sd">        assertions (Set[ExprRef]): Set of Z3 assertions.</span>
+<span class="sd">        counterexamples (List[Tuple[QuantifierRef | ExprRef | Callable | Any, Dict[str, ExprRef], ExprRef]]): List of counterexamples.</span>
+<span class="sd">        z3_negated_constraints (Set[ExprRef]): Set of negated Z3 constraints.</span>
+<span class="sd">        additional_constraints (List[ExprRef]): List of additional Z3 constraints.</span>
+<span class="sd">        smt_problem (str): SMT-LIB representation of the problem.</span>
+<span class="sd">        variable_mapping_dict (Dict[str, Dict[z3.ExprRef, z3.ExprRef]]): Dictionary mapping variable names to their Z3 representations.</span>
+<span class="sd">        all_z3_functions (Dict[str, z3.FuncDeclRef]): Dictionary of all Z3 functions in the problem.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enumerator_solver</span><span class="p">:</span> <span class="n">Solver</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Solver</span><span class="p">)</span>
+    <span class="n">verification_solver</span><span class="p">:</span> <span class="n">Solver</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Solver</span><span class="p">)</span>
+    <span class="n">original_assertions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">constraints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Command</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">z3_variables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">z3_synth_functions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FuncDeclRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">z3_synth_function_args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ExprRef</span><span class="p">]]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">z3_predefined_functions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">FuncDeclRef</span><span class="p">,</span> <span class="n">ExprRef</span> <span class="o">|</span> <span class="n">FuncDeclRef</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">z3_predefined_function_args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ExprRef</span><span class="p">]]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">z3_constraints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">z3_non_conjoined_constraints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">assertions</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">counterexamples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
+        <span class="n">Tuple</span><span class="p">[</span><span class="n">QuantifierRef</span> <span class="o">|</span> <span class="n">ExprRef</span> <span class="o">|</span> <span class="n">Callable</span> <span class="o">|</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ExprRef</span><span class="p">],</span> <span class="n">ExprRef</span><span class="p">]]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">z3_negated_constraints</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">additional_constraints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">smt_problem</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">variable_mapping_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">all_z3_functions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">FuncDeclRef</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">[docs]</a>
+<span class="k">class</span> <span class="nc">SynthesisProblemZ3</span><span class="p">(</span><span class="n">BaseSynthesisProblem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class representing a synthesis problem in the SyGuS format.</span>
+
+<span class="sd">    This class provides methods for parsing, analyzing, and manipulating</span>
+<span class="sd">    synthesis problems expressed in the SyGuS (Syntax-Guided Synthesis) format.</span>
+<span class="sd">    It includes functionality for converting SyGuS to SMT-LIB format,</span>
+<span class="sd">    initializing Z3 variables and functions, parsing constraints, substituting constraints.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        logger (logging.Logger): Logger for the class.</span>
+<span class="sd">        options (Options): Configuration options for the synthesis problem.</span>
+<span class="sd">        input_problem (str): The original input problem in SyGuS format.</span>
+<span class="sd">        parser (SygusV1Parser | SygusV2Parser): The parser used to parse the problem.</span>
+<span class="sd">        problem (Program): The parsed SyGuS program.</span>
+<span class="sd">        symbol_table (SymbolTable): Symbol table for the parsed program.</span>
+<span class="sd">        printer (SygusV2ASTPrinter): Printer for the AST.</span>
+<span class="sd">        context (SynthesisProblemZ3Context): Context holding various data structures and solvers.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; options = Options()</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str, options)</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.get_logic())</span>
+<span class="sd">            LIA</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.get_synth_funcs())</span>
+<span class="sd">            {&#39;max2&#39;: FunctionDescriptor(...)}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthesisProblemZ3.__init__">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a SynthesisProblem instance.</span>
+
+<span class="sd">        This method sets up the synthesis problem by parsing the input,</span>
+<span class="sd">        initializing the symbol table, and setting up various Z3 components.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            problem (str): The input problem in the SyGuS format.</span>
+<span class="sd">            options (Options, optional): Additional options for problem setup. Defaults to None.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ParseException: If the problem cannot be parsed using either SygusV1Parser or SygusV2Parser.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int ...)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; options = Options()</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str, options)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">SynthesisProblemZ3Context</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">verification_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;smt.macro_finder&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">verification_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;smt.macro_finder&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">randomise_each_iteration</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">enumerator_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">verification_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">smt_problem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smt_problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialise_variables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialise_synth_functions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialise_predefined_functions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_z3_variables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populate_all_z3_functions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_constraints</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.initialise_variables">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.initialise_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialise_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise Z3 variables based on the declared variables in the problem.</span>
+
+<span class="sd">        This method creates Z3 variables for each declared variable in the problem</span>
+<span class="sd">        and stores them in the context.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(declare-var x Int)\\n(declare-var y Bool)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_variables()</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.context.z3_variables)</span>
+<span class="sd">            {&#39;x&#39;: Int(&#39;x&#39;), &#39;y&#39;: Bool(&#39;y&#39;)}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">command</span><span class="o">.</span><span class="n">command_kind</span> <span class="o">==</span> <span class="n">CommandKind</span><span class="o">.</span><span class="n">DECLARE_VAR</span> <span class="ow">and</span> <span class="n">command</span><span class="o">.</span><span class="n">sort_expression</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span> <span class="o">==</span> <span class="s1">&#39;Int&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="p">[</span><span class="n">command</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">command</span><span class="o">.</span><span class="n">command_kind</span> <span class="o">==</span> <span class="n">CommandKind</span><span class="o">.</span><span class="n">DECLARE_VAR</span> <span class="ow">and</span> <span class="n">command</span><span class="o">.</span><span class="n">sort_expression</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span> <span class="o">==</span> <span class="s1">&#39;Bool&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="p">[</span><span class="n">command</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.initialise_synth_functions">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.initialise_synth_functions">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialise_synth_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise Z3 synthesis functions based on the synth-fun commands in the problem.</span>
+
+<span class="sd">        This method creates Z3 function declarations for each synthesis function</span>
+<span class="sd">        in the problem and stores them in the context.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_synth_functions()</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.context.z3_synth_functions)</span>
+<span class="sd">            {&#39;max2&#39;: Function(&#39;max2&#39;, IntSort(), IntSort(), IntSort())}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_synth_funcs</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">z3_arg_sorts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">convert_sort_descriptor_to_z3_sort</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">argument_sorts</span><span class="p">]</span>
+            <span class="n">z3_range_sort</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_sort_descriptor_to_z3_sort</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">range_sort</span><span class="p">)</span>
+
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">create_z3_variable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sort</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">argument_names</span><span class="p">,</span> <span class="n">z3_arg_sorts</span><span class="p">)]</span>
+
+            <span class="n">arg_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">argument_names</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_function_args</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg_mapping</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span>
+                <span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="o">*</span><span class="n">z3_arg_sorts</span><span class="p">,</span> <span class="n">z3_range_sort</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.initialise_predefined_functions">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.initialise_predefined_functions">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialise_predefined_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize Z3 predefined functions based on the define-fun commands in the problem.</span>
+
+<span class="sd">        This method creates Z3 function declarations for each predefined function</span>
+<span class="sd">        in the problem and stores them in the context.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (&lt;= x y) x y))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_z3_predefined_functions()</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.context.z3_predefined_functions)</span>
+<span class="sd">            {&#39;min2&#39;: (Function(&#39;min2&#39;, IntSort(), IntSort(), IntSort()), If(x &lt;= y, x, y))}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_predefined_funcs</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">z3_arg_sorts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">convert_sort_descriptor_to_z3_sort</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">argument_sorts</span><span class="p">]</span>
+            <span class="n">z3_range_sort</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_sort_descriptor_to_z3_sort</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">range_sort</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">z3_arg_sorts</span><span class="p">:</span>
+                <span class="n">parsed_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">function_body</span><span class="p">)</span>
+                <span class="n">const</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Const</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="n">z3_range_sort</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">const</span><span class="p">,</span> <span class="n">parsed_body</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">create_z3_variable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sort</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">argument_names</span><span class="p">,</span> <span class="n">z3_arg_sorts</span><span class="p">)]</span>
+                <span class="n">local_variables</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">argument_names</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+
+                <span class="n">parsed_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">function_body</span><span class="p">,</span> <span class="n">local_variables</span><span class="p">)</span>  <span class="c1"># Use local_variables here</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_function_args</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_variables</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">z3</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="o">*</span><span class="n">z3_arg_sorts</span><span class="p">,</span> <span class="n">z3_range_sort</span><span class="p">),</span>
+                    <span class="n">parsed_body</span>
+                <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.populate_all_z3_functions">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.populate_all_z3_functions">[docs]</a>
+    <span class="k">def</span> <span class="nf">populate_all_z3_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add all parsed Z3 functions to a dictionary.</span>
+
+<span class="sd">        This method combines all synthesis functions and predefined functions</span>
+<span class="sd">        into a single dictionary for easy access.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (&lt;= x y) x y))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_synth_functions()</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_predefined_functions()</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.populate_all_z3_functions()</span>
+<span class="sd">            &gt;&gt;&gt; print(list(synthesis_problem.context.all_z3_functions.keys()))</span>
+<span class="sd">            [&#39;max2&#39;, &#39;min2&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">all_z3_functions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">predefined_function_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">func_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">func_tuple</span> <span class="ow">in</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">all_z3_functions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">predefined_function_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.map_z3_variables">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.map_z3_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_z3_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Map Z3 variables for each synthesis function.</span>
+
+<span class="sd">        This method creates a mapping between free variables and declared variables</span>
+<span class="sd">        for each synthesis function.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_variables()</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.initialise_synth_functions()</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.map_z3_variables()</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.context.variable_mapping_dict[&#39;max2&#39;])</span>
+<span class="sd">            {Var(0, IntSort()): Int(&#39;a&#39;), Var(1, IntSort()): Int(&#39;b&#39;)}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">free_variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">arity</span><span class="p">())]</span>
+            <span class="n">declared_variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">variable_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">free_var</span><span class="p">:</span> <span class="n">declared_var</span> <span class="k">for</span> <span class="n">free_var</span><span class="p">,</span> <span class="n">declared_var</span> <span class="ow">in</span>
+                                <span class="nb">zip</span><span class="p">(</span><span class="n">free_variables</span><span class="p">,</span> <span class="n">declared_variables</span><span class="p">)}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">variable_mapping_dict</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable_mapping</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.parse_constraints">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.parse_constraints">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the constraints of the synthesis problem.</span>
+
+<span class="sd">        This method processes all constraint commands in the problem, checks for</span>
+<span class="sd">        undeclared variables, and adds the parsed constraints to the context.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(declare-var b Int)\\n(constraint (&gt;= (max2 a b) a))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem.parse_constraints()</span>
+<span class="sd">            &gt;&gt;&gt; print(synthesis_problem.context.z3_constraints)</span>
+<span class="sd">            [And(max2(a, b) &gt;= a)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_constraints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">non_conjoined_constraints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">declared_variables</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_var_symbols</span><span class="p">())</span>
+        <span class="n">declared_functions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_function_symbols</span><span class="p">())</span>
+        <span class="n">declared_synth_functions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_synth_funcs</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ConstraintCommand</span><span class="p">):</span>
+                <span class="n">undeclared_variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_undeclared_variables</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">constraint</span><span class="p">,</span> <span class="n">declared_variables</span><span class="p">,</span>
+                                                                      <span class="n">declared_functions</span><span class="p">,</span> <span class="n">declared_synth_functions</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">undeclared_variables</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undeclared variables used in constraint: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">undeclared_variables</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undeclared variables used in constraint: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">undeclared_variables</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">constraint</span><span class="p">)</span>
+                <span class="n">all_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">original_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_and</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
+                    <span class="n">non_conjoined_constraints</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">children</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">non_conjoined_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">all_constraints</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="o">*</span><span class="n">all_constraints</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">SynthesisProblemZ3</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Warning: No constraints found or generated.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_non_conjoined_constraints</span> <span class="o">=</span> <span class="n">non_conjoined_constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_negated_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">negate_assertions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_constraints</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.split_conjoined_constraint">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.split_conjoined_constraint">[docs]</a>
+    <span class="k">def</span> <span class="nf">split_conjoined_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split a potentially conjoined constraint into its individual components.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            constraint (z3.ExprRef): The constraint to split.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[z3.ExprRef]: A list of individual constraints.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun f ((x Int)) Int)\\n(constraint (and (&gt;= (f 0) 0) (&gt;= (f 1) 1)))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; conjoined_constraint = synthesis_problem.context.z3_constraints[0]</span>
+<span class="sd">            &gt;&gt;&gt; split_constraints = synthesis_problem.split_conjoined_constraint(conjoined_constraint)</span>
+<span class="sd">            &gt;&gt;&gt; print(split_constraints)</span>
+<span class="sd">            [f(0) &gt;= 0, f(1) &gt;= 1]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_and</span><span class="p">(</span><span class="n">constraint</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">children</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">constraint</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.find_undeclared_variables">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.find_undeclared_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_undeclared_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">declared_variables</span><span class="p">,</span> <span class="n">declared_functions</span><span class="p">,</span> <span class="n">declared_synth_functions</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find undeclared variables in a term.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            term: The term to check.</span>
+<span class="sd">            declared_variables: The set of declared variables.</span>
+<span class="sd">            declared_functions: The set of declared functions.</span>
+<span class="sd">            declared_synth_functions: The set of declared synthesis functions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: A list of undeclared variables found in the term.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(constraint (&gt;= (max2 a b) a))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; constraint = synthesis_problem.context.constraints[0]</span>
+<span class="sd">            &gt;&gt;&gt; undeclared = synthesis_problem.find_undeclared_variables(constraint.constraint, {&#39;a&#39;}, set(), {&#39;max2&#39;})</span>
+<span class="sd">            &gt;&gt;&gt; print(undeclared)</span>
+<span class="sd">            [&#39;b&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+
+        <span class="n">undeclared_variables</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">IdentifierTerm</span><span class="p">):</span>
+            <span class="n">symbol</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">symbol</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">declared_variables</span> <span class="ow">and</span> <span class="n">symbol</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">declared_functions</span>
+                    <span class="ow">and</span> <span class="n">symbol</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">declared_synth_functions</span><span class="p">):</span>
+                <span class="n">undeclared_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionApplicationTerm</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">term</span><span class="o">.</span><span class="n">arguments</span><span class="p">:</span>
+                <span class="n">undeclared_variables</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">find_undeclared_variables</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">declared_variables</span><span class="p">,</span> <span class="n">declared_functions</span><span class="p">,</span>
+                                                                           <span class="n">declared_synth_functions</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">QuantifiedTerm</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">term</span><span class="o">.</span><span class="n">quantified_variables</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">var_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">declared_variables</span><span class="p">:</span>
+                    <span class="n">undeclared_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+            <span class="n">undeclared_variables</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">find_undeclared_variables</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">term_body</span><span class="p">,</span> <span class="n">declared_variables</span><span class="p">,</span> <span class="n">declared_functions</span><span class="p">,</span>
+                                               <span class="n">declared_synth_functions</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">undeclared_variables</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.parse_term">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.parse_term">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Term</span><span class="p">,</span>
+                   <span class="n">local_variables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ExprRef</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExprRef</span> <span class="o">|</span> <span class="n">FuncDeclRef</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse a term with optional local variable context.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            term (ast.Term): The term to parse.</span>
+<span class="sd">            local_variables (Dict[str, ExprRef], optional): A dictionary of local variables to consider during parsing.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ExprRef | FuncDeclRef | bool | int: The Z3 expression representing the term.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an undefined symbol or unsupported term type is encountered.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(declare-var a Int)\\n(constraint (&gt;= (max2 a 5) a))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; constraint = synthesis_problem.context.constraints[0]</span>
+<span class="sd">            &gt;&gt;&gt; parsed_term = synthesis_problem.parse_term(constraint.constraint)</span>
+<span class="sd">            &gt;&gt;&gt; print(parsed_term)</span>
+<span class="sd">            max2(a, 5) &gt;= a</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="n">local_variables</span> <span class="o">=</span> <span class="n">local_variables</span> <span class="k">if</span> <span class="n">local_variables</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">IdentifierTerm</span><span class="p">):</span>
+            <span class="n">symbol</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span>
+            <span class="k">if</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">local_variables</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">local_variables</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="p">:</span>
+                <span class="n">func</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">func</span>
+            <span class="k">elif</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undefined symbol: </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undefined symbol: </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">LiteralTerm</span><span class="p">):</span>
+            <span class="n">literal</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">literal</span>
+            <span class="k">if</span> <span class="n">literal</span><span class="o">.</span><span class="n">literal_kind</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">LiteralKind</span><span class="o">.</span><span class="n">NUMERAL</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntVal</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">literal</span><span class="o">.</span><span class="n">literal_value</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">literal</span><span class="o">.</span><span class="n">literal_kind</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">LiteralKind</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolVal</span><span class="p">(</span><span class="n">literal</span><span class="o">.</span><span class="n">literal_value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported literal kind: </span><span class="si">{</span><span class="n">literal</span><span class="o">.</span><span class="n">literal_kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported literal kind: </span><span class="si">{</span><span class="n">literal</span><span class="o">.</span><span class="n">literal_kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionApplicationTerm</span><span class="p">):</span>
+            <span class="n">func_symbol</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">function_identifier</span><span class="o">.</span><span class="n">symbol</span>
+            <span class="n">nested_local_variables</span> <span class="o">=</span> <span class="n">local_variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">func_symbol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_function_args</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">arg_name</span><span class="p">,</span> <span class="n">z3_var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_function_args</span><span class="p">[</span><span class="n">func_symbol</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">nested_local_variables</span><span class="p">[</span><span class="n">arg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">z3_var</span>
+
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">nested_local_variables</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">term</span><span class="o">.</span><span class="n">arguments</span><span class="p">]</span>
+
+            <span class="n">operator_map</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;and&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">_args</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="o">*</span><span class="n">_args</span><span class="p">),</span>
+                <span class="s2">&quot;or&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">_args</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="o">*</span><span class="n">_args</span><span class="p">),</span>
+                <span class="s2">&quot;not&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span>
+                <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">arg1</span> <span class="o">&gt;</span> <span class="n">arg2</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">arg1</span> <span class="o">&lt;</span> <span class="n">arg2</span><span class="p">,</span>
+                <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">arg1</span> <span class="o">&gt;=</span> <span class="n">arg2</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">arg1</span> <span class="o">&lt;=</span> <span class="n">arg2</span><span class="p">,</span>
+                <span class="s2">&quot;+&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">_args</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">(</span><span class="n">_args</span><span class="p">),</span>
+                <span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">_args</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">Product</span><span class="p">(</span><span class="o">*</span><span class="n">_args</span><span class="p">),</span>
+                <span class="s2">&quot;/&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">arg1</span> <span class="o">/</span> <span class="n">arg2</span><span class="p">,</span>
+                <span class="s2">&quot;=&gt;&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">Implies</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">),</span>
+                <span class="s2">&quot;ite&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">cond</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">func_symbol</span> <span class="ow">in</span> <span class="n">operator_map</span><span class="p">:</span>
+                <span class="n">op</span> <span class="o">=</span> <span class="n">operator_map</span><span class="p">[</span><span class="n">func_symbol</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">func_symbol</span> <span class="o">==</span> <span class="s2">&quot;not&quot;</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&#39;not&#39; should have 1 argument&quot;</span>
+                    <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">func_symbol</span><span class="si">}</span><span class="s2">&#39; should have at least 2 arguments&quot;</span>
+                    <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">func_symbol</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Minus operator &#39;-&#39; should have 1 or 2 arguments&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Minus operator &#39;-&#39; should have 1 or 2 arguments&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">func_symbol</span> <span class="o">==</span> <span class="s2">&quot;=&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+            <span class="k">elif</span> <span class="n">func_symbol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">:</span>
+                <span class="n">func_term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_symbol</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">func_term</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">func_symbol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="p">:</span>
+                <span class="n">func</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="p">[</span><span class="n">func_symbol</span><span class="p">]</span>
+                <span class="n">function_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_function_args</span><span class="p">[</span><span class="n">func_symbol</span><span class="p">]</span>
+                <span class="n">substituted_body</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">body</span><span class="p">,</span>
+                                                 <span class="p">[(</span><span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">function_args</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">args</span><span class="p">)])</span>
+                <span class="k">return</span> <span class="n">substituted_body</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undefined function symbol: </span><span class="si">{</span><span class="n">func_symbol</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undefined function symbol: </span><span class="si">{</span><span class="n">func_symbol</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">QuantifiedTerm</span><span class="p">):</span>
+            <span class="n">quantified_variables</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">term</span><span class="o">.</span><span class="n">quantified_variables</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="p">:</span>
+                    <span class="n">quantified_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_variables</span><span class="p">[</span><span class="n">var_name</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undeclared variable used in quantifier: </span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Undeclared variable used in quantifier: </span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">term_body</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">term</span><span class="o">.</span><span class="n">quantifier_kind</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">QuantifierKind</span><span class="o">.</span><span class="n">FORALL</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">ForAll</span><span class="p">(</span><span class="n">quantified_variables</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">term</span><span class="o">.</span><span class="n">quantifier_kind</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">QuantifierKind</span><span class="o">.</span><span class="n">EXISTS</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">quantified_variables</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported quantifier kind: </span><span class="si">{</span><span class="n">term</span><span class="o">.</span><span class="n">quantifier_kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported quantifier kind: </span><span class="si">{</span><span class="n">term</span><span class="o">.</span><span class="n">quantifier_kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported term type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">term</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported term type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">term</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.negate_assertions">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.negate_assertions">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">negate_assertions</span><span class="p">(</span><span class="n">assertions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Negate a list of assertions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            assertions (List[z3.ExprRef]): The list of assertions to negate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[z3.ExprRef]: The negated assertions.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from z3 import Int, And, Or</span>
+<span class="sd">            &gt;&gt;&gt; x, y = Int(&#39;x&#39;), Int(&#39;y&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; assertions = [And(x &gt; 0, y &gt; 0), Or(x &lt; 10, y &lt; 10)]</span>
+<span class="sd">            &gt;&gt;&gt; negated = SynthesisProblemZ3.negate_assertions(assertions)</span>
+<span class="sd">            &gt;&gt;&gt; print(negated)</span>
+<span class="sd">            [Or(Not(x &gt; 0), Not(y &gt; 0)), And(Not(x &lt; 10), Not(y &lt; 10))]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="n">negated_assertions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">assertion</span> <span class="ow">in</span> <span class="n">assertions</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="n">assertion</span><span class="o">.</span><span class="n">num_args</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_and</span><span class="p">(</span><span class="n">assertion</span><span class="p">)</span> <span class="ow">or</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_or</span><span class="p">(</span><span class="n">assertion</span><span class="p">)</span> <span class="ow">or</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_not</span><span class="p">(</span><span class="n">assertion</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">args</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">negated_children</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="p">)]</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="o">*</span><span class="n">negated_children</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">assertion</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_expr</span><span class="p">(</span><span class="n">assertion</span><span class="p">)</span> <span class="ow">and</span> <span class="n">args</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_eq</span><span class="p">(</span><span class="n">assertion</span><span class="p">):</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_ge</span><span class="p">(</span><span class="n">assertion</span><span class="p">):</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_gt</span><span class="p">(</span><span class="n">assertion</span><span class="p">):</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_le</span><span class="p">(</span><span class="n">assertion</span><span class="p">):</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">z3</span><span class="o">.</span><span class="n">is_lt</span><span class="p">(</span><span class="n">assertion</span><span class="p">):</span>
+                    <span class="n">negated_assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">assertion</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">SynthesisProblemZ3</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unsupported assertion type: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">assertion</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported assertion type: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">assertion</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">negated_assertions</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.convert_sort_descriptor_to_z3_sort">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.convert_sort_descriptor_to_z3_sort">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">convert_sort_descriptor_to_z3_sort</span><span class="p">(</span><span class="n">sort_descriptor</span><span class="p">:</span> <span class="n">SortDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a sort descriptor to a Z3 sort.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sort_descriptor (SortDescriptor): The sort descriptor to convert.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            z3.SortRef | None: The corresponding Z3 sort, or None if not supported.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from src.helpers.parser.src.resolution import SortDescriptor</span>
+<span class="sd">            &gt;&gt;&gt; from src.helpers.parser.src.ast import Identifier</span>
+<span class="sd">            &gt;&gt;&gt; int_sort = SortDescriptor(identifier=Identifier(symbol=&#39;Int&#39;))</span>
+<span class="sd">            &gt;&gt;&gt; z3_sort = SynthesisProblemZ3.convert_sort_descriptor_to_z3_sort(int_sort)</span>
+<span class="sd">            &gt;&gt;&gt; print(z3_sort)</span>
+<span class="sd">            Int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sort_symbol</span> <span class="o">=</span> <span class="n">sort_descriptor</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;Int&#39;</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span>
+            <span class="s1">&#39;Bool&#39;</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">(),</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sort_symbol</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.create_z3_variable">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.create_z3_variable">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_z3_variable</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sort</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Z3 variable of the given sort.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the variable.</span>
+<span class="sd">            sort (z3.SortRef): The sort of the variable.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            z3.ExprRef: The Z3 expression representing the variable.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the sort is not supported.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; int_var = SynthesisProblemZ3.create_z3_variable(&#39;x&#39;, z3.IntSort())</span>
+<span class="sd">            &gt;&gt;&gt; print(int_var)</span>
+<span class="sd">            x</span>
+<span class="sd">            &gt;&gt;&gt; bool_var = SynthesisProblemZ3.create_z3_variable(&#39;y&#39;, z3.BoolSort())</span>
+<span class="sd">            &gt;&gt;&gt; print(bool_var)</span>
+<span class="sd">            y</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sort</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">SynthesisProblemZ3</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported sort: </span><span class="si">{</span><span class="n">sort</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported sort: </span><span class="si">{</span><span class="n">sort</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.collect_function_io_pairs">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.collect_function_io_pairs">[docs]</a>
+    <span class="k">def</span> <span class="nf">collect_function_io_pairs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">FuncDeclRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">],</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Collect input-output pairs for a function from the constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (z3.FuncDeclRef): The function to collect input-output pairs for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[Dict[str, z3.ExprRef], z3.ExprRef]]: A list of input-output pairs.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(constraint (&gt;= (max2 1 2) 2))\\n(constraint (= (max2 3 4) 4))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; max2_func = synthesis_problem.context.z3_synth_functions[&#39;max2&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; io_pairs = synthesis_problem.collect_function_io_pairs(max2_func)</span>
+<span class="sd">            &gt;&gt;&gt; print(io_pairs)</span>
+<span class="sd">            [({&#39;x&#39;: 1, &#39;y&#39;: 2}, 2), ({&#39;x&#39;: 3, &#39;y&#39;: 4}, 4)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">io_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ConstraintCommand</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">constraint</span><span class="p">,</span>
+                                                                            <span class="n">ast</span><span class="o">.</span><span class="n">FunctionApplicationTerm</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">constraint</span><span class="o">.</span><span class="n">constraint</span><span class="o">.</span><span class="n">function_identifier</span><span class="o">.</span><span class="n">symbol</span> <span class="o">==</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span><span class="p">():</span>
+                    <span class="n">example_inputs</span> <span class="o">=</span> <span class="p">{</span><span class="n">arg</span><span class="o">.</span><span class="n">identifier</span><span class="o">.</span><span class="n">symbol</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span>
+                                      <span class="n">constraint</span><span class="o">.</span><span class="n">constraint</span><span class="o">.</span><span class="n">arguments</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]}</span>
+                    <span class="n">example_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_term</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">constraint</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">io_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">example_inputs</span><span class="p">,</span> <span class="n">example_output</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">io_pairs</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.substitute_constraints">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.substitute_constraints">[docs]</a>
+    <span class="k">def</span> <span class="nf">substitute_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">],</span>
+                               <span class="n">functions_to_replace</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">FuncDeclRef</span><span class="p">],</span>
+                               <span class="n">replacement_expressions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
+                                   <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">FuncDeclRef</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]])</span> <span class="o">-&gt;</span> \
+            <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Substitute candidate expressions into a list of constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            constraints (Collection[z3.ExprRef]): The list of constraints to substitute.</span>
+<span class="sd">            functions_to_replace (List[z3.FuncDeclRef]): The list of functions to replace.</span>
+<span class="sd">            replacement_expressions (List[typing.Union[z3.FuncDeclRef, z3.ExprRef, Callable]]): The replacement expressions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[z3.ExprRef]: The list of substituted constraints.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(constraint (&gt;= (max2 a b) a))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; max2 = synthesis_problem.context.z3_synth_functions[&#39;max2&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; a, b = Int(&#39;a&#39;), Int(&#39;b&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; replacement = lambda x, y: If(x &gt; y, x, y)</span>
+<span class="sd">            &gt;&gt;&gt; substituted = synthesis_problem.substitute_constraints(synthesis_problem.context.z3_constraints, [max2], [replacement])</span>
+<span class="sd">            &gt;&gt;&gt; print(substituted[0])</span>
+<span class="sd">            If(a &gt; b, a, b) &gt;= a</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+
+        <span class="n">synth_substitutions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">functions_to_replace</span><span class="p">,</span> <span class="n">replacement_expressions</span><span class="p">))</span>
+
+        <span class="n">substituted_constraints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="n">constraints</span><span class="p">:</span>
+            <span class="n">substituted_constraint</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">substitute_funs</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">synth_substitutions</span><span class="p">])</span>
+            <span class="n">substituted_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">substituted_constraints</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.substitute_candidates">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.substitute_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">substitute_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">],</span>
+                              <span class="n">candidate_functions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">FuncDeclRef</span><span class="p">,</span>
+                              <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">FuncDeclRef</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Substitute candidate expressions into a list of constraints.</span>
+
+<span class="sd">        This method substitutes both candidate functions and predefined functions</span>
+<span class="sd">        into the given constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            constraints (Collection[z3.ExprRef]): The list of constraints to substitute.</span>
+<span class="sd">            candidate_functions (List[tuple[z3.FuncDeclRef, typing.Union[z3.FuncDeclRef, z3.ExprRef, Callable]]]): </span>
+<span class="sd">                The candidate functions and their replacements.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[z3.ExprRef]: The list of substituted constraints.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun max2 ((x Int) (y Int)) Int)\\n(define-fun min2 ((x Int) (y Int)) Int (ite (&lt;= x y) x y))\\n(constraint (&gt;= (max2 (min2 a b) c) c))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; max2 = synthesis_problem.context.z3_synth_functions[&#39;max2&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; a, b, c = Int(&#39;a&#39;), Int(&#39;b&#39;), Int(&#39;c&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; replacement = lambda x, y: If(x &gt; y, x, y)</span>
+<span class="sd">            &gt;&gt;&gt; candidates = [(max2, replacement)]</span>
+<span class="sd">            &gt;&gt;&gt; substituted = synthesis_problem.substitute_candidates(synthesis_problem.context.z3_constraints, candidates)</span>
+<span class="sd">            &gt;&gt;&gt; print(substituted[0])</span>
+<span class="sd">            If(If(a &lt;= b, a, b) &gt; c, If(a &lt;= b, a, b), c) &gt;= c</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="n">predefined_substitutions</span> <span class="o">=</span> <span class="p">[(</span><span class="n">func</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span> <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_predefined_functions</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+        <span class="n">substituted_constraints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="n">constraints</span><span class="p">:</span>
+            <span class="n">synth_substituted</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">substitute_funs</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span> <span class="n">candidate_functions</span><span class="p">)</span>
+            <span class="n">predefined_substituted</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">substitute_funs</span><span class="p">(</span><span class="n">synth_substituted</span><span class="p">,</span> <span class="n">predefined_substitutions</span><span class="p">)</span>
+            <span class="n">substituted_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predefined_substituted</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">substituted_constraints</span></div>
+
+
+<div class="viewcode-block" id="SynthesisProblemZ3.partial_evaluate_constraint">
+<a class="viewcode-back" href="../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.partial_evaluate_constraint">[docs]</a>
+    <span class="k">def</span> <span class="nf">partial_evaluate_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="n">partial_assignment</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Partially evaluate a constraint given a partial assignment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            constraint (z3.ExprRef): The constraint to evaluate.</span>
+<span class="sd">            partial_assignment (Dict[z3.ExprRef, z3.ExprRef]): A dictionary mapping variables to their partial assignments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            z3.ExprRef: The partially evaluated constraint.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; problem_str = &quot;(set-logic LIA)\\n(synth-fun f ((x Int)) Int)\\n(constraint (and (&gt;= (f 0) 0) (&gt;= (f 1) 1)))&quot;</span>
+<span class="sd">            &gt;&gt;&gt; synthesis_problem = SynthesisProblemZ3(problem_str)</span>
+<span class="sd">            &gt;&gt;&gt; f = synthesis_problem.context.z3_synth_functions[&#39;f&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; constraint = synthesis_problem.context.z3_non_conjoined_constraints[0]</span>
+<span class="sd">            &gt;&gt;&gt; partial_assignment = {f(0): z3.IntVal(5)}</span>
+<span class="sd">            &gt;&gt;&gt; evaluated = synthesis_problem.partial_evaluate_constraint(constraint, partial_assignment)</span>
+<span class="sd">            &gt;&gt;&gt; print(evaluated)</span>
+<span class="sd">            5 &gt;= 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span> <span class="p">[(</span><span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">partial_assignment</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

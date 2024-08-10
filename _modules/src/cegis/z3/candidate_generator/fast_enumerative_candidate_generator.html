@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Generator</span>
+<span class="kn">import</span> <span class="nn">z3</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span><span class="p">,</span> <span class="n">combinations_with_replacement</span>
+
+<span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblemZ3</span>
+<span class="kn">from</span> <span class="nn">src.cegis.z3.candidate_generator.candidate_generator_base</span> <span class="kn">import</span> <span class="n">CandidateGenerator</span>
+<span class="kn">from</span> <span class="nn">src.utilities.cancellation_token</span> <span class="kn">import</span> <span class="n">GlobalCancellationToken</span>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator">[docs]</a>
+<span class="k">class</span> <span class="nc">FastEnumerativeCandidateGenerator</span><span class="p">(</span><span class="n">CandidateGenerator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A candidate generator that uses fast enumerative synthesis to generate expressions.</span>
+
+<span class="sd">    This class implements a strategy to efficiently enumerate candidate solutions</span>
+<span class="sd">    for synthesis problems using a grammar-based approach and caching mechanisms.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        grammar (Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]): The extracted grammar for term generation.</span>
+<span class="sd">        constructor_classes (Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]): Grouped constructors by argument types.</span>
+<span class="sd">        term_cache (Dict[Tuple[z3.SortRef, int], List[z3.ExprRef]]): Cache for generated terms.</span>
+<span class="sd">        candidate_cache (Dict[Tuple[str, int], List[z3.ExprRef]]): Cache for generated candidates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">:</span> <span class="n">SynthesisProblemZ3</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_grammar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constructor_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_constructor_classes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">term_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">metrics</span>
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.extract_grammar">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.extract_grammar">[docs]</a>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">extract_grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">]]]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the grammar from the synthesis problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[z3.SortRef, List[Tuple[str, List[z3.SortRef]]]]: The extracted grammar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grammar</span> <span class="o">=</span> <span class="p">{</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">():</span> <span class="p">[],</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">():</span> <span class="p">[]}</span>
+
+        <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func_descriptor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">output_sort</span> <span class="o">=</span> <span class="n">func_descriptor</span><span class="o">.</span><span class="n">range</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">output_sort</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">:</span>
+                <span class="n">grammar</span><span class="p">[</span><span class="n">output_sort</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># need to decide if to allow recursive functions or not</span>
+            <span class="c1"># arg_sorts = [func_descriptor.domain(i) for i in range(func_descriptor.arity())]</span>
+            <span class="c1"># grammar[output_sort].append((func_name, arg_sorts))</span>
+
+        <span class="n">grammar</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+            <span class="p">(</span><span class="s2">&quot;Plus&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Minus&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Neg&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Ite&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()])</span>
+        <span class="p">])</span>
+        <span class="k">for</span> <span class="n">const</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_const</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_const</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">grammar</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+                <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Times</span><span class="si">{</span><span class="n">const</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+                <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Const_</span><span class="si">{</span><span class="n">const</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="p">])</span>
+
+        <span class="n">grammar</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">()]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+            <span class="p">(</span><span class="s2">&quot;LE&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;GE&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;LT&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;GT&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Eq&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;And&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Or&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Not&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Implies&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">()]),</span>
+            <span class="p">(</span><span class="s2">&quot;Xor&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">(),</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">()])</span>
+        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">grammar_size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span> <span class="k">for</span> <span class="n">rules</span> <span class="ow">in</span> <span class="n">grammar</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">grammar</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.compute_constructor_classes">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.compute_constructor_classes">[docs]</a>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">compute_constructor_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">]]]]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute constructor classes for each sort in the grammar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[z3.SortRef, List[List[Tuple[str, List[z3.SortRef]]]]]: A dictionary mapping each sort to a list of its constructor classes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">constructor_classes</span> <span class="o">=</span> <span class="p">{</span><span class="n">sort</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">sort</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">sort</span><span class="p">,</span> <span class="n">constructors</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">arg_sorts</span> <span class="ow">in</span> <span class="n">constructors</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">constructor_class</span> <span class="ow">in</span> <span class="n">constructor_classes</span><span class="p">[</span><span class="n">sort</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">arg_sorts</span> <span class="o">==</span> <span class="n">constructor_class</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">constructor_class</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">func_name</span><span class="p">,</span> <span class="n">arg_sorts</span><span class="p">))</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="n">constructor_classes</span><span class="p">[</span><span class="n">sort</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">arg_sorts</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">constructor_classes</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.fast_enum">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.fast_enum">[docs]</a>
+    <span class="k">def</span> <span class="nf">fast_enum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enumerate terms of the given sort and size.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sort (z3.SortRef): The Z3 sort of the terms to enumerate.</span>
+<span class="sd">            size (int): The maximum size of the terms.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            z3.ExprRef: Enumerated terms of the specified sort and size.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entering fast_enum with sort </span><span class="si">{</span><span class="n">sort</span><span class="si">}</span><span class="s2"> and size </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">sort</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">term_cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Returning </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">term_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span><span class="si">}</span><span class="s2"> cached terms for </span><span class="si">{</span><span class="n">cache_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">term_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span>
+            <span class="k">return</span>
+
+        <span class="n">terms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating terms for size 0 and sort </span><span class="si">{</span><span class="n">sort</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sort</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">BoolSort</span><span class="p">():</span>
+                <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">BoolVal</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_arity</span><span class="p">(</span><span class="n">sort</span><span class="p">))]</span>
+            <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">term</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">constructor_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constructor_classes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sort</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="k">for</span> <span class="n">constructor</span><span class="p">,</span> <span class="n">arg_sorts</span> <span class="ow">in</span> <span class="n">constructor_class</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">size_combination</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_size_combinations</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arg_sorts</span><span class="p">),</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">arg_terms</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fast_enum</span><span class="p">(</span><span class="n">arg_sort</span><span class="p">,</span> <span class="n">sub_size</span><span class="p">))</span> <span class="k">for</span> <span class="n">arg_sort</span><span class="p">,</span> <span class="n">sub_size</span> <span class="ow">in</span>
+                                     <span class="nb">zip</span><span class="p">(</span><span class="n">arg_sorts</span><span class="p">,</span> <span class="n">size_combination</span><span class="p">)]</span>
+                        <span class="k">for</span> <span class="n">term_combination</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">arg_terms</span><span class="p">):</span>
+                            <span class="n">term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_term</span><span class="p">(</span><span class="n">constructor</span><span class="p">,</span> <span class="n">term_combination</span><span class="p">)</span>
+                            <span class="n">simplified_term</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">simplified_term</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+                                <span class="n">terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simplified_term</span><span class="p">)</span>
+                                <span class="k">yield</span> <span class="n">simplified_term</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span><span class="si">}</span><span class="s2"> terms for </span><span class="si">{</span><span class="n">cache_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">terms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No terms generated for </span><span class="si">{</span><span class="n">cache_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">term_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">terms</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.construct_term">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.construct_term">[docs]</a>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">construct_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constructor</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">term_combination</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a Z3 term using the given LIA constructor and arguments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            constructor (str): The name of the LIA constructor.</span>
+<span class="sd">            term_combination (Tuple[z3.ExprRef, ...]): A tuple of Z3 expressions representing the arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            z3.ExprRef: The constructed Z3 term.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an unsupported constructor is provided.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s1">&#39;Plus&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s1">&#39;Minus&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">constructor</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Times&#39;</span><span class="p">):</span>
+            <span class="n">const</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">constructor</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span>
+            <span class="k">return</span> <span class="n">const</span> <span class="o">*</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s1">&#39;Neg&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">constructor</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Const_&#39;</span><span class="p">):</span>
+            <span class="n">const</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">constructor</span><span class="p">[</span><span class="mi">6</span><span class="p">:])</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntVal</span><span class="p">(</span><span class="n">const</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">constructor</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;LE&quot;</span><span class="p">,</span> <span class="s2">&quot;GE&quot;</span><span class="p">,</span> <span class="s2">&quot;LT&quot;</span><span class="p">,</span> <span class="s2">&quot;GT&quot;</span><span class="p">,</span> <span class="s2">&quot;Eq&quot;</span><span class="p">]:</span>
+            <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span> <span class="o">=</span> <span class="n">term_combination</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">If</span><span class="p">(</span>
+                <span class="n">arg1</span> <span class="o">&lt;=</span> <span class="n">arg2</span> <span class="k">if</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s2">&quot;LE&quot;</span> <span class="k">else</span>
+                <span class="n">arg1</span> <span class="o">&gt;=</span> <span class="n">arg2</span> <span class="k">if</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s2">&quot;GE&quot;</span> <span class="k">else</span>
+                <span class="n">arg1</span> <span class="o">&lt;</span> <span class="n">arg2</span> <span class="k">if</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s2">&quot;LT&quot;</span> <span class="k">else</span>
+                <span class="n">arg1</span> <span class="o">&gt;</span> <span class="n">arg2</span> <span class="k">if</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s2">&quot;GT&quot;</span> <span class="k">else</span>
+                <span class="n">arg1</span> <span class="o">==</span> <span class="n">arg2</span><span class="p">,</span>
+                <span class="n">z3</span><span class="o">.</span><span class="n">BoolVal</span><span class="p">(</span><span class="kc">True</span><span class="p">),</span>
+                <span class="n">z3</span><span class="o">.</span><span class="n">BoolVal</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">constructor</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;And&#39;</span><span class="p">,</span> <span class="s1">&#39;Or&#39;</span><span class="p">,</span> <span class="s1">&#39;Implies&#39;</span><span class="p">,</span> <span class="s1">&#39;Xor&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">z3</span><span class="p">,</span> <span class="n">constructor</span><span class="p">)(</span><span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s1">&#39;Not&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">constructor</span> <span class="o">==</span> <span class="s1">&#39;Ite&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">term_combination</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">term_combination</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported constructor: </span><span class="si">{</span><span class="n">constructor</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.generate_size_combinations">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.generate_size_combinations">[docs]</a>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">generate_size_combinations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_args</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate all possible combinations of argument sizes that sum up to the total size.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_args (int): The number of arguments.</span>
+<span class="sd">            total_size (int): The total size of the arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[int, ...]]: A list of tuples representing the size combinations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations_with_replacement</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">total_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">num_args</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.get_arity">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.get_arity">[docs]</a>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_arity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the maximum arity of functions with the given sort as their range.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sort (z3.SortRef): The sort to check.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The maximum arity found, or 0 if no functions have this sort as their range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="n">func</span><span class="o">.</span><span class="n">arity</span><span class="p">()</span> <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">range</span><span class="p">()</span> <span class="o">==</span> <span class="n">sort</span><span class="p">),</span>
+                   <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.generate_candidates">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.generate_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate candidates for all synthesis functions up to the maximum depth.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            List[Tuple[z3.ExprRef, str]]: A list of tuples, each containing a candidate expression and the function name it&#39;s for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">max_depth</span>
+
+        <span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">:</span>
+                    <span class="n">arg_sorts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_arg_sorts</span><span class="p">(</span><span class="n">func_name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fast_enum</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">range</span><span class="p">(),</span> <span class="n">depth</span><span class="p">):</span>
+                        <span class="n">candidate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_candidate_function</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">arg_sorts</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+                        <span class="k">yield</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">func_name</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield from</span> <span class="p">((</span><span class="n">candidate</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.generate_candidates_at_depth">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.generate_candidates_at_depth">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_candidates_at_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate candidates for all synthesis functions at a specific depth.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            depth (int): The depth at which to generate candidates.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Tuple[z3.ExprRef, str]: A tuple containing a candidate expression and the function name it&#39;s for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">:</span>
+                <span class="n">arg_sorts</span> <span class="o">=</span> <span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">arity</span><span class="p">())]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">terms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fast_enum</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">range</span><span class="p">(),</span> <span class="n">depth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span><span class="si">}</span><span class="s2"> terms for </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2"> at depth </span><span class="si">{</span><span class="n">depth</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+                    <span class="n">candidate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_candidate_function</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">arg_sorts</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]:</span>
+                <span class="k">yield</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">func_name</span>
+
+        <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">candidates</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">candidate_cache</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No candidates generated for </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2"> at depth </span><span class="si">{</span><span class="n">depth</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FastEnumerativeCandidateGenerator.prune_candidates">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.fast_enumerative_candidate_generator.FastEnumerativeCandidateGenerator.prune_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">prune_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prune the list of candidate expressions.</span>
+
+<span class="sd">        This method is a placeholder for potential future pruning strategies.</span>
+<span class="sd">        Currently, it doesn&#39;t perform any pruning.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidates (List[Tuple[z3.ExprRef, str]]): The list of candidate expressions to prune.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[z3.ExprRef, str]]: The pruned list of candidates (currently unchanged).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">candidates</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

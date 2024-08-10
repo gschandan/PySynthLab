@@ -1,11 +1,15 @@
 SynthesisProblem
 ================
 
-.. automodule:: src.cegis.z3.synthesis_problem
+Base Classes
+------------
+
+.. automodule:: src.cegis.synthesis_problem_base
+   :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: src.cegis.z3.synthesis_problem.SynthesisProblem
+.. autoclass:: src.cegis.synthesis_problem_base.BaseSynthesisProblem
    :members:
    :undoc-members:
    :show-inheritance:
@@ -13,7 +17,23 @@ SynthesisProblem
    .. automethod:: __init__
    .. automethod:: __str__
 
-.. autoclass:: src.cegis.z3.synthesis_problem.SynthesisProblemContext
+Z3 Extensions
+-------------
+
+.. automodule:: src.cegis.z3.synthesis_problem_z3
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+   .. automethod:: __init__
+   .. automethod:: __str__
+
+.. autoclass:: src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context
    :members:
    :undoc-members:
    :show-inheritance:
@@ -25,8 +45,12 @@ Creating a SynthesisProblem instance:
 
 .. code-block:: python
 
+   from src.cegis.z3.synthesis_problem_z3 import SynthesisProblemZ3
+   from src.utilities.options import Options
+
    problem_str = "(set-logic LIA)\n(synth-fun max2 ((x Int) (y Int)) Int)\n(declare-var a Int)\n(declare-var b Int)\n(constraint (>= (max2 a b) a))"
-   synthesis_problem = SynthesisProblem(problem_str)
+   options = Options()
+   synthesis_problem = SynthesisProblemZ3(problem_str, options)
 
 Getting the logic of the problem:
 
@@ -53,11 +77,11 @@ Substituting candidate expressions:
 
 .. code-block:: python
 
-   from z3 import Int, Function
+   from z3 import Int, Function, If
    max2 = synthesis_problem.context.z3_synth_functions['max2']
    a, b = Int('a'), Int('b')
    replacement = lambda x, y: If(x > y, x, y)
-   substituted = synthesis_problem.substitute_constraints(synthesis_problem.context.z3_constraints, [max2], [replacement])
+   substituted = synthesis_problem.substitute_constraints([synthesis_problem.context.z3_constraints], [max2], [replacement])
    print(substituted[0])  # Output: If(a > b, a, b) >= a
 
-For more detailed examples and usage, refer to the individual method docstrings.
+For more detailed examples and usage, refer to the individual method docstrings of both base classes and Z3 extensions.

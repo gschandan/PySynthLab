@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.cegis.z3.candidate_generator.top_down_enumerative_generator &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.cegis.z3.candidate_generator.top_down_enumerative_generator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.cegis.z3.candidate_generator.top_down_enumerative_generator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">z3</span>
+<span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblemZ3</span>
+<span class="kn">from</span> <span class="nn">src.utilities.cancellation_token</span> <span class="kn">import</span> <span class="n">GlobalCancellationToken</span>
+
+
+<span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator">[docs]</a>
+<span class="k">class</span> <span class="nc">TopDownCandidateGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A top-down candidate generator for synthesis problems.</span>
+
+<span class="sd">    This class generates candidate solutions for synthesis problems using a top-down</span>
+<span class="sd">    approach. It starts with complex expressions and gradually simplifies them,</span>
+<span class="sd">    exploring the solution space in a top-down manner.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        grammar (dict): The grammar used for generating expressions.</span>
+<span class="sd">        problem (SynthesisProblemZ3): The synthesis problem being solved.</span>
+<span class="sd">        min_const (int): The minimum constant value to be used in expressions.</span>
+<span class="sd">        max_const (int): The maximum constant value to be used in expressions.</span>
+<span class="sd">        max_depth (int): The maximum depth of generated expressions.</span>
+<span class="sd">        explored_expressions (dict): A dictionary to keep track of explored expressions for each function.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        define_grammar(variables): Define the grammar for expression generation.</span>
+<span class="sd">        generate_candidates(): Generate candidate expressions.</span>
+<span class="sd">        expand(grammar, expr, depth): Expand an expression using the grammar.</span>
+<span class="sd">        simplify_term(term): Simplify a term in the expression.</span>
+<span class="sd">        prune_candidates(candidates): Prune the list of candidate expressions.</span>
+<span class="sd">        build_tree(grammar, expr, depth): Build a tree representation of the grammar.</span>
+<span class="sd">        print_tree(node, prefix, is_last): Print the tree representation of the grammar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">:</span> <span class="n">SynthesisProblemZ3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_const</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">min_const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_const</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">max_const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_depth</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">max_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">explored_expressions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">func_name</span><span class="p">:</span> <span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">func_name</span> <span class="ow">in</span>
+                                                          <span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">variable_mapping_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">custom_grammar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">metrics</span>
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.define_grammar">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.define_grammar">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the grammar for expression generation.</span>
+
+<span class="sd">        If no custom grammar is provided, this method creates a default grammar</span>
+<span class="sd">        using the given variables and the configured constant range.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            variables (list): List of variable names to be used in the grammar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: The defined grammar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;ite&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;neg&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">)],</span>
+                <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span>
+                      <span class="p">(</span><span class="s1">&#39;!=&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">)],</span>
+                <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_const</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_const</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span></div>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.generate_candidates">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.generate_candidates">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate candidate expressions for each function in the synthesis problem.</span>
+
+<span class="sd">        This method generates candidate expressions using the defined grammar,</span>
+<span class="sd">        simplifies them, and ensures that only unexplored expressions are considered.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[z3.ExprRef, str]]: A list of tuples, where each tuple contains</span>
+<span class="sd">            a candidate expression and the name of the function it&#39;s for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">iteration</span><span class="p">,</span> <span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">variable_mapping</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">variable_mapping_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variable_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+            <span class="n">grammar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">define_grammar</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Grammar </span><span class="si">{</span><span class="n">grammar</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Iteration </span><span class="si">{</span><span class="n">iteration</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_tree</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">)</span>
+                <span class="n">tree_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">tree_str</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">simplified_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_term</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+                <span class="n">expr_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">simplified_expr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">expr_str</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">explored_expressions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Generated expression: </span><span class="si">{</span><span class="n">expr_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">explored_expressions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">expr_str</span><span class="p">)</span>
+                    <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">simplified_expr</span><span class="p">,</span> <span class="n">func_name</span><span class="p">))</span>
+                    <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">candidates</span></div>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.expand">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.expand">[docs]</a>
+    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recursively expand an expression using the grammar.</span>
+
+<span class="sd">        This method generates all possible expansions of a given expression</span>
+<span class="sd">        according to the grammar rules, up to a maximum depth.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            grammar (dict): The grammar to use for expansions.</span>
+<span class="sd">            expr (Union[str, tuple]): The expression to expand.</span>
+<span class="sd">            depth (int): The current depth in the expansion process.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[z3.ExprRef]: A list of expanded expressions.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            If expr is &#39;S&#39; and the grammar includes a rule &#39;S&#39;: [&#39;+&#39;, &#39;T&#39;, &#39;T&#39;],</span>
+<span class="sd">            this method might return expansions like [x + y, x + 1, 1 + x, ...].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_depth</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">expansions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">production</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">[</span><span class="n">expr</span><span class="p">]:</span>
+                <span class="n">expansions</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="n">production</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">expr</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">op</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">expr</span>
+            <span class="n">arg_expansions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">arg_combo</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">arg_expansions</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntNumRef</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z3</span><span class="o">.</span><span class="n">IntNumRef</span><span class="p">):</span>
+                        <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;ite&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;==&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;!=&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">arg_combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;neg&#39;</span><span class="p">:</span>
+                    <span class="n">expansions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">arg_combo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">expansions</span></div>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.simplify_term">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.simplify_term">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">simplify_term</span><span class="p">(</span><span class="n">term</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simplify a term in the expression.</span>
+
+<span class="sd">        This method uses Z3&#39;s simplification for Z3 expressions and</span>
+<span class="sd">        returns integers as-is.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            term (Union[z3.ExprRef, int]): The term to simplify.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Union[z3.ExprRef, int]: The simplified term.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            simplify_term(z3.Int(&#39;x&#39;) + 0) might return z3.Int(&#39;x&#39;)</span>
+<span class="sd">            simplify_term(5) would return 5</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">term</span></div>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.prune_candidates">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.prune_candidates">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">prune_candidates</span><span class="p">(</span><span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prune the list of candidate expressions.</span>
+
+<span class="sd">        This method is a placeholder for potential future pruning strategies.</span>
+<span class="sd">        Currently, it returns the candidates unchanged.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidates (List[Tuple[z3.ExprRef, str]]): The list of candidate</span>
+<span class="sd">            expressions to prune.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[z3.ExprRef, str]]: The pruned list of candidates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">candidates</span></div>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.build_tree">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.build_tree">[docs]</a>
+    <span class="k">def</span> <span class="nf">build_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">expr</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a tree representation of the grammar.</span>
+
+<span class="sd">        This method constructs a tree structure that represents the</span>
+<span class="sd">        possible expansions of an expression according to the grammar.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            grammar (dict): The grammar to use for tree construction.</span>
+<span class="sd">            expr (Union[str, tuple]): The expression to expand into a tree.</span>
+<span class="sd">            depth (int, optional): The current depth in the tree. Defaults to 0.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Node: The root node of the constructed tree.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The tree construction stops at a depth of 10 to prevent</span>
+<span class="sd">            infinite recursion for recursive grammars.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">op</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">expr</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_tree</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">production</span> <span class="ow">in</span> <span class="n">grammar</span><span class="p">[</span><span class="n">expr</span><span class="p">]:</span>
+                <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_tree</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="n">production</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">node</span></div>
+
+
+<div class="viewcode-block" id="TopDownCandidateGenerator.print_tree">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.top_down_enumerative_generator.TopDownCandidateGenerator.print_tree">[docs]</a>
+    <span class="k">def</span> <span class="nf">print_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">is_last</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a string representation of the grammar tree.</span>
+
+<span class="sd">        This method creates a formatted string that visually represents</span>
+<span class="sd">        the structure of the grammar tree.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node (Node): The current node in the tree.</span>
+<span class="sd">            prefix (str, optional): The prefix to use for this line. Defaults to &quot;&quot;.</span>
+<span class="sd">            is_last (bool, optional): Whether this is the last child of its parent. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: A list of strings, each representing a line in the tree visualization.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            For a simple grammar tree, the output might look like:</span>
+
+<span class="sd">            .. code-block::</span>
+
+<span class="sd">                S</span>
+<span class="sd">                ├── T</span>
+<span class="sd">                │   ├── x</span>
+<span class="sd">                │   └── y</span>
+<span class="sd">                └── (&#39;+&#39;, &#39;T&#39;, &#39;T&#39;)</span>
+<span class="sd">                    ├── +</span>
+<span class="sd">                    ├── T</span>
+<span class="sd">                    │   ├── x</span>
+<span class="sd">                    │   └── y</span>
+<span class="sd">                    └── T</span>
+<span class="sd">                        ├── x</span>
+<span class="sd">                        └── y</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;└── &quot;</span> <span class="k">if</span> <span class="n">is_last</span> <span class="k">else</span> <span class="s2">&quot;├── &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_tree</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="k">if</span> <span class="n">is_last</span> <span class="k">else</span> <span class="s2">&quot;│   &quot;</span><span class="p">),</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

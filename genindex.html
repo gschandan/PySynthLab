@@ -6,6 +6,7 @@
   <title>Index &mdash; PySynthLab 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
@@ -43,10 +44,105 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="config_manager.html">ConfigManager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="candidate_generator.html">Candidate Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -77,6 +173,8 @@
 
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
@@ -91,14 +189,19 @@
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__">__init__() (src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator method)</a>
+      <li><a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.__init__">__init__() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>
 
       <ul>
+        <li><a href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__">(src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator method)</a>
+</li>
+        <li><a href="synthesis_problem.html#id49">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#id50">[1]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.__init__">[2]</a>
+</li>
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__">(src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis method)</a>
 </li>
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.__init__">(src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp method)</a>
@@ -108,6 +211,36 @@
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__">(src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id1">__str__() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#id2">[1]</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.__str__">[2]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.__str__">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id22">additional_constraints (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id82">[1]</a>, <a href="synthesis_problem.html#id86">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.additional_constraints">[3]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id23">all_z3_functions (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id85">[1]</a>, <a href="synthesis_problem.html#id87">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.all_z3_functions">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id24">assertions (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id79">[1]</a>, <a href="synthesis_problem.html#id88">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.assertions">[3]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id0">BaseSynthesisProblem (class in src.cegis.synthesis_problem_base)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem">[1]</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -124,15 +257,29 @@
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.candidate_generator">(src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample">check_counterexample() (src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy method)</a>
+</li>
+      <li><a href="synthesis_problem.html#id51">collect_function_io_pairs() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.collect_function_io_pairs">[1]</a>
 </li>
       <li><a href="config_manager.html#src.utilities.options.LoggingOptions.collect_metrics">collect_metrics (src.utilities.options.LoggingOptions attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager">ConfigManager (class in src.utilities.config_manager)</a>
 </li>
+      <li><a href="synthesis_problem.html#id25">constraints (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id71">[1]</a>, <a href="synthesis_problem.html#id89">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.constraints">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id48">context (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.context">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id52">convert_sort_descriptor_to_z3_sort() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 static method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.convert_sort_descriptor_to_z3_sort">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id3">convert_sygus_to_smt() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.convert_sygus_to_smt">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id26">counterexamples (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id80">[1]</a>, <a href="synthesis_problem.html#id90">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.counterexamples">[3]</a>
+</li>
       <li><a href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function">create_candidate_function() (src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator static method)</a>
+</li>
+      <li><a href="synthesis_problem.html#id53">create_z3_variable() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 static method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.create_z3_variable">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -140,6 +287,8 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id27">enumerator_solver (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id68">[1]</a>, <a href="synthesis_problem.html#id91">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.enumerator_solver">[3]</a>
+</li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis">execute_cegis() (src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis method)</a>
 
       <ul>
@@ -162,6 +311,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="config_manager.html#src.utilities.options.LoggingOptions.file">file (src.utilities.options.LoggingOptions attribute)</a>
 </li>
+      <li><a href="synthesis_problem.html#id54">find_undeclared_variables() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.find_undeclared_variables">[1]</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -176,15 +327,25 @@
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates">(src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample">generate_counterexample() (src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy method)</a>
 </li>
       <li><a href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts">get_arg_sorts() (src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator method)</a>
 </li>
       <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.get_config">get_config() (src.utilities.config_manager.ConfigManager class method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id4">get_function_symbols() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_function_symbols">[1]</a>
+</li>
       <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.get_logger">get_logger() (src.utilities.config_manager.ConfigManager class method)</a>
+</li>
+      <li><a href="synthesis_problem.html#id5">get_logic() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_logic">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id6">get_predefined_funcs() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_predefined_funcs">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id7">get_synth_funcs() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_synth_funcs">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id8">get_var_symbols() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.get_var_symbols">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -192,6 +353,32 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id9">info_smt() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.info_smt">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id10">info_sygus() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.info_sygus">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id11">initialise_predefined_functions() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.initialise_predefined_functions">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id55">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.initialise_predefined_functions">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id12">initialise_synth_functions() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.initialise_synth_functions">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id56">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.initialise_synth_functions">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id13">initialise_variables() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.initialise_variables">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id57">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.initialise_variables">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id43">input_problem (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.input_problem">[1]</a>
+</li>
       <li><a href="config_manager.html#src.utilities.options.Options.input_source">input_source (src.utilities.options.Options attribute)</a>
 </li>
   </ul></td>
@@ -204,10 +391,16 @@
 </li>
       <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.load_yaml">load_yaml() (src.utilities.config_manager.ConfigManager class method)</a>
 </li>
+      <li><a href="synthesis_problem.html#id14">logger (src.cegis.synthesis_problem_base.BaseSynthesisProblem attribute)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.logger">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id41">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.logger">[1]</a>
+</li>
+        <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.logger">(src.utilities.config_manager.ConfigManager attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.logger">logger (src.utilities.config_manager.ConfigManager attribute)</a>
-</li>
       <li><a href="config_manager.html#src.utilities.options.LoggingOptions">LoggingOptions (class in src.utilities.options)</a>
 </li>
   </ul></td>
@@ -216,14 +409,27 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id58">map_z3_variables() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.map_z3_variables">[1]</a>
+</li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.max_const">max_const (src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp attribute)</a>
+</li>
+      <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.merge_config">merge_config() (src.utilities.config_manager.ConfigManager static method)</a>
+</li>
+      <li><a href="synthesis_problem.html#id15">metrics (src.cegis.synthesis_problem_base.BaseSynthesisProblem attribute)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.metrics">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.merge_config">merge_config() (src.utilities.config_manager.ConfigManager static method)</a>
-</li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.min_const">min_const (src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp attribute)</a>
 </li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="synthesis_problem.html#module-src.cegis.synthesis_problem_base">src.cegis.synthesis_problem_base</a>
+</li>
+        <li><a href="synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">src.cegis.z3.synthesis_problem_z3</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -233,6 +439,10 @@
       <li><a href="config_manager.html#src.utilities.options.SolverOptions.name">name (src.utilities.options.SolverOptions attribute)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id59">negate_assertions() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 static method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.negate_assertions">[1]</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="O">O</h2>
@@ -240,9 +450,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity">op_complexity() (src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator method)</a>
 </li>
+      <li><a href="config_manager.html#src.utilities.options.Options">Options (class in src.utilities.options)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config_manager.html#src.utilities.options.Options">Options (class in src.utilities.options)</a>
+      <li><a href="synthesis_problem.html#id16">options (src.cegis.synthesis_problem_base.BaseSynthesisProblem attribute)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.options">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id42">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.options">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id28">original_assertions (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id70">[1]</a>, <a href="synthesis_problem.html#id92">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.original_assertions">[3]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -250,9 +468,35 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.problem">problem (src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis attribute)</a>
+      <li><a href="synthesis_problem.html#id17">parse_constraints() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.parse_constraints">[1]</a>
 
       <ul>
+        <li><a href="synthesis_problem.html#id60">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.parse_constraints">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id18">parse_problem() (src.cegis.synthesis_problem_base.BaseSynthesisProblem static method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.parse_problem">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id19">parse_term() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.parse_term">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id61">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.parse_term">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id44">parser (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.parser">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id62">partial_evaluate_constraint() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.partial_evaluate_constraint">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id63">populate_all_z3_functions() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.populate_all_z3_functions">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id47">printer (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.printer">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id45">problem (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.problem">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.problem">(src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis attribute)</a>
+</li>
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.problem">(src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp attribute)</a>
 </li>
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.problem">(src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown attribute)</a>
@@ -260,8 +504,6 @@
         <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.problem">(src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates">prune_candidates() (src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator method)</a>
 </li>
   </ul></td>
@@ -286,15 +528,51 @@
 </li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found">set_solution_found() (src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy method)</a>
 </li>
-      <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.setup_logger">setup_logger() (src.utilities.config_manager.ConfigManager class method)</a>
+      <li><a href="synthesis_problem.html#id20">setup_logger() (src.cegis.synthesis_problem_base.BaseSynthesisProblem class method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.setup_logger">[1]</a>
+
+      <ul>
+        <li><a href="config_manager.html#src.utilities.config_manager.ConfigManager.setup_logger">(src.utilities.config_manager.ConfigManager class method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id29">smt_problem (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id83">[1]</a>, <a href="synthesis_problem.html#id93">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.smt_problem">[3]</a>
+</li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.solution_found">solution_found (src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy attribute)</a>
 </li>
       <li><a href="config_manager.html#src.utilities.options.SolverOptions">SolverOptions (class in src.utilities.options)</a>
 </li>
+      <li><a href="synthesis_problem.html#id64">split_conjoined_constraint() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.split_conjoined_constraint">[1]</a>
+</li>
+      <li>
+    src.cegis.synthesis_problem_base
+
+      <ul>
+        <li><a href="synthesis_problem.html#module-src.cegis.synthesis_problem_base">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    src.cegis.z3.synthesis_problem_z3
+
+      <ul>
+        <li><a href="synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">module</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id65">substitute_candidates() (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.substitute_candidates">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id21">substitute_constraints() (src.cegis.synthesis_problem_base.BaseSynthesisProblem method)</a>, <a href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem.substitute_constraints">[1]</a>
+
+      <ul>
+        <li><a href="synthesis_problem.html#id66">(src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 method)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.substitute_constraints">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="synthesis_problem.html#id46">symbol_table (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3 attribute)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3.symbol_table">[1]</a>
+</li>
       <li><a href="config_manager.html#src.utilities.options.SynthesisParameters">SynthesisParameters (class in src.utilities.options)</a>
+</li>
+      <li><a href="synthesis_problem.html#id40">SynthesisProblemZ3 (class in src.cegis.z3.synthesis_problem_z3)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">[1]</a>
+</li>
+      <li><a href="synthesis_problem.html#id67">SynthesisProblemZ3Context (class in src.cegis.z3.synthesis_problem_z3)</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context">[1]</a>
 </li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy">SynthesisStrategy (class in src.cegis.z3.synthesis_strategy.synthesis_strategy)</a>
 </li>
@@ -316,7 +594,37 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id30">variable_mapping_dict (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id84">[1]</a>, <a href="synthesis_problem.html#id94">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.variable_mapping_dict">[3]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id31">verification_solver (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id69">[1]</a>, <a href="synthesis_problem.html#id95">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.verification_solver">[3]</a>
+</li>
       <li><a href="synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates">verify_candidates() (src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id32">z3_constraints (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id77">[1]</a>, <a href="synthesis_problem.html#id96">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_constraints">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id33">z3_negated_constraints (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id81">[1]</a>, <a href="synthesis_problem.html#id97">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_negated_constraints">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id34">z3_non_conjoined_constraints (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id78">[1]</a>, <a href="synthesis_problem.html#id98">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_non_conjoined_constraints">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id35">z3_predefined_function_args (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id76">[1]</a>, <a href="synthesis_problem.html#id99">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_predefined_function_args">[3]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="synthesis_problem.html#id100">z3_predefined_functions (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id36">[1]</a>, <a href="synthesis_problem.html#id75">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_predefined_functions">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id101">z3_synth_function_args (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id37">[1]</a>, <a href="synthesis_problem.html#id74">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_synth_function_args">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id102">z3_synth_functions (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id38">[1]</a>, <a href="synthesis_problem.html#id73">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_synth_functions">[3]</a>
+</li>
+      <li><a href="synthesis_problem.html#id103">z3_variables (src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context attribute)</a>, <a href="synthesis_problem.html#id39">[1]</a>, <a href="synthesis_problem.html#id72">[2]</a>, <a href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context.z3_variables">[3]</a>
 </li>
   </ul></td>
 </tr></table>

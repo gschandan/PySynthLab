@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.cegis.z3.candidate_generator.candidate_generator_base &mdash; PySynthLab 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            PySynthLab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../synthesis_strategy.html">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../synthesis_strategy.html#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../synthesis_strategy.html#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PySynthLab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.cegis.z3.candidate_generator.candidate_generator_base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.cegis.z3.candidate_generator.candidate_generator_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblemZ3</span>
+<span class="kn">from</span> <span class="nn">src.utilities.cancellation_token</span> <span class="kn">import</span> <span class="n">GlobalCancellationToken</span>
+
+
+<div class="viewcode-block" id="CandidateGenerator">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator">[docs]</a>
+<span class="k">class</span> <span class="nc">CandidateGenerator</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for candidate function generators.</span>
+
+<span class="sd">    This class defines the interface for generating and pruning candidate functions</span>
+<span class="sd">    in the context of program synthesis.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        problem (SynthesisProblemZ3): The synthesis problem instance.</span>
+<span class="sd">        config (object): Configuration options for the synthesis problem.</span>
+<span class="sd">        min_const (int): Minimum constant value allowed in candidate functions.</span>
+<span class="sd">        max_const (int): Maximum constant value allowed in candidate functions.</span>
+<span class="sd">        operation_costs (dict): Dictionary mapping operations to their complexity costs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CandidateGenerator.__init__">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">:</span> <span class="n">SynthesisProblemZ3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the CandidateGenerator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            problem (SynthesisProblemZ3): The synthesis problem instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">metrics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_const</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">min_const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_const</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">max_const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operation_costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">operation_costs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;smt.macro_finder&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.generate_candidates">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">generate_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate candidate functions.</span>
+
+<span class="sd">        This method should be implemented by subclasses to generate a list of</span>
+<span class="sd">        candidate functions for the synthesis problem.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[z3.ExprRef, str]]: A list of tuples, where each tuple contains</span>
+<span class="sd">            a Z3 expression representing a candidate function and its string representation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.prune_candidates">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">prune_candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prune candidate functions.</span>
+
+<span class="sd">        This method should be implemented by subclasses to filter out unsuitable</span>
+<span class="sd">        candidates from the given list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidates (List[Tuple[z3.ExprRef, str]]): List of candidate functions to prune.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[z3.ExprRef, str]]: A filtered list of candidate functions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.op_complexity">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity">[docs]</a>
+    <span class="k">def</span> <span class="nf">op_complexity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the complexity cost of an operation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            op (str): The operation name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The complexity cost of the operation, or 0 if not defined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation_costs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.get_arg_sorts">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_arg_sorts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the argument sorts (types) for a given function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func_name (str): The name of the function.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[z3.SortRef]: A list of Z3 sorts representing the argument types.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">arity</span><span class="p">())]</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.create_candidate_function">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_candidate_function</span><span class="p">(</span><span class="n">candidate_expr</span><span class="p">:</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">,</span> <span class="n">arg_sorts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">SortRef</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">z3</span><span class="o">.</span><span class="n">ExprRef</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a candidate function from an expression and argument sorts.</span>
+
+<span class="sd">        This method creates a Z3 function by substituting variables in the candidate</span>
+<span class="sd">        expression with fresh variables of the appropriate sorts.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidate_expr (z3.ExprRef): The candidate expression.</span>
+<span class="sd">            arg_sorts (List[z3.SortRef]): List of argument sorts for the function.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            z3.ExprRef: A Z3 expression representing the candidate function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">z3</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sort</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arg_sorts</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">candidate_expr</span><span class="p">,</span> <span class="p">[(</span><span class="n">arg</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">sort</span><span class="p">()))</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.check_partial_satisfaction">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.check_partial_satisfaction">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_partial_satisfaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">ExprRef</span><span class="p">,</span> <span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check partial satisfaction of constraints by the candidate solution.</span>
+
+<span class="sd">        This method checks each constraint individually and returns the fraction satisfied.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidate (ExprRef): The candidate solution to evaluate.</span>
+<span class="sd">            func_name (str): The name of the function being synthesized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: The fraction of constraints satisfied by the candidate.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            score = generator.check_partial_satisfaction(candidate, &#39;f&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_non_conjoined_constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">satisfied_constraints</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="n">constraints</span><span class="p">:</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">is_implies</span><span class="p">(</span><span class="n">constraint</span><span class="p">):</span>
+                <span class="n">antecedent</span><span class="p">,</span> <span class="n">consequent</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">constraint</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">negated_constraint</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">antecedent</span><span class="p">,</span> <span class="n">Not</span><span class="p">(</span><span class="n">consequent</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">negated_constraint</span> <span class="o">=</span> <span class="n">Not</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+            <span class="n">substituted_constraint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">negated_constraint</span><span class="p">],</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">candidate</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">unsat</span><span class="p">:</span>
+                <span class="n">satisfied_constraints</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">satisfied_constraints</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">constraints</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.quantitative_satisfaction">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.quantitative_satisfaction">[docs]</a>
+    <span class="k">def</span> <span class="nf">quantitative_satisfaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">ExprRef</span><span class="p">,</span> <span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the candidate using quantitative satisfaction.</span>
+
+<span class="sd">        This method measures how close the candidate is to satisfying each constraint,</span>
+<span class="sd">        providing a more nuanced score than binary satisfaction.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidate (ExprRef): The candidate solution to evaluate.</span>
+<span class="sd">            func_name (str): The name of the function being synthesized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A score between 0 and 1, where 1 indicates full satisfaction.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            score = generator.quantitative_satisfaction(candidate, &#39;f&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">total_diff</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_non_conjoined_constraints</span><span class="p">:</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">is_implies</span><span class="p">(</span><span class="n">constraint</span><span class="p">):</span>
+                <span class="n">antecedent</span><span class="p">,</span> <span class="n">consequent</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">constraint</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">negated_constraint</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">antecedent</span><span class="p">,</span> <span class="n">Not</span><span class="p">(</span><span class="n">consequent</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">negated_constraint</span> <span class="o">=</span> <span class="n">Not</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+            <span class="n">substituted_constraint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">negated_constraint</span><span class="p">],</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">candidate</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">is_bool</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">unsat</span><span class="p">:</span>
+                    <span class="n">total_diff</span> <span class="o">+=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">total_diff</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">is_arith</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">):</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">Abs</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">diff</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">unsat</span><span class="p">:</span>
+                    <span class="n">diff_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">is_rational_value</span><span class="p">(</span><span class="n">diff_value</span><span class="p">):</span>
+                        <span class="n">total_diff</span> <span class="o">+=</span> <span class="n">diff_value</span><span class="o">.</span><span class="n">as_fraction</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">is_int_value</span><span class="p">(</span><span class="n">diff_value</span><span class="p">):</span>
+                        <span class="n">total_diff</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">diff_value</span><span class="o">.</span><span class="n">as_long</span><span class="p">())</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">total_diff</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">total_diff</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">total_diff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.unsat_core_analysis">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.unsat_core_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">unsat_core_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">ExprRef</span><span class="p">,</span> <span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the candidate using unsat core analysis.</span>
+
+<span class="sd">        This method uses Z3&#39;s unsat core providing a score and insight into how close the candidate</span>
+<span class="sd">        is to satisfying all constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidate (ExprRef): The candidate solution to evaluate.</span>
+<span class="sd">            func_name (str): The name of the function being synthesized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: The fraction of constraints not in the unsat core (i.e., satisfied).</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            score = generator.unsat_core_analysis(candidate, &#39;f&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">negated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_negated_constraints</span><span class="p">,</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">candidate</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">assert_exprs</span><span class="p">(</span><span class="n">negated</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">unsat</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">unsat_core</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">substituted_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_non_conjoined_constraints</span><span class="p">,</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">candidate</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">substituted_constraints</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">assert_and_track</span><span class="p">(</span><span class="n">Not</span><span class="p">(</span><span class="n">constraint</span><span class="p">),</span> <span class="n">Bool</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;c_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">unsat</span><span class="p">:</span>
+            <span class="n">unsat_core</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">unsat_core</span><span class="p">()</span>
+            <span class="n">satisfied_constraints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">substituted_constraints</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">unsat_core</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">satisfied_constraints</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">score</span> <span class="o">=</span> <span class="n">satisfied_constraints</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">substituted_constraints</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">unsat_core</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">score</span></div>
+
+
+<div class="viewcode-block" id="CandidateGenerator.fuzzy_satisfaction">
+<a class="viewcode-back" href="../../../../../candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.fuzzy_satisfaction">[docs]</a>
+    <span class="k">def</span> <span class="nf">fuzzy_satisfaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">ExprRef</span><span class="p">,</span> <span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the candidate using fuzzy satisfaction.</span>
+
+<span class="sd">        This method checks each constraint individually but allows for partial</span>
+<span class="sd">        satisfaction, providing a more gradual measure of constraint satisfaction.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidate (ExprRef): The candidate solution to evaluate.</span>
+<span class="sd">            func_name (str): The name of the function being synthesized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A score between 0 and 1, where 1 indicates full satisfaction.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            score = generator.fuzzy_satisfaction(candidate, &#39;f&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">all_satisfied</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">num_satisfied</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_non_conjoined_constraints</span><span class="p">:</span>
+            <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">is_implies</span><span class="p">(</span><span class="n">constraint</span><span class="p">):</span>
+                <span class="n">antecedent</span><span class="p">,</span> <span class="n">consequent</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">constraint</span><span class="o">.</span><span class="n">arg</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">negated_constraint</span> <span class="o">=</span> <span class="n">And</span><span class="p">(</span><span class="n">antecedent</span><span class="p">,</span> <span class="n">Not</span><span class="p">(</span><span class="n">consequent</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">negated_constraint</span> <span class="o">=</span> <span class="n">Not</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
+
+            <span class="n">substituted_constraint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">substitute_constraints</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">negated_constraint</span><span class="p">],</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_synth_functions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">candidate</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">substituted_constraint</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">unsat</span><span class="p">:</span>
+                <span class="n">num_satisfied</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_satisfied</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">partial_solver</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">all_satisfied</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">num_satisfied</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">z3_non_conjoined_constraints</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gurmukh Chandan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

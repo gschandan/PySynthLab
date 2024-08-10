@@ -7,6 +7,7 @@
   <title>SynthesisStrategy &mdash; PySynthLab 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
@@ -46,61 +47,105 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="config_manager.html">ConfigManager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SynthesisStrategy</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.problem"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.problem</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.solution_found"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.solution_found</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.candidate_generator"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.candidate_generator</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.check_counterexample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.execute_cegis()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.generate_candidates()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.generate_counterexample()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.set_candidate_generator()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.set_solution_found()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.test_candidates()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy.verify_candidates()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to PySynthLab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#who-should-use-pysynthlab">Who should use PySynthLab?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-steps">Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-benchmarks">Running Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="config_manager.html">ConfigManager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#configmanager-class">ConfigManager Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#options-class">Options Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#loggingoptions-class">LoggingOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.LoggingOptions"><code class="docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#synthesisparameters-class">SynthesisParameters Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.SynthesisParameters"><code class="docutils literal notranslate"><span class="pre">SynthesisParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_manager.html#solveroptions-class">SolverOptions Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_manager.html#src.utilities.options.SolverOptions"><code class="docutils literal notranslate"><span class="pre">SolverOptions</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.problem"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.problem</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.candidate_generator"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.candidate_generator</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis.execute_cegis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="synthesis_problem.html">SynthesisProblem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.synthesis_problem_base">Base Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.synthesis_problem_base.BaseSynthesisProblem"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id0"><code class="docutils literal notranslate"><span class="pre">BaseSynthesisProblem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#module-src.cegis.z3.synthesis_problem_z3">Z3 Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3Context"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id40"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="synthesis_problem.html#id67"><code class="docutils literal notranslate"><span class="pre">SynthesisProblemZ3Context</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="synthesis_problem.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SynthesisStrategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#synthesisstrategy-class">SynthesisStrategy Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fastenumerativesynthesis-class">FastEnumerativeSynthesis Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis"><code class="docutils literal notranslate"><span class="pre">FastEnumerativeSynthesis</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#randomsearchstrategybottomup-class">RandomSearchStrategyBottomUp Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.problem"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp.problem</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.min_const"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp.min_const</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.max_const"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp.max_const</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.__init__"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyBottomUp.execute_cegis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="candidate_generator.html">Candidate Generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#candidategenerator-base-class">CandidateGenerator Base Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.generate_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.generate_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.prune_candidates"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.prune_candidates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.op_complexity"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.op_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.get_arg_sorts"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.get_arg_sorts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="candidate_generator.html#src.cegis.z3.candidate_generator.candidate_generator_base.CandidateGenerator.create_candidate_function"><code class="docutils literal notranslate"><span class="pre">CandidateGenerator.create_candidate_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#topdowncandidategenerator-class">TopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#weightedtopdowncandidategenerator-class">WeightedTopDownCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#randomcandidategenerator-class">RandomCandidateGenerator Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="candidate_generator.html#fastenumerativecandidategenerator-class">FastEnumerativeCandidateGenerator Class</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#randomsearchstrategytopdown-class">RandomSearchStrategyTopDown Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.problem"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown.problem</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.candidate_generator"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown.candidate_generator</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.__init__"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis"><code class="docutils literal notranslate"><span class="pre">RandomSearchStrategyTopDown.execute_cegis()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="candidate_generator.html">Candidate Generators</a></li>
 </ul>
 
         </div>
@@ -117,6 +162,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API Reference</a></li>
       <li class="breadcrumb-item active">SynthesisStrategy</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/synthesis_strategy.rst.txt" rel="nofollow"> View page source</a>
@@ -133,7 +179,7 @@
 <h2>SynthesisStrategy Class<a class="headerlink" href="#synthesisstrategy-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.synthesis_strategy.</span></span><span class="sig-name descname"><span class="pre">SynthesisStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.synthesis_strategy.</span></span><span class="sig-name descname"><span class="pre">SynthesisStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>An abstract base class for implementing various synthesis strategies.</p>
 <p>This class provides a framework for implementing different approaches to program synthesis,
@@ -144,7 +190,7 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
 <dd><p>The synthesis problem to be solved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SynthesisProblemZ3</p>
+<dd class="field-odd"><p><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">SynthesisProblemZ3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -171,7 +217,8 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
 </dl>
 </dd></dl>
 
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyCustomStrategy</span><span class="p">(</span><span class="n">SynthesisStrategy</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">execute_cegis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">100</span>
@@ -184,6 +231,7 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
         <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;No solution found within max iterations.&quot;</span>
 </pre></div>
 </div>
+</div>
 <dl>
 <dt>Usage:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span> <span class="o">=</span> <span class="n">SynthesisProblem</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="n">strategy</span> <span class="o">=</span> <span class="n">MyCustomStrategy</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
@@ -194,12 +242,12 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize the SynthesisStrategy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>problem</strong> (<em>SynthesisProblemZ3</em>) – The synthesis problem to be solved.</p></li>
+<li><p><strong>problem</strong> (<a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><em>SynthesisProblemZ3</em></a>) – The synthesis problem to be solved.</p></li>
 <li><p><strong>candidate_generator</strong> (<em>CandidateGenerator</em><em>, </em><em>optional</em>) – A custom candidate generator. If None, a default RandomCandidateGenerator will be used.</p></li>
 </ul>
 </dd>
@@ -208,7 +256,7 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample">
-<span class="sig-name descname"><span class="pre">check_counterexample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">check_counterexample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExprRef</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.check_counterexample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.check_counterexample" title="Link to this definition"></a></dt>
 <dd><p>Check if a candidate satisfies all stored counterexamples for a given function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -218,14 +266,17 @@ particularly in the context of Counterexample-Guided Inductive Synthesis (CEGIS)
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>bool</em> – True if the candidate satisfies all counterexamples, False otherwise.</p>
+<dd class="field-even"><p>True if the candidate satisfies all counterexamples, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.execute_cegis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop.</p>
 <p>This method should implement the core logic of the synthesis strategy.
 It typically involves generating candidates, testing them, and refining
@@ -236,19 +287,22 @@ a termination condition is met.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates">
-<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_candidates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.generate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_candidates" title="Link to this definition"></a></dt>
 <dd><p>Generate candidate solutions using the candidate generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>list[tuple[ExprRef, str]]</em> – A list of tuples, each containing a candidate solution
+<dd class="field-odd"><p>A list of tuples, each containing a candidate solution
 (as a Z3 expression) and its string representation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[tuple[ExprRef, str]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample">
-<span class="sig-name descname"><span class="pre">generate_counterexample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_counterexample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.generate_counterexample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.generate_counterexample" title="Link to this definition"></a></dt>
 <dd><p>Find a potential counterexample for a set of candidates, if one can be found.</p>
 <p>This method attempts to find input values that violate the problem constraints
 for the given candidate functions.</p>
@@ -257,15 +311,18 @@ for the given candidate functions.</p>
 <dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>z3.ExprRef</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of tuples containing candidate functions and their names.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Dict[str, Dict[str, Any]] | None</em> – A dictionary of counterexamples for each function,
+<dd class="field-even"><p>A dictionary of counterexamples for each function,
 or None if no counterexample is found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Dict[str, Any]] | None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator">
-<span class="sig-name descname"><span class="pre">set_candidate_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_candidate_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CandidateGenerator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.set_candidate_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_candidate_generator" title="Link to this definition"></a></dt>
 <dd><p>Set a new candidate generator.</p>
 <p>This method allows changing the candidate generator during the synthesis process,
 which can be useful for implementing adaptive or other custom strategies.</p>
@@ -278,7 +335,7 @@ which can be useful for implementing adaptive or other custom strategies.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found">
-<span class="sig-name descname"><span class="pre">set_solution_found</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_solution_found</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.set_solution_found"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.set_solution_found" title="Link to this definition"></a></dt>
 <dd><p>Mark that a solution has been found.</p>
 <p>This method sets the solution_found flag to True, indicating that
 the synthesis process has successfully found a solution.</p>
@@ -286,7 +343,7 @@ the synthesis process has successfully found a solution.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates">
-<span class="sig-name descname"><span class="pre">test_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_strs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">test_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_strs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.test_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.test_candidates" title="Link to this definition"></a></dt>
 <dd><p>Test a set of candidate functions against the synthesis problem.</p>
 <p>This method checks if the given candidate functions satisfy all constraints
 and pass stored counterexamples.</p>
@@ -298,17 +355,20 @@ and pass stored counterexamples.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>bool</em> – True if the candidates satisfy all constraints, False otherwise.</p>
+<dd class="field-even"><p>True if the candidates satisfy all constraints, False otherwise.</p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the number of candidate functions doesn’t match the number of synthesis functions.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the number of candidate functions doesn’t match the number of synthesis functions.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates">
-<span class="sig-name descname"><span class="pre">verify_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">verify_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ExprRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/synthesis_strategy.html#SynthesisStrategy.verify_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy.verify_candidates" title="Link to this definition"></a></dt>
 <dd><p>Verify if a set of candidates satisfies all constraints.</p>
 <p>This method performs a final verification step to ensure that the candidate functions
 satisfy all constraints of the synthesis problem.</p>
@@ -317,7 +377,10 @@ satisfy all constraints of the synthesis problem.</p>
 <dd class="field-odd"><p><strong>candidates</strong> (<em>List</em><em>[</em><em>z3.ExprRef</em><em>]</em>) – List of candidate functions to verify.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>bool</em> – True if the candidates satisfy all constraints, False otherwise.</p>
+<dd class="field-even"><p>True if the candidates satisfy all constraints, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -329,7 +392,7 @@ satisfy all constraints of the synthesis problem.</p>
 <h2>FastEnumerativeSynthesis Class<a class="headerlink" href="#fastenumerativesynthesis-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.fast_enumerative_synth.</span></span><span class="sig-name descname"><span class="pre">FastEnumerativeSynthesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.fast_enumerative_synth.</span></span><span class="sig-name descname"><span class="pre">FastEnumerativeSynthesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/fast_enumerative_synth.html#FastEnumerativeSynthesis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></p>
 <p>A synthesis strategy that uses fast enumerative synthesis.</p>
 <p>This class implements a synthesis strategy based on the fast enumerative synthesis approach,
@@ -342,7 +405,7 @@ which systematically explores the space of possible programs in a systematic man
 <dd><p>The synthesis problem to be solved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SynthesisProblemZ3</p>
+<dd class="field-odd"><p><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">SynthesisProblemZ3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -358,7 +421,8 @@ which systematically explores the space of possible programs in a systematic man
 </dl>
 </dd></dl>
 
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblem</span>
 <span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_strategy.fast_enumerative_synth</span> <span class="kn">import</span> <span class="n">FastEnumerativeSynthesis</span>
 
@@ -378,6 +442,7 @@ which systematically explores the space of possible programs in a systematic man
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found within the given constraints.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This strategy is particularly effective for problems where the space of possible
@@ -386,18 +451,18 @@ divide-and-conquer techniques to scale to larger synthesis tasks.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/fast_enumerative_synth.html#FastEnumerativeSynthesis.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize the FastEnumerativeSynthesis strategy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>problem</strong> (<em>SynthesisProblemZ3</em>) – The synthesis problem to be solved.</p>
+<dd class="field-odd"><p><strong>problem</strong> (<a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><em>SynthesisProblemZ3</em></a>) – The synthesis problem to be solved.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis">
-<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/fast_enumerative_synth.html#FastEnumerativeSynthesis.execute_cegis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.fast_enumerative_synth.FastEnumerativeSynthesis.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using fast enumerative synthesis.</p>
 <p>This method implements two different approaches based on the number of synthesis functions:</p>
 <ol class="arabic simple">
@@ -424,7 +489,7 @@ the synthesis_parameters in the configuration file or command line arguments.</p
 <h2>RandomSearchStrategyBottomUp Class<a class="headerlink" href="#randomsearchstrategybottomup-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.random_search_bottom_up.</span></span><span class="sig-name descname"><span class="pre">RandomSearchStrategyBottomUp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.random_search_bottom_up.</span></span><span class="sig-name descname"><span class="pre">RandomSearchStrategyBottomUp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/random_search_bottom_up.html#RandomSearchStrategyBottomUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></p>
 <p>A synthesis strategy that uses a bottom-up random search approach.</p>
 <p>This class implements a synthesis strategy based on a bottom-up random search. It
@@ -439,7 +504,7 @@ candidate generator.</p>
 <dd><p>The synthesis problem to be solved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SynthesisProblemZ3</p>
+<dd class="field-odd"><p><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">SynthesisProblemZ3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -466,7 +531,8 @@ candidate generator.</p>
 </dl>
 </dd></dl>
 
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblemZ3</span>
 <span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_strategy.random_search_bottom_up</span> <span class="kn">import</span> <span class="n">RandomSearchStrategyBottomUp</span>
 
@@ -486,6 +552,7 @@ candidate generator.</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found within the given constraints.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This strategy is particularly useful when the structure of the solution is unknown
@@ -495,18 +562,18 @@ search space.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/random_search_bottom_up.html#RandomSearchStrategyBottomUp.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize the RandomSearchStrategyBottomUp strategy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>problem</strong> (<em>SynthesisProblemZ3</em>) – The synthesis problem to be solved.</p>
+<dd class="field-odd"><p><strong>problem</strong> (<a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><em>SynthesisProblemZ3</em></a>) – The synthesis problem to be solved.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis">
-<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/random_search_bottom_up.html#RandomSearchStrategyBottomUp.execute_cegis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_bottom_up.RandomSearchStrategyBottomUp.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS (Counterexample-Guided Inductive Synthesis) loop using a bottom-up random search strategy.</p>
 <p>This method generates candidates by incrementally increasing depth and complexity. It prunes candidates
 and tests them against the synthesis problem. The search continues until a solution is found or the
@@ -530,7 +597,7 @@ the synthesis parameters in the problem definition.</p>
 <h2>RandomSearchStrategyTopDown Class<a class="headerlink" href="#randomsearchstrategytopdown-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.random_search_top_down.</span></span><span class="sig-name descname"><span class="pre">RandomSearchStrategyTopDown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.cegis.z3.synthesis_strategy.random_search_top_down.</span></span><span class="sig-name descname"><span class="pre">RandomSearchStrategyTopDown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/random_search_top_down.html#RandomSearchStrategyTopDown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy" title="src.cegis.z3.synthesis_strategy.synthesis_strategy.SynthesisStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SynthesisStrategy</span></code></a></p>
 <p>A synthesis strategy that uses a top-down random search approach.</p>
 <p>This class implements a synthesis strategy based on a top-down random search. It
@@ -546,7 +613,7 @@ top-down candidate generator, depending on the configuration.</p>
 <dd><p>The synthesis problem to be solved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SynthesisProblemZ3</p>
+<dd class="field-odd"><p><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3">SynthesisProblemZ3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -562,7 +629,8 @@ top-down candidate generator, depending on the configuration.</p>
 </dl>
 </dd></dl>
 
-<p class="rubric">Example</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_problem_z3</span> <span class="kn">import</span> <span class="n">SynthesisProblemZ3</span>
 <span class="kn">from</span> <span class="nn">src.cegis.z3.synthesis_strategy.random_search_top_down</span> <span class="kn">import</span> <span class="n">RandomSearchStrategyTopDown</span>
 
@@ -582,6 +650,7 @@ top-down candidate generator, depending on the configuration.</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found within the given constraints.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This strategy is particularly useful when you have an idea of the overall
@@ -593,18 +662,18 @@ the solution space is well-defined.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SynthesisProblemZ3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><span class="pre">SynthesisProblemZ3</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/random_search_top_down.html#RandomSearchStrategyTopDown.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize the RandomSearchStrategyTopDown strategy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>problem</strong> (<em>SynthesisProblemZ3</em>) – The synthesis problem to be solved.</p>
+<dd class="field-odd"><p><strong>problem</strong> (<a class="reference internal" href="synthesis_problem.html#id40" title="src.cegis.z3.synthesis_problem_z3.SynthesisProblemZ3"><em>SynthesisProblemZ3</em></a>) – The synthesis problem to be solved.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis">
-<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_cegis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/cegis/z3/synthesis_strategy/random_search_top_down.html#RandomSearchStrategyTopDown.execute_cegis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.cegis.z3.synthesis_strategy.random_search_top_down.RandomSearchStrategyTopDown.execute_cegis" title="Link to this definition"></a></dt>
 <dd><p>Execute the CEGIS loop using a top-down random search strategy.</p>
 <p>This method generates candidates using a top-down approach, and tests them against
 the synthesis problem. The search continues for a specified number of iterations or until a
