@@ -1,19 +1,16 @@
-.. PySynthLab documentation master file, created by
-   sphinx-quickstart on Tue Jul  2 13:30:54 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to PySynthLab's documentation!
 ======================================
+
+PySynthLab is a Python library for synthesizing programs using counterexample-guided inductive synthesis (CEGIS).
 
 .. toctree::
    :maxdepth: 3
    :caption: Contents:
    
-   config_manager
-   synthesis_problem
-   synthesis_strategy
-   candidate_generator
+   introduction
+   installation
+   quickstart
+   api_reference
 
 Indices and tables
 ==================

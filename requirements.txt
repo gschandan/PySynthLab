@@ -11,3 +11,5 @@ pandas
 numpy
 jupyter
 seaborn
+textstat
+sphinx_rtd_theme
