@@ -279,7 +279,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">explored_expressions</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">expr_str</span><span class="p">)</span>
                     <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">simplified_expr</span><span class="p">,</span> <span class="n">func_name</span><span class="p">))</span>
                     <span class="k">break</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">candidates_generated</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">candidates</span></div>
 
 

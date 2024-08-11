@@ -186,7 +186,7 @@
 <span class="sd">        level: Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.</span>
 <span class="sd">        file: Log file path. Defaults to logs/run_{datetime}.log.</span>
 <span class="sd">        collect_metrics: Whether to collect metrics or not. Default is True.</span>
-
+<span class="sd">        metrics_file: Log file path for metrics. Defaults to logs/run_{datetime}.metrics.</span>
 <span class="sd">    Note:</span>
 <span class="sd">        These options can be grouped under the &#39;logging&#39; section in a YAML file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -208,6 +208,12 @@
         <span class="n">metadata</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Collect metrics about the synthesis process&quot;</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span>
+        <span class="p">))</span>
+    <span class="n">metrics_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;logs/metrics_</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Metrics file path&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;str&quot;</span>
         <span class="p">))</span></div>
 
 
