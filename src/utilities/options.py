@@ -133,7 +133,7 @@ class SynthesisParameters:
         default_factory=lambda: {'+': 1, '-': 1, '*': 2, 'ite': 3, 'neg': 1},
         metadata=dict(
             description="Operation costs for candidate generation",
-            type="dict"
+            type="dict[str, int]"
         )
     )
     initial_weight: float = field(

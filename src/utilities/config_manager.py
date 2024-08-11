@@ -55,7 +55,7 @@ class ConfigManager:
         parser = argparse.ArgumentParser(description="PySynthLab Synthesiser")
         parser.add_argument('--config', type=str, help="Path to custom config file")
         parser.add_argument('input_source', nargs='?', default='stdin',
-                            help="Source of the input problem (stdin or file path)")
+                            help="Source of the input problem. Use 'stdin' for standard input or provide a file path.")
 
         for class_name in ['LoggingOptions', 'SynthesisParameters', 'SolverOptions']:
             class_obj = globals()[class_name]
@@ -83,13 +83,16 @@ class ConfigManager:
                     elif type_str in ['str', 'int', 'float', 'bool']:
                         kwargs['type'] = eval(type_str)
                     else:
-                        kwargs['type'] = str  # Default to string for complex types
+                        kwargs['type'] = str 
 
                     if 'choices' in field_obj.metadata:
                         kwargs['choices'] = field_obj.metadata['choices']
-                        kwargs['help'] += f" Choices: {', '.join(map(str, field_obj.metadata['choices']))}"
+                        kwargs['help'] += f" (choices: {', '.join(map(str, field_obj.metadata['choices']))})"
 
-                kwargs['help'] += f" (default: {field_obj.default})"
+                if field_obj.name == 'file' and field_obj.default == "logs/run_{timestamp}.log":
+                    kwargs['help'] += f" (default: {field_obj.default})"
+                else:
+                    kwargs['help'] += f" (default: {field_obj.default})"
                 parser.add_argument(arg_name, **kwargs)
 
         return parser
