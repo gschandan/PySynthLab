@@ -22,11 +22,18 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
 
         iteration = 0
         self.start_time = time.time()
+
+        total_space = sum(max_candidates_per_depth * complexity for complexity in range(1, max_complexity + 1)) * max_depth
+        self.metrics.update_solution_space(0, total_space)
+
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
                 for candidate_at_depth in range(max_candidates_per_depth):
                     self.metrics.iterations += 1
                     iteration += 1
+
+                    self.metrics.update_resource_usage()
+                    self.metrics.update_solution_space(iteration, total_space)
 
                     process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
                                                                candidate_at_depth, max_candidates_per_depth)
@@ -37,12 +44,15 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
                         self.log_final_results(max_iterations)
                         return process_iteration
 
-    def process_iteration(self, iteration, max_iterations, depth, complexity, candidate_at_depth,max_candidates_per_depth) -> tuple[bool, str]:
+    def process_iteration(self, iteration, max_iterations, depth, complexity, candidate_at_depth, max_candidates_per_depth) -> tuple[bool, str]:
         self.problem.logger.info(
             f"Iteration {iteration}/{max_iterations} max iterations, depth: {depth}, complexity: {complexity}, candidate at depth: {candidate_at_depth + 1}/{max_candidates_per_depth}):")
 
         candidates = self.candidate_generator.generate_candidates()
         self.metrics.candidates_generated += len(candidates)
+
+        for candidate, _ in candidates:
+            self.metrics.update_pattern_metrics(str(candidate))
 
         pruned_candidates = self.candidate_generator.prune_candidates(candidates)
         self.metrics.candidates_pruned += len(candidates) - len(pruned_candidates)
@@ -50,7 +60,12 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
         func_strs = [f"{func_name}: {candidate}" for candidate, func_name in pruned_candidates]
         candidate_functions = [candidate for candidate, _ in pruned_candidates]
 
-        if self.test_candidates(func_strs, candidate_functions):
+        solver_start_time = time.time()
+        test_result = self.test_candidates(func_strs, candidate_functions)
+        solver_time = time.time() - solver_start_time
+        self.metrics.update_solver_metrics(solver_time)
+
+        if test_result:
             self.metrics.time_spent = time.time() - self.start_time
             self.metrics.solution_found = True
             self.metrics.solution_height = depth

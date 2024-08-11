@@ -35,7 +35,7 @@ class BaseSynthesisProblem(ABC):
         self.input_problem = problem
         self.smt_problem = self.convert_sygus_to_smt()
         self.constraints = [x for x in self.problem.commands if x.command_kind == CommandKind.CONSTRAINT]
-        self.metrics = Metrics(self.options.logging.collect_metrics)
+        self.metrics = Metrics(self.options.logging.collect_metrics, self.options.logging.metrics_file)
 
     @classmethod
     def setup_logger(cls, options: Options = None):

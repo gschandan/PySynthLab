@@ -1,5 +1,6 @@
 import ast
 import random
+import time
 from collections import Counter
 from typing import List, Tuple, Dict, Any
 from z3 import *
@@ -91,6 +92,10 @@ class PartialRandomCandidateGenerator(CandidateGenerator):
             score = self.evaluate_candidate(candidate, func_name)
             self.candidate_scores[(candidate, func_name)] = score
             self.score_history[func_name].append((score, str(candidate)))
+
+            self.metrics.update_pattern_metrics(str(candidate))
+
+        self.metrics.candidates_generated += len(candidates)
         return candidates
 
     def generate_random_term(self, arg_sorts: List[z3.SortRef], depth: int, complexity: int) -> z3.ExprRef:
@@ -272,7 +277,10 @@ class PartialRandomCandidateGenerator(CandidateGenerator):
         scores = []
         for method in self.active_methods:
             GlobalCancellationToken.check_cancellation()
+            start_time = time.time()
             score = self.partial_satisfaction_methods[method](candidate, func_name)
+            end_time = time.time()
+            self.metrics.update_solver_metrics(end_time - start_time)
             self.metrics.update_partial_score(score)
             scores.append(score)
         return sum(scores) / len(scores)
@@ -296,7 +304,9 @@ class PartialRandomCandidateGenerator(CandidateGenerator):
         """
         sorted_candidates = sorted(candidates, key=lambda x: self.candidate_scores.get((x[0], x[1]), 0), reverse=True)
         top_n = self.problem.options.synthesis_parameters.max_candidates_at_each_depth
-        return sorted_candidates[:top_n]
+        pruned = sorted_candidates[:top_n]
+        self.metrics.candidates_pruned += len(candidates) - len(pruned)
+        return pruned
 
     def get_score_statistics(self, func_name: str) -> Dict[str, Any]:
         """

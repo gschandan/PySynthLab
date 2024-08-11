@@ -100,7 +100,7 @@ class TopDownCandidateGenerator:
                     self.explored_expressions[func_name].add(expr_str)
                     candidates.append((simplified_expr, func_name))
                     break
-
+        self.metrics.candidates_generated += len(candidates)
         return candidates
 
     def expand(self, grammar: dict[str, list], expr: str, depth: int) -> List[Tuple[z3.ExprRef, str]]:

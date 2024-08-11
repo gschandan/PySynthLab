@@ -76,7 +76,6 @@ class RandomSearchStrategyTopDown(SynthesisStrategy):
             self.candidate_generator.grammar = problem.options.synthesis_parameters.custom_grammar
             self.metrics.grammar = sum(len(rules) for rules in self.candidate_generator.grammar.values())
 
-
     def execute_cegis(self) -> tuple[bool, str]:
         """
         Execute the CEGIS loop using a top-down random search strategy.

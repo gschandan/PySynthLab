@@ -158,6 +158,14 @@ class ConfigManager:
                 else:
                     merged_dict[arg_name] = arg_value
 
+        if '{datetime}' in merged_dict['logging']['file']:
+            merged_dict['logging']['file'] = merged_dict['logging']['file'].format(
+                datetime=datetime.now().strftime('%Y%m%d_%H%M%S'))
+
+        if '{datetime}' in merged_dict['logging']['metrics_file']:
+            merged_dict['logging']['metrics_file'] = merged_dict['logging']['metrics_file'].format(
+                datetime=datetime.now().strftime('%Y%m%d_%H%M%S'))
+
         for field in fields(default_options):
             if isinstance(getattr(default_options, field.name), dict):
                 for subfield in fields(getattr(default_options, field.name)):

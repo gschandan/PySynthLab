@@ -53,6 +53,8 @@ def run_synthesis(config: Options):
             raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
 
         result, candidates = strategy.execute_cegis()
+        problem.logger.info("Final Metrics:")
+        problem.logger.info(problem.metrics.get_summary())
         return result, candidates
 
 

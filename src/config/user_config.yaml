@@ -32,5 +32,8 @@ synthesis_parameters:
 #        ["!=", "T", "T"]
 #    ]
 #}'
+
 logging:
-  level: "DEBUG"
+  level: WARNING
+  file: "logs/run_{datetime}.log"
+  metrics_file: "logs/metrics_{datetime}.json"

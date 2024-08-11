@@ -1,6 +1,7 @@
 logging:
-  level: ERROR
+  level: WARNING
   file: "{root}/logs/random_enumerative_bottom_up_{datetime}_{problem}.log"
+  metrics_file: "{root}/logs/metrics_random_enumerative_bottom_up_{datetime}_{problem}.json"
 
 synthesis_parameters:
   strategy: random_enumerative

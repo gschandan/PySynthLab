@@ -12,7 +12,7 @@ class LoggingOptions:
         level: Logging level. Choices are DEBUG, INFO, WARNING, ERROR, CRITICAL. Default is INFO.
         file: Log file path. Defaults to logs/run_{datetime}.log.
         collect_metrics: Whether to collect metrics or not. Default is True.
-
+        metrics_file: Log file path for metrics. Defaults to logs/run_{datetime}.metrics.
     Note:
         These options can be grouped under the 'logging' section in a YAML file.
     """
@@ -34,6 +34,12 @@ class LoggingOptions:
         metadata=dict(
             description="Collect metrics about the synthesis process",
             type="bool"
+        ))
+    metrics_file: str = field(
+        default=f"logs/metrics_{datetime.now()}.json",
+        metadata=dict(
+            description="Metrics file path",
+            type="str"
         ))
 
 

@@ -1,6 +1,7 @@
 logging:
-  level: ERROR
+  level: WARNING
   file: "{root}/logs/fast_enumerative_{datetime}_{problem}.log"
+  metrics_file: "{root}/logs/metrics_fast_enumerative_{datetime}_{problem}.json"
 
 synthesis_parameters:
   strategy: fast_enumerative
