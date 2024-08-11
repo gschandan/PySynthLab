@@ -14,3 +14,5 @@ seaborn
 textstat
 sphinx_rtd_theme
 tabulate
+radon
+pylint
