@@ -13,3 +13,4 @@ jupyter
 seaborn
 textstat
 sphinx_rtd_theme
+tabulate
