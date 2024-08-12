@@ -19,9 +19,6 @@ class Metrics:
         self.best_partial_score = 0
         self.grammar_size = 0
         self.solution_found = False
-        self.cpu_usage = []
-        self.per_core_cpu_usage = []
-        self.memory_usage = []
         self.solution_space_explored = 0
         self.total_solution_space = 0
         self.start_time = time.time()
@@ -40,16 +37,6 @@ class Metrics:
             return
         self.partial_satisfaction_scores.append(score)
         self.best_partial_score = max(self.best_partial_score, score)
-
-    def update_resource_usage(self):
-        if not self.collect_metrics:
-            return
-
-        self.cpu_usage.append(psutil.cpu_percent())
-
-        self.per_core_cpu_usage.append(psutil.cpu_percent(percpu=True))
-
-        self.memory_usage.append(self.process.memory_info().rss / 1024 / 1024)
 
     def update_solution_space(self, explored, total):
         if not self.collect_metrics:
@@ -84,14 +71,8 @@ class Metrics:
             "best_partial_score": self.best_partial_score,
             "grammar_size": self.grammar_size,
             "solution_found": self.solution_found,
-            "avg_cpu_usage": sum(self.cpu_usage) / len(self.cpu_usage) if self.cpu_usage else 0,
-            "max_cpu_usage": max(self.cpu_usage) if self.cpu_usage else 0,
-            "avg_per_core_cpu_usage": [sum(core) / len(core) for core in zip(*self.per_core_cpu_usage)] if self.per_core_cpu_usage else [],
-            "max_per_core_cpu_usage": [max(core) for core in zip(*self.per_core_cpu_usage)] if self.per_core_cpu_usage else [],
-            "max_memory_usage": max(self.memory_usage) if self.memory_usage else 0,
             "solution_space_coverage": self.solution_space_explored / self.total_solution_space if self.total_solution_space else 0,
             "solver_calls": self.solver_calls,
-            "avg_solver_time": self.solver_time / self.solver_calls if self.solver_calls else 0,
             "unique_patterns": len(self.unique_patterns_generated),
             "pattern_reuse_ratio": self.pattern_reuse_count / self.candidates_generated if self.candidates_generated else 0,
         }

@@ -24,16 +24,12 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
         self.start_time = time.time()
 
         total_space = sum(max_candidates_per_depth * complexity for complexity in range(1, max_complexity + 1)) * max_depth
-        self.metrics.update_solution_space(0, total_space)
 
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
                 for candidate_at_depth in range(max_candidates_per_depth):
                     self.metrics.iterations += 1
                     iteration += 1
-
-                    self.metrics.update_resource_usage()
-                    self.metrics.update_solution_space(iteration, total_space)
 
                     process_iteration = self.process_iteration(iteration, max_iterations, depth, complexity,
                                                                candidate_at_depth, max_candidates_per_depth)
