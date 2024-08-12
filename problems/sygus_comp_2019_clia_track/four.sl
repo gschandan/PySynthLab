@@ -17,6 +17,6 @@
 ))
 
 (declare-var x Int)
-(constraint (= (id1 x) (id2 x) (id3 x) (id4 x) x))
+(constraint (= (id1 x) (id2 x) (id3 x) (id4 x)))
 
 (check-synth)
