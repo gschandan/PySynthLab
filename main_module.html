@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quickstart Guide &mdash; PySynthLab 0.1.0 documentation</title>
+  <title>Main Module &mdash; PySynthLab 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css" />
@@ -22,8 +22,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="api_reference.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="next" title="ConfigManager" href="config_manager.html" />
+    <link rel="prev" title="API Reference" href="api_reference.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,25 +58,25 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installation-steps">Installation Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#running-the-synthesiser">Running the Synthesiser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#yaml-configuration">YAML Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-the-synthesiser">Running the Synthesiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#yaml-configuration">YAML Configuration</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-benchmarks">Running Benchmarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-benchmarks">Running Benchmarks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="main_module.html">Main Module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="main_module.html#error-codes">Error Codes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="main_module.html#global-variables">Global Variables</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="main_module.html#src.runner.problem_global"><code class="docutils literal notranslate"><span class="pre">problem_global</span></code></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Main Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#error-codes">Error Codes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-variables">Global Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.runner.problem_global"><code class="docutils literal notranslate"><span class="pre">problem_global</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="main_module.html#example-usage">Example Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-usage">Example Usage</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="config_manager.html">ConfigManager</a><ul>
@@ -171,9 +171,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Quickstart Guide</li>
+          <li class="breadcrumb-item"><a href="api_reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Main Module</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/main_module.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -181,113 +182,94 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="quickstart-guide">
-<h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Link to this heading"></a></h1>
-<p>This guide will help you get started with PySynthLab quickly.</p>
-<section id="running-the-synthesiser">
-<h2>Running the Synthesiser<a class="headerlink" href="#running-the-synthesiser" title="Link to this heading"></a></h2>
-<p>You can run the Synthesiser by providing a path to the SyGuS input file or by providing the input problem via stdin.</p>
-<ol class="arabic">
-<li><p>Using a SyGuS input file:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>problems/debugging/small.sl
-</pre></div>
+  <section id="main-module">
+<h1>Main Module<a class="headerlink" href="#main-module" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">src.runner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/src/runner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This function sets up the synthesis configuration, runs the synthesis in a separate thread
+with a timeout, logs metrics, and handles various outcomes of the synthesis process.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function uses a global variable <cite>problem_global</cite> to access the problem instance
+for metric logging, even if the synthesis process times out.</p>
 </div>
-<p>If you’re using a virtual environment:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./venv/bin/python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>problems/debugging/small.sl
-</pre></div>
-</div>
-</li>
-<li><p>Providing input via STDIN:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
-<span class="s">(set-logic LIA)</span>
-<span class="s">(synth-fun max2 ((a Int) (b Int)) Int)</span>
-<span class="s">(declare-var x Int)</span>
-<span class="s">(declare-var y Int)</span>
-<span class="s">(constraint (&gt;= (max2 x y) x))</span>
-<span class="s">(constraint (&gt;= (max2 x y) y))</span>
-<span class="s">(constraint (or (= x (max2 x y)) (= y (max2 x y))))</span>
-<span class="s">(constraint (= (max2 x x) x))</span>
-<span class="s">(declare-var a Int)</span>
-<span class="s">(declare-var b Int)</span>
-<span class="s">(constraint (=&gt; (and (&gt;= a b) (&gt;= b a)) (= (max2 a b) a)))</span>
-<span class="s">(constraint (=&gt; (and (&gt;= b a) (&gt;= a b)) (= (max2 b a) b)))</span>
-<span class="s">(check-synth)</span>
-<span class="s">EOF</span>
-</pre></div>
-</div>
-<p>If you’re using a virtual environment:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./venv/bin/python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
-<span class="s"># (same input as above)</span>
-<span class="s">EOF</span>
-</pre></div>
-</div>
-</li>
-</ol>
-</section>
-<section id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
-<p>PySynthLab supports configuration through command-line arguments, YAML files, and default options.</p>
-<section id="command-line-options">
-<h3>Command Line Options<a class="headerlink" href="#command-line-options" title="Link to this heading"></a></h3>
-<p>Here are some key command-line options:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--strategy</span></code>: Choose the synthesis strategy (fast_enumerative, random_search_bottom_up, random_search_top_down)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--candidate-generation</span></code>: Candidate generation strategy (bottom_up, top_down, fast_enumerative)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--max-iterations</span></code>: Maximum number of iterations</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--max-depth</span></code>: Maximum depth of generated expressions</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--logging-level</span></code>: Set logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)</p></li>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">src.runner.</span></span><span class="sig-name descname"><span class="pre">run_synthesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="config_manager.html#src.utilities.options.Options" title="src.utilities.options.Options"><span class="pre">Options</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/runner.html#run_synthesis"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Run the synthesis process based on the provided configuration.</p>
+<p>This function sets up the synthesis problem, chooses the appropriate strategy,
+and executes the CEGIS (Counterexample-Guided Inductive Synthesis) loop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference internal" href="config_manager.html#src.utilities.options.Options" title="src.utilities.options.Options"><em>Options</em></a>) – Configuration options for the synthesis process.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a boolean indicating whether a solution was found,
+and a string representation of the solution candidates (or None if no solution was found).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[bool, Optional[str]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If an unsupported solver or synthesis strategy is specified in the configuration.</p></li>
+<li><p><strong>CancellationError</strong> – If the synthesis process is cancelled due to timing out.</p></li>
 </ul>
-<p>For a complete list of options, run:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>src.runner<span class="w"> </span>--help
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">,</span> <span class="n">candidates</span> <span class="o">=</span> <span class="n">run_synthesis</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Solution found: </span><span class="si">{</span><span class="n">candidates</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="yaml-configuration">
-<h3>YAML Configuration<a class="headerlink" href="#yaml-configuration" title="Link to this heading"></a></h3>
-<p>You can also use a YAML file for configuration. Edit the <code class="docutils literal notranslate"><span class="pre">user_config.yaml</span></code> in <code class="docutils literal notranslate"><span class="pre">src/config</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">logging</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INFO</span>
-<span class="w">  </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logs/synthesis.log</span>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function uses a global variable <cite>problem_global</cite> to store the problem instance,
+allowing for metric logging even if the synthesis process times out.</p>
+</div>
+</dd></dl>
 
-<span class="nt">synthesis_parameters</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fast_enumerative</span>
-<span class="w">  </span><span class="nt">max_iterations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
-<span class="w">  </span><span class="nt">max_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<section id="error-codes">
+<h2>Error Codes<a class="headerlink" href="#error-codes" title="Link to this heading"></a></h2>
+<p>The following error codes are used in the main module:</p>
+<ul class="simple">
+<li><p>0: Success - A solution was found successfully.</p></li>
+<li><p>1: General Error - An exception occurred during the synthesis process.</p></li>
+<li><p>2: No Solution - The synthesis process completed, but no satisfying candidates were found.</p></li>
+<li><p>-6: Timeout - The synthesis process did not complete within the specified timeout period.</p></li>
+</ul>
+<p>These error codes were chosen to be comparable with cvc5 solver’s error codes for easier comparison.</p>
+</section>
+<section id="global-variables">
+<h2>Global Variables<a class="headerlink" href="#global-variables" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="src.runner.problem_global">
+<span class="sig-prename descclassname"><span class="pre">src.runner.</span></span><span class="sig-name descname"><span class="pre">problem_global</span></span><a class="headerlink" href="#src.runner.problem_global" title="Link to this definition"></a></dt>
+<dd><p>A global variable of type Optional[SynthesisProblemZ3 | SynthesisProblemCVC5] used to store the problem instance for metric logging.</p>
+</dd></dl>
 
-<span class="nt">solver</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">z3</span>
-<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30000</span>
-</pre></div>
-</div>
 </section>
-</section>
-<section id="running-tests">
-<h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h2>
-<p>To run general tests:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">test</span>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<p>To run the synthesis process:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">main</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Or:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;test_*.py&quot;</span>
-</pre></div>
-</div>
-<p>To run specific debugging tests:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>tests.run_problem_tests
-</pre></div>
-</div>
-</section>
-<section id="running-benchmarks">
-<h2>Running Benchmarks<a class="headerlink" href="#running-benchmarks" title="Link to this heading"></a></h2>
-<p>To run benchmarks:</p>
-<ol class="arabic">
-<li><p>Edit the file <code class="docutils literal notranslate"><span class="pre">src/benchmark/run_all_benchmarks.py</span></code> with the desired configuration(s) and point it at the relevant folder of problems.</p></li>
-<li><p>Run the benchmarks:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./venv/bin/python<span class="w"> </span>src/benchmark/run_all_benchmarks.py
-</pre></div>
-</div>
-</li>
-</ol>
-<p>For more detailed information, please refer to the full documentation.</p>
+<p>This will execute the main function, which sets up the synthesis configuration, runs the synthesis process, and returns the results or any errors that occur.</p>
 </section>
 </section>
 
@@ -295,8 +277,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="api_reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="config_manager.html" class="btn btn-neutral float-right" title="ConfigManager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="SynthesisProblem" href="synthesis_problem.html" />
-    <link rel="prev" title="API Reference" href="api_reference.html" /> 
+    <link rel="prev" title="Main Module" href="main_module.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -70,6 +70,15 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="main_module.html">Main Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="main_module.html#error-codes">Error Codes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="main_module.html#global-variables">Global Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="main_module.html#src.runner.problem_global"><code class="docutils literal notranslate"><span class="pre">problem_global</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="main_module.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ConfigManager</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#configmanager-class">ConfigManager Class</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#src.utilities.config_manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></li>
@@ -298,7 +307,7 @@ CLI arguments will take priority over any user defined config in the user_config
 <h2>LoggingOptions Class<a class="headerlink" href="#loggingoptions-class" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.utilities.options.LoggingOptions">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-08-12</span> <span class="pre">19:39:31.227160.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/metrics_2024-08-12</span> <span class="pre">19:39:31.227176.json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/options.html#LoggingOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utilities.options.</span></span><span class="sig-name descname"><span class="pre">LoggingOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/run_2024-08-12</span> <span class="pre">20:47:28.768369.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logs/metrics_2024-08-12</span> <span class="pre">20:47:28.768386.json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utilities/options.html#LoggingOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utilities.options.LoggingOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Options for configuring logging and metrics in the Synthesis process.</p>
 <dl class="py attribute">
@@ -435,7 +444,7 @@ timeout (int): Global timeout for the synthesis process (in seconds). Default is
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="main_module.html" class="btn btn-neutral float-left" title="Main Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="synthesis_problem.html" class="btn btn-neutral float-right" title="SynthesisProblem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
