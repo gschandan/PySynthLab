@@ -68,6 +68,7 @@ def run_synthesis(config: Options) -> tuple[bool, Optional[str]]:
             raise ValueError(f"Unsupported solver: {config.solver.name}")
 
         problem.logger.info(problem.info_smt())
+        problem_global = problem
 
         GlobalCancellationToken.check_cancellation()
 
@@ -86,7 +87,6 @@ def run_synthesis(config: Options) -> tuple[bool, Optional[str]]:
         else:
             ConfigManager.logger.error(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
             raise ValueError(f"Unknown synthesis strategy: {config.synthesis_parameters.strategy}")
-        problem_global = problem
         result, candidates = strategy.execute_cegis()
         return result, candidates
 

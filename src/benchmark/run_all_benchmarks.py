@@ -233,9 +233,9 @@ def run_pysynthlab_experiments(timeout_seconds: int = 30):
 if __name__ == "__main__":
     # for i in range(3):
         # run_cvc5_experiments()
-    for i in range(1):
+    for i in range(3):
         run_pysynthlab_experiments(30)
-    # for i in range(1):
-    #     run_pysynthlab_experiments(60)
-    # for i in range(1):
-    #     run_pysynthlab_experiments(120)
+    for i in range(1):
+        run_pysynthlab_experiments(60)
+    for i in range(1):
+        run_pysynthlab_experiments(120)
