@@ -251,6 +251,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported solver: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">problem</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">info_smt</span><span class="p">())</span>
+        <span class="n">problem_global</span> <span class="o">=</span> <span class="n">problem</span>
 
         <span class="n">GlobalCancellationToken</span><span class="o">.</span><span class="n">check_cancellation</span><span class="p">()</span>
 
@@ -269,7 +270,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ConfigManager</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown synthesis strategy: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">strategy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown synthesis strategy: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">synthesis_parameters</span><span class="o">.</span><span class="n">strategy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">problem_global</span> <span class="o">=</span> <span class="n">problem</span>
         <span class="n">result</span><span class="p">,</span> <span class="n">candidates</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">execute_cegis</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">candidates</span></div>
 
