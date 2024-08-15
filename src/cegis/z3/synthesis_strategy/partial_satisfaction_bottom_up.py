@@ -24,6 +24,7 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
         self.start_time = time.time()
 
         total_space = sum(max_candidates_per_depth * complexity for complexity in range(1, max_complexity + 1)) * max_depth
+        self.metrics.total_space = total_space
 
         for depth in range(1, max_depth + 1):
             for complexity in range(1, max_complexity + 1):
@@ -96,5 +97,4 @@ class PartialSatisfactionBottomUp(SynthesisStrategy):
             joined_scores = "\n"
             for score, candidate in sorted_scores:
                 joined_scores += f"{score:.4f}: {candidate}\n"
-
             self.problem.logger.debug(joined_scores)
