@@ -66,8 +66,8 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/venv/lib/python3.11/site-packages/z3/z3.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/venv/lib/python3.11/site-packages/z3/z3core.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/pysynthlab/lib/python3.11/site-packages/z3/z3.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/pysynthlab/lib/python3.11/site-packages/z3/z3core.py" root0="SKIP_INSPECTION" />
     <setting file="file://$APPLICATION_HOME_DIR$/plugins/python/helpers/typeshed/stdlib/builtins.pyi" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
