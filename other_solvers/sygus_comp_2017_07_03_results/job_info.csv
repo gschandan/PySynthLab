@@ -1,0 +1,877 @@
+pair id,benchmark,benchmark id,solver,solver id,configuration,configuration id,status,cpu time,wallclock time,memory usage,result,expected,exprs-total-size,exprs-details,adheres,smt-result
+299131030,CLIA_Track/fg_array_search_10.sl,4786901,EUSolver,11893,default,219860,complete,6.24391,6.24491,337784.0,correct,correct,411,(findIdx 411),true,sat
+299131031,CLIA_Track/fg_array_search_10.sl,4786901,EUSolver_new,11898,default,219869,complete,6.29852,6.30054,337528.0,correct,correct,411,(findIdx 411),true,sat
+299131032,CLIA_Track/fg_array_search_10.sl,4786901,Euphony,11902,default,219874,complete,6.54328,6.54547,346184.0,correct,correct,411,(findIdx 411),true,sat
+299131033,CLIA_Track/fg_array_search_10.sl,4786901,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.42,3600.05,479392.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131034,CLIA_Track/fg_array_search_10.sl,4786901,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.057552,0.0553539,113120.0,correct,correct,1035,(findIdx 1035),true,sat
+299131035,CLIA_Track/fg_array_search_10.sl,4786901,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.73,3600.03,477872.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131036,CLIA_Track/fg_array_search_10.sl,4786901,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.067487,0.0632881,113120.0,correct,correct,1489,(findIdx 1489),true,sat
+299131037,CLIA_Track/fg_array_search_10.sl,4786901,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.063185,0.060429,113120.0,correct,correct,1035,(findIdx 1035),true,sat
+299131038,CLIA_Track/fg_array_search_10.sl,4786901,DryadSynth,12292,autothreads,223920,timeout (wallclock),14162.9,3600.07,3.7489956E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131039,CLIA_Track/fg_array_search_10.sl,4786901,DryadSynth,12292,default,223921,timeout (wallclock),14292.8,3600.06,3.5919452E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131040,CLIA_Track/fg_array_search_10.sl,4786901,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.53,3600.07,3.5639124E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131041,CLIA_Track/fg_array_search_10.sl,4786901,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14291.8,3600.09,3.6372324E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131042,CLIA_Track/fg_array_search_11.sl,4786902,EUSolver,11893,default,219860,complete,8.61491,8.61752,338300.0,correct,correct,496,(findIdx 496),true,sat
+299131043,CLIA_Track/fg_array_search_11.sl,4786902,EUSolver_new,11898,default,219869,complete,8.67042,8.67142,338300.0,correct,correct,496,(findIdx 496),true,sat
+299131044,CLIA_Track/fg_array_search_11.sl,4786902,Euphony,11902,default,219874,complete,8.84199,8.84337,346764.0,correct,correct,496,(findIdx 496),true,sat
+299131045,CLIA_Track/fg_array_search_11.sl,4786902,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.41,3600.01,486808.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131046,CLIA_Track/fg_array_search_11.sl,4786902,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.062985,0.059316,113120.0,correct,correct,1196,(findIdx 1196),true,sat
+299131047,CLIA_Track/fg_array_search_11.sl,4786902,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.27,3600.02,487896.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131048,CLIA_Track/fg_array_search_11.sl,4786902,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.076877,0.0719889,113120.0,correct,correct,1736,(findIdx 1736),true,sat
+299131049,CLIA_Track/fg_array_search_11.sl,4786902,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.070303,0.0670279,113120.0,correct,correct,1196,(findIdx 1196),true,sat
+299131050,CLIA_Track/fg_array_search_11.sl,4786902,DryadSynth,12292,autothreads,223920,timeout (wallclock),9799.67,3600.06,3.7622852E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131051,CLIA_Track/fg_array_search_11.sl,4786902,DryadSynth,12292,default,223921,timeout (wallclock),14289.5,3600.04,3.6039132E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131052,CLIA_Track/fg_array_search_11.sl,4786902,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.71,3600.03,3.5606732E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131053,CLIA_Track/fg_array_search_11.sl,4786902,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14288.4,3600.06,3.5980272E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131054,CLIA_Track/fg_array_search_12.sl,4786903,EUSolver,11893,default,219860,complete,11.7621,11.7694,338412.0,correct,correct,589,(findIdx 589),true,sat
+299131055,CLIA_Track/fg_array_search_12.sl,4786903,EUSolver_new,11898,default,219869,complete,11.9895,11.9925,338156.0,correct,correct,589,(findIdx 589),true,sat
+299131056,CLIA_Track/fg_array_search_12.sl,4786903,Euphony,11902,default,219874,complete,12.1095,12.1109,347064.0,correct,correct,589,(findIdx 589),true,sat
+299131057,CLIA_Track/fg_array_search_12.sl,4786903,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.23,3600.02,500340.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131058,CLIA_Track/fg_array_search_12.sl,4786903,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.075675,0.0708231,113120.0,correct,correct,1495,(findIdx 1495),true,sat
+299131059,CLIA_Track/fg_array_search_12.sl,4786903,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.54,3600.01,499632.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131060,CLIA_Track/fg_array_search_12.sl,4786903,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.087536,0.0819139,113120.0,correct,correct,2002,(findIdx 2002),true,sat
+299131061,CLIA_Track/fg_array_search_12.sl,4786903,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.082531,0.079472,113120.0,correct,correct,1495,(findIdx 1495),true,sat
+299131062,CLIA_Track/fg_array_search_12.sl,4786903,DryadSynth,12292,autothreads,223920,timeout (wallclock),14209.8,3600.05,3.7100124E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131063,CLIA_Track/fg_array_search_12.sl,4786903,DryadSynth,12292,default,223921,timeout (wallclock),14290.9,3600.04,3.59859E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131064,CLIA_Track/fg_array_search_12.sl,4786903,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.98,3600.02,3.5573448E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131065,CLIA_Track/fg_array_search_12.sl,4786903,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14263.5,3600.06,3.612018E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131066,CLIA_Track/fg_array_search_13.sl,4786904,EUSolver,11893,default,219860,complete,16.0193,16.0243,338468.0,correct,correct,690,(findIdx 690),true,sat
+299131067,CLIA_Track/fg_array_search_13.sl,4786904,EUSolver_new,11898,default,219869,complete,16.0716,16.0771,338468.0,correct,correct,690,(findIdx 690),true,sat
+299131068,CLIA_Track/fg_array_search_13.sl,4786904,Euphony,11902,default,219874,complete,15.9946,15.9975,346376.0,correct,correct,690,(findIdx 690),true,sat
+299131069,CLIA_Track/fg_array_search_13.sl,4786904,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.5,3600.02,514444.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131070,CLIA_Track/fg_array_search_13.sl,4786904,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.081613,0.0767519,113120.0,correct,correct,1665,(findIdx 1665),true,sat
+299131071,CLIA_Track/fg_array_search_13.sl,4786904,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3600.11,3600.1,510652.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131072,CLIA_Track/fg_array_search_13.sl,4786904,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.100498,0.0935689,113120.0,correct,correct,2287,(findIdx 2287),true,sat
+299131073,CLIA_Track/fg_array_search_13.sl,4786904,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.089111,0.0844689,113120.0,correct,correct,1665,(findIdx 1665),true,sat
+299131074,CLIA_Track/fg_array_search_13.sl,4786904,DryadSynth,12292,autothreads,223920,timeout (wallclock),14248.4,3600.05,3.636796E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131075,CLIA_Track/fg_array_search_13.sl,4786904,DryadSynth,12292,default,223921,timeout (wallclock),14303.3,3600.06,3.5849564E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131076,CLIA_Track/fg_array_search_13.sl,4786904,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.48,3600.03,3.5603024E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131077,CLIA_Track/fg_array_search_13.sl,4786904,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14311.0,3600.04,3.5912028E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131078,CLIA_Track/fg_array_search_14.sl,4786905,EUSolver,11893,default,219860,complete,21.1397,21.1434,339288.0,correct,correct,799,(findIdx 799),true,sat
+299131079,CLIA_Track/fg_array_search_14.sl,4786905,EUSolver_new,11898,default,219869,complete,21.079,21.0815,339288.0,correct,correct,799,(findIdx 799),true,sat
+299131080,CLIA_Track/fg_array_search_14.sl,4786905,Euphony,11902,default,219874,complete,21.8499,21.853,346416.0,correct,correct,799,(findIdx 799),true,sat
+299131081,CLIA_Track/fg_array_search_14.sl,4786905,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.48,3600.02,453448.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131082,CLIA_Track/fg_array_search_14.sl,4786905,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.095023,0.0904299,113120.0,correct,correct,1894,(findIdx 1894),true,sat
+299131083,CLIA_Track/fg_array_search_14.sl,4786905,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.65,3600.03,452912.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131084,CLIA_Track/fg_array_search_14.sl,4786905,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.11204,0.105829,113120.0,correct,correct,2591,(findIdx 2591),true,sat
+299131085,CLIA_Track/fg_array_search_14.sl,4786905,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.105069,0.102292,113120.0,correct,correct,1894,(findIdx 1894),true,sat
+299131086,CLIA_Track/fg_array_search_14.sl,4786905,DryadSynth,12292,autothreads,223920,timeout (wallclock),14217.8,3600.08,3.6570716E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131087,CLIA_Track/fg_array_search_14.sl,4786905,DryadSynth,12292,default,223921,timeout (wallclock),14297.4,3600.04,3.5981928E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131088,CLIA_Track/fg_array_search_14.sl,4786905,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.73,3600.02,3.5641928E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131089,CLIA_Track/fg_array_search_14.sl,4786905,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14299.3,3600.06,3.5982948E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131090,CLIA_Track/fg_array_search_15.sl,4786906,EUSolver,11893,default,219860,complete,28.331,28.3825,339404.0,correct,correct,916,(findIdx 916),true,sat
+299131091,CLIA_Track/fg_array_search_15.sl,4786906,EUSolver_new,11898,default,219869,complete,28.2985,28.3043,339148.0,correct,correct,916,(findIdx 916),true,sat
+299131092,CLIA_Track/fg_array_search_15.sl,4786906,Euphony,11902,default,219874,complete,29.0564,29.1195,348588.0,correct,correct,916,(findIdx 916),true,sat
+299131093,CLIA_Track/fg_array_search_15.sl,4786906,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.79,3600.11,455560.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131094,CLIA_Track/fg_array_search_15.sl,4786906,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.105729,0.099454,113120.0,correct,correct,2299,(findIdx 2299),true,sat
+299131095,CLIA_Track/fg_array_search_15.sl,4786906,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.66,3600.02,453696.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131096,CLIA_Track/fg_array_search_15.sl,4786906,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.118632,0.112161,113120.0,correct,correct,2181,(findIdx 2181),true,sat
+299131097,CLIA_Track/fg_array_search_15.sl,4786906,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.116735,0.109839,113120.0,correct,correct,2299,(findIdx 2299),true,sat
+299131098,CLIA_Track/fg_array_search_15.sl,4786906,DryadSynth,12292,autothreads,223920,timeout (wallclock),14261.5,3600.08,3.6110496E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131099,CLIA_Track/fg_array_search_15.sl,4786906,DryadSynth,12292,default,223921,timeout (wallclock),14294.8,3600.04,3.591792E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131100,CLIA_Track/fg_array_search_15.sl,4786906,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.04,3600.03,3.5577288E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131101,CLIA_Track/fg_array_search_15.sl,4786906,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14288.2,3600.03,3.591792E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131102,CLIA_Track/fg_array_search_2.sl,4786907,EUSolver,11893,default,219860,complete,0.743448,0.744814,337552.0,correct,correct,19,(findIdx 19),true,sat
+299131103,CLIA_Track/fg_array_search_2.sl,4786907,EUSolver_new,11898,default,219869,complete,0.739819,0.740804,336496.0,correct,correct,19,(findIdx 19),true,sat
+299131104,CLIA_Track/fg_array_search_2.sl,4786907,Euphony,11902,default,219874,complete,0.936528,0.938487,346164.0,correct,correct,19,(findIdx 19),true,sat
+299131105,CLIA_Track/fg_array_search_2.sl,4786907,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,18.6856,18.6921,277616.0,correct,correct,11,(findIdx 11),true,sat
+299131106,CLIA_Track/fg_array_search_2.sl,4786907,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.015222,0.014257,113120.0,correct,correct,53,(findIdx 53),true,sat
+299131107,CLIA_Track/fg_array_search_2.sl,4786907,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,65.1022,65.1053,285904.0,correct,correct,11,(findIdx 11),true,sat
+299131108,CLIA_Track/fg_array_search_2.sl,4786907,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.017562,0.017397,113120.0,correct,correct,107,(findIdx 107),true,sat
+299131109,CLIA_Track/fg_array_search_2.sl,4786907,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.016506,0.0165299,113120.0,correct,correct,53,(findIdx 53),true,sat
+299131110,CLIA_Track/fg_array_search_2.sl,4786907,DryadSynth,12292,autothreads,223920,complete,95.9954,33.2056,3.8074456E7,correct,correct,21,(findIdx 21),true,sat
+299131111,CLIA_Track/fg_array_search_2.sl,4786907,DryadSynth,12292,default,223921,complete,21.0303,7.59153,3.6421696E7,correct,correct,21,(findIdx 21),true,sat
+299131112,CLIA_Track/fg_array_search_2.sl,4786907,DryadSynth,12292,fallback,223922,complete,35.6847,34.3224,3.60217E7,correct,correct,21,(findIdx 21),true,sat
+299131113,CLIA_Track/fg_array_search_2.sl,4786907,DryadSynth,12292,timeout_change,223923,complete,69.3391,18.5953,3.707834E7,correct,correct,21,(findIdx 21),true,sat
+299131114,CLIA_Track/fg_array_search_3.sl,4786908,EUSolver,11893,default,219860,complete,0.85236,1.42204,337536.0,correct,correct,40,(findIdx 40),true,sat
+299131115,CLIA_Track/fg_array_search_3.sl,4786908,EUSolver_new,11898,default,219869,complete,0.843496,0.844223,337536.0,correct,correct,40,(findIdx 40),true,sat
+299131116,CLIA_Track/fg_array_search_3.sl,4786908,Euphony,11902,default,219874,complete,1.0327,1.09206,347228.0,correct,correct,40,(findIdx 40),true,sat
+299131117,CLIA_Track/fg_array_search_3.sl,4786908,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.69,3600.02,507164.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131118,CLIA_Track/fg_array_search_3.sl,4786908,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.017081,0.0163779,113120.0,correct,correct,109,(findIdx 109),true,sat
+299131119,CLIA_Track/fg_array_search_3.sl,4786908,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.5,3600.02,476668.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131120,CLIA_Track/fg_array_search_3.sl,4786908,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.022927,0.022012,113120.0,correct,correct,292,(findIdx 292),true,sat
+299131121,CLIA_Track/fg_array_search_3.sl,4786908,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.020335,0.020955,113120.0,correct,correct,109,(findIdx 109),true,sat
+299131122,CLIA_Track/fg_array_search_3.sl,4786908,DryadSynth,12292,autothreads,223920,timeout (wallclock),14201.8,3600.03,4.9362608E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131123,CLIA_Track/fg_array_search_3.sl,4786908,DryadSynth,12292,default,223921,timeout (wallclock),14276.1,3600.04,4.1779564E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131124,CLIA_Track/fg_array_search_3.sl,4786908,DryadSynth,12292,fallback,223922,timeout (wallclock),3603.21,3600.02,3.7108424E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131125,CLIA_Track/fg_array_search_3.sl,4786908,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14166.0,3600.04,4.0719128E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131126,CLIA_Track/fg_array_search_4.sl,4786909,EUSolver,11893,default,219860,complete,1.00816,1.00886,337660.0,correct,correct,69,(findIdx 69),true,sat
+299131127,CLIA_Track/fg_array_search_4.sl,4786909,EUSolver_new,11898,default,219869,complete,1.01079,1.01241,337404.0,correct,correct,69,(findIdx 69),true,sat
+299131128,CLIA_Track/fg_array_search_4.sl,4786909,Euphony,11902,default,219874,complete,1.20377,1.20389,345988.0,correct,correct,69,(findIdx 69),true,sat
+299131129,CLIA_Track/fg_array_search_4.sl,4786909,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3600.15,3600.11,474140.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131130,CLIA_Track/fg_array_search_4.sl,4786909,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.02158,0.0206649,113120.0,correct,correct,187,(findIdx 187),true,sat
+299131131,CLIA_Track/fg_array_search_4.sl,4786909,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.52,3600.02,422348.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131132,CLIA_Track/fg_array_search_4.sl,4786909,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.026506,0.0262561,113120.0,correct,correct,406,(findIdx 406),true,sat
+299131133,CLIA_Track/fg_array_search_4.sl,4786909,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.023463,0.022884,113120.0,correct,correct,187,(findIdx 187),true,sat
+299131134,CLIA_Track/fg_array_search_4.sl,4786909,DryadSynth,12292,autothreads,223920,timeout (wallclock),10152.0,3600.07,4.2716968E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131135,CLIA_Track/fg_array_search_4.sl,4786909,DryadSynth,12292,default,223921,timeout (wallclock),14282.1,3600.09,3.7981156E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131136,CLIA_Track/fg_array_search_4.sl,4786909,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.8,3600.1,3.5764432E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131137,CLIA_Track/fg_array_search_4.sl,4786909,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14298.4,3600.06,3.7691208E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131138,CLIA_Track/fg_array_search_5.sl,4786910,EUSolver,11893,default,219860,complete,1.27942,1.27982,337688.0,correct,correct,106,(findIdx 106),true,sat
+299131139,CLIA_Track/fg_array_search_5.sl,4786910,EUSolver_new,11898,default,219869,complete,1.2737,1.28132,337688.0,correct,correct,106,(findIdx 106),true,sat
+299131140,CLIA_Track/fg_array_search_5.sl,4786910,Euphony,11902,default,219874,complete,1.47357,1.47453,347576.0,correct,correct,106,(findIdx 106),true,sat
+299131141,CLIA_Track/fg_array_search_5.sl,4786910,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.5,3600.02,439236.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131142,CLIA_Track/fg_array_search_5.sl,4786910,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.025145,0.0234179,113120.0,correct,correct,285,(findIdx 285),true,sat
+299131143,CLIA_Track/fg_array_search_5.sl,4786910,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.53,3600.01,439460.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131144,CLIA_Track/fg_array_search_5.sl,4786910,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.03029,0.03465,113120.0,correct,correct,539,(findIdx 539),true,sat
+299131145,CLIA_Track/fg_array_search_5.sl,4786910,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.028494,0.027839,113120.0,correct,correct,285,(findIdx 285),true,sat
+299131146,CLIA_Track/fg_array_search_5.sl,4786910,DryadSynth,12292,autothreads,223920,timeout (wallclock),14248.1,3600.12,3.9067732E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131147,CLIA_Track/fg_array_search_5.sl,4786910,DryadSynth,12292,default,223921,timeout (wallclock),14231.8,3600.08,3.7437848E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131148,CLIA_Track/fg_array_search_5.sl,4786910,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.51,3600.03,3.6109412E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131149,CLIA_Track/fg_array_search_5.sl,4786910,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14286.1,3600.04,3.7921984E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131150,CLIA_Track/fg_array_search_6.sl,4786911,EUSolver,11893,default,219860,complete,1.67314,1.67498,337768.0,correct,correct,151,(findIdx 151),true,sat
+299131151,CLIA_Track/fg_array_search_6.sl,4786911,EUSolver_new,11898,default,219869,complete,1.66229,1.66349,337512.0,correct,correct,151,(findIdx 151),true,sat
+299131152,CLIA_Track/fg_array_search_6.sl,4786911,Euphony,11902,default,219874,complete,1.87527,1.876,345828.0,correct,correct,151,(findIdx 151),true,sat
+299131153,CLIA_Track/fg_array_search_6.sl,4786911,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.65,3600.01,501412.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131154,CLIA_Track/fg_array_search_6.sl,4786911,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.030357,0.029049,113120.0,correct,correct,372,(findIdx 372),true,sat
+299131155,CLIA_Track/fg_array_search_6.sl,4786911,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.5,3600.02,504772.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131156,CLIA_Track/fg_array_search_6.sl,4786911,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.036886,0.0352261,113120.0,correct,correct,691,(findIdx 691),true,sat
+299131157,CLIA_Track/fg_array_search_6.sl,4786911,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.033419,0.0324169,113120.0,correct,correct,372,(findIdx 372),true,sat
+299131158,CLIA_Track/fg_array_search_6.sl,4786911,DryadSynth,12292,autothreads,223920,timeout (wallclock),14245.6,3600.04,4.086326E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131159,CLIA_Track/fg_array_search_6.sl,4786911,DryadSynth,12292,default,223921,timeout (wallclock),14286.9,3600.05,3.7776952E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131160,CLIA_Track/fg_array_search_6.sl,4786911,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.62,3600.03,3.5697096E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131161,CLIA_Track/fg_array_search_6.sl,4786911,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14269.8,3600.06,3.7098272E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131162,CLIA_Track/fg_array_search_7.sl,4786912,EUSolver,11893,default,219860,complete,2.31039,2.31085,338180.0,correct,correct,204,(findIdx 204),true,sat
+299131163,CLIA_Track/fg_array_search_7.sl,4786912,EUSolver_new,11898,default,219869,complete,2.3274,2.32788,337924.0,correct,correct,204,(findIdx 204),true,sat
+299131164,CLIA_Track/fg_array_search_7.sl,4786912,Euphony,11902,default,219874,complete,2.54944,2.55006,344864.0,correct,correct,204,(findIdx 204),true,sat
+299131165,CLIA_Track/fg_array_search_7.sl,4786912,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.39,3600.01,450544.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131166,CLIA_Track/fg_array_search_7.sl,4786912,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.036129,0.034269,113120.0,correct,correct,506,(findIdx 506),true,sat
+299131167,CLIA_Track/fg_array_search_7.sl,4786912,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.7,3600.01,452652.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131168,CLIA_Track/fg_array_search_7.sl,4786912,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.043199,0.041306,113120.0,correct,correct,862,(findIdx 862),true,sat
+299131169,CLIA_Track/fg_array_search_7.sl,4786912,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.039556,0.0394539,113120.0,correct,correct,506,(findIdx 506),true,sat
+299131170,CLIA_Track/fg_array_search_7.sl,4786912,DryadSynth,12292,autothreads,223920,timeout (wallclock),14188.0,3600.09,3.8016352E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131171,CLIA_Track/fg_array_search_7.sl,4786912,DryadSynth,12292,default,223921,timeout (wallclock),14287.5,3600.04,3.6715864E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131172,CLIA_Track/fg_array_search_7.sl,4786912,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.73,3600.07,3.5629384E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131173,CLIA_Track/fg_array_search_7.sl,4786912,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14285.6,3600.06,3.6507292E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131174,CLIA_Track/fg_array_search_8.sl,4786913,EUSolver,11893,default,219860,complete,3.23739,3.24201,338044.0,correct,correct,265,(findIdx 265),true,sat
+299131175,CLIA_Track/fg_array_search_8.sl,4786913,EUSolver_new,11898,default,219869,complete,3.21204,3.21401,337788.0,correct,correct,265,(findIdx 265),true,sat
+299131176,CLIA_Track/fg_array_search_8.sl,4786913,Euphony,11902,default,219874,complete,3.36344,3.36372,345688.0,correct,correct,265,(findIdx 265),true,sat
+299131177,CLIA_Track/fg_array_search_8.sl,4786913,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.7,3600.03,459820.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131178,CLIA_Track/fg_array_search_8.sl,4786913,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.04286,0.0397321,113120.0,correct,correct,670,(findIdx 670),true,sat
+299131179,CLIA_Track/fg_array_search_8.sl,4786913,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.78,3600.1,462660.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131180,CLIA_Track/fg_array_search_8.sl,4786913,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.049056,0.0459931,113120.0,correct,correct,1052,(findIdx 1052),true,sat
+299131181,CLIA_Track/fg_array_search_8.sl,4786913,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.045018,0.0430719,113120.0,correct,correct,670,(findIdx 670),true,sat
+299131182,CLIA_Track/fg_array_search_8.sl,4786913,DryadSynth,12292,autothreads,223920,timeout (wallclock),9970.81,3600.04,3.7840988E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131183,CLIA_Track/fg_array_search_8.sl,4786913,DryadSynth,12292,default,223921,timeout (wallclock),14289.7,3600.06,3.6708352E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131184,CLIA_Track/fg_array_search_8.sl,4786913,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.63,3600.02,3.5702864E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131185,CLIA_Track/fg_array_search_8.sl,4786913,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14289.3,3600.08,3.6635864E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131186,CLIA_Track/fg_array_search_9.sl,4786914,EUSolver,11893,default,219860,complete,4.49472,4.49614,338032.0,correct,correct,334,(findIdx 334),true,sat
+299131187,CLIA_Track/fg_array_search_9.sl,4786914,EUSolver_new,11898,default,219869,complete,4.51528,4.51638,338028.0,correct,correct,334,(findIdx 334),true,sat
+299131188,CLIA_Track/fg_array_search_9.sl,4786914,Euphony,11902,default,219874,complete,4.65768,4.67283,346028.0,correct,correct,334,(findIdx 334),true,sat
+299131189,CLIA_Track/fg_array_search_9.sl,4786914,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.58,3600.02,470252.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131190,CLIA_Track/fg_array_search_9.sl,4786914,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.046493,0.043319,113120.0,correct,correct,850,(findIdx 850),true,sat
+299131191,CLIA_Track/fg_array_search_9.sl,4786914,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.75,3600.11,475932.0,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131192,CLIA_Track/fg_array_search_9.sl,4786914,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.058228,0.054747,113120.0,correct,correct,1261,(findIdx 1261),true,sat
+299131193,CLIA_Track/fg_array_search_9.sl,4786914,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.052456,0.0500749,113120.0,correct,correct,850,(findIdx 850),true,sat
+299131194,CLIA_Track/fg_array_search_9.sl,4786914,DryadSynth,12292,autothreads,223920,timeout (wallclock),14182.0,3600.07,3.6699228E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131195,CLIA_Track/fg_array_search_9.sl,4786914,DryadSynth,12292,default,223921,timeout (wallclock),14280.2,3600.05,3.6109032E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131196,CLIA_Track/fg_array_search_9.sl,4786914,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.61,3600.11,3.5589836E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131197,CLIA_Track/fg_array_search_9.sl,4786914,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14292.0,3600.04,3.60444E7,unsolved,correct,0,(findIdx -1), n/a (not all solved),not-run
+299131198,CLIA_Track/fg_array_sum_10_15.sl,4786915,EUSolver,11893,default,219860,complete,39.1042,39.11,338404.0,correct,correct,1838,(findSum 1838),true,sat
+299131199,CLIA_Track/fg_array_sum_10_15.sl,4786915,EUSolver_new,11898,default,219869,complete,38.2099,38.3654,338404.0,correct,correct,1838,(findSum 1838),true,sat
+299131200,CLIA_Track/fg_array_sum_10_15.sl,4786915,Euphony,11902,default,219874,complete,54.369,54.378,346320.0,correct,correct,2070,(findSum 2070),true,sat
+299131201,CLIA_Track/fg_array_sum_10_15.sl,4786915,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.45,3600.01,540012.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131202,CLIA_Track/fg_array_sum_10_15.sl,4786915,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.104616,0.096746,113120.0,correct,correct,3354,(findSum 3354),true,sat
+299131203,CLIA_Track/fg_array_sum_10_15.sl,4786915,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.56,3600.01,522408.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131204,CLIA_Track/fg_array_sum_10_15.sl,4786915,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.084321,0.076445,113120.0,correct,correct,3354,(findSum 3354),true,sat
+299131205,CLIA_Track/fg_array_sum_10_15.sl,4786915,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.116346,0.109203,113120.0,correct,correct,3354,(findSum 3354),true,sat
+299131206,CLIA_Track/fg_array_sum_10_15.sl,4786915,DryadSynth,12292,autothreads,223920,timeout (wallclock),14260.8,3600.05,4.0836576E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131207,CLIA_Track/fg_array_sum_10_15.sl,4786915,DryadSynth,12292,default,223921,timeout (wallclock),14287.8,3600.06,3.761826E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131208,CLIA_Track/fg_array_sum_10_15.sl,4786915,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.92,3600.06,3.5639636E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131209,CLIA_Track/fg_array_sum_10_15.sl,4786915,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14287.8,3600.05,3.7680208E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131210,CLIA_Track/fg_array_sum_10_5.sl,4786916,EUSolver,11893,default,219860,complete,38.9617,38.968,338148.0,correct,correct,1838,(findSum 1838),true,sat
+299131211,CLIA_Track/fg_array_sum_10_5.sl,4786916,EUSolver_new,11898,default,219869,complete,39.5695,39.5785,338536.0,correct,correct,1838,(findSum 1838),true,sat
+299131212,CLIA_Track/fg_array_sum_10_5.sl,4786916,Euphony,11902,default,219874,complete,52.6914,52.7004,347060.0,correct,correct,2070,(findSum 2070),true,sat
+299131213,CLIA_Track/fg_array_sum_10_5.sl,4786916,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.5,3600.01,537936.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131214,CLIA_Track/fg_array_sum_10_5.sl,4786916,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.105302,0.125393,113120.0,correct,correct,3354,(findSum 3354),true,sat
+299131215,CLIA_Track/fg_array_sum_10_5.sl,4786916,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.61,3600.01,523868.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131216,CLIA_Track/fg_array_sum_10_5.sl,4786916,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.084215,0.0823529,113120.0,correct,correct,3354,(findSum 3354),true,sat
+299131217,CLIA_Track/fg_array_sum_10_5.sl,4786916,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.117648,0.1116,113120.0,correct,correct,3354,(findSum 3354),true,sat
+299131218,CLIA_Track/fg_array_sum_10_5.sl,4786916,DryadSynth,12292,autothreads,223920,timeout (wallclock),14270.7,3600.07,4.3060312E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131219,CLIA_Track/fg_array_sum_10_5.sl,4786916,DryadSynth,12292,default,223921,timeout (wallclock),14294.1,3600.07,3.8669472E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131220,CLIA_Track/fg_array_sum_10_5.sl,4786916,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.84,3600.07,3.5697996E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131221,CLIA_Track/fg_array_sum_10_5.sl,4786916,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14264.1,3600.04,3.8123696E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131222,CLIA_Track/fg_array_sum_2_15.sl,4786917,EUSolver,11893,default,219860,complete,0.686112,0.68671,330376.0,correct,correct,18,(findSum 18),true,sat
+299131223,CLIA_Track/fg_array_sum_2_15.sl,4786917,EUSolver_new,11898,default,219869,complete,0.688753,0.692944,337148.0,correct,correct,18,(findSum 18),true,sat
+299131224,CLIA_Track/fg_array_sum_2_15.sl,4786917,Euphony,11902,default,219874,complete,0.885455,0.885939,346908.0,correct,correct,18,(findSum 18),true,sat
+299131225,CLIA_Track/fg_array_sum_2_15.sl,4786917,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,10.1672,10.1682,271172.0,correct,correct,10,(findSum 10),true,sat
+299131226,CLIA_Track/fg_array_sum_2_15.sl,4786917,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.012357,0.0122071,113120.0,correct,correct,11,(findSum 11),true,sat
+299131227,CLIA_Track/fg_array_sum_2_15.sl,4786917,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,39.363,39.3688,280188.0,correct,correct,10,(findSum 10),true,sat
+299131228,CLIA_Track/fg_array_sum_2_15.sl,4786917,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.013383,0.0131469,113120.0,correct,correct,11,(findSum 11),true,sat
+299131229,CLIA_Track/fg_array_sum_2_15.sl,4786917,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.013405,0.0134199,113120.0,correct,correct,11,(findSum 11),true,sat
+299131230,CLIA_Track/fg_array_sum_2_15.sl,4786917,DryadSynth,12292,autothreads,223920,complete,13.9762,6.56552,3.6561248E7,correct,correct,16,(findSum 16),true,sat
+299131231,CLIA_Track/fg_array_sum_2_15.sl,4786917,DryadSynth,12292,default,223921,complete,4.0489,1.56375,3.602848E7,correct,correct,16,(findSum 16),true,sat
+299131232,CLIA_Track/fg_array_sum_2_15.sl,4786917,DryadSynth,12292,fallback,223922,complete,1.26595,0.827545,3.5561156E7,correct,correct,10,(findSum 10),true,sat
+299131233,CLIA_Track/fg_array_sum_2_15.sl,4786917,DryadSynth,12292,timeout_change,223923,complete,8.56796,1.64511,3.602848E7,correct,correct,16,(findSum 16),true,sat
+299131234,CLIA_Track/fg_array_sum_2_5.sl,4786918,EUSolver,11893,default,219860,complete,0.693327,0.695754,333032.0,correct,correct,18,(findSum 18),true,sat
+299131235,CLIA_Track/fg_array_sum_2_5.sl,4786918,EUSolver_new,11898,default,219869,complete,0.692196,0.708241,328632.0,correct,correct,18,(findSum 18),true,sat
+299131236,CLIA_Track/fg_array_sum_2_5.sl,4786918,Euphony,11902,default,219874,complete,0.893025,0.898052,346808.0,correct,correct,18,(findSum 18),true,sat
+299131237,CLIA_Track/fg_array_sum_2_5.sl,4786918,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,10.2484,10.2479,271084.0,correct,correct,10,(findSum 10),true,sat
+299131238,CLIA_Track/fg_array_sum_2_5.sl,4786918,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.013281,0.0128309,113120.0,correct,correct,11,(findSum 11),true,sat
+299131239,CLIA_Track/fg_array_sum_2_5.sl,4786918,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,39.3582,39.3615,280232.0,correct,correct,10,(findSum 10),true,sat
+299131240,CLIA_Track/fg_array_sum_2_5.sl,4786918,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.013636,0.0154971,113120.0,correct,correct,11,(findSum 11),true,sat
+299131241,CLIA_Track/fg_array_sum_2_5.sl,4786918,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.015519,0.0151751,113120.0,correct,correct,11,(findSum 11),true,sat
+299131242,CLIA_Track/fg_array_sum_2_5.sl,4786918,DryadSynth,12292,autothreads,223920,complete,8.1801,3.69886,3.6298092E7,correct,correct,16,(findSum 16),true,sat
+299131243,CLIA_Track/fg_array_sum_2_5.sl,4786918,DryadSynth,12292,default,223921,complete,3.30339,1.32898,3.602848E7,correct,correct,16,(findSum 16),true,sat
+299131244,CLIA_Track/fg_array_sum_2_5.sl,4786918,DryadSynth,12292,fallback,223922,complete,1.19843,0.821333,3.5561152E7,correct,correct,10,(findSum 10),true,sat
+299131245,CLIA_Track/fg_array_sum_2_5.sl,4786918,DryadSynth,12292,timeout_change,223923,complete,3.77921,1.5022,3.602848E7,correct,correct,10,(findSum 10),true,sat
+299131246,CLIA_Track/fg_array_sum_3_15.sl,4786919,EUSolver,11893,default,219860,complete,0.759344,0.76181,337416.0,correct,correct,39,(findSum 39),true,sat
+299131247,CLIA_Track/fg_array_sum_3_15.sl,4786919,EUSolver_new,11898,default,219869,complete,0.76239,0.76388,337412.0,correct,correct,39,(findSum 39),true,sat
+299131248,CLIA_Track/fg_array_sum_3_15.sl,4786919,Euphony,11902,default,219874,complete,0.954221,0.954839,345672.0,correct,correct,39,(findSum 39),true,sat
+299131249,CLIA_Track/fg_array_sum_3_15.sl,4786919,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.58,3600.11,482596.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131250,CLIA_Track/fg_array_sum_3_15.sl,4786919,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.0173,0.0166751,113120.0,correct,correct,57,(findSum 57),true,sat
+299131251,CLIA_Track/fg_array_sum_3_15.sl,4786919,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.44,3600.09,480816.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131252,CLIA_Track/fg_array_sum_3_15.sl,4786919,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.017016,0.0165941,113120.0,correct,correct,57,(findSum 57),true,sat
+299131253,CLIA_Track/fg_array_sum_3_15.sl,4786919,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.01823,0.0181969,113120.0,correct,correct,57,(findSum 57),true,sat
+299131254,CLIA_Track/fg_array_sum_3_15.sl,4786919,DryadSynth,12292,autothreads,223920,complete,1231.54,562.485,3.98514E7,correct,correct,25,(findSum 25),true,sat
+299131255,CLIA_Track/fg_array_sum_3_15.sl,4786919,DryadSynth,12292,default,223921,complete,263.089,67.0973,3.7150944E7,correct,correct,19,(findSum 19),true,sat
+299131256,CLIA_Track/fg_array_sum_3_15.sl,4786919,DryadSynth,12292,fallback,223922,complete,3.47522,2.81116,3.5626916E7,correct,correct,25,(findSum 25),true,sat
+299131257,CLIA_Track/fg_array_sum_3_15.sl,4786919,DryadSynth,12292,timeout_change,223923,complete,27.7068,7.75828,3.6552768E7,correct,correct,25,(findSum 25),true,sat
+299131258,CLIA_Track/fg_array_sum_3_5.sl,4786920,EUSolver,11893,default,219860,complete,0.755694,0.757196,335204.0,correct,correct,39,(findSum 39),true,sat
+299131259,CLIA_Track/fg_array_sum_3_5.sl,4786920,EUSolver_new,11898,default,219869,complete,0.761354,0.76259,337672.0,correct,correct,39,(findSum 39),true,sat
+299131260,CLIA_Track/fg_array_sum_3_5.sl,4786920,Euphony,11902,default,219874,complete,0.947188,0.948197,345672.0,correct,correct,39,(findSum 39),true,sat
+299131261,CLIA_Track/fg_array_sum_3_5.sl,4786920,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.66,3600.1,481492.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131262,CLIA_Track/fg_array_sum_3_5.sl,4786920,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.018165,0.016957,113120.0,correct,correct,57,(findSum 57),true,sat
+299131263,CLIA_Track/fg_array_sum_3_5.sl,4786920,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3600.17,3600.11,477844.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131264,CLIA_Track/fg_array_sum_3_5.sl,4786920,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.016404,0.016465,113120.0,correct,correct,57,(findSum 57),true,sat
+299131265,CLIA_Track/fg_array_sum_3_5.sl,4786920,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.018612,0.0193861,113120.0,correct,correct,57,(findSum 57),true,sat
+299131266,CLIA_Track/fg_array_sum_3_5.sl,4786920,DryadSynth,12292,autothreads,223920,complete,247.303,78.3027,3.8733916E7,correct,correct,19,(findSum 19),true,sat
+299131267,CLIA_Track/fg_array_sum_3_5.sl,4786920,DryadSynth,12292,default,223921,complete,429.736,109.451,3.8196944E7,correct,correct,25,(findSum 25),true,sat
+299131268,CLIA_Track/fg_array_sum_3_5.sl,4786920,DryadSynth,12292,fallback,223922,complete,17.8625,17.0376,3.5758788E7,correct,correct,19,(findSum 19),true,sat
+299131269,CLIA_Track/fg_array_sum_3_5.sl,4786920,DryadSynth,12292,timeout_change,223923,complete,157.389,40.6712,3.7151896E7,correct,correct,25,(findSum 25),true,sat
+299131270,CLIA_Track/fg_array_sum_4_15.sl,4786921,EUSolver,11893,default,219860,complete,0.862138,0.862935,337360.0,correct,correct,112,(findSum 112),true,sat
+299131271,CLIA_Track/fg_array_sum_4_15.sl,4786921,EUSolver_new,11898,default,219869,complete,0.862618,0.863576,337368.0,correct,correct,112,(findSum 112),true,sat
+299131272,CLIA_Track/fg_array_sum_4_15.sl,4786921,Euphony,11902,default,219874,complete,1.0635,1.07291,345944.0,correct,correct,112,(findSum 112),true,sat
+299131273,CLIA_Track/fg_array_sum_4_15.sl,4786921,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.58,3600.02,476068.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131274,CLIA_Track/fg_array_sum_4_15.sl,4786921,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.021751,0.0209361,113120.0,correct,correct,168,(findSum 168),true,sat
+299131275,CLIA_Track/fg_array_sum_4_15.sl,4786921,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.62,3600.01,473220.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131276,CLIA_Track/fg_array_sum_4_15.sl,4786921,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.021366,0.020684,113120.0,correct,correct,168,(findSum 168),true,sat
+299131277,CLIA_Track/fg_array_sum_4_15.sl,4786921,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.024564,0.0240839,113120.0,correct,correct,168,(findSum 168),true,sat
+299131278,CLIA_Track/fg_array_sum_4_15.sl,4786921,DryadSynth,12292,autothreads,223920,timeout (wallclock),14255.5,3600.09,4.412372E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131279,CLIA_Track/fg_array_sum_4_15.sl,4786921,DryadSynth,12292,default,223921,timeout (wallclock),14285.4,3600.06,3.9626888E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131280,CLIA_Track/fg_array_sum_4_15.sl,4786921,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.14,3600.08,3.5875288E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131281,CLIA_Track/fg_array_sum_4_15.sl,4786921,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14287.7,3600.05,4.106118E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131282,CLIA_Track/fg_array_sum_4_5.sl,4786922,EUSolver,11893,default,219860,complete,0.863128,0.863754,337360.0,correct,correct,112,(findSum 112),true,sat
+299131283,CLIA_Track/fg_array_sum_4_5.sl,4786922,EUSolver_new,11898,default,219869,complete,0.866627,0.87414,337364.0,correct,correct,112,(findSum 112),true,sat
+299131284,CLIA_Track/fg_array_sum_4_5.sl,4786922,Euphony,11902,default,219874,complete,1.07093,1.07498,345940.0,correct,correct,112,(findSum 112),true,sat
+299131285,CLIA_Track/fg_array_sum_4_5.sl,4786922,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.58,3600.11,474936.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131286,CLIA_Track/fg_array_sum_4_5.sl,4786922,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.022903,0.022357,113120.0,correct,correct,168,(findSum 168),true,sat
+299131287,CLIA_Track/fg_array_sum_4_5.sl,4786922,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.52,3600.01,469968.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131288,CLIA_Track/fg_array_sum_4_5.sl,4786922,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.020779,0.0202881,113120.0,correct,correct,168,(findSum 168),true,sat
+299131289,CLIA_Track/fg_array_sum_4_5.sl,4786922,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.023485,0.023831,113120.0,correct,correct,168,(findSum 168),true,sat
+299131290,CLIA_Track/fg_array_sum_4_5.sl,4786922,DryadSynth,12292,autothreads,223920,timeout (wallclock),9815.37,3600.05,4.1873E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131291,CLIA_Track/fg_array_sum_4_5.sl,4786922,DryadSynth,12292,default,223921,timeout (wallclock),14276.4,3600.05,3.9831136E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131292,CLIA_Track/fg_array_sum_4_5.sl,4786922,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.93,3600.03,3.5824196E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131293,CLIA_Track/fg_array_sum_4_5.sl,4786922,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14282.8,3600.06,4.1500908E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131294,CLIA_Track/fg_array_sum_5_15.sl,4786923,EUSolver,11893,default,219860,complete,1.46652,1.48024,337432.0,correct,correct,229,(findSum 229),true,sat
+299131295,CLIA_Track/fg_array_sum_5_15.sl,4786923,EUSolver_new,11898,default,219869,complete,1.34285,1.72528,337688.0,correct,correct,229,(findSum 229),true,sat
+299131296,CLIA_Track/fg_array_sum_5_15.sl,4786923,Euphony,11902,default,219874,complete,1.54121,1.54248,347284.0,correct,correct,229,(findSum 229),true,sat
+299131297,CLIA_Track/fg_array_sum_5_15.sl,4786923,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.56,3600.02,534504.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131298,CLIA_Track/fg_array_sum_5_15.sl,4786923,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.026947,0.025222,113120.0,correct,correct,369,(findSum 369),true,sat
+299131299,CLIA_Track/fg_array_sum_5_15.sl,4786923,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.66,3600.01,529740.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131300,CLIA_Track/fg_array_sum_5_15.sl,4786923,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.027206,0.027289,113120.0,correct,correct,369,(findSum 369),true,sat
+299131301,CLIA_Track/fg_array_sum_5_15.sl,4786923,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.029691,0.0302849,113120.0,correct,correct,369,(findSum 369),true,sat
+299131302,CLIA_Track/fg_array_sum_5_15.sl,4786923,DryadSynth,12292,autothreads,223920,timeout (wallclock),14241.1,3600.09,4.2667844E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131303,CLIA_Track/fg_array_sum_5_15.sl,4786923,DryadSynth,12292,default,223921,timeout (wallclock),14285.9,3600.04,3.9114432E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131304,CLIA_Track/fg_array_sum_5_15.sl,4786923,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.03,3600.04,3.5859144E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131305,CLIA_Track/fg_array_sum_5_15.sl,4786923,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14288.9,3600.07,3.920548E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131306,CLIA_Track/fg_array_sum_6_15.sl,4786924,EUSolver,11893,default,219860,complete,5.78648,5.78847,337604.0,correct,correct,492,(findSum 492),true,sat
+299131307,CLIA_Track/fg_array_sum_6_15.sl,4786924,EUSolver_new,11898,default,219869,complete,5.96204,5.96956,337604.0,correct,correct,492,(findSum 492),true,sat
+299131308,CLIA_Track/fg_array_sum_6_15.sl,4786924,Euphony,11902,default,219874,complete,4.3215,4.33562,347700.0,correct,correct,492,(findSum 492),true,sat
+299131309,CLIA_Track/fg_array_sum_6_15.sl,4786924,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.56,3600.02,533600.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131310,CLIA_Track/fg_array_sum_6_15.sl,4786924,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.039045,0.0362909,113120.0,correct,correct,678,(findSum 678),true,sat
+299131311,CLIA_Track/fg_array_sum_6_15.sl,4786924,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.64,3600.02,569292.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131312,CLIA_Track/fg_array_sum_6_15.sl,4786924,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.034266,0.0343549,113120.0,correct,correct,678,(findSum 678),true,sat
+299131313,CLIA_Track/fg_array_sum_6_15.sl,4786924,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.042709,0.040803,113120.0,correct,correct,678,(findSum 678),true,sat
+299131314,CLIA_Track/fg_array_sum_6_15.sl,4786924,DryadSynth,12292,autothreads,223920,timeout (wallclock),14194.3,3600.07,4.1830136E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131315,CLIA_Track/fg_array_sum_6_15.sl,4786924,DryadSynth,12292,default,223921,timeout (wallclock),14276.8,3600.07,3.89851E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131316,CLIA_Track/fg_array_sum_6_15.sl,4786924,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.61,3600.11,3.563284E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131317,CLIA_Track/fg_array_sum_6_15.sl,4786924,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14267.4,3600.04,3.9012496E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131318,CLIA_Track/fg_array_sum_6_5.sl,4786925,EUSolver,11893,default,219860,complete,6.11367,6.11419,337860.0,correct,correct,492,(findSum 492),true,sat
+299131319,CLIA_Track/fg_array_sum_6_5.sl,4786925,EUSolver_new,11898,default,219869,complete,5.97085,5.97518,337604.0,correct,correct,492,(findSum 492),true,sat
+299131320,CLIA_Track/fg_array_sum_6_5.sl,4786925,Euphony,11902,default,219874,complete,4.48667,4.51731,345908.0,correct,correct,492,(findSum 492),true,sat
+299131321,CLIA_Track/fg_array_sum_6_5.sl,4786925,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.75,3600.02,536736.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131322,CLIA_Track/fg_array_sum_6_5.sl,4786925,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.039123,0.0375199,113120.0,correct,correct,678,(findSum 678),true,sat
+299131323,CLIA_Track/fg_array_sum_6_5.sl,4786925,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.7,3600.11,569208.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131324,CLIA_Track/fg_array_sum_6_5.sl,4786925,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.034695,0.0384339,113120.0,correct,correct,678,(findSum 678),true,sat
+299131325,CLIA_Track/fg_array_sum_6_5.sl,4786925,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.042504,0.0466221,113120.0,correct,correct,678,(findSum 678),true,sat
+299131326,CLIA_Track/fg_array_sum_6_5.sl,4786925,DryadSynth,12292,autothreads,223920,timeout (wallclock),14228.6,3600.09,4.2105428E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131327,CLIA_Track/fg_array_sum_6_5.sl,4786925,DryadSynth,12292,default,223921,timeout (wallclock),14277.4,3600.05,4.1057876E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131328,CLIA_Track/fg_array_sum_6_5.sl,4786925,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.76,3600.06,3.5633356E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131329,CLIA_Track/fg_array_sum_6_5.sl,4786925,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14233.8,3600.05,3.8273648E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131330,CLIA_Track/fg_array_sum_7_15.sl,4786926,EUSolver,11893,default,219860,complete,7.70457,7.70557,337724.0,correct,correct,685,(findSum 685),true,sat
+299131331,CLIA_Track/fg_array_sum_7_15.sl,4786926,EUSolver_new,11898,default,219869,complete,7.66425,7.66568,337728.0,correct,correct,685,(findSum 685),true,sat
+299131332,CLIA_Track/fg_array_sum_7_15.sl,4786926,Euphony,11902,default,219874,complete,7.71382,7.72144,347292.0,correct,correct,679,(findSum 679),true,sat
+299131333,CLIA_Track/fg_array_sum_7_15.sl,4786926,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.76,3600.01,542384.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131334,CLIA_Track/fg_array_sum_7_15.sl,4786926,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.050654,0.047227,113120.0,correct,correct,1113,(findSum 1113),true,sat
+299131335,CLIA_Track/fg_array_sum_7_15.sl,4786926,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.88,3600.01,593996.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131336,CLIA_Track/fg_array_sum_7_15.sl,4786926,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.043104,0.040434,113120.0,correct,correct,1113,(findSum 1113),true,sat
+299131337,CLIA_Track/fg_array_sum_7_15.sl,4786926,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.055727,0.053116,113120.0,correct,correct,1113,(findSum 1113),true,sat
+299131338,CLIA_Track/fg_array_sum_7_15.sl,4786926,DryadSynth,12292,autothreads,223920,timeout (wallclock),14242.7,3600.07,4.1109992E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131339,CLIA_Track/fg_array_sum_7_15.sl,4786926,DryadSynth,12292,default,223921,timeout (wallclock),14271.5,3600.06,3.9262108E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131340,CLIA_Track/fg_array_sum_7_15.sl,4786926,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.76,3600.11,3.5636424E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131341,CLIA_Track/fg_array_sum_7_15.sl,4786926,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14292.3,3600.06,3.8313068E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131342,CLIA_Track/fg_array_sum_7_5.sl,4786927,EUSolver,11893,default,219860,complete,7.6692,7.73355,337984.0,correct,correct,685,(findSum 685),true,sat
+299131343,CLIA_Track/fg_array_sum_7_5.sl,4786927,EUSolver_new,11898,default,219869,complete,7.7147,7.71521,337988.0,correct,correct,685,(findSum 685),true,sat
+299131344,CLIA_Track/fg_array_sum_7_5.sl,4786927,Euphony,11902,default,219874,complete,7.65687,7.65867,346512.0,correct,correct,679,(findSum 679),true,sat
+299131345,CLIA_Track/fg_array_sum_7_5.sl,4786927,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.78,3600.11,539628.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131346,CLIA_Track/fg_array_sum_7_5.sl,4786927,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.050731,0.0473631,113120.0,correct,correct,1113,(findSum 1113),true,sat
+299131347,CLIA_Track/fg_array_sum_7_5.sl,4786927,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.45,3600.02,610880.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131348,CLIA_Track/fg_array_sum_7_5.sl,4786927,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.044274,0.040902,113120.0,correct,correct,1113,(findSum 1113),true,sat
+299131349,CLIA_Track/fg_array_sum_7_5.sl,4786927,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.056326,0.0533111,113120.0,correct,correct,1113,(findSum 1113),true,sat
+299131350,CLIA_Track/fg_array_sum_7_5.sl,4786927,DryadSynth,12292,autothreads,223920,timeout (wallclock),14265.9,3600.08,4.3202588E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131351,CLIA_Track/fg_array_sum_7_5.sl,4786927,DryadSynth,12292,default,223921,timeout (wallclock),14285.6,3600.07,4.0107648E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131352,CLIA_Track/fg_array_sum_7_5.sl,4786927,DryadSynth,12292,fallback,223922,timeout (wallclock),3600.69,3600.04,3.5695304E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131353,CLIA_Track/fg_array_sum_7_5.sl,4786927,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14294.8,3600.04,3.9946204E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131354,CLIA_Track/fg_array_sum_8_15.sl,4786928,EUSolver,11893,default,219860,complete,11.5364,11.5379,337876.0,correct,correct,1126,(findSum 1126),true,sat
+299131355,CLIA_Track/fg_array_sum_8_15.sl,4786928,EUSolver_new,11898,default,219869,complete,10.8489,10.8548,337876.0,correct,correct,1126,(findSum 1126),true,sat
+299131356,CLIA_Track/fg_array_sum_8_15.sl,4786928,Euphony,11902,default,219874,complete,9.60521,9.60819,346332.0,correct,correct,1138,(findSum 1138),true,sat
+299131357,CLIA_Track/fg_array_sum_8_15.sl,4786928,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.47,3600.02,560728.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131358,CLIA_Track/fg_array_sum_8_15.sl,4786928,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.062103,0.059829,113120.0,correct,correct,1692,(findSum 1692),true,sat
+299131359,CLIA_Track/fg_array_sum_8_15.sl,4786928,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.52,3600.02,613140.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131360,CLIA_Track/fg_array_sum_8_15.sl,4786928,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.055177,0.0511041,113120.0,correct,correct,1692,(findSum 1692),true,sat
+299131361,CLIA_Track/fg_array_sum_8_15.sl,4786928,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.069288,0.0657321,113120.0,correct,correct,1692,(findSum 1692),true,sat
+299131362,CLIA_Track/fg_array_sum_8_15.sl,4786928,DryadSynth,12292,autothreads,223920,timeout (wallclock),14234.9,3600.14,4.1230492E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131363,CLIA_Track/fg_array_sum_8_15.sl,4786928,DryadSynth,12292,default,223921,timeout (wallclock),14285.5,3600.07,3.9422912E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131364,CLIA_Track/fg_array_sum_8_15.sl,4786928,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.92,3600.05,3.6090312E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131365,CLIA_Track/fg_array_sum_8_15.sl,4786928,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14289.9,3600.04,3.8557284E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131366,CLIA_Track/fg_array_sum_8_5.sl,4786929,EUSolver,11893,default,219860,complete,10.9647,10.9687,337872.0,correct,correct,1126,(findSum 1126),true,sat
+299131367,CLIA_Track/fg_array_sum_8_5.sl,4786929,EUSolver_new,11898,default,219869,complete,10.8082,10.8139,338136.0,correct,correct,1126,(findSum 1126),true,sat
+299131368,CLIA_Track/fg_array_sum_8_5.sl,4786929,Euphony,11902,default,219874,complete,9.51048,9.51215,346300.0,correct,correct,1138,(findSum 1138),true,sat
+299131369,CLIA_Track/fg_array_sum_8_5.sl,4786929,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.55,3600.11,541180.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131370,CLIA_Track/fg_array_sum_8_5.sl,4786929,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.066036,0.061339,113120.0,correct,correct,1692,(findSum 1692),true,sat
+299131371,CLIA_Track/fg_array_sum_8_5.sl,4786929,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.67,3600.02,608060.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131372,CLIA_Track/fg_array_sum_8_5.sl,4786929,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.055145,0.0520769,113120.0,correct,correct,1692,(findSum 1692),true,sat
+299131373,CLIA_Track/fg_array_sum_8_5.sl,4786929,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.071889,0.067528,113120.0,correct,correct,1692,(findSum 1692),true,sat
+299131374,CLIA_Track/fg_array_sum_8_5.sl,4786929,DryadSynth,12292,autothreads,223920,timeout (wallclock),14227.2,3600.02,4.36266E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131375,CLIA_Track/fg_array_sum_8_5.sl,4786929,DryadSynth,12292,default,223921,timeout (wallclock),14287.2,3600.08,3.9350888E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131376,CLIA_Track/fg_array_sum_8_5.sl,4786929,DryadSynth,12292,fallback,223922,timeout (wallclock),3603.12,3600.05,3.615586E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131377,CLIA_Track/fg_array_sum_8_5.sl,4786929,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14158.1,3600.04,3.942798E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131378,CLIA_Track/fg_array_sum_9_15.sl,4786930,EUSolver,11893,default,219860,complete,31.0286,31.9271,338148.0,correct,correct,1539,(findSum 1539),true,sat
+299131379,CLIA_Track/fg_array_sum_9_15.sl,4786930,EUSolver_new,11898,default,219869,complete,31.1817,32.9653,338408.0,correct,correct,1539,(findSum 1539),true,sat
+299131380,CLIA_Track/fg_array_sum_9_15.sl,4786930,Euphony,11902,default,219874,complete,54.5842,27.3569,346508.0,correct,correct,953,(findSum 953),true,sat
+299131381,CLIA_Track/fg_array_sum_9_15.sl,4786930,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.53,3600.01,562200.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131382,CLIA_Track/fg_array_sum_9_15.sl,4786930,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.085638,0.079132,113120.0,correct,correct,2433,(findSum 2433),true,sat
+299131383,CLIA_Track/fg_array_sum_9_15.sl,4786930,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.53,3600.01,564560.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131384,CLIA_Track/fg_array_sum_9_15.sl,4786930,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.069207,0.0627219,113120.0,correct,correct,2433,(findSum 2433),true,sat
+299131385,CLIA_Track/fg_array_sum_9_15.sl,4786930,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.095881,0.0904159,113120.0,correct,correct,2433,(findSum 2433),true,sat
+299131386,CLIA_Track/fg_array_sum_9_15.sl,4786930,DryadSynth,12292,autothreads,223920,timeout (wallclock),14193.9,3600.09,4.1560248E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131387,CLIA_Track/fg_array_sum_9_15.sl,4786930,DryadSynth,12292,default,223921,timeout (wallclock),14286.8,3600.05,3.9061592E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131388,CLIA_Track/fg_array_sum_9_15.sl,4786930,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.96,3600.02,3.5709132E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131389,CLIA_Track/fg_array_sum_9_15.sl,4786930,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14276.8,3600.05,3.9137936E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131390,CLIA_Track/fg_array_sum_9_5.sl,4786931,EUSolver,11893,default,219860,complete,31.886,31.9251,338404.0,correct,correct,1539,(findSum 1539),true,sat
+299131391,CLIA_Track/fg_array_sum_9_5.sl,4786931,EUSolver_new,11898,default,219869,complete,30.875,30.8888,338148.0,correct,correct,1539,(findSum 1539),true,sat
+299131392,CLIA_Track/fg_array_sum_9_5.sl,4786931,Euphony,11902,default,219874,complete,27.3158,27.3171,347012.0,correct,correct,953,(findSum 953),true,sat
+299131393,CLIA_Track/fg_array_sum_9_5.sl,4786931,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3600.0,3600.01,561284.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131394,CLIA_Track/fg_array_sum_9_5.sl,4786931,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.085497,0.079229,113120.0,correct,correct,2433,(findSum 2433),true,sat
+299131395,CLIA_Track/fg_array_sum_9_5.sl,4786931,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.65,3600.1,555540.0,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131396,CLIA_Track/fg_array_sum_9_5.sl,4786931,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.069484,0.0631259,113120.0,correct,correct,2433,(findSum 2433),true,sat
+299131397,CLIA_Track/fg_array_sum_9_5.sl,4786931,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.095924,0.0886691,113120.0,correct,correct,2433,(findSum 2433),true,sat
+299131398,CLIA_Track/fg_array_sum_9_5.sl,4786931,DryadSynth,12292,autothreads,223920,timeout (wallclock),14257.1,3600.03,4.398582E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131399,CLIA_Track/fg_array_sum_9_5.sl,4786931,DryadSynth,12292,default,223921,timeout (wallclock),14270.5,3600.04,3.9631204E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131400,CLIA_Track/fg_array_sum_9_5.sl,4786931,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.0,3600.04,3.5779272E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131401,CLIA_Track/fg_array_sum_9_5.sl,4786931,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14286.0,3600.05,4.0343772E7,unsolved,correct,0,(findSum -1), n/a (not all solved),not-run
+299131402,CLIA_Track/fg_eightfuncs.sl,4786932,EUSolver,11893,default,219860,complete,0.747504,0.747759,335344.0,correct,correct,44,(f1 5) (f2 7) (f3 11) (f4 7) (f5 7) (g1 3) (g2 1) (g3 3),true,sat
+299131403,CLIA_Track/fg_eightfuncs.sl,4786932,EUSolver_new,11898,default,219869,complete,0.7445,0.745304,332476.0,correct,correct,44,(f1 5) (f2 7) (f3 11) (f4 7) (f5 7) (g1 3) (g2 1) (g3 3),true,sat
+299131404,CLIA_Track/fg_eightfuncs.sl,4786932,Euphony,11902,default,219874,complete,1.65496,1.65599,349216.0,correct,correct,36,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3) (g1 5) (g2 7) (g3 7),true,sat
+299131405,CLIA_Track/fg_eightfuncs.sl,4786932,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.601986,0.600852,260612.0,correct,correct,16,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1) (g1 3) (g2 3) (g3 3),true,sat
+299131406,CLIA_Track/fg_eightfuncs.sl,4786932,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.023479,0.025698,113120.0,correct,correct,30,(f1 3) (f2 6) (f3 6) (f4 6) (f5 6) (g1 1) (g2 1) (g3 1),true,sat
+299131407,CLIA_Track/fg_eightfuncs.sl,4786932,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,10.9765,10.9849,264244.0,correct,correct,16,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1) (g1 3) (g2 3) (g3 3),true,sat
+299131408,CLIA_Track/fg_eightfuncs.sl,4786932,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.024771,0.0245919,113120.0,correct,correct,30,(f1 3) (f2 6) (f3 6) (f4 6) (f5 6) (g1 1) (g2 1) (g3 1),true,sat
+299131409,CLIA_Track/fg_eightfuncs.sl,4786932,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.025618,0.0252959,113120.0,correct,correct,30,(f1 3) (f2 6) (f3 6) (f4 6) (f5 6) (g1 1) (g2 1) (g3 1),true,sat
+299131410,CLIA_Track/fg_eightfuncs.sl,4786932,DryadSynth,12292,autothreads,223920,complete,5.86846,2.49426,3.604002E7,correct,correct,24,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6),true,sat
+299131411,CLIA_Track/fg_eightfuncs.sl,4786932,DryadSynth,12292,default,223921,complete,2.13739,1.28124,3.5767336E7,correct,correct,24,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6),true,sat
+299131412,CLIA_Track/fg_eightfuncs.sl,4786932,DryadSynth,12292,fallback,223922,complete,0.916079,0.466157,113120.0,correct,correct,24,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6),true,sat
+299131413,CLIA_Track/fg_eightfuncs.sl,4786932,DryadSynth,12292,timeout_change,223923,complete,2.12904,2.48091,3.5767756E7,correct,correct,24,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6),true,sat
+299131414,CLIA_Track/fg_fivefuncs.sl,4786933,EUSolver,11893,default,219860,complete,0.709951,0.727901,297664.0,correct,correct,17,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3),true,sat
+299131415,CLIA_Track/fg_fivefuncs.sl,4786933,EUSolver_new,11898,default,219869,complete,0.725604,0.738124,327700.0,correct,correct,17,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3),true,sat
+299131416,CLIA_Track/fg_fivefuncs.sl,4786933,Euphony,11902,default,219874,complete,1.32896,1.34662,342972.0,correct,correct,17,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3),true,sat
+299131417,CLIA_Track/fg_fivefuncs.sl,4786933,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.284272,0.283528,113120.0,correct,correct,7,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1),true,sat
+299131418,CLIA_Track/fg_fivefuncs.sl,4786933,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.0171,0.01642,113120.0,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131419,CLIA_Track/fg_fivefuncs.sl,4786933,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.207773,0.206821,113120.0,correct,correct,7,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1),true,sat
+299131420,CLIA_Track/fg_fivefuncs.sl,4786933,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.019382,0.019107,113120.0,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131421,CLIA_Track/fg_fivefuncs.sl,4786933,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.018974,0.0196781,113120.0,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131422,CLIA_Track/fg_fivefuncs.sl,4786933,DryadSynth,12292,autothreads,223920,complete,3.13955,1.46472,3.6037224E7,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131423,CLIA_Track/fg_fivefuncs.sl,4786933,DryadSynth,12292,default,223921,complete,1.29333,0.60416,113120.0,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131424,CLIA_Track/fg_fivefuncs.sl,4786933,DryadSynth,12292,fallback,223922,complete,0.673873,0.400424,113120.0,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131425,CLIA_Track/fg_fivefuncs.sl,4786933,DryadSynth,12292,timeout_change,223923,complete,1.36716,0.659901,3.5766996E7,correct,correct,8,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1),true,sat
+299131426,CLIA_Track/fg_max10.sl,4786934,EUSolver,11893,default,219860,complete,4.55392,4.55477,337676.0,correct,correct,406,(max10 406),true,sat
+299131427,CLIA_Track/fg_max10.sl,4786934,EUSolver_new,11898,default,219869,complete,4.60414,4.60867,337680.0,correct,correct,406,(max10 406),true,sat
+299131428,CLIA_Track/fg_max10.sl,4786934,Euphony,11902,default,219874,complete,4.70913,4.70976,346612.0,correct,correct,406,(max10 406),true,sat
+299131429,CLIA_Track/fg_max10.sl,4786934,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.7,3600.02,490368.0,unsolved,correct,0,(max10 -1), n/a (not all solved),not-run
+299131430,CLIA_Track/fg_max10.sl,4786934,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.569305,0.56636,113120.0,correct,correct,775,(max10 775),true,sat
+299131431,CLIA_Track/fg_max10.sl,4786934,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.48,3600.01,513672.0,unsolved,correct,0,(max10 -1), n/a (not all solved),not-run
+299131432,CLIA_Track/fg_max10.sl,4786934,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.561369,0.559437,113120.0,correct,correct,775,(max10 775),true,sat
+299131433,CLIA_Track/fg_max10.sl,4786934,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.571496,0.569809,113120.0,correct,correct,775,(max10 775),true,sat
+299131434,CLIA_Track/fg_max10.sl,4786934,DryadSynth,12292,autothreads,223920,timeout (wallclock),14232.2,3600.09,4.0898448E7,unsolved,correct,0,(max10 -1), n/a (not all solved),not-run
+299131435,CLIA_Track/fg_max10.sl,4786934,DryadSynth,12292,default,223921,timeout (wallclock),14279.7,3600.1,3.978338E7,unsolved,correct,0,(max10 -1), n/a (not all solved),not-run
+299131436,CLIA_Track/fg_max10.sl,4786934,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.03,3600.02,3.5922908E7,unsolved,correct,0,(max10 -1), n/a (not all solved),not-run
+299131437,CLIA_Track/fg_max10.sl,4786934,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14287.3,3600.05,3.9521432E7,unsolved,correct,0,(max10 -1), n/a (not all solved),not-run
+299131438,CLIA_Track/fg_max11.sl,4786935,EUSolver,11893,default,219860,complete,9.84691,10.3508,338172.0,correct,correct,491,(max11 491),true,sat
+299131439,CLIA_Track/fg_max11.sl,4786935,EUSolver_new,11898,default,219869,complete,9.89133,9.9692,338176.0,correct,correct,491,(max11 491),true,sat
+299131440,CLIA_Track/fg_max11.sl,4786935,Euphony,11902,default,219874,complete,10.1101,10.117,346128.0,correct,correct,491,(max11 491),true,sat
+299131441,CLIA_Track/fg_max11.sl,4786935,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.48,3600.12,533812.0,unsolved,correct,0,(max11 -1), n/a (not all solved),not-run
+299131442,CLIA_Track/fg_max11.sl,4786935,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,1.05142,1.04906,257428.0,correct,correct,958,(max11 958),true,sat
+299131443,CLIA_Track/fg_max11.sl,4786935,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.5,3600.02,498984.0,unsolved,correct,0,(max11 -1), n/a (not all solved),not-run
+299131444,CLIA_Track/fg_max11.sl,4786935,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,1.54712,1.54697,258208.0,correct,correct,956,(max11 956),true,sat
+299131445,CLIA_Track/fg_max11.sl,4786935,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,1.06106,1.05899,257428.0,correct,correct,958,(max11 958),true,sat
+299131446,CLIA_Track/fg_max11.sl,4786935,DryadSynth,12292,autothreads,223920,timeout (wallclock),9851.41,3600.09,4.2878176E7,unsolved,correct,0,(max11 -1), n/a (not all solved),not-run
+299131447,CLIA_Track/fg_max11.sl,4786935,DryadSynth,12292,default,223921,timeout (wallclock),14286.1,3600.06,4.10648E7,unsolved,correct,0,(max11 -1), n/a (not all solved),not-run
+299131448,CLIA_Track/fg_max11.sl,4786935,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.07,3600.09,3.5905892E7,unsolved,correct,0,(max11 -1), n/a (not all solved),not-run
+299131449,CLIA_Track/fg_max11.sl,4786935,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14271.7,3600.09,4.102056E7,unsolved,correct,0,(max11 -1), n/a (not all solved),not-run
+299131450,CLIA_Track/fg_max12.sl,4786936,EUSolver,11893,default,219860,complete,13.438,13.4389,338124.0,correct,correct,584,(max12 584),true,sat
+299131451,CLIA_Track/fg_max12.sl,4786936,EUSolver_new,11898,default,219869,complete,13.394,13.3956,338380.0,correct,correct,584,(max12 584),true,sat
+299131452,CLIA_Track/fg_max12.sl,4786936,Euphony,11902,default,219874,complete,19.2315,19.232,346540.0,correct,correct,584,(max12 584),true,sat
+299131453,CLIA_Track/fg_max12.sl,4786936,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.88,3600.02,501960.0,unsolved,correct,0,(max12 -1), n/a (not all solved),not-run
+299131454,CLIA_Track/fg_max12.sl,4786936,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,2.14227,2.13875,258456.0,correct,correct,1158,(max12 1158),true,sat
+299131455,CLIA_Track/fg_max12.sl,4786936,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.69,3600.12,497652.0,unsolved,correct,0,(max12 -1), n/a (not all solved),not-run
+299131456,CLIA_Track/fg_max12.sl,4786936,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,6.94811,6.9459,265600.0,correct,correct,1156,(max12 1156),true,sat
+299131457,CLIA_Track/fg_max12.sl,4786936,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,2.16161,2.15907,258456.0,correct,correct,1158,(max12 1158),true,sat
+299131458,CLIA_Track/fg_max12.sl,4786936,DryadSynth,12292,autothreads,223920,timeout (wallclock),14244.3,3600.07,4.0188656E7,unsolved,correct,0,(max12 -1), n/a (not all solved),not-run
+299131459,CLIA_Track/fg_max12.sl,4786936,DryadSynth,12292,default,223921,timeout (wallclock),14288.3,3600.06,3.8724172E7,unsolved,correct,0,(max12 -1), n/a (not all solved),not-run
+299131460,CLIA_Track/fg_max12.sl,4786936,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.17,3600.03,3.6039136E7,unsolved,correct,0,(max12 -1), n/a (not all solved),not-run
+299131461,CLIA_Track/fg_max12.sl,4786936,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14286.0,3600.04,4.124242E7,unsolved,correct,0,(max12 -1), n/a (not all solved),not-run
+299131462,CLIA_Track/fg_max13.sl,4786937,EUSolver,11893,default,219860,complete,14.1103,14.1126,338464.0,correct,correct,685,(max13 685),true,sat
+299131463,CLIA_Track/fg_max13.sl,4786937,EUSolver_new,11898,default,219869,complete,14.6057,14.6093,338208.0,correct,correct,685,(max13 685),true,sat
+299131464,CLIA_Track/fg_max13.sl,4786937,Euphony,11902,default,219874,complete,10.1267,10.1279,346212.0,correct,correct,685,(max13 685),true,sat
+299131465,CLIA_Track/fg_max13.sl,4786937,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.56,3600.11,501936.0,unsolved,correct,0,(max13 -1), n/a (not all solved),not-run
+299131466,CLIA_Track/fg_max13.sl,4786937,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,3.80549,3.80158,261032.0,correct,correct,1378,(max13 1378),true,sat
+299131467,CLIA_Track/fg_max13.sl,4786937,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.7,3600.01,487284.0,unsolved,correct,0,(max13 -1), n/a (not all solved),not-run
+299131468,CLIA_Track/fg_max13.sl,4786937,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,17.3033,17.3013,276976.0,correct,correct,1375,(max13 1375),true,sat
+299131469,CLIA_Track/fg_max13.sl,4786937,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,3.78989,3.78707,261032.0,correct,correct,1378,(max13 1378),true,sat
+299131470,CLIA_Track/fg_max13.sl,4786937,DryadSynth,12292,autothreads,223920,timeout (wallclock),14251.6,3600.07,4.0323548E7,unsolved,correct,0,(max13 -1), n/a (not all solved),not-run
+299131471,CLIA_Track/fg_max13.sl,4786937,DryadSynth,12292,default,223921,timeout (wallclock),14288.0,3600.03,3.9921944E7,unsolved,correct,0,(max13 -1), n/a (not all solved),not-run
+299131472,CLIA_Track/fg_max13.sl,4786937,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.25,3600.03,3.5907676E7,unsolved,correct,0,(max13 -1), n/a (not all solved),not-run
+299131473,CLIA_Track/fg_max13.sl,4786937,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14287.6,3600.05,3.980196E7,unsolved,correct,0,(max13 -1), n/a (not all solved),not-run
+299131474,CLIA_Track/fg_max14.sl,4786938,EUSolver,11893,default,219860,complete,27.3209,27.3237,339796.0,correct,correct,794,(max14 794),true,sat
+299131475,CLIA_Track/fg_max14.sl,4786938,EUSolver_new,11898,default,219869,complete,27.2732,27.2771,339800.0,correct,correct,794,(max14 794),true,sat
+299131476,CLIA_Track/fg_max14.sl,4786938,Euphony,11902,default,219874,complete,26.0075,26.0078,346620.0,correct,correct,794,(max14 794),true,sat
+299131477,CLIA_Track/fg_max14.sl,4786938,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.75,3600.11,491892.0,unsolved,correct,0,(max14 -1), n/a (not all solved),not-run
+299131478,CLIA_Track/fg_max14.sl,4786938,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,5.85253,5.84683,261048.0,correct,correct,1619,(max14 1619),true,sat
+299131479,CLIA_Track/fg_max14.sl,4786938,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.6,3600.02,464772.0,unsolved,correct,0,(max14 -1), n/a (not all solved),not-run
+299131480,CLIA_Track/fg_max14.sl,4786938,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,148.668,148.671,329584.0,correct,correct,1613,(max14 1613),true,sat
+299131481,CLIA_Track/fg_max14.sl,4786938,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,5.86098,5.85654,260512.0,correct,correct,1619,(max14 1619),true,sat
+299131482,CLIA_Track/fg_max14.sl,4786938,DryadSynth,12292,autothreads,223920,timeout (wallclock),14202.3,3600.06,4.5110812E7,unsolved,correct,0,(max14 -1), n/a (not all solved),not-run
+299131483,CLIA_Track/fg_max14.sl,4786938,DryadSynth,12292,default,223921,timeout (wallclock),14268.4,3600.06,4.1026644E7,unsolved,correct,0,(max14 -1), n/a (not all solved),not-run
+299131484,CLIA_Track/fg_max14.sl,4786938,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.37,3600.03,3.6105952E7,unsolved,correct,0,(max14 -1), n/a (not all solved),not-run
+299131485,CLIA_Track/fg_max14.sl,4786938,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14285.5,3600.08,4.114798E7,unsolved,correct,0,(max14 -1), n/a (not all solved),not-run
+299131486,CLIA_Track/fg_max15.sl,4786939,EUSolver,11893,default,219860,complete,20.5418,20.5493,338708.0,correct,correct,794,(max15 794),true,sat
+299131487,CLIA_Track/fg_max15.sl,4786939,EUSolver_new,11898,default,219869,complete,20.6267,20.6293,338456.0,correct,correct,794,(max15 794),true,sat
+299131488,CLIA_Track/fg_max15.sl,4786939,Euphony,11902,default,219874,complete,14.7324,14.735,347164.0,correct,correct,794,(max15 794),true,sat
+299131489,CLIA_Track/fg_max15.sl,4786939,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.77,3600.01,480964.0,unsolved,correct,0,(max15 -1), n/a (not all solved),not-run
+299131490,CLIA_Track/fg_max15.sl,4786939,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,7.16093,7.1574,264872.0,correct,correct,1766,(max15 1766),true,sat
+299131491,CLIA_Track/fg_max15.sl,4786939,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.58,3600.01,464924.0,unsolved,correct,0,(max15 -1), n/a (not all solved),not-run
+299131492,CLIA_Track/fg_max15.sl,4786939,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,163.896,163.923,351232.0,correct,correct,1613,(max15 1613),true,sat
+299131493,CLIA_Track/fg_max15.sl,4786939,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,7.16887,7.16542,264860.0,correct,correct,1766,(max15 1766),true,sat
+299131494,CLIA_Track/fg_max15.sl,4786939,DryadSynth,12292,autothreads,223920,timeout (wallclock),14237.1,3600.04,4.0386024E7,unsolved,correct,0,(max15 -1), n/a (not all solved),not-run
+299131495,CLIA_Track/fg_max15.sl,4786939,DryadSynth,12292,default,223921,timeout (wallclock),14284.9,3600.06,4.0492176E7,unsolved,correct,0,(max15 -1), n/a (not all solved),not-run
+299131496,CLIA_Track/fg_max15.sl,4786939,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.51,3600.03,3.6095704E7,unsolved,correct,0,(max15 -1), n/a (not all solved),not-run
+299131497,CLIA_Track/fg_max15.sl,4786939,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14287.5,3600.03,3.9445252E7,unsolved,correct,0,(max15 -1), n/a (not all solved),not-run
+299131498,CLIA_Track/fg_max2.sl,4786940,EUSolver,11893,default,219860,complete,0.726861,0.728723,333256.0,correct,correct,14,(max2 14),true,sat
+299131499,CLIA_Track/fg_max2.sl,4786940,EUSolver_new,11898,default,219869,complete,0.732907,0.73346,334940.0,correct,correct,14,(max2 14),true,sat
+299131500,CLIA_Track/fg_max2.sl,4786940,Euphony,11902,default,219874,complete,0.922654,0.950794,345828.0,correct,correct,14,(max2 14),true,sat
+299131501,CLIA_Track/fg_max2.sl,4786940,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.081338,0.0808019,113120.0,correct,correct,6,(max2 6),true,sat
+299131502,CLIA_Track/fg_max2.sl,4786940,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.012193,0.012072,113120.0,correct,correct,11,(max2 11),true,sat
+299131503,CLIA_Track/fg_max2.sl,4786940,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.242354,0.241698,113120.0,correct,correct,6,(max2 6),true,sat
+299131504,CLIA_Track/fg_max2.sl,4786940,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.01432,0.0143539,113120.0,correct,correct,11,(max2 11),true,sat
+299131505,CLIA_Track/fg_max2.sl,4786940,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.013893,0.015835,0.0,correct,correct,11,(max2 11),true,sat
+299131506,CLIA_Track/fg_max2.sl,4786940,DryadSynth,12292,autothreads,223920,complete,2.80809,1.43309,3.6033984E7,correct,correct,11,(max2 11),true,sat
+299131507,CLIA_Track/fg_max2.sl,4786940,DryadSynth,12292,default,223921,complete,1.55881,0.698825,3.576634E7,correct,correct,11,(max2 11),true,sat
+299131508,CLIA_Track/fg_max2.sl,4786940,DryadSynth,12292,fallback,223922,complete,0.69453,0.437793,113120.0,correct,correct,11,(max2 11),true,sat
+299131509,CLIA_Track/fg_max2.sl,4786940,DryadSynth,12292,timeout_change,223923,complete,1.32871,0.607706,3.576634E7,correct,correct,11,(max2 11),true,sat
+299131510,CLIA_Track/fg_max3.sl,4786941,EUSolver,11893,default,219860,complete,0.833059,0.864686,337224.0,correct,correct,35,(max3 35),true,sat
+299131511,CLIA_Track/fg_max3.sl,4786941,EUSolver_new,11898,default,219869,complete,0.838697,0.842552,337472.0,correct,correct,35,(max3 35),true,sat
+299131512,CLIA_Track/fg_max3.sl,4786941,Euphony,11902,default,219874,complete,1.02841,1.03067,345636.0,correct,correct,35,(max3 35),true,sat
+299131513,CLIA_Track/fg_max3.sl,4786941,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,786.116,786.254,398376.0,correct,correct,15,(max3 15),true,sat
+299131514,CLIA_Track/fg_max3.sl,4786941,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.015804,0.0156809,113120.0,correct,correct,42,(max3 42),true,sat
+299131515,CLIA_Track/fg_max3.sl,4786941,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,1279.89,1280.15,410920.0,correct,correct,15,(max3 15),true,sat
+299131516,CLIA_Track/fg_max3.sl,4786941,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.017743,0.0175779,113120.0,correct,correct,40,(max3 40),true,sat
+299131517,CLIA_Track/fg_max3.sl,4786941,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.017018,0.017034,113120.0,correct,correct,42,(max3 42),true,sat
+299131518,CLIA_Track/fg_max3.sl,4786941,DryadSynth,12292,autothreads,223920,complete,27.1344,11.7923,3.702204E7,correct,correct,31,(max3 31),true,sat
+299131519,CLIA_Track/fg_max3.sl,4786941,DryadSynth,12292,default,223921,complete,7.30567,2.5508,3.6094016E7,correct,correct,31,(max3 31),true,sat
+299131520,CLIA_Track/fg_max3.sl,4786941,DryadSynth,12292,fallback,223922,complete,1.91015,1.26704,3.5627428E7,correct,correct,31,(max3 31),true,sat
+299131521,CLIA_Track/fg_max3.sl,4786941,DryadSynth,12292,timeout_change,223923,complete,6.48848,2.31365,3.609466E7,correct,correct,31,(max3 31),true,sat
+299131522,CLIA_Track/fg_max4.sl,4786942,EUSolver,11893,default,219860,complete,1.01124,1.01456,337316.0,correct,correct,64,(max4 64),true,sat
+299131523,CLIA_Track/fg_max4.sl,4786942,EUSolver_new,11898,default,219869,complete,1.00873,1.00947,337572.0,correct,correct,64,(max4 64),true,sat
+299131524,CLIA_Track/fg_max4.sl,4786942,Euphony,11902,default,219874,complete,1.2052,1.20604,346720.0,correct,correct,64,(max4 64),true,sat
+299131525,CLIA_Track/fg_max4.sl,4786942,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.54,3600.01,481256.0,unsolved,correct,0,(max4 -1), n/a (not all solved),not-run
+299131526,CLIA_Track/fg_max4.sl,4786942,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.021691,0.025605,113120.0,correct,correct,90,(max4 90),true,sat
+299131527,CLIA_Track/fg_max4.sl,4786942,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.78,3600.1,520216.0,unsolved,correct,0,(max4 -1), n/a (not all solved),not-run
+299131528,CLIA_Track/fg_max4.sl,4786942,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.021755,0.021705,113120.0,correct,correct,88,(max4 88),true,sat
+299131529,CLIA_Track/fg_max4.sl,4786942,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.024386,0.023997,113120.0,correct,correct,90,(max4 90),true,sat
+299131530,CLIA_Track/fg_max4.sl,4786942,DryadSynth,12292,autothreads,223920,complete,12712.3,3238.98,5.6072E7,correct,correct,71,(max4 71),true,sat
+299131531,CLIA_Track/fg_max4.sl,4786942,DryadSynth,12292,default,223921,complete,3462.49,875.314,4.235094E7,correct,correct,71,(max4 71),true,sat
+299131532,CLIA_Track/fg_max4.sl,4786942,DryadSynth,12292,fallback,223922,timeout (wallclock),3600.85,3600.06,3.575956E7,unsolved,correct,0,(max4 -1), n/a (not all solved),not-run
+299131533,CLIA_Track/fg_max4.sl,4786942,DryadSynth,12292,timeout_change,223923,complete,5178.98,1306.08,4.238314E7,correct,correct,71,(max4 71),true,sat
+299131534,CLIA_Track/fg_max5.sl,4786943,EUSolver,11893,default,219860,complete,0.955744,0.955954,337316.0,correct,correct,101,(max5 101),true,sat
+299131535,CLIA_Track/fg_max5.sl,4786943,EUSolver_new,11898,default,219869,complete,0.963469,0.979993,337568.0,correct,correct,101,(max5 101),true,sat
+299131536,CLIA_Track/fg_max5.sl,4786943,Euphony,11902,default,219874,complete,1.16089,1.16175,346692.0,correct,correct,101,(max5 101),true,sat
+299131537,CLIA_Track/fg_max5.sl,4786943,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.57,3600.1,476960.0,unsolved,correct,0,(max5 -1), n/a (not all solved),not-run
+299131538,CLIA_Track/fg_max5.sl,4786943,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.034439,0.0345091,113120.0,correct,correct,157,(max5 157),true,sat
+299131539,CLIA_Track/fg_max5.sl,4786943,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.69,3600.09,488736.0,unsolved,correct,0,(max5 -1), n/a (not all solved),not-run
+299131540,CLIA_Track/fg_max5.sl,4786943,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.027873,0.027508,113120.0,correct,correct,155,(max5 155),true,sat
+299131541,CLIA_Track/fg_max5.sl,4786943,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.037587,0.037261,113120.0,correct,correct,157,(max5 157),true,sat
+299131542,CLIA_Track/fg_max5.sl,4786943,DryadSynth,12292,autothreads,223920,timeout (wallclock),14274.8,3600.08,4.401704E7,unsolved,correct,0,(max5 -1), n/a (not all solved),not-run
+299131543,CLIA_Track/fg_max5.sl,4786943,DryadSynth,12292,default,223921,timeout (wallclock),14264.6,3600.07,4.1602056E7,unsolved,correct,0,(max5 -1), n/a (not all solved),not-run
+299131544,CLIA_Track/fg_max5.sl,4786943,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.19,3600.05,3.5900004E7,unsolved,correct,0,(max5 -1), n/a (not all solved),not-run
+299131545,CLIA_Track/fg_max5.sl,4786943,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14273.3,3600.05,4.1351304E7,unsolved,correct,0,(max5 -1), n/a (not all solved),not-run
+299131546,CLIA_Track/fg_max6.sl,4786944,EUSolver,11893,default,219860,complete,2.28698,2.28897,337404.0,correct,correct,146,(max6 146),true,sat
+299131547,CLIA_Track/fg_max6.sl,4786944,EUSolver_new,11898,default,219869,complete,2.22945,2.23038,337912.0,correct,correct,146,(max6 146),true,sat
+299131548,CLIA_Track/fg_max6.sl,4786944,Euphony,11902,default,219874,complete,2.41247,2.41323,346096.0,correct,correct,146,(max6 146),true,sat
+299131549,CLIA_Track/fg_max6.sl,4786944,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.61,3600.11,526064.0,unsolved,correct,0,(max6 -1), n/a (not all solved),not-run
+299131550,CLIA_Track/fg_max6.sl,4786944,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.060502,0.0594991,113120.0,correct,correct,242,(max6 242),true,sat
+299131551,CLIA_Track/fg_max6.sl,4786944,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.74,3600.01,542880.0,unsolved,correct,0,(max6 -1), n/a (not all solved),not-run
+299131552,CLIA_Track/fg_max6.sl,4786944,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.041175,0.040611,113120.0,correct,correct,241,(max6 241),true,sat
+299131553,CLIA_Track/fg_max6.sl,4786944,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.06259,0.0627481,113120.0,correct,correct,242,(max6 242),true,sat
+299131554,CLIA_Track/fg_max6.sl,4786944,DryadSynth,12292,autothreads,223920,timeout (wallclock),14241.2,3600.08,4.7694564E7,unsolved,correct,0,(max6 -1), n/a (not all solved),not-run
+299131555,CLIA_Track/fg_max6.sl,4786944,DryadSynth,12292,default,223921,timeout (wallclock),14288.5,3600.11,3.999168E7,unsolved,correct,0,(max6 -1), n/a (not all solved),not-run
+299131556,CLIA_Track/fg_max6.sl,4786944,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.92,3600.07,3.5917196E7,unsolved,correct,0,(max6 -1), n/a (not all solved),not-run
+299131557,CLIA_Track/fg_max6.sl,4786944,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14285.8,3600.04,4.0407968E7,unsolved,correct,0,(max6 -1), n/a (not all solved),not-run
+299131558,CLIA_Track/fg_max7.sl,4786945,EUSolver,11893,default,219860,complete,2.54161,2.54271,337528.0,correct,correct,199,(max7 199),true,sat
+299131559,CLIA_Track/fg_max7.sl,4786945,EUSolver_new,11898,default,219869,complete,2.60132,2.62434,337788.0,correct,correct,199,(max7 199),true,sat
+299131560,CLIA_Track/fg_max7.sl,4786945,Euphony,11902,default,219874,complete,2.74176,2.83975,346152.0,correct,correct,199,(max7 199),true,sat
+299131561,CLIA_Track/fg_max7.sl,4786945,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.65,3600.01,528996.0,unsolved,correct,0,(max7 -1), n/a (not all solved),not-run
+299131562,CLIA_Track/fg_max7.sl,4786945,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.120523,0.119012,113120.0,correct,correct,346,(max7 346),true,sat
+299131563,CLIA_Track/fg_max7.sl,4786945,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.36,3600.01,488360.0,unsolved,correct,0,(max7 -1), n/a (not all solved),not-run
+299131564,CLIA_Track/fg_max7.sl,4786945,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.067833,0.06735,113120.0,correct,correct,346,(max7 346),true,sat
+299131565,CLIA_Track/fg_max7.sl,4786945,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.122768,0.121877,113120.0,correct,correct,346,(max7 346),true,sat
+299131566,CLIA_Track/fg_max7.sl,4786945,DryadSynth,12292,autothreads,223920,timeout (wallclock),14213.3,3600.05,4.7208932E7,unsolved,correct,0,(max7 -1), n/a (not all solved),not-run
+299131567,CLIA_Track/fg_max7.sl,4786945,DryadSynth,12292,default,223921,timeout (wallclock),14280.1,3600.04,4.10331E7,unsolved,correct,0,(max7 -1), n/a (not all solved),not-run
+299131568,CLIA_Track/fg_max7.sl,4786945,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.79,3600.08,3.5764432E7,unsolved,correct,0,(max7 -1), n/a (not all solved),not-run
+299131569,CLIA_Track/fg_max7.sl,4786945,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14289.9,3600.06,4.077914E7,unsolved,correct,0,(max7 -1), n/a (not all solved),not-run
+299131570,CLIA_Track/fg_max8.sl,4786946,EUSolver,11893,default,219860,complete,1.92941,1.94481,337652.0,correct,correct,260,(max8 260),true,sat
+299131571,CLIA_Track/fg_max8.sl,4786946,EUSolver_new,11898,default,219869,complete,1.99294,1.99304,337652.0,correct,correct,260,(max8 260),true,sat
+299131572,CLIA_Track/fg_max8.sl,4786946,Euphony,11902,default,219874,complete,2.13689,2.13708,345628.0,correct,correct,260,(max8 260),true,sat
+299131573,CLIA_Track/fg_max8.sl,4786946,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3600.07,3600.11,505260.0,unsolved,correct,0,(max8 -1), n/a (not all solved),not-run
+299131574,CLIA_Track/fg_max8.sl,4786946,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.196134,0.194416,113120.0,correct,correct,470,(max8 470),true,sat
+299131575,CLIA_Track/fg_max8.sl,4786946,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.41,3600.01,455172.0,unsolved,correct,0,(max8 -1), n/a (not all solved),not-run
+299131576,CLIA_Track/fg_max8.sl,4786946,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.122365,0.12177,113120.0,correct,correct,470,(max8 470),true,sat
+299131577,CLIA_Track/fg_max8.sl,4786946,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.198501,0.197099,113120.0,correct,correct,470,(max8 470),true,sat
+299131578,CLIA_Track/fg_max8.sl,4786946,DryadSynth,12292,autothreads,223920,timeout (wallclock),14231.3,3600.06,4.2612324E7,unsolved,correct,0,(max8 -1), n/a (not all solved),not-run
+299131579,CLIA_Track/fg_max8.sl,4786946,DryadSynth,12292,default,223921,timeout (wallclock),14295.8,3600.04,3.9459464E7,unsolved,correct,0,(max8 -1), n/a (not all solved),not-run
+299131580,CLIA_Track/fg_max8.sl,4786946,DryadSynth,12292,fallback,223922,timeout (wallclock),3602.13,3600.03,3.575776E7,unsolved,correct,0,(max8 -1), n/a (not all solved),not-run
+299131581,CLIA_Track/fg_max8.sl,4786946,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14284.2,3600.04,4.0874556E7,unsolved,correct,0,(max8 -1), n/a (not all solved),not-run
+299131582,CLIA_Track/fg_max9.sl,4786947,EUSolver,11893,default,219860,complete,3.34738,3.41083,337880.0,correct,correct,329,(max9 329),true,sat
+299131583,CLIA_Track/fg_max9.sl,4786947,EUSolver_new,11898,default,219869,complete,3.41171,3.4146,337880.0,correct,correct,329,(max9 329),true,sat
+299131584,CLIA_Track/fg_max9.sl,4786947,Euphony,11902,default,219874,complete,2.83924,6.96307,346148.0,correct,correct,329,(max9 329),true,sat
+299131585,CLIA_Track/fg_max9.sl,4786947,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.62,3600.01,458032.0,unsolved,correct,0,(max9 -1), n/a (not all solved),not-run
+299131586,CLIA_Track/fg_max9.sl,4786947,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.376092,0.373857,113120.0,correct,correct,616,(max9 616),true,sat
+299131587,CLIA_Track/fg_max9.sl,4786947,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.61,3600.1,482828.0,unsolved,correct,0,(max9 -1), n/a (not all solved),not-run
+299131588,CLIA_Track/fg_max9.sl,4786947,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.23084,0.229379,113120.0,correct,correct,613,(max9 613),true,sat
+299131589,CLIA_Track/fg_max9.sl,4786947,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.379298,0.37764,113120.0,correct,correct,616,(max9 616),true,sat
+299131590,CLIA_Track/fg_max9.sl,4786947,DryadSynth,12292,autothreads,223920,timeout (wallclock),14253.1,3600.06,4.1499444E7,unsolved,correct,0,(max9 -1), n/a (not all solved),not-run
+299131591,CLIA_Track/fg_max9.sl,4786947,DryadSynth,12292,default,223921,timeout (wallclock),14277.8,3600.05,4.0405864E7,unsolved,correct,0,(max9 -1), n/a (not all solved),not-run
+299131592,CLIA_Track/fg_max9.sl,4786947,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.74,3600.06,3.5631048E7,unsolved,correct,0,(max9 -1), n/a (not all solved),not-run
+299131593,CLIA_Track/fg_max9.sl,4786947,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14263.3,3600.06,3.971086E7,unsolved,correct,0,(max9 -1), n/a (not all solved),not-run
+299131594,CLIA_Track/fg_mpg_example1.sl,4786948,EUSolver,11893,default,219860,complete,0.809156,0.8116,337684.0,correct,correct,46,(ex 46),true,sat
+299131595,CLIA_Track/fg_mpg_example1.sl,4786948,EUSolver_new,11898,default,219869,complete,0.902739,0.921524,337428.0,correct,correct,46,(ex 46),true,sat
+299131596,CLIA_Track/fg_mpg_example1.sl,4786948,Euphony,11902,default,219874,complete,1.0009,1.00217,342856.0,correct,correct,46,(ex 46),true,sat
+299131597,CLIA_Track/fg_mpg_example1.sl,4786948,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.64,3600.01,384436.0,unsolved,correct,0,(ex -1), n/a (not all solved),not-run
+299131598,CLIA_Track/fg_mpg_example1.sl,4786948,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.016557,0.015355,113120.0,correct,correct,38,(ex 38),true,sat
+299131599,CLIA_Track/fg_mpg_example1.sl,4786948,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.73,3600.1,400908.0,unsolved,correct,0,(ex -1), n/a (not all solved),not-run
+299131600,CLIA_Track/fg_mpg_example1.sl,4786948,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.019357,0.0268489,113120.0,correct,correct,38,(ex 38),true,sat
+299131601,CLIA_Track/fg_mpg_example1.sl,4786948,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.017539,0.0179171,113120.0,correct,correct,38,(ex 38),true,sat
+299131602,CLIA_Track/fg_mpg_example1.sl,4786948,DryadSynth,12292,autothreads,223920,complete,37.519,16.5843,3.7475668E7,correct,correct,21,(ex 21),true,sat
+299131603,CLIA_Track/fg_mpg_example1.sl,4786948,DryadSynth,12292,default,223921,complete,5.55623,5.69952,3.6159552E7,correct,correct,21,(ex 21),true,sat
+299131604,CLIA_Track/fg_mpg_example1.sl,4786948,DryadSynth,12292,fallback,223922,complete,1.41102,0.996496,3.5626688E7,correct,correct,21,(ex 21),true,sat
+299131605,CLIA_Track/fg_mpg_example1.sl,4786948,DryadSynth,12292,timeout_change,223923,complete,8.18474,2.92098,3.635616E7,correct,correct,21,(ex 21),true,sat
+299131606,CLIA_Track/fg_mpg_example2.sl,4786949,EUSolver,11893,default,219860,complete,1.93441,1.9565,337532.0,correct,correct,339,(eq1 339),true,sat
+299131607,CLIA_Track/fg_mpg_example2.sl,4786949,EUSolver_new,11898,default,219869,complete,1.83145,1.83273,337788.0,correct,correct,339,(eq1 339),true,sat
+299131608,CLIA_Track/fg_mpg_example2.sl,4786949,Euphony,11902,default,219874,complete,2.03068,2.03478,345768.0,correct,correct,339,(eq1 339),true,sat
+299131609,CLIA_Track/fg_mpg_example2.sl,4786949,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.54,3600.01,456524.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131610,CLIA_Track/fg_mpg_example2.sl,4786949,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.022009,0.021371,113120.0,correct,correct,219,(eq1 219),true,sat
+299131611,CLIA_Track/fg_mpg_example2.sl,4786949,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.95,3600.01,459904.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131612,CLIA_Track/fg_mpg_example2.sl,4786949,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.023347,0.0228679,113120.0,correct,correct,219,(eq1 219),true,sat
+299131613,CLIA_Track/fg_mpg_example2.sl,4786949,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.027585,0.046396,113096.0,correct,correct,219,(eq1 219),true,sat
+299131614,CLIA_Track/fg_mpg_example2.sl,4786949,DryadSynth,12292,autothreads,223920,timeout (wallclock),8798.03,3600.07,5.4380788E7,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131615,CLIA_Track/fg_mpg_example2.sl,4786949,DryadSynth,12292,default,223921,timeout (wallclock),14266.0,3600.08,4.6349776E7,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131616,CLIA_Track/fg_mpg_example2.sl,4786949,DryadSynth,12292,fallback,223922,timeout (wallclock),3603.1,3600.03,3.63927E7,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131617,CLIA_Track/fg_mpg_example2.sl,4786949,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14265.5,3600.09,4.4518676E7,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131618,CLIA_Track/fg_mpg_example3.sl,4786950,EUSolver,11893,default,219860,complete,3.11652,3.11796,337880.0,correct,correct,1708,(eq2 1708),true,sat
+299131619,CLIA_Track/fg_mpg_example3.sl,4786950,EUSolver_new,11898,default,219869,complete,3.09585,3.09865,337884.0,correct,correct,1708,(eq2 1708),true,sat
+299131620,CLIA_Track/fg_mpg_example3.sl,4786950,Euphony,11902,default,219874,complete,3.20346,3.20581,345100.0,correct,correct,1708,(eq2 1708),true,sat
+299131621,CLIA_Track/fg_mpg_example3.sl,4786950,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.42,3600.01,396940.0,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131622,CLIA_Track/fg_mpg_example3.sl,4786950,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.038679,0.0363071,113120.0,correct,correct,391,(eq2 391),true,sat
+299131623,CLIA_Track/fg_mpg_example3.sl,4786950,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.56,3600.02,552064.0,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131624,CLIA_Track/fg_mpg_example3.sl,4786950,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.029115,0.0279461,113120.0,correct,correct,397,(eq2 397),true,sat
+299131625,CLIA_Track/fg_mpg_example3.sl,4786950,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.039988,0.0396921,113120.0,correct,correct,391,(eq2 391),true,sat
+299131626,CLIA_Track/fg_mpg_example3.sl,4786950,DryadSynth,12292,autothreads,223920,timeout (wallclock),14279.5,3600.07,3.6693076E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131627,CLIA_Track/fg_mpg_example3.sl,4786950,DryadSynth,12292,default,223921,timeout (wallclock),14296.3,3600.05,3.5969628E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131628,CLIA_Track/fg_mpg_example3.sl,4786950,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.55,3600.03,3.5567304E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131629,CLIA_Track/fg_mpg_example3.sl,4786950,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14288.2,3600.06,3.603464E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131630,CLIA_Track/fg_mpg_example4.sl,4786951,EUSolver,11893,default,219860,complete,6.33916,6.34019,338744.0,correct,correct,4110,(eq2 4110),true,sat
+299131631,CLIA_Track/fg_mpg_example4.sl,4786951,EUSolver_new,11898,default,219869,complete,6.59542,6.59717,338496.0,correct,correct,4110,(eq2 4110),true,sat
+299131632,CLIA_Track/fg_mpg_example4.sl,4786951,Euphony,11902,default,219874,complete,6.6456,6.64722,346416.0,correct,correct,4110,(eq2 4110),true,sat
+299131633,CLIA_Track/fg_mpg_example4.sl,4786951,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.82,3600.11,443288.0,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131634,CLIA_Track/fg_mpg_example4.sl,4786951,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.052646,0.052721,113120.0,correct,correct,505,(eq2 505),true,sat
+299131635,CLIA_Track/fg_mpg_example4.sl,4786951,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.63,3600.1,442908.0,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131636,CLIA_Track/fg_mpg_example4.sl,4786951,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.031712,0.0305491,113120.0,correct,correct,505,(eq2 505),true,sat
+299131637,CLIA_Track/fg_mpg_example4.sl,4786951,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.056744,0.0558529,113120.0,correct,correct,505,(eq2 505),true,sat
+299131638,CLIA_Track/fg_mpg_example4.sl,4786951,DryadSynth,12292,autothreads,223920,timeout (wallclock),14287.1,3600.07,3.6166228E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131639,CLIA_Track/fg_mpg_example4.sl,4786951,DryadSynth,12292,default,223921,timeout (wallclock),14295.6,3600.05,3.5769032E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131640,CLIA_Track/fg_mpg_example4.sl,4786951,DryadSynth,12292,fallback,223922,timeout (wallclock),3601.31,3600.02,3.5568208E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131641,CLIA_Track/fg_mpg_example4.sl,4786951,DryadSynth,12292,timeout_change,223923,timeout (wallclock),14295.0,3600.06,3.5768136E7,unsolved,correct,0,(eq2 -1), n/a (not all solved),not-run
+299131642,CLIA_Track/fg_mpg_example5.sl,4786952,EUSolver,11893,default,219860,complete,4.8108,4.81617,337964.0,correct,correct,2181,(eq1 2181),true,sat
+299131643,CLIA_Track/fg_mpg_example5.sl,4786952,EUSolver_new,11898,default,219869,complete,4.64572,4.64597,337964.0,correct,correct,2181,(eq1 2181),true,sat
+299131644,CLIA_Track/fg_mpg_example5.sl,4786952,Euphony,11902,default,219874,complete,4.83349,4.87162,347128.0,correct,correct,2181,(eq1 2181),true,sat
+299131645,CLIA_Track/fg_mpg_example5.sl,4786952,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.96,3600.01,508504.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131646,CLIA_Track/fg_mpg_example5.sl,4786952,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.029003,0.028013,113120.0,correct,correct,434,(eq1 434),true,sat
+299131647,CLIA_Track/fg_mpg_example5.sl,4786952,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3600.04,3600.01,471756.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131648,CLIA_Track/fg_mpg_example5.sl,4786952,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.032195,0.0323681,113120.0,correct,correct,369,(eq1 369),true,sat
+299131649,CLIA_Track/fg_mpg_example5.sl,4786952,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.031857,0.0309941,113120.0,correct,correct,434,(eq1 434),true,sat
+299131650,CLIA_Track/fg_mpg_example5.sl,4786952,DryadSynth,12292,autothreads,223920,complete,27.1374,10.8561,3.6968032E7,correct,correct,62,(eq1 62),true,sat
+299131651,CLIA_Track/fg_mpg_example5.sl,4786952,DryadSynth,12292,default,223921,complete,8.7202,2.99922,3.6225088E7,correct,correct,74,(eq1 74),true,sat
+299131652,CLIA_Track/fg_mpg_example5.sl,4786952,DryadSynth,12292,fallback,223922,complete,2.62354,1.77735,3.5626688E7,correct,correct,68,(eq1 68),true,sat
+299131653,CLIA_Track/fg_mpg_example5.sl,4786952,DryadSynth,12292,timeout_change,223923,complete,8.52412,2.85768,3.6160836E7,correct,correct,80,(eq1 80),true,sat
+299131654,CLIA_Track/fg_mpg_guard1.sl,4786953,EUSolver,11893,default,219860,complete,0.79634,0.824904,337416.0,correct,correct,30,(eq1 30),true,sat
+299131655,CLIA_Track/fg_mpg_guard1.sl,4786953,EUSolver_new,11898,default,219869,complete,0.807662,0.808609,336648.0,correct,correct,30,(eq1 30),true,sat
+299131656,CLIA_Track/fg_mpg_guard1.sl,4786953,Euphony,11902,default,219874,complete,1.00689,1.00783,338652.0,correct,correct,30,(eq1 30),true,sat
+299131657,CLIA_Track/fg_mpg_guard1.sl,4786953,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,89.2255,89.2329,307040.0,correct,correct,12,(eq1 12),true,sat
+299131658,CLIA_Track/fg_mpg_guard1.sl,4786953,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.014977,0.013807,113120.0,correct,correct,24,(eq1 24),true,sat
+299131659,CLIA_Track/fg_mpg_guard1.sl,4786953,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,167.598,167.655,308944.0,correct,correct,12,(eq1 12),true,sat
+299131660,CLIA_Track/fg_mpg_guard1.sl,4786953,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.015257,0.015426,113120.0,correct,correct,24,(eq1 24),true,sat
+299131661,CLIA_Track/fg_mpg_guard1.sl,4786953,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.023572,0.0219999,113120.0,correct,correct,24,(eq1 24),true,sat
+299131662,CLIA_Track/fg_mpg_guard1.sl,4786953,DryadSynth,12292,autothreads,223920,complete,2.72986,1.25424,3.6033916E7,correct,correct,21,(eq1 21),true,sat
+299131663,CLIA_Track/fg_mpg_guard1.sl,4786953,DryadSynth,12292,default,223921,complete,1.67316,0.733233,113120.0,correct,correct,21,(eq1 21),true,sat
+299131664,CLIA_Track/fg_mpg_guard1.sl,4786953,DryadSynth,12292,fallback,223922,complete,0.801869,0.492152,113120.0,correct,correct,21,(eq1 21),true,sat
+299131665,CLIA_Track/fg_mpg_guard1.sl,4786953,DryadSynth,12292,timeout_change,223923,complete,1.78772,0.761034,3.5766336E7,correct,correct,21,(eq1 21),true,sat
+299131666,CLIA_Track/fg_mpg_guard2.sl,4786954,EUSolver,11893,default,219860,complete,0.863578,0.865823,337948.0,correct,correct,68,(eq1 68),true,sat
+299131667,CLIA_Track/fg_mpg_guard2.sl,4786954,EUSolver_new,11898,default,219869,complete,0.871191,0.872879,337692.0,correct,correct,68,(eq1 68),true,sat
+299131668,CLIA_Track/fg_mpg_guard2.sl,4786954,Euphony,11902,default,219874,complete,1.06837,1.07426,346920.0,correct,correct,68,(eq1 68),true,sat
+299131669,CLIA_Track/fg_mpg_guard2.sl,4786954,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.52,3600.01,548156.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131670,CLIA_Track/fg_mpg_guard2.sl,4786954,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.015769,0.0191711,113120.0,correct,correct,28,(eq1 28),true,sat
+299131671,CLIA_Track/fg_mpg_guard2.sl,4786954,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.5,3600.01,551820.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131672,CLIA_Track/fg_mpg_guard2.sl,4786954,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.015518,0.015655,113120.0,correct,correct,28,(eq1 28),true,sat
+299131673,CLIA_Track/fg_mpg_guard2.sl,4786954,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.016241,0.018892,113120.0,correct,correct,28,(eq1 28),true,sat
+299131674,CLIA_Track/fg_mpg_guard2.sl,4786954,DryadSynth,12292,autothreads,223920,complete,9.282,4.0615,3.6034844E7,correct,correct,26,(eq1 26),true,sat
+299131675,CLIA_Track/fg_mpg_guard2.sl,4786954,DryadSynth,12292,default,223921,complete,2.35247,1.02253,3.576688E7,correct,correct,26,(eq1 26),true,sat
+299131676,CLIA_Track/fg_mpg_guard2.sl,4786954,DryadSynth,12292,fallback,223922,complete,0.88557,0.528346,113120.0,correct,correct,26,(eq1 26),true,sat
+299131677,CLIA_Track/fg_mpg_guard2.sl,4786954,DryadSynth,12292,timeout_change,223923,complete,2.50145,1.05853,3.576688E7,correct,correct,26,(eq1 26),true,sat
+299131678,CLIA_Track/fg_mpg_guard3.sl,4786955,EUSolver,11893,default,219860,complete,0.873129,0.875162,337696.0,correct,correct,72,(eq1 72),true,sat
+299131679,CLIA_Track/fg_mpg_guard3.sl,4786955,EUSolver_new,11898,default,219869,complete,0.875957,0.876857,337700.0,correct,correct,72,(eq1 72),true,sat
+299131680,CLIA_Track/fg_mpg_guard3.sl,4786955,Euphony,11902,default,219874,complete,1.07615,1.07834,345644.0,correct,correct,72,(eq1 72),true,sat
+299131681,CLIA_Track/fg_mpg_guard3.sl,4786955,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.58,3600.02,474692.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131682,CLIA_Track/fg_mpg_guard3.sl,4786955,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.015664,0.015045,113120.0,correct,correct,34,(eq1 34),true,sat
+299131683,CLIA_Track/fg_mpg_guard3.sl,4786955,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.72,3600.01,462940.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131684,CLIA_Track/fg_mpg_guard3.sl,4786955,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.01631,0.0161619,113120.0,correct,correct,34,(eq1 34),true,sat
+299131685,CLIA_Track/fg_mpg_guard3.sl,4786955,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.016766,0.017457,113120.0,correct,correct,34,(eq1 34),true,sat
+299131686,CLIA_Track/fg_mpg_guard3.sl,4786955,DryadSynth,12292,autothreads,223920,complete,60.3637,23.8791,3.79357E7,correct,correct,26,(eq1 26),true,sat
+299131687,CLIA_Track/fg_mpg_guard3.sl,4786955,DryadSynth,12292,default,223921,complete,6.89644,2.63669,3.6225088E7,correct,correct,26,(eq1 26),true,sat
+299131688,CLIA_Track/fg_mpg_guard3.sl,4786955,DryadSynth,12292,fallback,223922,complete,1.68794,1.112,3.5626688E7,correct,correct,26,(eq1 26),true,sat
+299131689,CLIA_Track/fg_mpg_guard3.sl,4786955,DryadSynth,12292,timeout_change,223923,complete,11.0904,4.5183,3.6421696E7,correct,correct,26,(eq1 26),true,sat
+299131690,CLIA_Track/fg_mpg_guard4.sl,4786956,EUSolver,11893,default,219860,complete,0.87607,0.876696,337704.0,correct,correct,76,(eq1 76),true,sat
+299131691,CLIA_Track/fg_mpg_guard4.sl,4786956,EUSolver_new,11898,default,219869,complete,0.886859,0.887169,337452.0,correct,correct,76,(eq1 76),true,sat
+299131692,CLIA_Track/fg_mpg_guard4.sl,4786956,Euphony,11902,default,219874,complete,1.07456,1.07878,346924.0,correct,correct,76,(eq1 76),true,sat
+299131693,CLIA_Track/fg_mpg_guard4.sl,4786956,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.66,3600.01,475020.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131694,CLIA_Track/fg_mpg_guard4.sl,4786956,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.015758,0.0162831,113120.0,correct,correct,37,(eq1 37),true,sat
+299131695,CLIA_Track/fg_mpg_guard4.sl,4786956,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.55,3600.02,492048.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131696,CLIA_Track/fg_mpg_guard4.sl,4786956,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.015941,0.0157609,113120.0,correct,correct,37,(eq1 37),true,sat
+299131697,CLIA_Track/fg_mpg_guard4.sl,4786956,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.017361,0.0172399,113120.0,correct,correct,37,(eq1 37),true,sat
+299131698,CLIA_Track/fg_mpg_guard4.sl,4786956,DryadSynth,12292,autothreads,223920,complete,19.2431,9.56739,3.6821588E7,correct,correct,26,(eq1 26),true,sat
+299131699,CLIA_Track/fg_mpg_guard4.sl,4786956,DryadSynth,12292,default,223921,complete,5.27319,2.44031,3.602848E7,correct,correct,26,(eq1 26),true,sat
+299131700,CLIA_Track/fg_mpg_guard4.sl,4786956,DryadSynth,12292,fallback,223922,complete,1.80999,1.34946,3.5561316E7,correct,correct,26,(eq1 26),true,sat
+299131701,CLIA_Track/fg_mpg_guard4.sl,4786956,DryadSynth,12292,timeout_change,223923,complete,5.18829,1.98989,3.602848E7,correct,correct,26,(eq1 26),true,sat
+299131702,CLIA_Track/fg_mpg_ite1.sl,4786957,EUSolver,11893,default,219860,complete,0.949746,0.954116,337792.0,correct,correct,141,(eq1 141),true,sat
+299131703,CLIA_Track/fg_mpg_ite1.sl,4786957,EUSolver_new,11898,default,219869,complete,0.957939,0.958524,337532.0,correct,correct,141,(eq1 141),true,sat
+299131704,CLIA_Track/fg_mpg_ite1.sl,4786957,Euphony,11902,default,219874,complete,1.14734,1.14849,345504.0,correct,correct,141,(eq1 141),true,sat
+299131705,CLIA_Track/fg_mpg_ite1.sl,4786957,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.69,3600.01,485528.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131706,CLIA_Track/fg_mpg_ite1.sl,4786957,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.016705,0.0168491,113120.0,correct,correct,77,(eq1 77),true,sat
+299131707,CLIA_Track/fg_mpg_ite1.sl,4786957,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3600.04,3600.1,465960.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131708,CLIA_Track/fg_mpg_ite1.sl,4786957,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.017643,0.0180949,113120.0,correct,correct,77,(eq1 77),true,sat
+299131709,CLIA_Track/fg_mpg_ite1.sl,4786957,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.018475,0.0190691,113120.0,correct,correct,77,(eq1 77),true,sat
+299131710,CLIA_Track/fg_mpg_ite1.sl,4786957,DryadSynth,12292,autothreads,223920,complete,20.8451,8.23553,3.6565852E7,correct,correct,33,(eq1 33),true,sat
+299131711,CLIA_Track/fg_mpg_ite1.sl,4786957,DryadSynth,12292,default,223921,complete,6.12307,2.26568,3.602848E7,correct,correct,33,(eq1 33),true,sat
+299131712,CLIA_Track/fg_mpg_ite1.sl,4786957,DryadSynth,12292,fallback,223922,complete,1.30746,0.837491,3.5561152E7,correct,correct,27,(eq1 27),true,sat
+299131713,CLIA_Track/fg_mpg_ite1.sl,4786957,DryadSynth,12292,timeout_change,223923,complete,5.47033,1.99987,3.6094016E7,correct,correct,27,(eq1 27),true,sat
+299131714,CLIA_Track/fg_mpg_ite2.sl,4786958,EUSolver,11893,default,219860,complete,1.2873,1.28858,337584.0,correct,correct,397,(eq1 397),true,sat
+299131715,CLIA_Track/fg_mpg_ite2.sl,4786958,EUSolver_new,11898,default,219869,complete,1.29756,1.29862,337584.0,correct,correct,397,(eq1 397),true,sat
+299131716,CLIA_Track/fg_mpg_ite2.sl,4786958,Euphony,11902,default,219874,complete,1.50118,1.52113,345876.0,correct,correct,397,(eq1 397),true,sat
+299131717,CLIA_Track/fg_mpg_ite2.sl,4786958,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.8,3600.01,477760.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131718,CLIA_Track/fg_mpg_ite2.sl,4786958,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.016229,0.015953,113120.0,correct,correct,105,(eq1 105),true,sat
+299131719,CLIA_Track/fg_mpg_ite2.sl,4786958,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.97,3600.01,474952.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131720,CLIA_Track/fg_mpg_ite2.sl,4786958,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.018231,0.018461,113120.0,correct,correct,105,(eq1 105),true,sat
+299131721,CLIA_Track/fg_mpg_ite2.sl,4786958,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.019674,0.0197111,113120.0,correct,correct,105,(eq1 105),true,sat
+299131722,CLIA_Track/fg_mpg_ite2.sl,4786958,DryadSynth,12292,autothreads,223920,complete,13.919,6.18417,3.6565212E7,correct,correct,42,(eq1 42),true,sat
+299131723,CLIA_Track/fg_mpg_ite2.sl,4786958,DryadSynth,12292,default,223921,complete,5.60955,2.04509,3.602848E7,correct,correct,42,(eq1 42),true,sat
+299131724,CLIA_Track/fg_mpg_ite2.sl,4786958,DryadSynth,12292,fallback,223922,complete,1.66177,1.03195,3.5561912E7,correct,correct,36,(eq1 36),true,sat
+299131725,CLIA_Track/fg_mpg_ite2.sl,4786958,DryadSynth,12292,timeout_change,223923,complete,7.24317,2.50155,3.6225088E7,correct,correct,42,(eq1 42),true,sat
+299131726,CLIA_Track/fg_mpg_plane1.sl,4786959,EUSolver,11893,default,219860,complete,0.754745,0.75561,330972.0,correct,correct,3,(eq1 3),true,sat
+299131727,CLIA_Track/fg_mpg_plane1.sl,4786959,EUSolver_new,11898,default,219869,complete,0.759359,0.760799,330976.0,correct,correct,3,(eq1 3),true,sat
+299131728,CLIA_Track/fg_mpg_plane1.sl,4786959,Euphony,11902,default,219874,complete,0.955038,0.955996,343380.0,correct,correct,3,(eq1 3),true,sat
+299131729,CLIA_Track/fg_mpg_plane1.sl,4786959,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.020988,0.0206061,113120.0,correct,correct,3,(eq1 3),true,sat
+299131730,CLIA_Track/fg_mpg_plane1.sl,4786959,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.011582,0.011276,113120.0,correct,correct,3,(eq1 3),true,sat
+299131731,CLIA_Track/fg_mpg_plane1.sl,4786959,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.030335,0.029815,113120.0,correct,correct,3,(eq1 3),true,sat
+299131732,CLIA_Track/fg_mpg_plane1.sl,4786959,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.012162,0.0123271,113120.0,correct,correct,3,(eq1 3),true,sat
+299131733,CLIA_Track/fg_mpg_plane1.sl,4786959,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.013256,0.013636,113120.0,correct,correct,3,(eq1 3),true,sat
+299131734,CLIA_Track/fg_mpg_plane1.sl,4786959,DryadSynth,12292,autothreads,223920,complete,2.25923,1.22234,3.6033888E7,correct,correct,3,(eq1 3),true,sat
+299131735,CLIA_Track/fg_mpg_plane1.sl,4786959,DryadSynth,12292,default,223921,complete,1.12837,0.557116,113120.0,correct,correct,3,(eq1 3),true,sat
+299131736,CLIA_Track/fg_mpg_plane1.sl,4786959,DryadSynth,12292,fallback,223922,complete,0.637347,0.41065,113120.0,correct,correct,3,(eq1 3),true,sat
+299131737,CLIA_Track/fg_mpg_plane1.sl,4786959,DryadSynth,12292,timeout_change,223923,complete,1.20394,0.584116,3.5766336E7,correct,correct,3,(eq1 3),true,sat
+299131738,CLIA_Track/fg_mpg_plane2.sl,4786960,EUSolver,11893,default,219860,complete,0.759542,0.760572,335048.0,correct,correct,9,(eq1 9),true,sat
+299131739,CLIA_Track/fg_mpg_plane2.sl,4786960,EUSolver_new,11898,default,219869,complete,0.764592,0.781841,327704.0,correct,correct,9,(eq1 9),true,sat
+299131740,CLIA_Track/fg_mpg_plane2.sl,4786960,Euphony,11902,default,219874,complete,0.958182,0.958641,342852.0,correct,correct,9,(eq1 9),true,sat
+299131741,CLIA_Track/fg_mpg_plane2.sl,4786960,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3600.1,3600.1,424032.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131742,CLIA_Track/fg_mpg_plane2.sl,4786960,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.01295,0.0125201,113120.0,correct,correct,11,(eq1 11),true,sat
+299131743,CLIA_Track/fg_mpg_plane2.sl,4786960,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3600.11,3600.02,358268.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131744,CLIA_Track/fg_mpg_plane2.sl,4786960,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.013335,0.0142361,113120.0,correct,correct,11,(eq1 11),true,sat
+299131745,CLIA_Track/fg_mpg_plane2.sl,4786960,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.013762,0.013749,113120.0,correct,correct,11,(eq1 11),true,sat
+299131746,CLIA_Track/fg_mpg_plane2.sl,4786960,DryadSynth,12292,autothreads,223920,complete,3.30316,1.80421,3.6033888E7,correct,correct,11,(eq1 11),true,sat
+299131747,CLIA_Track/fg_mpg_plane2.sl,4786960,DryadSynth,12292,default,223921,complete,1.28519,0.608965,3.5766336E7,correct,correct,11,(eq1 11),true,sat
+299131748,CLIA_Track/fg_mpg_plane2.sl,4786960,DryadSynth,12292,fallback,223922,complete,0.665857,0.408692,113120.0,correct,correct,11,(eq1 11),true,sat
+299131749,CLIA_Track/fg_mpg_plane2.sl,4786960,DryadSynth,12292,timeout_change,223923,complete,1.25426,0.617255,3.5766336E7,correct,correct,11,(eq1 11),true,sat
+299131750,CLIA_Track/fg_mpg_plane3.sl,4786961,EUSolver,11893,default,219860,complete,0.767097,0.767839,335632.0,correct,correct,9,(eq1 9),true,sat
+299131751,CLIA_Track/fg_mpg_plane3.sl,4786961,EUSolver_new,11898,default,219869,complete,0.76856,0.768896,327716.0,correct,correct,9,(eq1 9),true,sat
+299131752,CLIA_Track/fg_mpg_plane3.sl,4786961,Euphony,11902,default,219874,complete,0.965272,0.969591,339276.0,correct,correct,9,(eq1 9),true,sat
+299131753,CLIA_Track/fg_mpg_plane3.sl,4786961,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,timeout (wallclock),3599.86,3600.04,352040.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131754,CLIA_Track/fg_mpg_plane3.sl,4786961,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.013435,0.012998,0.0,correct,correct,11,(eq1 11),true,sat
+299131755,CLIA_Track/fg_mpg_plane3.sl,4786961,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.57,3600.01,448736.0,unsolved,correct,0,(eq1 -1), n/a (not all solved),not-run
+299131756,CLIA_Track/fg_mpg_plane3.sl,4786961,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.013409,0.0134971,113120.0,correct,correct,11,(eq1 11),true,sat
+299131757,CLIA_Track/fg_mpg_plane3.sl,4786961,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.013659,0.013643,113120.0,correct,correct,11,(eq1 11),true,sat
+299131758,CLIA_Track/fg_mpg_plane3.sl,4786961,DryadSynth,12292,autothreads,223920,complete,3.25627,1.72579,3.6033716E7,correct,correct,11,(eq1 11),true,sat
+299131759,CLIA_Track/fg_mpg_plane3.sl,4786961,DryadSynth,12292,default,223921,complete,1.34984,0.621482,3.5766336E7,correct,correct,11,(eq1 11),true,sat
+299131760,CLIA_Track/fg_mpg_plane3.sl,4786961,DryadSynth,12292,fallback,223922,complete,0.675005,0.434953,113120.0,correct,correct,11,(eq1 11),true,sat
+299131761,CLIA_Track/fg_mpg_plane3.sl,4786961,DryadSynth,12292,timeout_change,223923,complete,1.33531,0.624712,3.5766336E7,correct,correct,11,(eq1 11),true,sat
+299131762,CLIA_Track/fg_ninefuncs.sl,4786962,EUSolver,11893,default,219860,complete,0.763989,0.793129,333572.0,correct,correct,39,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1) (g2 3) (g3 3) (g4 5),true,sat
+299131763,CLIA_Track/fg_ninefuncs.sl,4786962,EUSolver_new,11898,default,219869,complete,0.758343,0.75835,334908.0,correct,correct,39,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1) (g2 3) (g3 3) (g4 5),true,sat
+299131764,CLIA_Track/fg_ninefuncs.sl,4786962,Euphony,11902,default,219874,complete,1.77814,1.7783,344148.0,correct,correct,65,(f1 7) (f2 9) (f3 13) (f4 9) (f5 9) (g1 11) (g2 3) (g3 1) (g4 3),true,sat
+299131765,CLIA_Track/fg_ninefuncs.sl,4786962,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,619.517,619.593,309052.0,correct,correct,43,(f1 1) (f2 1) (f3 8) (f4 1) (f5 1) (g1 8) (g2 8) (g3 8) (g4 7),true,sat
+299131766,CLIA_Track/fg_ninefuncs.sl,4786962,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.025722,0.0246589,113120.0,correct,correct,31,(f1 3) (f2 6) (f3 6) (f4 6) (f5 6) (g1 1) (g2 1) (g3 1) (g4 1),true,sat
+299131767,CLIA_Track/fg_ninefuncs.sl,4786962,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.65,3600.01,285812.0,unsolved,correct,0,(f1 -1) (f2 -1) (f3 -1) (f4 -1) (f5 -1) (g1 -1) (g2 -1) (g3 -1) (g4 -1), n/a (not all solved),not-run
+299131768,CLIA_Track/fg_ninefuncs.sl,4786962,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.026851,0.0266341,113120.0,correct,correct,31,(f1 3) (f2 6) (f3 6) (f4 6) (f5 6) (g1 1) (g2 1) (g3 1) (g4 1),true,sat
+299131769,CLIA_Track/fg_ninefuncs.sl,4786962,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.026576,0.0262891,113120.0,correct,correct,31,(f1 3) (f2 6) (f3 6) (f4 6) (f5 6) (g1 1) (g2 1) (g3 1) (g4 1),true,sat
+299131770,CLIA_Track/fg_ninefuncs.sl,4786962,DryadSynth,12292,autothreads,223920,complete,6.72843,2.88893,3.6044128E7,correct,correct,30,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6),true,sat
+299131771,CLIA_Track/fg_ninefuncs.sl,4786962,DryadSynth,12292,default,223921,complete,2.18529,0.986789,3.5767592E7,correct,correct,30,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6),true,sat
+299131772,CLIA_Track/fg_ninefuncs.sl,4786962,DryadSynth,12292,fallback,223922,complete,1.02051,0.512969,113120.0,correct,correct,30,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6),true,sat
+299131773,CLIA_Track/fg_ninefuncs.sl,4786962,DryadSynth,12292,timeout_change,223923,complete,4.7573,1.08983,3.576808E7,correct,correct,30,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6),true,sat
+299131774,CLIA_Track/fg_polynomial.sl,4786963,EUSolver,11893,default,219860,complete,0.651398,0.653073,327456.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131775,CLIA_Track/fg_polynomial.sl,4786963,EUSolver_new,11898,default,219869,complete,0.650338,0.650589,332340.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131776,CLIA_Track/fg_polynomial.sl,4786963,Euphony,11902,default,219874,complete,0.955576,0.956618,344012.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131777,CLIA_Track/fg_polynomial.sl,4786963,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.014282,0.013876,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131778,CLIA_Track/fg_polynomial.sl,4786963,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.015623,0.015494,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131779,CLIA_Track/fg_polynomial.sl,4786963,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.016087,0.016668,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131780,CLIA_Track/fg_polynomial.sl,4786963,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.016331,0.0163819,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131781,CLIA_Track/fg_polynomial.sl,4786963,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.022133,0.022726,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131782,CLIA_Track/fg_polynomial.sl,4786963,DryadSynth,12292,autothreads,223920,timeout (wallclock),10223.7,3600.06,9.3108672E7,unsolved,correct,0,(addExpr1 -1) (addExpr2 -1), n/a (not all solved),not-run
+299131783,CLIA_Track/fg_polynomial.sl,4786963,DryadSynth,12292,default,223921,timeout (wallclock),12346.8,3600.08,9.3096384E7,unsolved,correct,0,(addExpr1 -1) (addExpr2 -1), n/a (not all solved),not-run
+299131784,CLIA_Track/fg_polynomial.sl,4786963,DryadSynth,12292,fallback,223922,timeout (wallclock),4775.86,3600.02,4.2496792E7,unsolved,correct,0,(addExpr1 -1) (addExpr2 -1), n/a (not all solved),not-run
+299131785,CLIA_Track/fg_polynomial.sl,4786963,DryadSynth,12292,timeout_change,223923,timeout (wallclock),12280.0,3600.08,9.2579016E7,unsolved,correct,0,(addExpr1 -1) (addExpr2 -1), n/a (not all solved),not-run
+299131786,CLIA_Track/fg_polynomial1.sl,4786964,EUSolver,11893,default,219860,complete,0.648592,0.651327,327472.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131787,CLIA_Track/fg_polynomial1.sl,4786964,EUSolver_new,11898,default,219869,complete,0.644466,0.645558,327472.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131788,CLIA_Track/fg_polynomial1.sl,4786964,Euphony,11902,default,219874,complete,0.945596,0.952602,344312.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131789,CLIA_Track/fg_polynomial1.sl,4786964,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.010891,0.0109729,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131790,CLIA_Track/fg_polynomial1.sl,4786964,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.014004,0.013518,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131791,CLIA_Track/fg_polynomial1.sl,4786964,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.01294,0.0190681,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131792,CLIA_Track/fg_polynomial1.sl,4786964,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.014812,0.014871,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131793,CLIA_Track/fg_polynomial1.sl,4786964,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.020396,0.0198,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131794,CLIA_Track/fg_polynomial1.sl,4786964,DryadSynth,12292,autothreads,223920,complete,2.72053,1.52975,3.603498E7,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131795,CLIA_Track/fg_polynomial1.sl,4786964,DryadSynth,12292,default,223921,complete,1.06662,0.525763,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131796,CLIA_Track/fg_polynomial1.sl,4786964,DryadSynth,12292,fallback,223922,complete,0.593915,3.66222,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131797,CLIA_Track/fg_polynomial1.sl,4786964,DryadSynth,12292,timeout_change,223923,complete,0.957169,0.486607,113120.0,correct,correct,2,(addExpr1 1) (addExpr2 1),true,sat
+299131798,CLIA_Track/fg_polynomial2.sl,4786965,EUSolver,11893,default,219860,complete,0.907232,0.907312,332692.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131799,CLIA_Track/fg_polynomial2.sl,4786965,EUSolver_new,11898,default,219869,complete,0.701076,0.712059,332688.0,correct,correct,4,(addExpr1 1) (addExpr2 3),true,sat
+299131800,CLIA_Track/fg_polynomial2.sl,4786965,Euphony,11902,default,219874,complete,7.62103,7.62239,345044.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131801,CLIA_Track/fg_polynomial2.sl,4786965,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.044249,0.0434831,113120.0,correct,correct,4,(addExpr1 1) (addExpr2 3),true,sat
+299131802,CLIA_Track/fg_polynomial2.sl,4786965,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.062703,0.062147,113120.0,correct,correct,4,(addExpr1 1) (addExpr2 3),true,sat
+299131803,CLIA_Track/fg_polynomial2.sl,4786965,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.098084,0.104269,113120.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131804,CLIA_Track/fg_polynomial2.sl,4786965,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.09924,0.100517,113120.0,correct,correct,5,(addExpr1 4) (addExpr2 1),true,sat
+299131805,CLIA_Track/fg_polynomial2.sl,4786965,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.104939,0.104066,113120.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131806,CLIA_Track/fg_polynomial2.sl,4786965,DryadSynth,12292,autothreads,223920,complete,3.24305,1.63073,3.603456E7,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131807,CLIA_Track/fg_polynomial2.sl,4786965,DryadSynth,12292,default,223921,complete,1.20623,0.587945,113120.0,correct,correct,5,(addExpr1 4) (addExpr2 1),true,sat
+299131808,CLIA_Track/fg_polynomial2.sl,4786965,DryadSynth,12292,fallback,223922,complete,0.632933,0.393916,113120.0,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131809,CLIA_Track/fg_polynomial2.sl,4786965,DryadSynth,12292,timeout_change,223923,complete,1.28705,0.60309,113120.0,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131810,CLIA_Track/fg_polynomial3.sl,4786966,EUSolver,11893,default,219860,complete,1.01808,1.05132,332888.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131811,CLIA_Track/fg_polynomial3.sl,4786966,EUSolver_new,11898,default,219869,complete,1.0173,1.01842,332964.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131812,CLIA_Track/fg_polynomial3.sl,4786966,Euphony,11902,default,219874,complete,6.67453,6.67577,345416.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131813,CLIA_Track/fg_polynomial3.sl,4786966,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.062076,0.0618481,113120.0,correct,correct,4,(addExpr1 1) (addExpr2 3),true,sat
+299131814,CLIA_Track/fg_polynomial3.sl,4786966,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.231491,0.230719,113120.0,correct,correct,6,(addExpr1 3) (addExpr2 3),true,sat
+299131815,CLIA_Track/fg_polynomial3.sl,4786966,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.095193,0.0939131,113120.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131816,CLIA_Track/fg_polynomial3.sl,4786966,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.106465,0.106812,113120.0,correct,correct,5,(addExpr1 4) (addExpr2 1),true,sat
+299131817,CLIA_Track/fg_polynomial3.sl,4786966,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.101129,0.100302,113120.0,correct,correct,4,(addExpr1 3) (addExpr2 1),true,sat
+299131818,CLIA_Track/fg_polynomial3.sl,4786966,DryadSynth,12292,autothreads,223920,complete,2.58273,1.37483,3.6033724E7,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131819,CLIA_Track/fg_polynomial3.sl,4786966,DryadSynth,12292,default,223921,complete,1.02662,0.505938,113120.0,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131820,CLIA_Track/fg_polynomial3.sl,4786966,DryadSynth,12292,fallback,223922,complete,0.595081,0.423272,113120.0,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131821,CLIA_Track/fg_polynomial3.sl,4786966,DryadSynth,12292,timeout_change,223923,complete,1.0828,0.513087,113120.0,correct,correct,5,(addExpr1 1) (addExpr2 4),true,sat
+299131822,CLIA_Track/fg_polynomial4.sl,4786967,EUSolver,11893,default,219860,complete,312.304,312.362,662772.0,correct,correct,8,(addExpr1 7) (addExpr2 1),true,sat
+299131823,CLIA_Track/fg_polynomial4.sl,4786967,EUSolver_new,11898,default,219869,complete,306.775,306.807,332980.0,correct,correct,8,(addExpr1 7) (addExpr2 1),true,sat
+299131824,CLIA_Track/fg_polynomial4.sl,4786967,Euphony,11902,default,219874,complete,829.787,829.849,967864.0,correct,correct,6,(addExpr1 5) (addExpr2 1),true,sat
+299131825,CLIA_Track/fg_polynomial4.sl,4786967,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,47.2626,47.2691,264504.0,correct,correct,8,(addExpr1 5) (addExpr2 3),true,sat
+299131826,CLIA_Track/fg_polynomial4.sl,4786967,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,40.7781,40.7783,267272.0,correct,correct,8,(addExpr1 5) (addExpr2 3),true,sat
+299131827,CLIA_Track/fg_polynomial4.sl,4786967,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,124.416,124.434,265868.0,correct,correct,8,(addExpr1 5) (addExpr2 3),true,sat
+299131828,CLIA_Track/fg_polynomial4.sl,4786967,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,181.199,181.234,265872.0,correct,correct,9,(addExpr1 6) (addExpr2 3),true,sat
+299131829,CLIA_Track/fg_polynomial4.sl,4786967,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,125.218,125.228,265868.0,correct,correct,8,(addExpr1 5) (addExpr2 3),true,sat
+299131830,CLIA_Track/fg_polynomial4.sl,4786967,DryadSynth,12292,autothreads,223920,complete,3.73845,1.91318,3.6034816E7,correct,correct,8,(addExpr1 4) (addExpr2 4),true,sat
+299131831,CLIA_Track/fg_polynomial4.sl,4786967,DryadSynth,12292,default,223921,complete,1.41846,0.694924,3.5766468E7,correct,correct,8,(addExpr1 4) (addExpr2 4),true,sat
+299131832,CLIA_Track/fg_polynomial4.sl,4786967,DryadSynth,12292,fallback,223922,complete,0.641251,0.403708,113120.0,correct,correct,8,(addExpr1 4) (addExpr2 4),true,sat
+299131833,CLIA_Track/fg_polynomial4.sl,4786967,DryadSynth,12292,timeout_change,223923,complete,1.30787,0.602426,3.5766336E7,correct,correct,8,(addExpr1 4) (addExpr2 4),true,sat
+299131834,CLIA_Track/fg_sevenfuncs.sl,4786968,EUSolver,11893,default,219860,complete,0.733097,0.744337,336456.0,correct,correct,41,(f1 5) (f2 7) (f3 11) (f4 7) (f5 7) (g1 3) (g2 1),true,sat
+299131835,CLIA_Track/fg_sevenfuncs.sl,4786968,EUSolver_new,11898,default,219869,complete,0.730041,0.730714,327488.0,correct,correct,31,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1) (g2 3),true,sat
+299131836,CLIA_Track/fg_sevenfuncs.sl,4786968,Euphony,11902,default,219874,complete,1.56096,1.56201,348236.0,correct,correct,29,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3) (g1 5) (g2 7),true,sat
+299131837,CLIA_Track/fg_sevenfuncs.sl,4786968,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.487399,0.486396,113120.0,correct,correct,13,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1) (g1 3) (g2 3),true,sat
+299131838,CLIA_Track/fg_sevenfuncs.sl,4786968,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.021417,0.020761,113120.0,correct,correct,19,(f1 1) (f2 4) (f3 4) (f4 4) (f5 4) (g1 1) (g2 1),true,sat
+299131839,CLIA_Track/fg_sevenfuncs.sl,4786968,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,3.15812,3.15753,262944.0,correct,correct,13,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1) (g1 3) (g2 3),true,sat
+299131840,CLIA_Track/fg_sevenfuncs.sl,4786968,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.023483,0.0234331,113120.0,correct,correct,19,(f1 1) (f2 4) (f3 4) (f4 4) (f5 4) (g1 1) (g2 1),true,sat
+299131841,CLIA_Track/fg_sevenfuncs.sl,4786968,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.02236,0.0287431,113120.0,correct,correct,19,(f1 1) (f2 4) (f3 4) (f4 4) (f5 4) (g1 1) (g2 1),true,sat
+299131842,CLIA_Track/fg_sevenfuncs.sl,4786968,DryadSynth,12292,autothreads,223920,complete,5.61208,2.29687,3.6038964E7,correct,correct,18,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6),true,sat
+299131843,CLIA_Track/fg_sevenfuncs.sl,4786968,DryadSynth,12292,default,223921,complete,1.51846,0.719284,3.5767096E7,correct,correct,18,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6),true,sat
+299131844,CLIA_Track/fg_sevenfuncs.sl,4786968,DryadSynth,12292,fallback,223922,complete,0.765866,0.434782,113120.0,correct,correct,18,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6),true,sat
+299131845,CLIA_Track/fg_sevenfuncs.sl,4786968,DryadSynth,12292,timeout_change,223923,complete,1.59132,0.787722,3.5766632E7,correct,correct,18,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6),true,sat
+299131846,CLIA_Track/fg_sixfuncs.sl,4786969,EUSolver,11893,default,219860,complete,0.724764,0.724698,334812.0,correct,correct,22,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3) (g1 5),true,sat
+299131847,CLIA_Track/fg_sixfuncs.sl,4786969,EUSolver_new,11898,default,219869,complete,0.726413,0.731333,327592.0,correct,correct,28,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1),true,sat
+299131848,CLIA_Track/fg_sixfuncs.sl,4786969,Euphony,11902,default,219874,complete,1.43591,1.43869,348224.0,correct,correct,28,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1),true,sat
+299131849,CLIA_Track/fg_sixfuncs.sl,4786969,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.369104,0.368252,113120.0,correct,correct,10,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1) (g1 3),true,sat
+299131850,CLIA_Track/fg_sixfuncs.sl,4786969,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.018725,0.0238961,113120.0,correct,correct,18,(f1 1) (f2 4) (f3 4) (f4 4) (f5 4) (g1 1),true,sat
+299131851,CLIA_Track/fg_sixfuncs.sl,4786969,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,1.53387,1.53894,261020.0,correct,correct,10,(f1 1) (f2 1) (f3 3) (f4 1) (f5 1) (g1 3),true,sat
+299131852,CLIA_Track/fg_sixfuncs.sl,4786969,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.021206,0.0213691,113120.0,correct,correct,18,(f1 1) (f2 4) (f3 4) (f4 4) (f5 4) (g1 1),true,sat
+299131853,CLIA_Track/fg_sixfuncs.sl,4786969,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.022684,0.022664,113120.0,correct,correct,18,(f1 1) (f2 4) (f3 4) (f4 4) (f5 4) (g1 1),true,sat
+299131854,CLIA_Track/fg_sixfuncs.sl,4786969,DryadSynth,12292,autothreads,223920,complete,3.37524,1.54625,3.603994E7,correct,correct,12,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4),true,sat
+299131855,CLIA_Track/fg_sixfuncs.sl,4786969,DryadSynth,12292,default,223921,complete,1.74267,0.873719,3.5767756E7,correct,correct,12,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4),true,sat
+299131856,CLIA_Track/fg_sixfuncs.sl,4786969,DryadSynth,12292,fallback,223922,complete,0.733198,0.445795,113120.0,correct,correct,12,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4),true,sat
+299131857,CLIA_Track/fg_sixfuncs.sl,4786969,DryadSynth,12292,timeout_change,223923,complete,1.52486,0.768916,3.5767756E7,correct,correct,12,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4),true,sat
+299131858,CLIA_Track/fg_tenfunc1.sl,4786970,EUSolver,11893,default,219860,complete,0.783066,1.36411,335352.0,correct,correct,54,(f1 1) (f2 3) (f3 7) (f4 3) (f5 3) (g1 5) (g2 7) (g3 7) (g4 9) (g5 9),true,sat
+299131859,CLIA_Track/fg_tenfunc1.sl,4786970,EUSolver_new,11898,default,219869,complete,0.780953,0.783267,334328.0,correct,correct,46,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1) (g2 3) (g3 3) (g4 5) (g5 7),true,sat
+299131860,CLIA_Track/fg_tenfunc1.sl,4786970,Euphony,11902,default,219874,complete,1.92837,2.0,347392.0,correct,correct,66,(f1 7) (f2 9) (f3 13) (f4 9) (f5 9) (g1 5) (g2 3) (g3 1) (g4 3) (g5 7),true,sat
+299131861,CLIA_Track/fg_tenfunc1.sl,4786970,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,1092.93,1093.14,318316.0,correct,correct,50,(f1 1) (f2 1) (f3 8) (f4 1) (f5 1) (g1 8) (g2 8) (g3 8) (g4 7) (g5 7),true,sat
+299131862,CLIA_Track/fg_tenfunc1.sl,4786970,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.363896,0.353232,113120.0,correct,correct,4344,(f1 438) (f2 438) (f3 423) (f4 438) (f5 438) (g1 438) (g2 438) (g3 438) (g4 438) (g5 417),true,sat
+299131863,CLIA_Track/fg_tenfunc1.sl,4786970,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3600.08,3600.02,291456.0,unsolved,correct,0,(f1 -1) (f2 -1) (f3 -1) (f4 -1) (f5 -1) (g1 -1) (g2 -1) (g3 -1) (g4 -1) (g5 -1), n/a (not all solved),not-run
+299131864,CLIA_Track/fg_tenfunc1.sl,4786970,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,timeout (wallclock),3597.74,3600.11,753944.0,unsolved,correct,0,(f1 -1) (f2 -1) (f3 -1) (f4 -1) (f5 -1) (g1 -1) (g2 -1) (g3 -1) (g4 -1) (g5 -1), n/a (not all solved),not-run
+299131865,CLIA_Track/fg_tenfunc1.sl,4786970,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.380989,0.36874,113120.0,correct,correct,4344,(f1 438) (f2 438) (f3 423) (f4 438) (f5 438) (g1 438) (g2 438) (g3 438) (g4 438) (g5 417),true,sat
+299131866,CLIA_Track/fg_tenfunc1.sl,4786970,DryadSynth,12292,autothreads,223920,complete,5.6938,2.55368,3.6040604E7,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131867,CLIA_Track/fg_tenfunc1.sl,4786970,DryadSynth,12292,default,223921,complete,2.3462,0.98556,3.5767592E7,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131868,CLIA_Track/fg_tenfunc1.sl,4786970,DryadSynth,12292,fallback,223922,complete,1.07778,0.53799,113120.0,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131869,CLIA_Track/fg_tenfunc1.sl,4786970,DryadSynth,12292,timeout_change,223923,complete,1.91112,0.822795,3.5767248E7,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131870,CLIA_Track/fg_tenfunc2.sl,4786971,EUSolver,11893,default,219860,complete,0.782446,0.782379,332744.0,correct,correct,62,(f1 5) (f2 7) (f3 11) (f4 7) (f5 7) (g1 9) (g2 1) (g3 3) (g4 5) (g5 7),true,sat
+299131871,CLIA_Track/fg_tenfunc2.sl,4786971,EUSolver_new,11898,default,219869,complete,0.782388,0.83442,337668.0,correct,correct,46,(f1 3) (f2 5) (f3 9) (f4 5) (f5 5) (g1 1) (g2 3) (g3 3) (g4 5) (g5 7),true,sat
+299131872,CLIA_Track/fg_tenfunc2.sl,4786971,Euphony,11902,default,219874,complete,1.9071,1.91001,349496.0,correct,correct,56,(f1 5) (f2 7) (f3 11) (f4 7) (f5 7) (g1 3) (g2 5) (g3 1) (g4 3) (g5 7),true,sat
+299131873,CLIA_Track/fg_tenfunc2.sl,4786971,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,1097.73,1097.73,318316.0,correct,correct,50,(f1 1) (f2 1) (f3 8) (f4 1) (f5 1) (g1 8) (g2 8) (g3 8) (g4 7) (g5 7),true,sat
+299131874,CLIA_Track/fg_tenfunc2.sl,4786971,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,0.363369,0.350028,113120.0,correct,correct,4344,(f1 438) (f2 438) (f3 423) (f4 438) (f5 438) (g1 438) (g2 438) (g3 438) (g4 438) (g5 417),true,sat
+299131875,CLIA_Track/fg_tenfunc2.sl,4786971,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,timeout (wallclock),3599.53,3600.01,291456.0,unsolved,correct,0,(f1 -1) (f2 -1) (f3 -1) (f4 -1) (f5 -1) (g1 -1) (g2 -1) (g3 -1) (g4 -1) (g5 -1), n/a (not all solved),not-run
+299131876,CLIA_Track/fg_tenfunc2.sl,4786971,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,timeout (wallclock),3596.48,3600.11,753944.0,unsolved,correct,0,(f1 -1) (f2 -1) (f3 -1) (f4 -1) (f5 -1) (g1 -1) (g2 -1) (g3 -1) (g4 -1) (g5 -1), n/a (not all solved),not-run
+299131877,CLIA_Track/fg_tenfunc2.sl,4786971,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.382584,0.370649,113120.0,correct,correct,4344,(f1 438) (f2 438) (f3 423) (f4 438) (f5 438) (g1 438) (g2 438) (g3 438) (g4 438) (g5 417),true,sat
+299131878,CLIA_Track/fg_tenfunc2.sl,4786971,DryadSynth,12292,autothreads,223920,complete,5.45463,2.43354,3.6041244E7,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131879,CLIA_Track/fg_tenfunc2.sl,4786971,DryadSynth,12292,default,223921,complete,2.33049,1.01499,3.5766952E7,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131880,CLIA_Track/fg_tenfunc2.sl,4786971,DryadSynth,12292,fallback,223922,complete,1.05909,0.52216,113120.0,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131881,CLIA_Track/fg_tenfunc2.sl,4786971,DryadSynth,12292,timeout_change,223923,complete,2.36271,0.968861,3.5766828E7,correct,correct,36,(f1 1) (f2 1) (f3 4) (f4 1) (f5 1) (g1 4) (g2 6) (g3 6) (g4 6) (g5 6),true,sat
+299131882,CLIA_Track/fg_VC22_a.sl,4786972,EUSolver,11893,default,219860,timeout (wallclock),3599.82,3600.1,606108.0,unsolved,correct,0,(f -1), n/a (not all solved),not-run
+299131883,CLIA_Track/fg_VC22_a.sl,4786972,EUSolver_new,11898,default,219869,complete,80.8092,80.8178,333248.0,correct,correct,6,(f 6),true,sat
+299131884,CLIA_Track/fg_VC22_a.sl,4786972,Euphony,11902,default,219874,timeout (wallclock),3599.39,3600.02,548524.0,unsolved,correct,0,(f -1), n/a (not all solved),not-run
+299131885,CLIA_Track/fg_VC22_a.sl,4786972,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,0.610695,0.610304,263888.0,correct,correct,6,(f 6),true,sat
+299131886,CLIA_Track/fg_VC22_a.sl,4786972,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,3.56786,3.56792,266280.0,correct,correct,6,(f 6),true,sat
+299131887,CLIA_Track/fg_VC22_a.sl,4786972,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,0.441298,0.44074,113120.0,correct,correct,6,(f 6),true,sat
+299131888,CLIA_Track/fg_VC22_a.sl,4786972,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,0.446284,0.446639,113120.0,correct,correct,6,(f 6),true,sat
+299131889,CLIA_Track/fg_VC22_a.sl,4786972,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,0.448506,0.44787,113120.0,correct,correct,6,(f 6),true,sat
+299131890,CLIA_Track/fg_VC22_a.sl,4786972,DryadSynth,12292,autothreads,223920,complete,38.9969,13.4923,3.6700764E7,correct,correct,26,(f 26),true,sat
+299131891,CLIA_Track/fg_VC22_a.sl,4786972,DryadSynth,12292,default,223921,complete,8.50145,2.83469,3.6028484E7,correct,correct,26,(f 26),true,sat
+299131892,CLIA_Track/fg_VC22_a.sl,4786972,DryadSynth,12292,fallback,223922,complete,2.34692,1.66523,3.5626692E7,correct,correct,26,(f 26),true,sat
+299131893,CLIA_Track/fg_VC22_a.sl,4786972,DryadSynth,12292,timeout_change,223923,complete,29.4514,8.01927,3.616084E7,correct,correct,21,(f 21),true,sat
+299131894,CLIA_Track/fg_VC22_b.sl,4786973,EUSolver,11893,default,219860,timeout (wallclock),3599.92,3600.04,898188.0,unsolved,correct,0,(f1 -1) (f2 -1), n/a (not all solved),not-run
+299131895,CLIA_Track/fg_VC22_b.sl,4786973,EUSolver_new,11898,default,219869,timeout (wallclock),3599.79,3600.01,333252.0,unsolved,correct,0,(f1 -1) (f2 -1), n/a (not all solved),not-run
+299131896,CLIA_Track/fg_VC22_b.sl,4786973,Euphony,11902,default,219874,timeout (wallclock),3599.73,3600.01,748988.0,unsolved,correct,0,(f1 -1) (f2 -1), n/a (not all solved),not-run
+299131897,CLIA_Track/fg_VC22_b.sl,4786973,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_Strings,223911,complete,11.5476,11.555,272540.0,correct,correct,12,(f1 6) (f2 6),true,sat
+299131898,CLIA_Track/fg_VC22_b.sl,4786973,CVC4-061117-sygus-comp-2017,12289,sygus_c_CLIA,223912,complete,34.6695,34.6709,280044.0,correct,correct,12,(f1 6) (f2 6),true,sat
+299131899,CLIA_Track/fg_VC22_b.sl,4786973,CVC4-061117-sygus-comp-2017,12289,sygus_c_PBE_BitVec,223913,complete,4.73747,4.73736,265856.0,correct,correct,12,(f1 6) (f2 6),true,sat
+299131900,CLIA_Track/fg_VC22_b.sl,4786973,CVC4-061117-sygus-comp-2017,12289,sygus_c_INV,223914,complete,4.7368,4.73763,265912.0,correct,correct,12,(f1 6) (f2 6),true,sat
+299131901,CLIA_Track/fg_VC22_b.sl,4786973,CVC4-061117-sygus-comp-2017,12289,sygus_c_GENERAL,223915,complete,4.73788,4.73797,265856.0,correct,correct,12,(f1 6) (f2 6),true,sat
+299131902,CLIA_Track/fg_VC22_b.sl,4786973,DryadSynth,12292,autothreads,223920,complete,330.873,91.763,3.6996188E7,correct,correct,69,(f1 26) (f2 43),true,sat
+299131903,CLIA_Track/fg_VC22_b.sl,4786973,DryadSynth,12292,default,223921,complete,139.713,35.9203,3.622766E7,correct,correct,72,(f1 26) (f2 46),true,sat
+299131904,CLIA_Track/fg_VC22_b.sl,4786973,DryadSynth,12292,fallback,223922,complete,22.6661,21.7821,3.5626692E7,correct,correct,47,(f1 26) (f2 21),true,sat
+299131905,CLIA_Track/fg_VC22_b.sl,4786973,DryadSynth,12292,timeout_change,223923,complete,149.016,38.414,3.6227656E7,correct,correct,72,(f1 26) (f2 46),true,sat
