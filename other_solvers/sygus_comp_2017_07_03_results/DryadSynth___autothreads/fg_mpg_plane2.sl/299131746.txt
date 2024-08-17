@@ -1,0 +1,2 @@
+2.68/1.43	(define-fun eq1 ((x Int) (y Int) (z Int)) Int (+ 3 (* 3 x) (* 3 y)))
+3.29/1.80	EOF

@@ -1,0 +1,2 @@
+4.67/4.73	(define-fun f1 ((x1 Int) (x2 Int)) Int (ite (= x1 x2) 0 1)) (define-fun f2 ((x1 Int) (x2 Int)) Int (ite (= x1 x2) 0 1))
+4.67/4.73	EOF

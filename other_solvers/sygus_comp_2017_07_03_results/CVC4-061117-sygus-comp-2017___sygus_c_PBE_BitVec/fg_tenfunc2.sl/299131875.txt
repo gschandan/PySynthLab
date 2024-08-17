@@ -1,0 +1,7 @@
+3599.51/3600.01	/export/starexec/sandbox/solver/bin/starexec_run_sygus_c_PBE_BitVec: line 6: 30790 Alarm clock             ( $cvc4 --lang=sygus --no-checking --no-interactive --dump-synth --default-dag-thresh=0 "$@" $bench ) 2> /dev/null
+3599.51/3600.01	     30791                       | ( read result w1; case "$result" in 
+3599.51/3600.01	    unsat)
+3599.51/3600.01	        echo "$w1"; cat; exit 0
+3599.51/3600.01	    ;;
+3599.51/3600.01	esac; exit 1 )
+3599.51/3600.01	EOF

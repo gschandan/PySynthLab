@@ -1,0 +1,2 @@
+1.35/1.44	(define-fun findIdx ((y1 Int) (y2 Int) (y3 Int) (y4 Int) (y5 Int) (k1 Int)) Int (ite (and (>= k1 y1) (<= k1 y5) (>= k1 y2) (>= k1 y3) (>= k1 y4)) 4 (ite (and (<= k1 y5) (<= k1 y1) (<= k1 y2) (<= k1 y3) (<= k1 y4)) 0 (ite (and (>= k1 y1) (<= k1 y5) (<= k1 y2) (<= k1 y3) (<= k1 y4)) 1 (ite (and (>= k1 y1) (>= k1 y2) (>= k1 y3) (>= k1 y4) (>= k1 y5)) 5 (ite (and (>= k1 y1) (<= k1 y5) (>= k1 y2) (<= k1 y3) (<= k1 y4)) 2 3))))))
+1.44/1.47	EOF

@@ -1,0 +1,2 @@
+3.11/1.27	(define-fun findSum ((y1 Int) (y2 Int)) Int (ite (>= (+ (* -1 y1) (* -1 y2)) -5) 0 (+ y1 y2)))
+3.28/1.32	EOF

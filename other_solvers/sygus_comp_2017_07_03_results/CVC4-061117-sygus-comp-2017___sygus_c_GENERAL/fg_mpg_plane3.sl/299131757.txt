@@ -1,0 +1,2 @@
+0.00/0.01	(define-fun eq1 ((x Int) (y Int) (z Int)) Int (+ 5 (* 5 x) (* 5 y)))
+0.00/0.01	EOF

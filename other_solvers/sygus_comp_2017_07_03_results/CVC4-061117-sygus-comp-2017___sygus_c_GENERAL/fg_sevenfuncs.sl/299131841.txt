@@ -1,0 +1,2 @@
+0.00/0.02	(define-fun f1 ((p1 Int) (P1 Int)) Int P1) (define-fun f2 ((p1 Int) (P1 Int)) Int (* 2 P1)) (define-fun f3 ((p1 Int) (P1 Int)) Int (* 2 P1)) (define-fun f4 ((p1 Int) (P1 Int)) Int (* 4 P1)) (define-fun f5 ((p1 Int) (P1 Int)) Int (* 5 P1)) (define-fun g1 ((p1 Int) (P1 Int)) Int 0) (define-fun g2 ((p1 Int) (P1 Int)) Int 1)
+0.00/0.02	EOF

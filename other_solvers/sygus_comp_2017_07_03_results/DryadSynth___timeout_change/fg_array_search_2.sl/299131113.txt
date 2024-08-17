@@ -1,0 +1,2 @@
+68.04/18.11	(define-fun findIdx ((y1 Int) (y2 Int) (k1 Int)) Int (ite (>= (+ y2 (* -1 k1)) 1) (ite (>= (+ y1 (* -1 k1)) 0) 0 1) 2))
+69.33/18.59	EOF

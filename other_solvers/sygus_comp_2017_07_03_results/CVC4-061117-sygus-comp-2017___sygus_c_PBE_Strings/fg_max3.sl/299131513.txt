@@ -1,0 +1,3 @@
+786.05/786.24	
+786.05/786.25	(define-fun max3 ((x Int) (y Int) (z Int)) Int (ite (or (<= x z) (<= x y)) (ite (<= z y) y z) x))
+786.05/786.25	EOF

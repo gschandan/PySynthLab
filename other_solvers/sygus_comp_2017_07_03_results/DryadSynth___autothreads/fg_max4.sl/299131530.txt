@@ -1,0 +1,2 @@
+12709.30/3237.30	(define-fun max4 ((x Int) (y Int) (z Int) (w Int)) Int (ite (>= (+ (* -1 y) z) 1) (ite (>= (+ (* -1 x) w) 1) (ite (>= (+ (* -1 z) w) 1) w z) (ite (>= (+ x (* -1 z)) 1) x z)) (ite (>= (+ y (* -1 w)) 1) (ite (>= (+ (* -1 x) y) 1) y x) (ite (>= (+ x (* -1 w)) 1) x w))))
+12712.21/3238.98	EOF

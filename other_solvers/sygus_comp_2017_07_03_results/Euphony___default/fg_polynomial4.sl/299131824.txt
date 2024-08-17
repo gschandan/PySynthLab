@@ -1,0 +1,3 @@
+829.62/829.74	(define-fun addExpr1 ((x Int) (y Int)) Int (* (+ y x) 2))
+829.62/829.74	(define-fun addExpr2 ((x Int) (y Int)) Int x)
+829.68/829.84	EOF

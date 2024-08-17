@@ -1,0 +1,2 @@
+0.90/1.00	(define-fun max3 ((x Int) (y Int) (z Int)) Int (ite (and (>= x x) (>= x y) (>= x z) (= x x)) x (ite (and (>= z x) (>= z y) (>= z z) (= z z)) z y)))
+1.00/1.03	EOF

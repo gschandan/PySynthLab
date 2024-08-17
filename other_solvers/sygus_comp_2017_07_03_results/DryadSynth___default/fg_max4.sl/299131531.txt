@@ -1,0 +1,2 @@
+3461.00/874.48	(define-fun max4 ((x Int) (y Int) (z Int) (w Int)) Int (ite (>= (+ (* -1 z) w) 1) (ite (>= (+ (* -1 y) w) 1) (ite (>= (+ x (* -1 w)) 0) x w) (ite (>= (+ (* -1 x) y) 0) y x)) (ite (>= (+ (* -1 x) y) 1) (ite (>= (+ y (* -1 z)) 1) y z) (ite (>= (+ (* -1 x) z) 1) z x))))
+3462.43/875.31	EOF

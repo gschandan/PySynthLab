@@ -1,0 +1,12 @@
+1092.87/1093.14	
+1092.87/1093.14	(define-fun f1 ((p1 Int) (P1 Int)) Int 0)
+1092.87/1093.14	(define-fun f2 ((p1 Int) (P1 Int)) Int 0)
+1092.87/1093.14	(define-fun f3 ((p1 Int) (P1 Int)) Int (ite (= 0 P1) P1 (- 0 P1)))
+1092.87/1093.14	(define-fun f4 ((p1 Int) (P1 Int)) Int 0)
+1092.87/1093.14	(define-fun f5 ((p1 Int) (P1 Int)) Int 0)
+1092.87/1093.14	(define-fun g1 ((p1 Int) (P1 Int)) Int (ite (= 0 P1) P1 (- 0 P1)))
+1092.87/1093.14	(define-fun g2 ((p1 Int) (P1 Int)) Int (ite (= 1 P1) 0 (- 1 P1)))
+1092.87/1093.14	(define-fun g3 ((p1 Int) (P1 Int)) Int (ite (= 1 P1) P1 (- 2 P1)))
+1092.87/1093.14	(define-fun g4 ((p1 Int) (P1 Int)) Int (- (+ 2 2) (+ P1 P1)))
+1092.87/1093.14	(define-fun g5 ((p1 Int) (P1 Int)) Int (- (+ 2 2) (+ P1 P1)))
+1092.87/1093.14	EOF

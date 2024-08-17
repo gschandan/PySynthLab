@@ -1,0 +1,5 @@
+0.95/1.02	(define-fun addExpr1 ((x Int) (y Int)) Int
+0.95/1.02	     (- 0 y))
+0.95/1.02	(define-fun addExpr2 ((x Int) (y Int)) Int
+0.95/1.02	     0)
+0.95/1.05	EOF

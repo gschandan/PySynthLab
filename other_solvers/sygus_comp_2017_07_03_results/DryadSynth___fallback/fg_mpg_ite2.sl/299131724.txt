@@ -1,0 +1,2 @@
+1.59/1.00	(define-fun eq1 ((x Int) (y Int) (z Int)) Int (ite (>= (+ x y) 1) (ite (>= (+ x z) 1) (+ 1 x) (+ 1 y)) (ite (>= (+ (* -1 y) (* -1 z)) 0) (+ 1 y) (+ 1 z))))
+1.65/1.03	EOF

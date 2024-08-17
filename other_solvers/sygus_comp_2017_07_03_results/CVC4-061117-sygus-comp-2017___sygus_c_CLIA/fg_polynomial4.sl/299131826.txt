@@ -1,0 +1,4 @@
+40.70/40.77	
+40.70/40.77	(define-fun addExpr1 ((x Int) (y Int)) Int (+ (+ y y) x))
+40.70/40.77	(define-fun addExpr2 ((x Int) (y Int)) Int (+ y x))
+40.70/40.77	EOF

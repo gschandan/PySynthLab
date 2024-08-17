@@ -1,0 +1,2 @@
+0.89/0.91	(define-fun findIdx ((y1 Int) (y2 Int) (k1 Int)) Int (ite (and (>= k1 y1) (>= k1 y2)) 2 (ite (and (>= k1 y1) (<= k1 y2)) 1 0)))
+0.90/0.93	EOF

@@ -1,0 +1,3 @@
+0.96/0.99	(define-fun max4 ((x Int) (y Int) (z Int) (w Int)) Int
+0.96/0.99	     (ite (and (>= x x) (>= x y) (>= x z) (>= x w) (= x x)) x (ite (and (>= y x) (>= y y) (>= y z) (>= y w) (= y y)) y (ite (and (>= z x) (>= z y) (>= z z) (>= z w) (= z z)) z w))))
+0.96/1.01	EOF

@@ -1,0 +1,2 @@
+0.00/0.02	(define-fun max4 ((x Int) (y Int) (z Int) (w Int)) Int (ite (and (not (>= (+ x (* -1 z)) 1)) (not (>= (+ y (* -1 z)) 1)) (>= (+ z (* -1 w)) 0)) z (ite (and (not (>= (+ x (* -1 w)) 1)) (not (>= (+ y (* -1 w)) 1)) (not (>= (+ z (* -1 w)) 1))) w (ite (and (>= (+ x (* -1 y)) 0) (>= (+ x (* -1 z)) 0) (>= (+ x (* -1 w)) 0)) x y))))
+0.00/0.02	EOF

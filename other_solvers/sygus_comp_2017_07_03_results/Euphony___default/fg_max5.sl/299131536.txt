@@ -1,0 +1,2 @@
+1.06/1.13	(define-fun max5 ((x Int) (y Int) (z Int) (w Int) (u Int)) Int (ite (and (>= u x) (>= u y) (>= u z) (>= u w) (>= u u) (= u u)) u (ite (and (>= y x) (>= y y) (>= y z) (>= y w) (>= y u) (= y y)) y (ite (and (>= z x) (>= z y) (>= z z) (>= z w) (>= z u) (= z z)) z (ite (and (>= x x) (>= x y) (>= x z) (>= x w) (>= x u) (= x x)) x w)))))
+1.06/1.16	EOF

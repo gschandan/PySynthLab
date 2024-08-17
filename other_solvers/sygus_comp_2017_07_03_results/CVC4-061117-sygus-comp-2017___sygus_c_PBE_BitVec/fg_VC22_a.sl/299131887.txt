@@ -1,0 +1,3 @@
+0.00/0.43	
+0.00/0.43	(define-fun f ((x1 Int) (x2 Int)) Int (ite (= x1 x2) 0 1))
+0.00/0.44	EOF

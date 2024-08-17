@@ -1,0 +1,2 @@
+59.95/60.00	CVC4 interrupted by timeout.
+3596.48/3600.11	EOF

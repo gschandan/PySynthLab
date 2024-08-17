@@ -1,0 +1,2 @@
+1.11/0.58	(define-fun eq1 ((x Int) (y Int) (z Int)) Int (+ 5 (* 5 x) (* 5 y)))
+1.33/0.62	EOF

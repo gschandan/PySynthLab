@@ -1,0 +1,3 @@
+0.63/0.71	(define-fun max2 ((x Int) (y Int)) Int
+0.63/0.71	     (ite (and (>= x x) (>= x y) (= x x)) x y))
+0.71/0.73	EOF

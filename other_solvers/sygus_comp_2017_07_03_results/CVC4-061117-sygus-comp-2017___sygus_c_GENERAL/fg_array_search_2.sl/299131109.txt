@@ -1,0 +1,2 @@
+0.00/0.01	(define-fun findIdx ((y1 Int) (y2 Int) (k1 Int)) Int (ite (>= (+ y1 (* -1 y2)) 0) 1 (ite (not (>= (+ y2 (* -1 k1)) 0)) 2 (ite (not (>= (+ y1 (* -1 k1)) 1)) 1 (ite (or (>= (+ y1 (* -1 k1)) 0) (not (>= (+ y2 (* -1 k1)) 1))) 0 2)))))
+0.00/0.01	EOF

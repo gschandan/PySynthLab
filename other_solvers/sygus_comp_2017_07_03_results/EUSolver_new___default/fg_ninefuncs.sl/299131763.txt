@@ -1,0 +1,19 @@
+0.68/0.73	(define-fun g2 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (+ 1 0))
+0.68/0.73	(define-fun f5 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (* (+ P1 0) 5))
+0.68/0.73	(define-fun g3 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (+ 2 0))
+0.68/0.73	(define-fun f4 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (* (+ P1 0) 4))
+0.68/0.73	(define-fun f2 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (* (+ P1 0) 2))
+0.68/0.73	(define-fun f1 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (+ P1 0))
+0.68/0.73	(define-fun f3 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (+ (* (+ P1 0) 3) (* P1 -1)))
+0.68/0.73	(define-fun g1 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     0)
+0.68/0.73	(define-fun g4 ((p1 Int) (P1 Int)) Int
+0.68/0.73	     (+ 4 (* 0 2)))
+0.68/0.75	EOF

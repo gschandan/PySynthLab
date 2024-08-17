@@ -1,0 +1,2 @@
+0.00/0.02	(define-fun ex ((x Int) (y Int)) Int (ite (or (>= x 5) (and (not (>= x 5)) (= (* 2 x) (+ -16 (* -3 y))))) (+ 17 (* 5 x) (* 3 y)) (+ 1 (* 3 x))))
+0.00/0.02	EOF

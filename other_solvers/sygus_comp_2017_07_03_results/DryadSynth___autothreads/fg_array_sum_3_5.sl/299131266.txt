@@ -1,0 +1,2 @@
+245.51/77.64	(define-fun findSum ((y1 Int) (y2 Int) (y3 Int)) Int (ite (>= (+ y1 y2) 6) (+ y1 y2) (ite (>= (+ y2 y3) 6) (+ y2 y3) 0)))
+247.25/78.30	EOF

@@ -1,0 +1,2 @@
+3602.03/3600.02	/export/starexec/sandbox/solver/bin/starexec_run_fallback: line 9: 36146 Alarm clock             java -Djava.library.path=../lib Synth $1 2> /dev/null
+3602.03/3600.02	EOF

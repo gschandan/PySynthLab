@@ -1,0 +1,2 @@
+0.00/0.01	(define-fun findSum ((y1 Int) (y2 Int)) Int (ite (not (>= (+ y1 y2) 16)) 0 (+ y1 y2)))
+0.00/0.01	EOF

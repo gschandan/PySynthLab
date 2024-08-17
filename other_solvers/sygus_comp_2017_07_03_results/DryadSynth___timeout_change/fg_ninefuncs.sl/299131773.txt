@@ -1,0 +1,10 @@
+2.18/1.01	(define-fun f1 ((p1 Int) (P1 Int)) Int 0)
+2.18/1.01	(define-fun f2 ((p1 Int) (P1 Int)) Int 0)
+2.18/1.02	(define-fun f3 ((p1 Int) (P1 Int)) Int (* -1 P1))
+2.18/1.02	(define-fun f4 ((p1 Int) (P1 Int)) Int 0)
+2.18/1.02	(define-fun f5 ((p1 Int) (P1 Int)) Int 0)
+2.18/1.02	(define-fun g1 ((p1 Int) (P1 Int)) Int (* -1 P1))
+2.18/1.03	(define-fun g2 ((p1 Int) (P1 Int)) Int (+ 1 (* -1 P1)))
+2.18/1.03	(define-fun g3 ((p1 Int) (P1 Int)) Int (+ 2 (* -1 P1)))
+2.18/1.04	(define-fun g4 ((p1 Int) (P1 Int)) Int (+ 4 (* -2 P1)))
+2.37/1.08	EOF

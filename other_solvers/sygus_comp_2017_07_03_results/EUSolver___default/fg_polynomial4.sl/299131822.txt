@@ -1,0 +1,5 @@
+312.13/312.28	(define-fun addExpr1 ((x Int) (y Int)) Int
+312.13/312.28	     (+ (+ (+ y y) x) x))
+312.13/312.28	(define-fun addExpr2 ((x Int) (y Int)) Int
+312.13/312.28	     x)
+312.22/312.36	EOF

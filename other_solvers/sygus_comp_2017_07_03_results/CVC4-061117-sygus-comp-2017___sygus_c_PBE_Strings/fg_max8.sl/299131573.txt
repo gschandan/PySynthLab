@@ -1,0 +1,7 @@
+3600.05/3600.11	/export/starexec/sandbox/solver/bin/starexec_run_sygus_c_PBE_Strings: line 6: 27188 Alarm clock             ( $cvc4 --lang=sygus --no-checking --no-interactive --dump-synth --default-dag-thresh=0 "$@" $bench ) 2> /dev/null
+3600.05/3600.11	     27189                       | ( read result w1; case "$result" in 
+3600.05/3600.11	    unsat)
+3600.05/3600.11	        echo "$w1"; cat; exit 0
+3600.05/3600.11	    ;;
+3600.05/3600.11	esac; exit 1 )
+3600.05/3600.11	EOF

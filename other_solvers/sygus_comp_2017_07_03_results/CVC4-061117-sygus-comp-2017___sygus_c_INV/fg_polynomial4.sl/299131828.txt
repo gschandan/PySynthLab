@@ -1,0 +1,5 @@
+59.97/60.00	CVC4 interrupted by timeout.
+181.15/181.23	
+181.15/181.23	(define-fun addExpr1 ((x Int) (y Int)) Int (+ (* 2 x) y))
+181.15/181.23	(define-fun addExpr2 ((x Int) (y Int)) Int (+ x x))
+181.15/181.23	EOF

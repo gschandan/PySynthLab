@@ -1,0 +1,3 @@
+89.19/89.22	
+89.19/89.22	(define-fun eq1 ((x Int) (y Int) (z Int)) Int (ite (<= (+ y x) 0) (- x y) (+ y x)))
+89.19/89.23	EOF

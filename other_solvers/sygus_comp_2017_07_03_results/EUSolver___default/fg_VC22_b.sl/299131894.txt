@@ -1,0 +1,39 @@
+3599.92/3600.03	Traceback (most recent call last):
+3599.92/3600.03	  File "benchmarks.py", line 441, in <module>
+3599.92/3600.03	    test_make_solver(benchmark_files)
+3599.92/3600.03	  File "benchmarks.py", line 416, in test_make_solver
+3599.92/3600.03	    make_solver(file_sexp)
+3599.92/3600.03	  File "benchmarks.py", line 375, in make_solver
+3599.92/3600.03	    final_solutions = solver(*solver_args)
+3599.92/3600.03	  File "benchmarks.py", line 319, in memoryless_esolver
+3599.92/3600.03	    solution = next(solutions)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/core/solvers.py", line 86, in solve
+3599.92/3600.03	    success = term_solver.solve()
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/termsolvers/termsolvers.py", line 252, in solve
+3599.92/3600.03	    return self._default_solve(restart_everytime=False)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/termsolvers/termsolvers.py", line 194, in _default_solve
+3599.92/3600.03	    success = self.generate_more_terms()
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/termsolvers/termsolvers.py", line 248, in generate_more_terms
+3599.92/3600.03	    return self._default_generate_more_terms(transform_term=add_expr_id)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/termsolvers/termsolvers.py", line 217, in _default_generate_more_terms
+3599.92/3600.03	    sig = self._compute_term_signature(term)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/termsolvers/termsolvers.py", line 239, in _compute_term_signature
+3599.92/3600.03	    retval = self._default_compute_term_signature(term, old_signature)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/termsolvers/termsolvers.py", line 128, in _default_compute_term_signature
+3599.92/3600.03	    for i, v in enumerate(self.term_signature(term, new_points), start_index):
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/core/specifications.py", line 74, in term_signature
+3599.92/3600.03	    r = evaluation.evaluate_expression_raw(self.canon_spec, eval_ctx)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/exprs/evaluation.py", line 90, in evaluate_expression_raw
+3599.92/3600.03	    evaluate_expression_on_stack(expr_object, eval_context)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/exprs/evaluation.py", line 79, in evaluate_expression_on_stack
+3599.92/3600.03	    fun_info.evaluate(expr_object, eval_context)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/semantics/semantics_types.py", line 236, in evaluate
+3599.92/3600.03	    self._evaluate_children(expr_object, eval_context_object)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/semantics/semantics_types.py", line 155, in _evaluate_children
+3599.92/3600.03	    evaluate_expression_on_stack(child, eval_context_object)
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/exprs/evaluation.py", line 72, in evaluate_expression_on_stack
+3599.92/3600.03	    elif (kind == _formal_parameter_expression):
+3599.92/3600.03	  File "/export/starexec/sandbox2/solver/bin/utils/utils.py", line 165, in handler
+3599.92/3600.03	    raise TimeoutError()
+3599.92/3600.03	utils.utils.TimeoutError
+3599.92/3600.04	EOF

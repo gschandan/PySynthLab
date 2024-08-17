@@ -1,0 +1,2 @@
+1.15/0.76	(define-fun findSum ((y1 Int) (y2 Int)) Int (ite (>= (+ y1 y2) 16) (+ y1 y2) 0))
+1.25/0.82	EOF
