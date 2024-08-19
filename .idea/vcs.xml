@@ -2,9 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/other_solvers/cvc5" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/other_solvers/dryadsynth" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/other_solvers/dryadsynth/z3" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/other_solvers/eusolver" vcs="Git" />
   </component>
 </project>
